@@ -3,32 +3,34 @@ import * as React from "react";
 import { HexIcon } from "./hexagonSVGIconComponent";
 import { updateHexIcon } from "../ts/HexBoardUpdate";
 
-type props = {
+type HexProps = {
   x: number,
   y: number,
   id: string,
 }
 
-export default class Hex extends React.Component<props> {
-  styles = {
-    hexagon: {
-      left: this.props.x + "px",
-      top: this.props.y + "px",
-    } as React.CSSProperties
+
+
+
+/**
+ * Returns a Hex Component that is ready to be rendered
+ * @returns JSX.Element which has the rendered Hex along with its id
+ */
+const Hex : React.FC<HexProps> = ({x , y , id}) => {
+  const styles : React.CSSProperties = {
+    left : `${x}px`,
+    top : `${y}px`
   }
 
-  /**
-   * Renders each individual hexagon.
-   * @return void
-   */
-    render() {
-    return (
-      <div className="hexagon" id={this.props.id} style={this.styles.hexagon} onClick={() => {
-        updateHexIcon(`props-${this.props.id}`, parseInt(this.props.id));
+  const parsedId = parseInt(id, 10);
+      return (
+      <div className="hexagon" id={id} style={styles} onClick={() => {
+        updateHexIcon(`props-${id}`, parsedId);
       }}>
-        <HexIcon idSVG={`svg-${this.props.id}`}/>
-        <div className="prop-holder no-node" id={`props-${this.props.id}`}></div>
+        <HexIcon idSVG={`svg-${id}`}/>
+        <div className="prop-holder no-node" id={`props-${id}`}></div>
       </div>
     );
-  }
 }
+
+export default Hex;

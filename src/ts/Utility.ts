@@ -18,3 +18,10 @@ export const addToGraphs = (source: number, destination: number): void => {
   currentState.graph().addEdge(source, destination, 1);
   currentState.initGraph().addEdge(source, destination, 1);
 }
+
+export const updateGraph = (x:number , y : number , id : number)=>{
+  currentState.graph().addNode(id);
+  currentState.graph().setNodeCoords(id, { x: x, y: y });
+  currentState.initGraph().addNode(id);
+  currentState.initGraph().setNodeCoords(id, { x: x, y: y });
+}

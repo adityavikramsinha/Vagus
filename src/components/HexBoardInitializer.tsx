@@ -2,7 +2,7 @@ import * as React from "react";
 import currentState from "../ts/GlobalState";
 import Hex from "./Hex";
 
-import { updateBiIDClass, addToGraphs } from '../ts/Utility';
+import {updateBiIDClass, addToGraphs, updateGraph} from '../ts/Utility';
 import {JSX, useEffect, useState} from "react";
 
 const HexBoardInitializer :React.FC = () => {
@@ -10,8 +10,6 @@ const HexBoardInitializer :React.FC = () => {
 
   const HEX_WIDTH = 26 ;
   const HEX_HEIGHT= 30;
-  let hexBoardRows: number, hexBoardCols : number, hexBoardIdVar: number;
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,20 +28,6 @@ const HexBoardInitializer :React.FC = () => {
     };
   }, []);
 
-  const setInitialNodes = ()=> {
-   for (let i = 0; i <  hexBoardIdVar; i++) {
-      if (i === ( hexBoardRows * 3)) {
-        setTimeout(() => {
-          let startCalculator = Math.floor((  hexBoardRows *  hexBoardCols) * 0.25);
-          let endCalculator = Math.floor((  hexBoardRows *  hexBoardCols) * 0.75)
-          updateBiIDClass(startCalculator, ['no-node'], 'start-node')
-          updateBiIDClass(endCalculator, ['no-node'], 'end-node')
-          currentState.changeStartNode(startCalculator);
-          currentState.changeEndNode(endCalculator);
-        }, 1)
-      }
-    }
-  }
   const renderHex= ()=> {
     let content: JSX.Element[] = [];
     let xVar = -14.5;
@@ -51,32 +35,14 @@ const HexBoardInitializer :React.FC = () => {
     let idVar = 0;
     const cols = Math.ceil(dimensions.width / HEX_WIDTH);
     const rows = Math.ceil(dimensions.height / HEX_HEIGHT);
-    hexBoardRows = rows ;
-    hexBoardCols = cols;
     for (let i = 0; i < cols; i++) {
-      if (i % 2 === 0) {
-        yVar = -17;
-        for (let i = 0; i < rows; i++) {
-          content.push(<Hex x={xVar} y={yVar} id={idVar.toString()} key={ idVar.toString()} />)
-          yVar += HEX_HEIGHT;
-          currentState.graph().addNode(idVar);
-          currentState.graph().setNodeCoords(idVar, { x: xVar, y: yVar });
-          currentState.initGraph().addNode(idVar);
-          currentState.initGraph().setNodeCoords(idVar, { x: xVar, y: yVar });
-          idVar++;
-        }
-      }
-      else {
-        yVar = -2.5;
-        for (let i = 0; i < rows; i++) {
-          content.push(<Hex x={xVar} y={yVar} id={idVar.toString()} key={ idVar.toString()} />)
-          yVar +=  HEX_HEIGHT;
-          currentState.graph().addNode( idVar);
-          currentState.graph().setNodeCoords( idVar, { x: xVar, y: yVar });
-          currentState.initGraph().addNode( idVar);
-          currentState.initGraph().setNodeCoords( idVar, { x: xVar, y: yVar });
-           idVar++;
-        }
+      // since the hexagons aren't in straight lines,
+      // we have to account for odd even.
+      yVar = (i & 1 )=== 1 ? -2.5 : -17;
+      for (let i = 0; i < rows; i++, idVar ++) {
+        content.push(<Hex x={xVar} y={yVar} id={idVar.toString()} key={idVar}/>)
+        yVar += HEX_HEIGHT;
+        updateGraph(xVar, yVar, idVar)
       }
       xVar +=  HEX_WIDTH;
     }
@@ -181,8 +147,24 @@ const HexBoardInitializer :React.FC = () => {
         }
       }
     }
-    hexBoardIdVar = idVar
-    setInitialNodes();
+
+
+    // Set up the initial start and end nodes,
+    // to prevent browser UI blocking, use requestAnimationFrame
+    for (let i = 0; i <  idVar; i++) {
+      if (i === ( rows * 3)) {
+        requestAnimationFrame(() => {
+          let startCalculator = Math.floor((rows  * cols) * 0.25);
+          let endCalculator = Math.floor((rows * cols) * 0.75);
+
+          updateBiIDClass(startCalculator, ['no-node'], 'start-node');
+          updateBiIDClass(endCalculator, ['no-node'], 'end-node');
+
+          currentState.changeStartNode(startCalculator);
+          currentState.changeEndNode(endCalculator);
+        });
+      }
+    }
     currentState.initGraph().freeze();
     return content;
   }
