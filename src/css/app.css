@@ -1,0 +1,78 @@
+:root {
+  --white: #ffffff;
+  --cmd-bg: #21252B;
+  --cmd-border: #434B57;
+  --project-bg: #323844;
+  --moz-sb-color: #4b4e5578;
+  --sb-color: #ffffff42;
+  --sb-color-hover: #ffffff60;
+  --sb-color-track: #7f808200;
+  --file-hover: #2C313A;
+  --alg-folder: #D5756C;
+  --node-folder: #67BBFF;
+  --maze-folder: #4CAF50;
+  --speed-folder: #E5C07B;
+  --legend-folder: #EF5350;
+  --hex-color: #282C34;
+  --hex-color-hover: #1B8BCD;
+  --wall-node-color: #484E5B;
+  --path-node-color-1: #FFA500;
+  --path-node-color-2: #FF9000;
+  --path-node-color-3: #FF7B00;
+  --path-node-color-4: #FF6702;
+  --path-node-color-5: #FF5000;
+  --visited-node-color-1: #175ab5;
+  --visited-node-color-2: #1b8bcd;
+  --visited-node-color-3: #25c8cf;
+  --visited-node-color-11: #BF4286;
+  --visited-node-color-21: #D15FDA;
+  --visited-node-color-31: #85404F;
+  --white: #ffffff;
+  --solid-red: #EF5350;
+  --light-red: #D5756C;
+  --blue: #67BBFF;
+  --green: #4CAF50;
+  --yellow: #E5C07B;
+  --file-bg: #21252B;
+  --file-bg-selected: #4B4E5578;
+  --file-border: #67BBFF;
+  --cmd-bg: #21252B;
+  --cmd-border: #434B57;
+  --project-bg: #323844;
+  --moz-sb-color: #4B4E5578;
+  --sb-color: #FFFFFF42;
+  --sb-color-hover: #FFFFFF60;
+  --sb-color-track: #7F808200;
+  --file-hover: #2C313A;
+  --algo-folder: #D5756C;
+  --node-folder: #67BBFF;
+  --maze-folder: #4CAF50;
+  --speed-folder: #E5C07B;
+  --legend-folder: #EF5350;
+  --hex-color: #282C34;
+  --hex-color-hover: #1B8BCD;
+  --wall-node-color: #484E5B;
+  --path-node-color-1: #FFA500;
+  --path-node-color-2: #FF9000;
+  --path-node-color-3: #FF7B00;
+  --path-node-color-4: #FF6702;
+  --path-node-color-5: #FF5000;
+  --visited-node-color-1: #175AB5;
+  --visited-node-color-2: #1B8BCD;
+  --visited-node-color-3: #25C8CF;
+  --visited-node-color-11: #BF4286;
+  --visited-node-color-21: #D15FDA;
+  --visited-node-color31: #85404F;
+}
+
+.content {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.left-cmd {
+  width: 30vw;
+  border-right: 0.75px solid var(--cmd-border);
+}
