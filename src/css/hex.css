@@ -24,25 +24,25 @@
 }
 
 .start-node {
-  background-image: url('../svgIcons/startNode.svg');
+  background-image: url('../assets/startNode.svg');
   top: 0px;
   /* DO NOT REMOVE THE ABOVE LINE */
 }
 
 .end-node {
-  background-image: url('../svgIcons/endNode.svg');
+  background-image: url('../assets/endNode.svg');
   top: 0px;
   /* DO NOT REMOVE THE ABOVE LINE */
 }
 
 .bomb-node {
-  background-image: url('../svgIcons/bombNode.svg');
+  background-image: url('../assets/bombNode.svg');
   top: 0px;
   left: 1px;
 }
 
 .weight-node {
-  background-image: url('../svgIcons/weightNode.svg');
+  background-image: url('../assets/weightNode.svg');
   top: 0px;
 }
 
@@ -190,15 +190,15 @@
   0% {
     fill: var(--visited-node-color-11);
   }
-  
+
   33% {
     fill: var(--visited-node-color-21);
   }
-  
+
   66% {
     fill: var(--visited-node-color-31);
   }
-  
+
   100% {
     fill: var(--hex-color);
   }

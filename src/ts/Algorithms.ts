@@ -1,6 +1,5 @@
 import Graph from './Graph';
 import { MinPriorityQueue } from "@datastructures-js/priority-queue";
-import Edge from "./Edge";
 import { AlgoType } from "./Types";
 import currentState from "./GlobalState";
 import { Queue } from "queue-typescript";
@@ -9,7 +8,7 @@ import Node from "./Node";
 /**
  * Main backbone of the whole backend.
  * This class contains the various algorithms which are required to
- * give their outputs so as to visualise.
+ * give their outputs to visualise.
  *
  * @author aditya , <adityavikramsinha19@gmail.com>
  */

@@ -1,13 +1,12 @@
 import * as React from "react";
-// import '../css/navbar.css';
-import { ProjectIcon } from '../svgIcons/projectSVGIconComponent';
-import * as ActionIcons from '../svgIcons/actionButtons';
+import { ProjectIcon } from './projectSVGIconComponent';
+import * as ActionIcons from './actionButtons';
 import { FolderComponent } from "./folderStruct";
 import { TSXFile, IOFile, BATFile, SYSFile, MDFile, GUIFile } from "./fileStruct";
-import { StopButtonClick, StartButtonClick, PrevButtonClick } from "./ActionButtonsFunctionality";
-import currentState from './GlobalState';
-import { RemoveAllClasses } from './ActionButtonsFunctionality';
-import Node from "./Node";
+import { StopButtonClick, StartButtonClick, PrevButtonClick } from "../ts/ActionButtonsFunctionality";
+import currentState from '../ts/GlobalState';
+import { RemoveAllClasses } from '../ts/ActionButtonsFunctionality';
+import Node from "../ts/Node";
 
 export default class Navbar extends React.Component {
 

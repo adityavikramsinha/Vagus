@@ -1,8 +1,7 @@
 import * as React from "react";
-import * as ActionIcons from '../svgIcons/actionButtons';
-// import '../css/settings.css';
-import { updateIDClass } from './Utility';
-import currentState from "./GlobalState";
+import * as ActionIcons from './actionButtons';
+import { updateIDClass } from '../ts/Utility';
+import currentState from "../ts/GlobalState";
 import {JSX} from "react";
 
 export default class Settings extends React.Component {

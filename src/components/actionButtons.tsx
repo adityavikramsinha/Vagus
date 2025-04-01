@@ -1,6 +1,4 @@
 import React from 'react';
-// import '../css/navbar.css';
-// import '../css/actionButtons.css';
 
 export function PrevButtonIcon(props: React.SVGProps<SVGSVGElement>) {
     return (

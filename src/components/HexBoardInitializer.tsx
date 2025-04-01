@@ -1,8 +1,8 @@
 import * as React from "react";
-import currentState from "./GlobalState";
+import currentState from "../ts/GlobalState";
 import Hex from "./Hex";
-// import '../css/hex.css';
-import { updateBiIDClass, addToGraphs } from './Utility';
+
+import { updateBiIDClass, addToGraphs } from '../ts/Utility';
 import {JSX, useEffect, useState} from "react";
 
 const HexBoardInitializer :React.FC = () => {

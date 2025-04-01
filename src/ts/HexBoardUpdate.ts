@@ -1,13 +1,10 @@
 import currentState from './GlobalState'
-import HexBoardInitializer from './HexBoardInitializer';
 import Graph from "./Graph";
-import { updateState } from './fileStruct'
+import { updateState } from '../components/fileStruct'
 import { MazeGenerator } from './MazeGenerator';
 import { MazeGenerationType } from './Types';
 import { RemoveAllClasses } from './ActionButtonsFunctionality';
 import { updateIDClass, updateBiIDClass } from './Utility';
-import hexBoardInitializer from "./HexBoardInitializer";
-import Hex from "./Hex";
 
 const updateHexIcon = (propID: string, id: number): void => {
   document.onmousemove = null;

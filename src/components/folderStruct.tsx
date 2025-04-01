@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Folder } from '../svgIcons/folderSVGIconComponent';
-import { ArrowIcon } from '../svgIcons/arrowSVGIcons';
-// import '../css/navbar.css';
+import { Folder } from './folderSVGIconComponent';
+import { ArrowIcon } from './arrowSVGIcons';
 
 export function FolderComponent(props: any) {
   const [isExpanded, setIsExpanded] = useState(true);

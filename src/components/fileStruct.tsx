@@ -1,5 +1,4 @@
 import React from 'react';
-// import '../css/navbar.css';
 import {
   BATIcon,
   BOMBNode,
@@ -14,10 +13,10 @@ import {
   VISITEDNode,
   WALLNode,
   WEIGHTNode
-} from "../svgIcons/fileSVGIconComponent";
-import currentState from "./GlobalState";
-import { AlgoType, MazeGenerationType, NodeType, SpeedType } from "./Types";
-import { updateMaze } from "./HexBoardUpdate"
+} from "./fileSVGIconComponent";
+import currentState from "../ts/GlobalState";
+import { AlgoType, MazeGenerationType, NodeType, SpeedType } from "../ts/Types";
+import { updateMaze } from "../ts/HexBoardUpdate"
 import Settings from './Settings';
 
 /**

@@ -1,5 +1,5 @@
 import React from 'react';
-// import '../css/hex.css'
+
 
 interface HexIconProps {
   idSVG?: string;

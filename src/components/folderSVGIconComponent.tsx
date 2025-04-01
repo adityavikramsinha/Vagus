@@ -1,5 +1,4 @@
 import React from 'react';
-// import '../css/navbar.css';
 
 export function Folder(props:React.SVGProps<SVGSVGElement>){
     return (
