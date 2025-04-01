@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ActionIcons from '../svgIcons/actionButtons';
-import '../css/settings.css';
+// import '../css/settings.css';
 import { updateIDClass } from './Utility';
 import currentState from "./GlobalState";
 import {JSX} from "react";

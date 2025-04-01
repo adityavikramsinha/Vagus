@@ -2,7 +2,6 @@ import Algorithms from "./Algorithms";
 import currentState from "./GlobalState";
 import Graph from "./Graph";
 import { updateBiDirectionalVisitedNodes, updateRandomVisitedNodes, updateVisitedNodes, unUpdateNodes } from "./HexBoardAlgoRunUpdate";
-import { setInitialNodes } from "./HexBoardUpdate";
 import { AlgoType } from "./Types";
 import { updateIDClass } from './Utility';
 
@@ -19,7 +18,6 @@ const StopButtonClick = (): void => {
   Graph.copy(currentState.initGraph(), currentState.graph(), 1);
   setTimeout(() => {
     updateIDClass('stop-button', ['button-clicked'], [])
-    setInitialNodes();
   }, 510);
 }
 

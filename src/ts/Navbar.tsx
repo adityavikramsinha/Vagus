@@ -1,5 +1,5 @@
 import * as React from "react";
-import '../css/navbar.css';
+// import '../css/navbar.css';
 import { ProjectIcon } from '../svgIcons/projectSVGIconComponent';
 import * as ActionIcons from '../svgIcons/actionButtons';
 import { FolderComponent } from "./folderStruct";

@@ -1,0 +1,13 @@
+﻿body,
+html {
+    background-color: #484E5B;
+    height: 90vh;
+    padding: 0;
+    margin: 0;
+}
+
+#root {
+    height: 90vh;
+    padding: 0;
+    margin: 0;
+}

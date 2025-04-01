@@ -6,6 +6,8 @@ import { MazeGenerator } from './MazeGenerator';
 import { MazeGenerationType } from './Types';
 import { RemoveAllClasses } from './ActionButtonsFunctionality';
 import { updateIDClass, updateBiIDClass } from './Utility';
+import hexBoardInitializer from "./HexBoardInitializer";
+import Hex from "./Hex";
 
 const updateHexIcon = (propID: string, id: number): void => {
   document.onmousemove = null;
@@ -151,23 +153,6 @@ const nodeHoverAnimation = (propID: string): void => {
   }
 }
 
-const setInitialNodes = (): void => {
-  for (let i = 0; i < HexBoardInitializer.idVar; i++) {
-    if (i === (HexBoardInitializer.rows * 3)) {
-      setTimeout(() => {
-        let startCalculator = Math.floor((HexBoardInitializer.rows * HexBoardInitializer.cols) * 0.25);
-        let endCalculator = Math.floor((HexBoardInitializer.rows * HexBoardInitializer.cols) * 0.75)
-        updateIDClass(`props-${startCalculator}`, ['no-node'], ['start-node']);
-        updateIDClass(`svg-${startCalculator}`, ['no-node'], ['svg-start-node']);
-        updateIDClass(`props-${endCalculator}`, ['no-node'], ['end-node']);
-        updateIDClass(`svg-${endCalculator}`, ['no-node'], ['svg-end-node']);
-        currentState.changeStartNode(startCalculator);
-        currentState.changeEndNode(endCalculator);
-      }, 1)
-    }
-  }
-}
-
 type displayMazeOptions = {
   randomMap?: Map<number, boolean>,
   mazeLeastCostArray?: number[],
@@ -200,7 +185,6 @@ const updateMaze = (): void => {
   if (currentState.run() === true) return;
   RemoveAllClasses(1, ['start-node', 'end-node', 'wall-node', 'weight-node']);
   Graph.copy(currentState.initGraph(), currentState.graph(), 1);
-  setInitialNodes();
   setTimeout(() => {
     switch (currentState.maze()) {
       case MazeGenerationType.generateRandomMaze:
@@ -235,7 +219,6 @@ const updateMaze = (): void => {
 
 export {
   updateHexIcon,
-  setInitialNodes,
   nodeHoverAnimation,
   updateMaze,
 }

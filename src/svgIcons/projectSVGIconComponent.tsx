@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/navbar.css';
+// import '../css/navbar.css';
 
 export function ProjectIcon(props:React.SVGProps<SVGSVGElement>){
     return(

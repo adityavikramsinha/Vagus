@@ -4,7 +4,7 @@ import Edge from './Edge';
 
 /**
  * This is the node class of this project.
- * This is also the most impotant class in this project.
+ * This is also the most important class in this project.
  * The main reason why this is so important is that it is the smallest
  * UNIT present in this project and refers to a single entity which can
  * be manipulated.

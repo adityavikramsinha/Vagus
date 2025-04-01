@@ -25,8 +25,10 @@ export class MazeGenerator {
    * @returns void
    */
   static setProps(): void {
-    this.workableRows = HexBoardInitializer.rows;
-    this.workableColumns = HexBoardInitializer.cols;
+    // this.workableRows = HexBoardInitializer.rows;
+    // this.workableColumns = HexBoardInitializer.cols;
+    this.workableRows = 100 ;
+    this.workableColumns = 100;
   }
 
   /**
