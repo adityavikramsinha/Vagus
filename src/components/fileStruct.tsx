@@ -96,7 +96,7 @@ const NodeAnimation = (nodeType: string) => {
   }
 }
 
-export function TSXFile(props: any) {
+export const TSXFile = (props: any) => {
   return (
     <div className={props.divClassName} id={props.divID} onClick={() => updateState('.tsx-file', props.divID, props.text)}>
       <TSXIcon />
@@ -105,7 +105,7 @@ export function TSXFile(props: any) {
   )
 }
 
-export function IOFile(props: any) {
+export const IOFile = (props: any) => {
   return (
     <div className={props.divClassName} id={props.divID} onClick={() => updateState('.io-file', props.divID, props.text)}>
       <IOIcon />
@@ -114,7 +114,7 @@ export function IOFile(props: any) {
   )
 }
 
-export function BATFile(props: any) {
+export const BATFile =(props: any)=> {
   return (
     <div className={props.divClassName} id={props.divID} onClick={() => {
       updateState('.bat-file', props.divID, props.text);
@@ -127,7 +127,7 @@ export function BATFile(props: any) {
   )
 }
 
-export function SYSFile(props: any) {
+export const SYSFile =(props: any) => {
   return (
     <div className={props.divClassName} id={props.divID} onClick={() => updateState('.sys-file', props.divID, props.text)}>
       <SYSIcon />
@@ -136,7 +136,7 @@ export function SYSFile(props: any) {
   )
 }
 
-export function MDFile(props: any) {
+export const MDFile =(props: any) => {
   return (
     <div className={props.divClassName} id={props.divID}  onClick={() => {
       Settings.toggleDisplay();
@@ -147,7 +147,7 @@ export function MDFile(props: any) {
   )
 }
 
-export function GUIFile(props: any) {
+export const GUIFile=(props: any) =>{
   function Icon() {
     switch (props.type) {
       case 'bomb': return <BOMBNode />;

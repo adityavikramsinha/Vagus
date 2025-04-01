@@ -2,7 +2,18 @@ import React, { useState } from 'react';
 import { Folder } from './folderSVGIconComponent';
 import { ArrowIcon } from './arrowSVGIcons';
 
-export function FolderComponent(props: any) {
+
+type FolderComponentProps = {
+  children: React.ReactNode,
+  text : string,
+  divClassName : string,
+  arrowID : string,
+  colorOfFolder : string
+
+}
+
+
+export const FolderComponent :React.FC<FolderComponentProps> =(props) => {
   const [isExpanded, setIsExpanded] = useState(true);
   let topLevel: boolean = false;
   let InsideText = () => {
@@ -15,9 +26,9 @@ export function FolderComponent(props: any) {
   }
   const changeState = (id: string, value: string) => {
     setIsExpanded(!isExpanded);
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       document.getElementById(id).style.transform = value;
-    }, 1)
+    })
   }
   return (
     <div className={props.divClassName}>
