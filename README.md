@@ -13,4 +13,4 @@ The website where this is hosted is : https://aarnavv.github.io/Vagus/ (previous
 
 
 The website where the new version is hosted is :
-https://adityavikramsinha.githuh.io/Vagus (v1.0.0)
+https://adityavikramsinha.github.io/Vagus/ (v1.0.0)
