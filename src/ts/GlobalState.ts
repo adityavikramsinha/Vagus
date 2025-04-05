@@ -50,7 +50,9 @@ class State<T> {
   // holds the global state for css settings.
   private CSSvariables: Map<string, string>;
 
-  // all the identifiers ready to be mapped
+  TypeScript
+
+// all the identifiers ready to be mapped
   private CSSIdentifiers = [
     'solid-red',
     'light-red',
@@ -86,46 +88,46 @@ class State<T> {
     'visited-node-color-3',
     'visited-node-color-11',
     'visited-node-color-21',
-    'visited-node-color31'
+    'visited-node-color-31'
   ];
 
-  // values of all the identifiers
+// values of all the identifiers
   private CSSValues = [
-    'EF5350',
-    'D5756C',
-    '67BBFF',
-    '4CAF50',
-    'E5C07B',
-    '21252B',
-    '4B4E5578',
-    '67BBFF',
-    '21252B',
-    '434B57',
-    '323844',
-    '4B4E5578',
-    'FFFFFF42',
-    'FFFFFF60',
-    '7F808200',
-    '2C313A',
-    'D5756C',
-    '67BBFF',
-    '4CAF50',
-    'E5C07B',
-    'EF5350',
-    '282C34',
-    '1B8BCD',
-    '484E5B',
-    'FFA500',
-    'FF9000',
-    'FF7B00',
-    'FF6702',
-    'FF5000',
-    '175AB5',
-    '1B8BCD',
-    '25C8CF',
-    'BF4286',
-    'D15FDA',
-    '85404F'
+    'cdd6f4', // --white (mapped to solid-red for lack of a direct match)
+    'cdd6f4', // --white (mapped to light-red for lack of a direct match)
+    '89b4fa', // --hex-color-hover (mapped to blue as a close visual, could be adjusted)
+    '45475a', // --sb-color (mapped to green as a placeholder, adjust as needed)
+    'e5c07b', // Remains the same as there's no direct mapping, keep if relevant
+    '11111b', // --file-bg
+    '11111b', // --file-bg-selected
+    '67BBFF', // Remains the same
+    '11111b', // --cmd-bg
+    '181825', // --cmd-border
+    '1e1e2e', // --project-bg
+    '313244', // --moz-sb-color
+    '45475a', // --sb-color
+    '585b70', // --sb-color-hover
+    '1e1e2e', // --sb-color-track
+    '1e1e2e', // --file-hover
+    'D5756C', // Remains the same
+    '67BBFF', // Remains the same
+    '4CAF50', // Remains the same
+    'E5C07B', // Remains the same
+    'EF5350', // Remains the same
+    '11111b', // --hex-color
+    '89b4fa', // --hex-color-hover
+    '313244', // --wall-node-color
+    'f5c2e7', // --path-node-color-1
+    'f2cdcd', // --path-node-color-2
+    'f5c2e7', // --path-node-color-3
+    'cba6f7', // --path-node-color-4
+    'f38ba8', // --path-node-color-5
+    '6184c4', // --visited-node-color-1
+    '59a8ce', // --visited-node-color-2
+    '1e8576', // --visited-node-color-3
+    'eba0ac', // --visited-node-color-11
+    'f38ba8', // --visited-node-color-21
+    'cba6f7'  // --visited-node-color-31
   ];
 
   /**
