@@ -144,6 +144,7 @@ export default class Algorithms<T> {
      * has no return
      *
      * @param at the present node id for iteration
+     * @param parent
      */
     const internalDfs = (at: T , parent :T ): void => {
 

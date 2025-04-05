@@ -3,20 +3,19 @@ import HexBoard from "./HexBoard";
 import Navbar from "./Navbar";
 import Settings from "./Settings";
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <React.Fragment>
-        <div className="App">
-          <div className="content">
-            <div className="left-cmd" id="left-cmd">
-              <Navbar />
-            </div>
-            <HexBoard />
-            <Settings />
+export const App :React.FC = () => {
+  return (
+    <React.Fragment>
+      <div className="App">
+        <div className="content">
+          <div className="left-cmd" id="left-cmd">
+            <Navbar />
           </div>
+          <HexBoard />
+          <Settings />
         </div>
-      </React.Fragment >
-    );
-  }
+      </div>
+    </React.Fragment >
+  );
 }
+export default App;

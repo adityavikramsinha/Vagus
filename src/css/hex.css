@@ -47,7 +47,7 @@
 }
 
 .icon:hover {
-  animation: icon-pulsate 0.2s 1 linear forwards;
+    animation: icon-pulsate 0.2s 1 linear forwards;
 }
 
 .svg-wall-node {

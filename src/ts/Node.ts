@@ -255,7 +255,7 @@ export default class Node<T> {
 
   /**
    * Function returns a pseudo-random neighbour.
-   * Function does not return a this node as a neighbour.
+   * Function does not return a node as a neighbour.
    *
    * @returns A random neighbour from the list of neighbours
    */

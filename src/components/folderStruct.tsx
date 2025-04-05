@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Folder } from './folderSVGIconComponent';
+import { FolderOpen, FolderClosed } from './folderSVGIconComponent';
 import { ArrowIcon } from './arrowSVGIcons';
 
 
@@ -8,7 +8,6 @@ type FolderComponentProps = {
   text : string,
   divClassName : string,
   arrowID : string,
-  colorOfFolder : string
 
 }
 
@@ -35,8 +34,8 @@ export const FolderComponent :React.FC<FolderComponentProps> =(props) => {
       <div className="folder-id">
         {isExpanded && <ArrowIcon id={props.arrowID} onClick={() => changeState(props.arrowID, "rotate(-90deg)")} />}
         {!isExpanded && <ArrowIcon id={props.arrowID} onClick={() => changeState(props.arrowID, "rotate(0deg)")} />}
-        {isExpanded && <Folder fill={props.colorOfFolder} onClick={() => changeState(props.arrowID, "rotate(-90deg)")} />}
-        {!isExpanded && <Folder fill={props.colorOfFolder} onClick={() => changeState(props.arrowID, "rotate(0deg)")} />}
+        {isExpanded && <FolderOpen  onClick={() => changeState(props.arrowID, "rotate(-90deg)")} />}
+        {!isExpanded && <FolderClosed onClick={() => changeState(props.arrowID, "rotate(0deg)")} />}
         {isExpanded && <div className="folder-title" onClick={() => changeState(props.arrowID, "rotate(-90deg)")}>{props.text}{topLevel && <InsideText />}</div>}
         {!isExpanded && <div className="folder-title" onClick={() => changeState(props.arrowID, "rotate(0deg)")}>{props.text}{topLevel && <InsideText />}</div>}
       </div>
@@ -44,3 +43,5 @@ export const FolderComponent :React.FC<FolderComponentProps> =(props) => {
     </div>
   )
 }
+
+export default FolderComponent;
