@@ -8,7 +8,7 @@ import {
   SHORTESTPATHNode,
   STARTNode,
   SYSIcon,
-  TSXIcon,
+  TsIcon,
   UNVISITEDNode,
   VISITEDNode,
   WALLNode,
@@ -40,7 +40,7 @@ export const updateState = (divClass: string, id: string, text: string): void =>
   let ext: string = text.substring(text.lastIndexOf(".") + 1);
   let textAdd: string = text.substring(0, text.lastIndexOf("."));
   switch (ext) {
-    case "tsx":
+    case "ts":
       currentState.changeAlgorithm(AlgoType[textAdd]);
       break;
     case "io":
@@ -96,10 +96,10 @@ const NodeAnimation = (nodeType: string) => {
   }
 }
 
-export const TSXFile = (props: any) => {
+export const TsFile = (props: any) => {
   return (
-    <div className={props.divClassName} id={props.divID} onClick={() => updateState('.tsx-file', props.divID, props.text)}>
-      <TSXIcon />
+    <div className={props.divClassName} id={props.divID} onClick={() => updateState('.ts-file', props.divID, props.text)}>
+      <TsIcon />
       <p className={props.pClassName}>{props.text}</p>
     </div>
   )

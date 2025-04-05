@@ -14,15 +14,7 @@ type FolderComponentProps = {
 
 export const FolderComponent :React.FC<FolderComponentProps> =(props) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  let topLevel: boolean = false;
-  let InsideText = () => {
-    return (
-      <b>[master]</b>
-    )
-  }
-  if (props.text === 'graphs') {
-    topLevel = true;
-  }
+
   const changeState = (id: string, value: string) => {
     setIsExpanded(!isExpanded);
     requestAnimationFrame(() => {
@@ -36,8 +28,8 @@ export const FolderComponent :React.FC<FolderComponentProps> =(props) => {
         {!isExpanded && <ArrowIcon id={props.arrowID} onClick={() => changeState(props.arrowID, "rotate(0deg)")} />}
         {isExpanded && <FolderOpen  onClick={() => changeState(props.arrowID, "rotate(-90deg)")} />}
         {!isExpanded && <FolderClosed onClick={() => changeState(props.arrowID, "rotate(0deg)")} />}
-        {isExpanded && <div className="folder-title" onClick={() => changeState(props.arrowID, "rotate(-90deg)")}>{props.text}{topLevel && <InsideText />}</div>}
-        {!isExpanded && <div className="folder-title" onClick={() => changeState(props.arrowID, "rotate(0deg)")}>{props.text}{topLevel && <InsideText />}</div>}
+        {isExpanded && <div className="folder-title" onClick={() => changeState(props.arrowID, "rotate(-90deg)")}>{props.text}{}</div>}
+        {!isExpanded && <div className="folder-title" onClick={() => changeState(props.arrowID, "rotate(0deg)")}>{props.text}{}</div>}
       </div>
       {isExpanded && props.children}
     </div>
