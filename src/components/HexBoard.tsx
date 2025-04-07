@@ -6,11 +6,11 @@ import HexBoardInitializer from "./HexBoardInitializer";
  * @returns JSX.Element
  */
 const HexBoard: React.FC = () => {
-  return (
-    <div className="hex-board" id="hex-board">
-      <HexBoardInitializer />
-    </div>
-  );
+    return (
+        <div className="hex-board" id="hex-board">
+            <HexBoardInitializer />
+        </div>
+    );
 };
 
 export default HexBoard;

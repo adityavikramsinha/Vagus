@@ -1,116 +1,116 @@
 .settings-outer {
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  display: none;
-  z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    display: none;
+    z-index: 100;
 }
 
 .settings-inner {
-  width: 70%;
-  height: 80%;
-  border-radius: 0.75rem;
-  margin: 10vh 15vw;
-  font-family: 'Fira Code', 'sans-serif';
-  background-color: #21252B;
+    width: 70%;
+    height: 80%;
+    border-radius: 0.75rem;
+    margin: 10vh 15vw;
+    font-family: 'Fira Code', 'sans-serif';
+    background-color: #21252B;
 }
 
 .settings-buttons {
-  position: relative;
-  width: min-content;
-  height: min-content;
-  margin: 0.75rem 0.75rem 0 0;
-  float: right;
+    position: relative;
+    width: min-content;
+    height: min-content;
+    margin: 0.75rem 0.75rem 0 0;
+    float: right;
 }
 
 .cross-icon {
-  cursor: pointer;
-  transform: scale(1.5);
+    cursor: pointer;
+    transform: scale(1.5);
 }
 
 .settings-header {
-  padding: 1.25rem 1rem;
+    padding: 1.25rem 1rem;
 }
 
 .settings-header>p {
-  margin: 0;
-  padding: 0;
-  font-size: 2rem;
-  color: #fff;
-  text-decoration: underline;
+    margin: 0;
+    padding: 0;
+    font-size: 2rem;
+    color: #fff;
+    text-decoration: underline;
 }
 
 .settings-content::-webkit-scrollbar{
-  width:5px;
+    width:5px;
 }
 
 .settings-content::-webkit-scrollbar-thumb{
-  background: var(--sb-color);
-  border-radius: 100vw;
+    background: var(--sb-color);
+    border-radius: 100vw;
 }
 
 .settings-content::-webkit-scrollbar-thumb:hover{
-  background: var(--sb-color-hover);
+    background: var(--sb-color-hover);
 }
 
 .settings-content::-webkit-scrollbar-track{
-  background: var(--sb-color-track);
+    background: var(--sb-color-track);
 }
 
 .settings-content::-webkit-scrollbar-corner{
-  background: var(--sb-color-track);
+    background: var(--sb-color-track);
 }
 
 .settings-content {
-  padding: 0 1rem;
-  display: flex;
-  height: 85%;
-  flex-direction: column;
-  overflow: scroll;
-  scrollbar-color: var(--moz-sb-color) transparent;
-  background-color: #21252B;
+    padding: 0 1rem;
+    display: flex;
+    height: 85%;
+    flex-direction: column;
+    overflow: scroll;
+    scrollbar-color: var(--moz-sb-color) transparent;
+    background-color: #21252B;
 }
 
 
 .braces {
-  font-size: 1rem;
-  color: #FFA500;
-  height: min-content;
+    font-size: 1rem;
+    color: #FFA500;
+    height: min-content;
 }
 
 .braces>p {
-  margin: 0;
+    margin: 0;
 }
 
 .key-value-master-drop {
-  border-left: 1px solid #FFA500;
-  margin-left: 0.5rem;
+    border-left: 1px solid #FFA500;
+    margin-left: 0.5rem;
 }
 
 .key-value-master {
-  display: flex;
-  flex-direction: column;
-  font-size: 1rem;
-  color: #FFFFFF;
-  margin: 0 1rem;
-  padding: 0;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    color: #FFFFFF;
+    margin: 0 1rem;
+    padding: 0;
+    height: 100%;
 }
 
 .key-value {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 .blue {
-  color: #52BFFF;
+    color: #52BFFF;
 }
 
 .blur-ele {
-  transition: all .5s ease;
-  -webkit-filter: blur(6px);
-  -moz-filter: blur(6px);
-  -o-filter: blur(6px);
-  -ms-filter: blur(6px);
-  filter: blur(6px);
+    transition: all .5s ease;
+    -webkit-filter: blur(6px);
+    -moz-filter: blur(6px);
+    -o-filter: blur(6px);
+    -ms-filter: blur(6px);
+    filter: blur(6px);
 }

@@ -15,6 +15,8 @@ const StopButtonClick = (): void => {
   updateIDClass('stop-button', [], ['button-clicked'])
   RemoveAllClasses(500, ['start-node', 'end-node', 'wall-node', 'weight-node', 'bomb-node']);
   currentState.changeBombNode(null);
+  currentState.changeEndNode(null);
+  currentState.changeStartNode(null);
   Graph.copy(currentState.initGraph(), currentState.graph(), 1);
   setTimeout(() => {
     updateIDClass('stop-button', ['button-clicked'], [])
@@ -25,6 +27,8 @@ const StartButtonClick = (currentNode, running): void => {
   if (!running) {
     let remAlgo: AlgoType[] = [AlgoType.aStarSearch, AlgoType.bellmanFord, AlgoType.bestFirstSearch, AlgoType.breadthFirstSearch, AlgoType.depthFirstSearch, AlgoType.depthFirstSearch, AlgoType.dijkstrasSearch]
     if (currentState.algorithm() === null) alert('Please select an algorithm before continuing!');
+    else if( currentState.startNode () === null) alert ('Please select a starting node');
+    else if (currentState.endNode () === null ) alert ('Please select a ending node');
     else if (currentState.algorithm() === AlgoType.biDirectionalSearch) {
       RemoveAllClasses(1, []);
       const [pathFromStart, visitedFromStartSet, visitedFromEndSet] = new Algorithms(currentState.graph()).biDirectional(currentState.startNode(), currentState.endNode());

@@ -1,8 +1,8 @@
 .button:hover {
-  transform: scale(1.1);
-  cursor: pointer;
+    transform: scale(1.1);
+    cursor: pointer;
 }
 
 .button-clicked {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }

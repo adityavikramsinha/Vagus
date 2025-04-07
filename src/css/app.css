@@ -1,41 +1,41 @@
 :root {
-  --white: #cdd6f4;
-  --cmd-bg: #11111b;
-  --cmd-border: #181825;
-  --project-bg: #1e1e2e;
-  --moz-sb-color: #313244;
-  --sb-color: #45475a;
-  --sb-color-hover: #585b70;
-  --sb-color-track: #1e1e2e;
-  --file-hover: #1e1e2e;
-  --hex-color: #11111b;
-  --hex-color-hover: #89b4fa;
-  --wall-node-color: #313244;
-  --path-node-color-1: #f5c2e7;
-  --path-node-color-2: #f2cdcd;
-  --path-node-color-3: #f5c2e7;
-  --path-node-color-4: #cba6f7;
-  --path-node-color-5: #f38ba8;
-  --visited-node-color-1: #6184c4;
-  --visited-node-color-2: #59a8ce;
-  --visited-node-color-3: #1e8576;
-  --visited-node-color-11: #eba0ac;
-  --visited-node-color-21: #f38ba8;
-  --visited-node-color-31: #cba6f7;
-  --file-bg: #11111b;
-  --file-bg-selected: #11111b;
-  --file-border: #67BBFF;
-  --visited-node-color31: #85404F;
+    --white: #cdd6f4;
+    --cmd-bg: #11111b;
+    --cmd-border: #181825;
+    --project-bg: #1e1e2e;
+    --moz-sb-color: #313244;
+    --sb-color: #45475a;
+    --sb-color-hover: #585b70;
+    --sb-color-track: #1e1e2e;
+    --file-hover: #1e1e2e;
+    --hex-color: #11111b;
+    --hex-color-hover: #89b4fa;
+    --wall-node-color: #313244;
+    --path-node-color-1: #f5c2e7;
+    --path-node-color-2: #f2cdcd;
+    --path-node-color-3: #f5c2e7;
+    --path-node-color-4: #cba6f7;
+    --path-node-color-5: #f38ba8;
+    --visited-node-color-1: #6184c4;
+    --visited-node-color-2: #59a8ce;
+    --visited-node-color-3: #1e8576;
+    --visited-node-color-11: #eba0ac;
+    --visited-node-color-21: #f38ba8;
+    --visited-node-color-31: #cba6f7;
+    --file-bg: #11111b;
+    --file-bg-selected: #11111b;
+    --file-border: #67BBFF;
+    --visited-node-color31: #85404F;
 }
 
 .content {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: row;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
 }
 
 .left-cmd {
-  width: 30vw;
-  border-right: 0.75px solid var(--cmd-border);
+    width: 30vw;
+    border-right: 0.75px solid var(--cmd-border);
 }

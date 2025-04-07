@@ -26,7 +26,7 @@ class State<T> {
   // State for the addable node folder
   private AddableNode: NodeType;
 
-  // State for the runable algorithm
+  // State for the run-able algorithm
   private Algorithm: AlgoType;
 
   // State for the implementable maze
@@ -48,9 +48,8 @@ class State<T> {
   private Run: boolean;
 
   // holds the global state for css settings.
-  private CSSvariables: Map<string, string>;
+  private readonly CSSvariables: Map<string, string>;
 
-  TypeScript
 
 // all the identifiers ready to be mapped
   private CSSIdentifiers = [
