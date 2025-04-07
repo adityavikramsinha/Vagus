@@ -35,8 +35,7 @@ export const updateState = (divClass: string, id: string, text: string): void =>
         ele.style.backgroundColor = `#${ currentState.cssVariables().get('file-bg') }`;
         ele.style.borderLeft = "";
     }
-    document.getElementById(id).style.backgroundColor = `#${currentState.cssVariables().get('file-bg-selected')}`;
-    document.getElementById(id).style.borderLeft = `2.5px solid #${currentState.cssVariables().get('file-border')}`;
+    document.getElementById(id).style.backgroundColor = `rgba(255, 255, 255, 0.05)`;
     let ext: string = text.substring(text.lastIndexOf(".") + 1);
     let textAdd: string = text.substring(0, text.lastIndexOf("."));
     switch (ext) {
