@@ -32,7 +32,7 @@ export const updateState = (divClass: string, id: string, text: string): void =>
     let files = document.querySelectorAll(divClass);
     for (let i = 0; i < files.length; i++) {
         const ele = files[i] as HTMLElement;
-        ele.style.backgroundColor = `#${ currentState.cssVariables().get('file-bg') }`;
+        ele.style.backgroundColor = "transparent";
         ele.style.borderLeft = "";
     }
     document.getElementById(id).style.backgroundColor = `rgba(255, 255, 255, 0.05)`;
