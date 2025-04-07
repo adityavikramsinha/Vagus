@@ -1,23 +1,14 @@
-import '../css/app.css';
-import '../css/hex.css'
-import '../css/navbar.css'
-import '../css/settings.css'
-import '../css/actionButtons.css'
-import App from "../components/App";
-import '../css/index.css';
-import {StrictMode} from 'react';
-import Head from "next/head";
+import '../visualiseGraphs/css/app.css';
+import '../visualiseGraphs/css/hex.css'
+import '../visualiseGraphs/css/navbar.css'
+import '../visualiseGraphs/css/settings.css'
+import '../visualiseGraphs/css/actionButtons.css'
+import '../visualiseGraphs/css/index.css';
+import { AppProps } from 'next/app';
 
-function WrapperApp() {
-  return <StrictMode>
-    <Head>
-      <link rel="icon" href="/favicon.png" />
-      <title>Vagus — A Path Visualiser</title>
-    </Head>
-    <div id = "root">
-    <App />
-    </div>
-  </StrictMode>
+function MyApp({ Component, pageProps }: AppProps) {
+    return <Component {...pageProps} />;
 }
 
-export default WrapperApp;
+export default MyApp;
+

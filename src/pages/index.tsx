@@ -2,7 +2,7 @@
 const Home = () => {
   return (
       <div>
-        <h1>Welcome to My Next.js App</h1>
+        <h1>Under construction, go to /graphs for the first page. </h1>
       </div>
   );
 };

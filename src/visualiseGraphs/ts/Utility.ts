@@ -1,8 +1,11 @@
 import currentState from "./GlobalState";
 
 export const updateIDClass = (id: string, classesRM: string[], classesADD: string[]): void => {
-  document.getElementById(id).classList.remove(...classesRM);
-  document.getElementById(id).classList.add(...classesADD);
+  let element = document.getElementById(id)
+    if(element!==null) {
+        element.classList.remove(...classesRM);
+        element.classList.add(...classesADD);
+    }
 }
 
 export const updateBiIDClass = (id: number, classToRM: string[], classToAdd: string): void => {
