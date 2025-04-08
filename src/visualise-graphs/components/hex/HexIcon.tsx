@@ -1,10 +1,9 @@
-import React from 'react';
+import * as React from "react";
 
-
-interface HexIconProps {
-  idSVG: string;
+type HexIconProps= {
+    idSVG: string;
 }
-export function HexIcon(props:HexIconProps) {
+const HexIcon= (props:HexIconProps)=> {
     return (
         <svg className="icon no-node" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 30"
              fill="currentColor" id={props.idSVG}>
@@ -16,3 +15,5 @@ export function HexIcon(props:HexIconProps) {
         </svg>
     )
 }
+
+export default HexIcon;

@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as ActionIcons from './actionButtons';
 import { updateIDClass } from '../ts/Utility';
 import currentState from "../ts/GlobalState";
 import {JSX} from "react";
@@ -59,10 +58,10 @@ export default class Settings extends React.Component {
                     <div className="settings-inner">
                         <div className="settings-master-header">
                             <div className="settings-buttons">
-                                <ActionIcons.StopButtonIcon className="cross-icon" onClick={() => {
-                                    Settings.toggleDisplay();
-                                    Settings.updateCSS();
-                                }} />
+                                {/*<ActionIcons.StopButtonIcon className="cross-icon" onClick={() => {*/}
+                                {/*    Settings.toggleDisplay();*/}
+                                {/*    Settings.updateCSS();*/}
+                                {/*}} />*/}
                             </div>
                             <div className="settings-header">
                                 <p>settings.json</p>

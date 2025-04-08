@@ -1,23 +1,8 @@
 import React from 'react';
-import {
-    BATIcon,
-    BOMBNode,
-    ENDNode,
-    IOIcon,
-    MDIcon,
-    SHORTESTPATHNode,
-    STARTNode,
-    SYSIcon,
-    TsIcon,
-    UNVISITEDNode,
-    VISITEDNode,
-    WALLNode,
-    WEIGHTNode
-} from "./fileSVGIconComponent";
-import currentState from "../ts/GlobalState";
-import { AlgoType, MazeGenerationType, NodeType, SpeedType } from "../ts/Types";
-import { updateMaze } from "../ts/HexBoardUpdate"
-import Settings from './Settings';
+import currentState from "../../ts/GlobalState";
+import { AlgoType, MazeGenerationType, NodeType, SpeedType } from "../../ts/Types";
+import { updateMaze } from "../../ts/HexBoardUpdate"
+import Settings from '../Settings';
 
 /**
  * Makes the changes in the Global States for the algorithm, node type, maze type, and speed.
@@ -108,75 +93,42 @@ const NodeAnimation = (nodeType: string) => {
     }
 }
 
-export const TsFile = (props: any) => {
-    return (
-        <div className={props.divClassName} id={props.divID} onClick={() => updateState('.ts-file', props.divID, props.text)}>
-            <TsIcon />
-            <p className={props.pClassName}>{props.text}</p>
-        </div>
-    )
+export enum FileType {
+    TS= "ts",
+    IO = "io",
+    BAT ="bat",
+    SYS = "sys",
+    MD = "md",
+    GUI = "gui",
 }
 
-export const IOFile = (props: any) => {
-    return (
-        <div className={props.divClassName} id={props.divID} onClick={() => updateState('.io-file', props.divID, props.text)}>
-            <IOIcon />
-            <p className={props.pClassName}>{props.text}</p>
-        </div>
-    )
+
+type FileProps = {
+    type ?: FileType,
+    divId : string,
+    text : string,
+    pClassName : string,
+    guiType ?: string;
+    Icon : React.JSX.Element
 }
 
-export const BATFile =(props: any)=> {
-    return (
-        <div className={props.divClassName} id={props.divID} onClick={() => {
-            updateState('.bat-file', props.divID, props.text);
-            updateMaze();
-        }
-        }>
-            <BATIcon />
-            <p className={props.pClassName}>{props.text}</p>
-        </div>
-    )
-}
+const File: React.FC<FileProps> = (props) => {
 
-export const SYSFile =(props: any) => {
     return (
-        <div className={props.divClassName} id={props.divID} onClick={() => updateState('.sys-file', props.divID, props.text)}>
-            <SYSIcon />
+        <div className={
+            props.type ===FileType.GUI? `${props.guiType}`:`file ${props.type}-file`
+        } id={props.divId}
+             onClick={() => {
+                 updateState(`.${props.type}-file`, props.divId, props.text)
+                 if(props.type === FileType.BAT)
+                     updateMaze();
+                 else if(props.type === FileType.MD)
+                     Settings.toggleDisplay()
+             }}>
+            {props.Icon}
             <p className={props.pClassName}>{props.text}</p>
         </div>
     )
 }
-
-export const MDFile =(props: any) => {
-    return (
-        <div className={props.divClassName} id={props.divID}  onClick={() => {
-            Settings.toggleDisplay();
-        }}>
-            <MDIcon />
-            <p className={props.pClassName}>{props.text}</p>
-        </div>
-    )
-}
-
-export const GUIFile=(props: any) =>{
-    function Icon() {
-        switch (props.type) {
-            case 'bomb': return <BOMBNode />;
-            case 'shortest-path': return <SHORTESTPATHNode />;
-            case 'wall': return <WALLNode />;
-            case 'visited': return <VISITEDNode />;
-            case 'unvisited': return <UNVISITEDNode />;
-            case 'start-node': return <STARTNode />;
-            case 'end-node': return <ENDNode />;
-            case 'weight': return <WEIGHTNode />;
-        }
-    }
-    return (
-        <div className={props.divClassName} id={props.divID}>
-            <Icon />
-            <p className={props.pClassName}>{props.text}</p>
-        </div>
-    )
-}
+export default File;
 

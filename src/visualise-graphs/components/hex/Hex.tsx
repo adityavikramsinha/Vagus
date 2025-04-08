@@ -1,16 +1,13 @@
 import * as React from "react";
 
-import { HexIcon } from "./hexagonSVGIconComponent";
-import { updateHexIcon } from "../ts/HexBoardUpdate";
+import { updateHexIcon } from "../../ts/HexBoardUpdate";
+import HexIcon from "./HexIcon";
 
 type HexProps = {
     x: number,
     y: number,
     id: string,
 }
-
-
-
 
 /**
  * Returns a Hex Component that is ready to be rendered

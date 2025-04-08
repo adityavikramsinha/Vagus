@@ -1,6 +1,6 @@
 import * as React from "react";
 import currentState from "../ts/GlobalState";
-import Hex from "./Hex";
+import Hex from "./hex/Hex";
 
 import {updateBiIDClass, addToGraphs, updateGraph} from '../ts/Utility';
 import {JSX, useEffect, useState} from "react";

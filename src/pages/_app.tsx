@@ -1,9 +1,9 @@
-import '../visualiseGraphs/css/app.css';
-import '../visualiseGraphs/css/hex.css'
-import '../visualiseGraphs/css/navbar.css'
-import '../visualiseGraphs/css/settings.css'
-import '../visualiseGraphs/css/actionButtons.css'
-import '../visualiseGraphs/css/index.css';
+import '../visualise-graphs/css/app.css';
+import '../visualise-graphs/css/hex.css'
+import '../visualise-graphs/css/navbar.css'
+import '../visualise-graphs/css/settings.css'
+import '../visualise-graphs/css/actionButtons.css'
+import '../visualise-graphs/css/index.css';
 import { AppProps } from 'next/app';
 
 function MyApp({ Component, pageProps }: AppProps) {

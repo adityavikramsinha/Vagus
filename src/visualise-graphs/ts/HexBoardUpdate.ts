@@ -1,9 +1,9 @@
 import currentState from './GlobalState'
 import Graph from "./Graph";
-import { updateState } from '../components/fileStruct'
+import { updateState } from '../components/file/File'
 import { MazeGenerator } from './MazeGenerator';
 import { MazeGenerationType } from './Types';
-import { RemoveAllClasses } from './ActionButtonsFunctionality';
+import {removeAllClasses} from "./Utility";
 import { updateIDClass, updateBiIDClass } from './Utility';
 
 const updateHexIcon = (propID: string, id: number): void => {
@@ -180,7 +180,7 @@ const displayMaze = (options: displayMazeOptions): void => {
 
 const updateMaze = (): void => {
   if (currentState.run() === true) return;
-  RemoveAllClasses(1, ['start-node', 'end-node', 'wall-node', 'weight-node']);
+  removeAllClasses(1, ['start-node', 'end-node', 'wall-node', 'weight-node']);
   Graph.copy(currentState.initGraph(), currentState.graph(), 1);
   setTimeout(() => {
     switch (currentState.maze()) {

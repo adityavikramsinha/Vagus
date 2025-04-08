@@ -1,6 +1,6 @@
 import currentState from "./GlobalState";
 import { nodeHoverAnimation } from "./HexBoardUpdate";
-import { RemoveAllClasses } from './ActionButtonsFunctionality';
+import {removeAllClasses} from "./Utility";
 import { updateIDClass, extractIDs } from './Utility';
 import { SpeedType } from "./Types";
 
@@ -128,7 +128,7 @@ const renewNodes = (classToRemove: string) => {
     ele.classList.remove(classToRemove);
     ele.classList.add('no-node');
   }
-  RemoveAllClasses(1, []);
+  removeAllClasses(1, []);
 }
 
 const updateSpeed = (): number => {

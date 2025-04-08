@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import GraphVisualiserApp from "../visualiseGraphs/components/GraphVisualiserApp";
+import GraphVisualiserApp from "../visualise-graphs/components/GraphVisualiserApp";
 import  Head  from "next/head";
 
 function GraphsPage() {

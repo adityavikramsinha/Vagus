@@ -28,3 +28,33 @@ export const updateGraph = (x:number , y : number , id : number)=>{
   currentState.initGraph().addNode(id);
   currentState.initGraph().setNodeCoords(id, { x: x, y: y });
 }
+
+
+/**
+ * Removes all the nodes of a certain type from the board.
+ * @param node The class of the node type that has to be removed from the board.
+ * @return void
+ */
+const removeAllNodes = (node: string): void => {
+    let nodes = document.querySelectorAll(`.${node}`);
+    let svgNode = document.querySelectorAll(`.svg-${node}`);
+    for (let i = 0; i < nodes.length; i++) {
+        const ele = nodes[i] as HTMLElement;
+        ele.classList.remove(node, 'node-hover');
+        ele.classList.add('no-node');
+        const svgEle = svgNode[i] as HTMLElement;
+        svgEle.classList.remove(`svg-${node}`);
+        svgEle.classList.add('no-node', 'icon');
+    }
+}
+
+export const removeAllClasses = (time: number, optional: string[]) => {
+    setTimeout(() => {
+        removeAllNodes('path-node');
+        removeAllNodes('visited-node');
+        removeAllNodes('visited-node-bomb');
+        removeAllNodes('un-path-node');
+        removeAllNodes('un-visited-node');
+        optional.forEach((x: string) => removeAllNodes(x));
+    }, time)
+}
