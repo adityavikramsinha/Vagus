@@ -6,7 +6,7 @@ import StopButton from "./action-buttons/StopButton";
 
 export default class Settings extends React.Component {
 
-    // TODO change from DOM to component state management 
+    // TODO change from DOM to component state management
     static toggleDisplay = () => {
         let settings = document.querySelector(".settings-outer") as HTMLElement;
         if (settings.style.display === "none") {

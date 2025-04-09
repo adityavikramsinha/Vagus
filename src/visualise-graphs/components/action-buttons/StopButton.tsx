@@ -1,8 +1,4 @@
 import React from "react";
-import currentState from "../../ts/GlobalState";
-import {updateIDClass} from "../../ts/Utility";
-import {removeAllClasses} from "../../ts/Utility";
-import Graph from "../../ts/Graph";
 
 const StopButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
     return (
@@ -13,15 +9,6 @@ const StopButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
     )
 }
 
-
-/**
- * Resets the hex board to its default initial state when the Stop button is clicked.
- * Requires no parameters.
- * @return void
- */
-const stopButtonClick = (): void => {
-
-}
 
 
 type StopButtonProps = {
