@@ -4,6 +4,7 @@ import '../visualise-graphs/css/navbar.css'
 import '../visualise-graphs/css/settings.css'
 import '../visualise-graphs/css/actionButtons.css'
 import '../visualise-graphs/css/index.css';
+import '../visualise-graphs/css/loading.scss'
 import { AppProps } from 'next/app';
 
 function MyApp({ Component, pageProps }: AppProps) {

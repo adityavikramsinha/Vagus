@@ -368,7 +368,13 @@ const Navbar: FC = () => {
                                 type={FileType.GUI}
                             />
                         </Folder>
-                        <File text="settings.json" id="md-1" type={FileType.MD} Icon={<MdFileIcon />} />
+                        <File
+                            text="settings.json"
+                            id="md-1"
+                            type={FileType.MD}
+                            Icon={<MdFileIcon />}
+                            changeSelectedFile={handleSelectedFile}
+                        />
                     </div>
                 </Folder>
             </div>

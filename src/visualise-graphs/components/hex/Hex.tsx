@@ -3,7 +3,7 @@ import * as React from "react";
 import { updateHexIcon } from "../../ts/HexBoardUpdate";
 import HexIcon from "./HexIcon";
 
-type HexProps = {
+export type HexProps = {
     x: number,
     y: number,
     id: string,

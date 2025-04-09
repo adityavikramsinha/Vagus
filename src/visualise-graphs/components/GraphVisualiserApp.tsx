@@ -1,5 +1,5 @@
 import React from "react";
-import HexBoard from "./HexBoard";
+import HexBoard from "./hex-board/HexBoard";
 import Navbar from "./Navbar";
 import Settings from "./Settings";
 

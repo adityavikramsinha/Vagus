@@ -1,0 +1,37 @@
+.outer-loading-container {
+    align-content: center;
+}
+
+.loading-hexagon {
+    height: var(--box-size);
+    position:relative;
+    display: block;
+    aspect-ratio: 1/cos(30deg);
+    clip-path: polygon(50% -50%,100% 50%,50% 150%,0 50%);
+    transform-origin: -50% center;
+    border-radius: var(--box-border-radius);
+    &:nth-child(1)
+    {
+        animation: slide var(--duration) ease-in-out infinite alternate;
+        &:after{ animation: color-change var(--duration) ease-in-out infinite alternate; }
+    }
+}
+.loading-container
+{
+    width: var(--container-size);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+@keyframes slide
+{
+    0% { background-color: #1795FF; transform: translatex(0vw); }
+    100% { background-color: #23D3FB; transform: translatex(calc(var(--container-size) - (var(--box-size) * 1.25))); }
+}
+@keyframes color-change
+{
+    0% { background-color: #1795FF; }
+    100% { background-color: #23D3FB; }
+}
