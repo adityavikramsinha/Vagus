@@ -1,8 +1,5 @@
 import Node from "./Node";
 
-
-
-
 /**
  * Utility graph class with functions to help in maintaining state and making the algorithms work.
  * It is a Map of Nodes, each node is connection through the Edges and together get

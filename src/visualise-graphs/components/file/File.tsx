@@ -1,55 +1,9 @@
 import React from 'react';
-import currentState from "../../ts/GlobalState";
-import { AlgoType, MazeGenerationType, NodeType, SpeedType } from "../../ts/Types";
-import { updateMaze } from "../../ts/HexBoardUpdate"
-import Settings from '../Settings';
-
-/**
- * Makes the changes in the Global States for the algorithm, node type, maze type, and speed.
- * Also makes the required the changes in the visual representation of the command board.
- * Sets the nodes to start pulsating depending on the selected node type.
- * @param divClass The class of the type of file which is clicked.
- * @param id The id of the file which is clicked.
- * @param text The type of file that is clicked.
- * @returns void
- */
-export const updateState = (divClass: string, id: string, text: string): void => {
-    let files = document.querySelectorAll(divClass);
-    for (let i = 0; i < files.length; i++) {
-        const ele = files[i] as HTMLElement;
-        ele.style.backgroundColor = "transparent";
-        ele.style.borderLeft = "";
-    }
-    document.getElementById(id).style.backgroundColor = `rgba(255, 255, 255, 0.05)`;
-    let ext: string = text.substring(text.lastIndexOf(".") + 1);
-    let textAdd: string = text.substring(0, text.lastIndexOf("."));
-    switch (ext) {
-        case "ts":
-            currentState.changeAlgorithm(AlgoType[textAdd]);
-            break;
-        case "io":
-            currentState.changeAddableNode(NodeType[textAdd]);
-            break;
-        case "bat":
-            currentState.changeMaze(MazeGenerationType[textAdd]);
-            break;
-        case "sys":
-            currentState.changeSpeed(parseInt(SpeedType[`percent${text.substring(0, text.indexOf('p'))}`]));
-            break;
-        default:
-            return
-    }
-    NodeAnimation(textAdd);
-    document.onmousemove = null;
-    document.onmousedown = null;
-}
-
-
 /**
  * Starts the pulsating of the all the nodes of a particular type which is selected on the command board.
  * @param nodeType The type of node that is selected.
  */
-const NodeAnimation = (nodeType: string) => {
+export const updateAddableNodes = (nodeType: string) => {
     let files = document.querySelectorAll('.node-hover');
     for (let i = 0; i < files.length; i++) {
         const ele = files[i] as HTMLElement;
@@ -103,30 +57,29 @@ export enum FileType {
 }
 
 
-type FileProps = {
+export type FileProps = {
     type ?: FileType,
-    divId : string,
+    id : string,
     text : string,
-    pClassName : string,
-    guiType ?: string;
-    Icon : React.JSX.Element
+    Icon : React.JSX.Element,
+    changeSelectedFile ?: (divId:string, text:string, type:FileType)=> void
+    currentActive ?: string
 }
 
 const File: React.FC<FileProps> = (props) => {
 
     return (
-        <div className={
-            props.type ===FileType.GUI? `${props.guiType}`:`file ${props.type}-file`
-        } id={props.divId}
-             onClick={() => {
-                 updateState(`.${props.type}-file`, props.divId, props.text)
-                 if(props.type === FileType.BAT)
-                     updateMaze();
-                 else if(props.type === FileType.MD)
-                     Settings.toggleDisplay()
-             }}>
+        <div
+            style ={props.id===props.currentActive? {background : `rgba(255, 255, 255, 0.05)`}:{}}
+            className= {`file ${props.type}-file`}
+            id={props.id}
+            onClick={() =>{ 
+                if (props.type !== FileType.GUI)
+                props.changeSelectedFile(props.id, props.text, props.type)
+            }}
+        >
             {props.Icon}
-            <p className={props.pClassName}>{props.text}</p>
+            <p className="file-name">{props.text}</p>
         </div>
     )
 }

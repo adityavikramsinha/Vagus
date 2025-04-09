@@ -1,10 +1,10 @@
 import currentState from './GlobalState'
 import Graph from "./Graph";
-import { updateState } from '../components/file/File'
 import { MazeGenerator } from './MazeGenerator';
-import { MazeGenerationType } from './Types';
+import {AlgoType, MazeGenerationType, NodeType, SpeedType} from './Types';
 import {removeAllClasses} from "./Utility";
 import { updateIDClass, updateBiIDClass } from './Utility';
+import {updateAddableNodes} from "../components/file/File";
 
 const updateHexIcon = (propID: string, id: number): void => {
   document.onmousemove = null;
@@ -109,6 +109,48 @@ const multiNodeGraphUpdate = (node: string, id: number, cost: number, add: boole
     if (add) Graph.revertNode(id, currentState.initGraph(), currentState.graph());
     else currentState.graph().rmNode(id);
   }
+}
+
+
+// TODO: still direct DOM manipulation
+/**
+ * Makes the changes in the Global States for the algorithm, node type, maze type, and speed.
+ * Also makes the required the changes in the visual representation of the command board.
+ * Sets the nodes to start pulsating depending on the selected node type.
+ * @param divClass The class of the type of file which is clicked.
+ * @param id The id of the file which is clicked.
+ * @param text The type of file that is clicked.
+ * @returns void
+ */
+export const updateState = (divClass: string, id: string, text: string): void => {
+    let files = document.querySelectorAll(divClass);
+    for (let i = 0; i < files.length; i++) {
+        const ele = files[i] as HTMLElement;
+        ele.style.backgroundColor = "transparent";
+        ele.style.borderLeft = "";
+    }
+    document.getElementById(id).style.backgroundColor = `rgba(255, 255, 255, 0.05)`;
+    let ext: string = text.substring(text.lastIndexOf(".") + 1);
+    let textAdd: string = text.substring(0, text.lastIndexOf("."));
+    switch (ext) {
+        case "ts":
+            currentState.changeAlgorithm(AlgoType[textAdd]);
+            break;
+        case "io":
+            currentState.changeAddableNode(NodeType[textAdd]);
+            break;
+        case "bat":
+            currentState.changeMaze(MazeGenerationType[textAdd]);
+            break;
+        case "sys":
+            currentState.changeSpeed(parseInt(SpeedType[`percent${text.substring(0, text.indexOf('p'))}`]));
+            break;
+        default:
+            return
+    }
+    updateAddableNodes(textAdd);
+    document.onmousemove = null;
+    document.onmousedown = null;
 }
 
 const updateStateOnClick = (propID: string): void => {

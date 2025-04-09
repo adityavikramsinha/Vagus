@@ -1,10 +1,11 @@
 import * as React from "react";
 
-import File, { FileType } from "./file/File";
+import File, {FileType, updateAddableNodes} from "./file/File";
 import PrevButton from "./action-buttons/PrevButton";
 import StopButton from "./action-buttons/StopButton";
 import StartButton from "./action-buttons/StartButton";
 import Folder from "./folder/Folder";
+
 import {
     BatFileIcon,
     BombNodeIcon, EndNodeIcon,
@@ -15,8 +16,75 @@ import {
     TsFileIcon, UnvisitedNodeIcon, VisitedNodeIcon,
     WallNodeIcon, WeightNodeIcon
 } from "./file/FileIcons";
+import { FC, useState} from "react";
+import currentState from "../ts/GlobalState";
+import {AlgoType, MazeGenerationType, NodeType, SpeedType} from "../ts/Types";
+import {updateMaze} from "../ts/HexBoardUpdate";
+import Settings from "./Settings";
 
-const Navbar: React.FC = () => {
+
+type activeFileTypes = {
+    ts : string | null,
+    io : string | null,
+    sys: string | null,
+    bat: string | null,
+}
+
+
+const Navbar: FC = () => {
+
+    const [activeFiles, setActiveFiles] = useState<activeFileTypes>({
+        ts : null,
+        io : null,
+        sys : null,
+        bat : null
+    });
+
+    /**
+     * Makes the changes in the Global States for the algorithm, node type, maze type, and speed.
+     * Also makes the required the changes in the visual representation of the command board.
+     * Sets the nodes to start pulsating depending on the selected node type.
+     * @param type The type of file which is clicked
+     * @param id The id of the file which is clicked.
+     * @param text The type of file that is clicked.
+     * @returns void
+     */
+    const handleSelectedFile = (id : string, text:string, type: FileType)=> {
+        let changedActiveFiles: activeFileTypes= {
+            ts  : activeFiles.ts,
+            bat : activeFiles.bat,
+            sys : activeFiles.sys,
+            io  : activeFiles.io
+        };
+        let typeOf: string = text.substring(0, text.lastIndexOf("."));
+        switch (type) {
+            case FileType.TS:
+                currentState.changeAlgorithm(AlgoType[typeOf]);
+                changedActiveFiles.ts = id;
+                break;
+            case FileType.IO:
+                currentState.changeAddableNode(NodeType[typeOf]);
+                changedActiveFiles.io = id;
+                break;
+            case FileType.BAT:
+                currentState.changeMaze(MazeGenerationType[typeOf]);
+                changedActiveFiles.bat= id;
+                updateMaze();
+                break;
+            case FileType.SYS:
+                currentState.changeSpeed(parseInt(SpeedType[`percent${text.substring(0, text.indexOf('p'))}`]));
+                changedActiveFiles.sys=id;
+                break;
+            case FileType.MD:
+                Settings.toggleDisplay();
+                break;
+            default:
+                return
+        }
+        setActiveFiles(changedActiveFiles)
+        updateAddableNodes(typeOf);
+    }
+
     return (
         <div className="navbar">
             <div className="header">
@@ -33,59 +101,274 @@ const Navbar: React.FC = () => {
                         <Folder text="algorithms" divClassName="folder advanced-cp-comp" arrowID="algorithms-arrow">
                             <div className="folder-drop-inner">
                                 <Folder text="heuristic" divClassName="folder advanced-cp-comp" arrowID="heuristic-arrow">
-                                    <File pClassName="tsx-name file-name" text="aStarSearch.ts" divId="tsx-1" type={FileType.TS} Icon={<TsFileIcon />} />
-                                    <File pClassName="tsx-name file-name" text="bestFirstSearch.ts" divId="tsx-2" type={FileType.TS} Icon={<TsFileIcon />} />
+                                    <File
+                                        text="aStarSearch.ts"
+                                        id="ts-1"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
+                                    <File
+                                        text="bestFirstSearch.ts"
+                                        id="ts-2"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
                                 </Folder>
                                 <Folder text="un-weighted" divClassName="folder advanced-cp-comp" arrowID="un-weighted-arrow">
-                                    <File pClassName="tsx-name file-name" text="breadthFirstSearch.ts" divId="tsx-3" type={FileType.TS} Icon={<TsFileIcon />} />
-                                    <File pClassName="tsx-name file-name" text="depthFirstSearch.ts" divId="tsx-4" type={FileType.TS} Icon={<TsFileIcon />} />
-                                    <File pClassName="tsx-name file-name" text="randomWalk.ts" divId="tsx-5" type={FileType.TS} Icon={<TsFileIcon />} />
-                                    <File pClassName="tsx-name file-name" text="bestFirstSearch.ts" divId="tsx-6" type={FileType.TS} Icon={<TsFileIcon />} />
+                                    <File
+                                        text="breadthFirstSearch.ts"
+                                        id="tsx-3"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
+                                    <File
+                                        text="depthFirstSearch.ts"
+                                        id="tsx-4"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
+                                    <File
+                                        text="randomWalk.ts"
+                                        id="tsx-5"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
+                                    <File
+                                        text="bestFirstSearch.ts"
+                                        id="tsx-6"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
                                 </Folder>
                                 <Folder text="weighted" divClassName="folder advanced-cp-comp" arrowID="weighted-arrow">
-                                    <File pClassName="tsx-name file-name" text="aStarSearch.ts" divId="tsx-7" type={FileType.TS} Icon={<TsFileIcon />} />
-                                    <File pClassName="tsx-name file-name" text="dijkstrasSearch.ts" divId="tsx-8" type={FileType.TS} Icon={<TsFileIcon />} />
-                                    <File pClassName="tsx-name file-name" text="bellmanFord.ts" divId="tsx-9" type={FileType.TS} Icon={<TsFileIcon />} />
-                                    <File pClassName="tsx-name file-name" text="biDirectionalSearch.ts" divId="tsx-10" type={FileType.TS} Icon={<TsFileIcon />} />
+                                    <File
+                                        text="aStarSearch.ts"
+                                        id="tsx-7"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
+                                    <File
+                                        text="dijkstrasSearch.ts"
+                                        id="tsx-8"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
+                                    <File
+                                        text="bellmanFord.ts"
+                                        id="tsx-9"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
+                                    <File
+                                        text="biDirectionalSearch.ts"
+                                        id="tsx-10"
+                                        type={FileType.TS}
+                                        Icon={<TsFileIcon />}
+                                        currentActive={activeFiles.ts}
+                                        changeSelectedFile={handleSelectedFile}
+                                    />
                                 </Folder>
                             </div>
                         </Folder>
                         <Folder text="addableNodes" divClassName="folder advanced-cp-comp" arrowID="addable-arrow">
-                            <File pClassName="node-name file-name" text="startNode.io" divId="io-1" type={FileType.IO} Icon={<IOFileIcon />} />
-                            <File pClassName="node-name file-name" text="endNode.io" divId="io-2" type={FileType.IO} Icon={<IOFileIcon />} />
-                            <File pClassName="node-name file-name" text="bombNode.io" divId="io-3" type={FileType.IO} Icon={<IOFileIcon />} />
-                            <File pClassName="node-name file-name" text="weightNode.io" divId="io-4" type={FileType.IO} Icon={<IOFileIcon />} />
-                            <File pClassName="node-name file-name" text="wallNode.io" divId="io-5" type={FileType.IO} Icon={<IOFileIcon />} />
+                            <File
+                                text="startNode.io"
+                                id="io-1"
+                                type={FileType.IO}
+                                Icon={<IOFileIcon />}
+                                currentActive={activeFiles.io}
+                                changeSelectedFile={handleSelectedFile}
+                            />
+                            <File
+                                text="endNode.io"
+                                id="io-2"
+                                type={FileType.IO}
+                                Icon={<IOFileIcon />}
+                                currentActive={activeFiles.io}
+                                changeSelectedFile={handleSelectedFile}
+                            />
+                            <File
+                                text="bombNode.io"
+                                id="io-3"
+                                type={FileType.IO}
+                                Icon={<IOFileIcon />}
+                                currentActive={activeFiles.io}
+                                changeSelectedFile={handleSelectedFile}
+                            />
+                            <File
+                                text="weightNode.io"
+                                id="io-4"
+                                type={FileType.IO}
+                                Icon={<IOFileIcon />}
+                                currentActive={activeFiles.io}
+                                changeSelectedFile={handleSelectedFile}
+                            />
+                            <File
+                                text="wallNode.io"
+                                id="io-5"
+                                type={FileType.IO}
+                                Icon={<IOFileIcon />}
+                                currentActive={activeFiles.io}
+                                changeSelectedFile={handleSelectedFile}
+                            />
                         </Folder>
                         <Folder text="mazes" divClassName="folder advanced-cp-comp" arrowID="mazes-arrow">
-                            <File pClassName="maze-name file-name" text="none.bat" divId="bat-1" type={FileType.BAT} Icon={<BatFileIcon />} />
-                            <File pClassName="maze-name file-name" text="generateRandomMaze.bat" divId="bat-2" type={FileType.BAT} Icon={<BatFileIcon />} />
+                            <File
+                                text="none.bat"
+                                id="bat-1"
+                                type={FileType.BAT}
+                                Icon={<BatFileIcon />}
+                                currentActive={activeFiles.bat}
+                                changeSelectedFile={handleSelectedFile}
+                            />
+                            <File
+                                text="generateRandomMaze.bat"
+                                id="bat-2"
+                                type={FileType.BAT}
+                                Icon={<BatFileIcon />}
+                                currentActive={activeFiles.bat}
+                                changeSelectedFile={handleSelectedFile}
+                            />
                             <Folder text="wall" divClassName="folder advanced-cp-comp" arrowID="wall-arrow">
-                                <File pClassName="maze-name file-name" text="generateLeastCostPathBlocker.bat" divId="bat-3" type={FileType.BAT} Icon={<BatFileIcon />} />
-                                <File pClassName="maze-name file-name" text="generateBlockedRidges.bat" divId="bat-4" type={FileType.BAT} Icon={<BatFileIcon />} />
-                                <File pClassName="maze-name file-name" text="generateBlockedRandomMaze.bat" divId="bat-5" type={FileType.BAT} Icon={<BatFileIcon />} />
+                                <File
+                                    text="generateLeastCostPathBlocker.bat"
+                                    id="bat-3"
+                                    type={FileType.BAT}
+                                    Icon={<BatFileIcon />}
+                                    currentActive={activeFiles.bat}
+                                    changeSelectedFile={handleSelectedFile}
+                                />
+                                <File
+                                    text="generateBlockedRidges.bat"
+                                    id="bat-4"
+                                    type={FileType.BAT}
+                                    Icon={<BatFileIcon />}
+                                    currentActive={activeFiles.bat}
+                                    changeSelectedFile={handleSelectedFile}
+                                />
+                                <File
+                                    text="generateBlockedRandomMaze.bat"
+                                    id="bat-5"
+                                    type={FileType.BAT}
+                                    Icon={<BatFileIcon />}
+                                    currentActive={activeFiles.bat}
+                                    changeSelectedFile={handleSelectedFile}
+                                />
                             </Folder>
                             <Folder text="weighted" divClassName="folder advanced-cp-comp" arrowID="weighted-arrow">
-                                <File pClassName="maze-name file-name" text="generateWeightedRidges.bat" divId="bat-6" type={FileType.BAT} Icon={<BatFileIcon />} />
-                                <File pClassName="maze-name file-name" text="generateWeightedRandomMaze.bat" divId="bat-7" type={FileType.BAT} Icon={<BatFileIcon />} />
+                                <File
+                                    text="generateWeightedRidges.bat"
+                                    id="bat-6"
+                                    type={FileType.BAT}
+                                    Icon={<BatFileIcon />}
+                                    currentActive={activeFiles.bat}
+                                    changeSelectedFile={handleSelectedFile}
+                                />
+                                <File
+                                    text="generateWeightedRandomMaze.bat"
+                                    id="bat-7"
+                                    type={FileType.BAT}
+                                    Icon={<BatFileIcon />}
+                                    currentActive={activeFiles.bat}
+                                    changeSelectedFile={handleSelectedFile}
+                                />
                             </Folder>
                         </Folder>
                         <Folder text="speeds" divClassName="folder advanced-cp-comp" arrowID="speeds-arrow">
-                            <File pClassName="speed-name file-name" text="25percent.sys" divId="sys-1" type={FileType.SYS} Icon={<SysFileIcon />} />
-                            <File pClassName="speed-name file-name" text="50percent.sys" divId="sys-2" type={FileType.SYS} Icon={<SysFileIcon />} />
-                            <File pClassName="speed-name file-name" text="100percent.sys" divId="sys-3" type={FileType.SYS} Icon={<SysFileIcon />} />
+                            <File
+                                text="25percent.sys"
+                                id="sys-1"
+                                type={FileType.SYS}
+                                Icon={<SysFileIcon />}
+                                currentActive={activeFiles.sys}
+                                changeSelectedFile={handleSelectedFile}
+                            />
+                            <File
+                                text="50percent.sys"
+                                id="sys-2"
+                                type={FileType.SYS}
+                                Icon={<SysFileIcon />}
+                                currentActive={activeFiles.sys}
+                                changeSelectedFile={handleSelectedFile}
+                            />
+                            <File
+                                text="100percent.sys"
+                                id="sys-3"
+                                type={FileType.SYS}
+                                Icon={<SysFileIcon />}
+                                currentActive={activeFiles.sys}
+                                changeSelectedFile={handleSelectedFile}
+                            />
                         </Folder>
                         <Folder text="legend" divClassName="folder advanced-cp-comp" arrowID="legend-arrow">
-                            <File  pClassName="legend-name file-name" text="bombNode.gui" guiType="bomb" divId="gui-1" Icon={<BombNodeIcon/>}/>
-                            <File  pClassName="legend-name file-name" text="shortestPathNode.gui" guiType="shortest-path" divId="gui-2" Icon={<ShortestPathNodeIcon/>}/>
-                            <File  pClassName="legend-name file-name" text="wallNode.gui" guiType="wall" divId="gui-3" Icon={<WallNodeIcon/>}/>
-                            <File  pClassName="legend-name file-name" text="visitedNode.gui" guiType="visited" divId="gui-4" Icon={<VisitedNodeIcon/>}/>
-                            <File  pClassName="legend-name file-name" text="unvisitedNode.gui" guiType="unvisited" divId="gui-5" Icon={<UnvisitedNodeIcon/>}/>
-                            <File  pClassName="legend-name file-name" text="startNode.gui" guiType="start-node" divId="gui-6" Icon={<StartNodeIcon/>}/>
-                            <File  pClassName="legend-name file-name" text="endNode.gui" guiType="end-node" divId="gui-7" Icon={<EndNodeIcon/>}/>
-                            <File  pClassName="legend-name file-name" text="weightNode.gui" guiType="weight" divId="gui-8" Icon={<WeightNodeIcon/>}/>
+                            <File
+                                text="bombNode.gui"
+                                id="gui-1"
+                                Icon={<BombNodeIcon />}
+                                type={FileType.GUI}
+                            />
+                            <File
+                                text="shortestPathNode.gui"
+                                id="gui-2"
+                                Icon={<ShortestPathNodeIcon />}
+                                type={FileType.GUI}
+                            />
+                            <File
+                                text="wallNode.gui"
+                                id="gui-3"
+                                Icon={<WallNodeIcon />}
+                                type={FileType.GUI}
+                            />
+                            <File
+                                text="visitedNode.gui"
+                                id="gui-4"
+                                Icon={<VisitedNodeIcon />}
+                                type={FileType.GUI}
+                            />
+                            <File
+                                text="unvisitedNode.gui"
+                                id="gui-5"
+                                Icon={<UnvisitedNodeIcon />}
+                                type={FileType.GUI}
+                            />
+                            <File
+                                text="startNode.gui"
+                                id="gui-6"
+                                Icon={<StartNodeIcon />}
+                                type={FileType.GUI}
+                            />
+                            <File
+                                text="endNode.gui"
+                                id="gui-7"
+                                Icon={<EndNodeIcon />}
+                                type={FileType.GUI}
+                            />
+                            <File
+                                text="weightNode.gui"
+                                id="gui-8"
+                                Icon={<WeightNodeIcon />}
+                                type={FileType.GUI}
+                            />
                         </Folder>
-                        <File pClassName="file-name" text="settings.json" divId="md-1" type={FileType.MD} Icon={<MdFileIcon />} />
+                        <File text="settings.json" id="md-1" type={FileType.MD} Icon={<MdFileIcon />} />
                     </div>
                 </Folder>
             </div>

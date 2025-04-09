@@ -51,6 +51,7 @@ export default class Settings extends React.Component {
         });
     }
 
+    // TODO: Action Button in settings in broken.
     render() {
         return (
             <React.Fragment>
