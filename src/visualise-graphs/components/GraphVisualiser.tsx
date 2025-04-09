@@ -3,7 +3,7 @@ import HexBoard from "./hex-board/HexBoard";
 import Navbar from "./Navbar";
 import Settings from "./Settings";
 
-export const GraphVisualiserApp :React.FC = () => {
+export const GraphVisualiser :React.FC = () => {
     return (
         <React.Fragment>
             <div className="App">
@@ -18,4 +18,4 @@ export const GraphVisualiserApp :React.FC = () => {
         </React.Fragment >
     );
 }
-export default GraphVisualiserApp;
+export default GraphVisualiser;

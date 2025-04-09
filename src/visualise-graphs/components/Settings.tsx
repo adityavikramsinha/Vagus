@@ -2,8 +2,11 @@ import * as React from "react";
 import { updateIDClass } from '../ts/Utility';
 import currentState from "../ts/GlobalState";
 import {JSX} from "react";
+import StopButton from "./action-buttons/StopButton";
 
 export default class Settings extends React.Component {
+
+    // TODO change from DOM to component state management 
     static toggleDisplay = () => {
         let settings = document.querySelector(".settings-outer") as HTMLElement;
         if (settings.style.display === "none") {
@@ -35,6 +38,7 @@ export default class Settings extends React.Component {
         return keyJSX;
     }
 
+    // TODO change from DOM to component state management
     static updateCSS = () => {
         let keyEle: HTMLElement, valueEle: HTMLElement;
         let key: string, value: string;
@@ -51,7 +55,6 @@ export default class Settings extends React.Component {
         });
     }
 
-    // TODO: Action Button in settings in broken.
     render() {
         return (
             <React.Fragment>
@@ -59,10 +62,10 @@ export default class Settings extends React.Component {
                     <div className="settings-inner">
                         <div className="settings-master-header">
                             <div className="settings-buttons">
-                                {/*<ActionIcons.StopButtonIcon className="cross-icon" onClick={() => {*/}
-                                {/*    Settings.toggleDisplay();*/}
-                                {/*    Settings.updateCSS();*/}
-                                {/*}} />*/}
+                                <StopButton onClick={()=>{
+                                    Settings.toggleDisplay();
+                                    Settings.updateCSS();
+                                }}/>
                             </div>
                             <div className="settings-header">
                                 <p>settings.json</p>

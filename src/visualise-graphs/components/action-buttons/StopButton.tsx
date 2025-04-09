@@ -20,21 +20,16 @@ const StopButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
  * @return void
  */
 const stopButtonClick = (): void => {
-    if (currentState.run() === true) currentState.changeRun();
-    updateIDClass('stop-button', [], ['button-clicked'])
-    removeAllClasses(500, ['start-node', 'end-node', 'wall-node', 'weight-node', 'bomb-node']);
-    currentState.changeBombNode(null);
-    currentState.changeEndNode(null);
-    currentState.changeStartNode(null);
-    Graph.copy(currentState.initGraph(), currentState.graph(), 1);
-    setTimeout(() => {
-        updateIDClass('stop-button', ['button-clicked'], [])
-    }, 510);
+
 }
 
 
-const StopButton =() => {
-    return <StopButtonIcon onClick={stopButtonClick}/>
+type StopButtonProps = {
+    onClick: () => void ;
+}
+
+const StopButton =(props:StopButtonProps) => {
+    return <StopButtonIcon onClick={props.onClick}/>
 }
 
 

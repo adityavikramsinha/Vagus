@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import GraphVisualiserApp from "../visualise-graphs/components/GraphVisualiserApp";
+import GraphVisualiser from "../visualise-graphs/components/GraphVisualiser";
 import  Head  from "next/head";
 
 function GraphsPage() {
@@ -9,7 +9,7 @@ function GraphsPage() {
             <title>Vagus — A Path Visualiser</title>
         </Head>
         <div id = "root">
-            <GraphVisualiserApp/>
+            <GraphVisualiser/>
         </div>
     </StrictMode>
 }

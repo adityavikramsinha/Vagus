@@ -21,6 +21,8 @@ import currentState from "../ts/GlobalState";
 import {AlgoType, MazeGenerationType, NodeType, SpeedType} from "../ts/Types";
 import {updateMaze} from "../ts/HexBoardUpdate";
 import Settings from "./Settings";
+import {removeAllClasses, updateIDClass} from "../ts/Utility";
+import Graph from "../ts/Graph";
 
 
 type activeFileTypes = {
@@ -85,13 +87,25 @@ const Navbar: FC = () => {
         updateAddableNodes(typeOf);
     }
 
+    const handleStop =()=>{
+        if (currentState.run() === true) currentState.changeRun();
+        updateIDClass('stop-button', [], ['button-clicked'])
+        removeAllClasses(500, ['start-node', 'end-node', 'wall-node', 'weight-node', 'bomb-node']);
+        currentState.changeBombNode(null);
+        currentState.changeEndNode(null);
+        currentState.changeStartNode(null);
+        Graph.copy(currentState.initGraph(), currentState.graph(), 1);
+        setTimeout(() => {
+            updateIDClass('stop-button', ['button-clicked'], [])
+        }, 510);
+    }
     return (
         <div className="navbar">
             <div className="header">
                 <div className="title">Vagus</div>
                 <div className="buttons">
                     <PrevButton />
-                    <StopButton />
+                    <StopButton onClick={()=>handleStop}/>
                     <StartButton />
                 </div>
             </div>
