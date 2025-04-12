@@ -36,7 +36,6 @@ const HexBoard: React.FC = () => {
         connectHexBoard(rows,cols, hexes.length);
         requestAnimationFrame(() => {
             let startPosition = Math.floor((rows  * cols) * 0.25);
-            console.log(startPosition);
             let endPosition = Math.floor((rows * cols) * 0.75);
 
             updateBiIDClass(startPosition, ['no-node'], 'start-node');
@@ -49,7 +48,13 @@ const HexBoard: React.FC = () => {
         return (
             <div className="hex-board" id="hex-board">
                 <div>
-                    {hexes.map((hex,index) => <Hex x={hex.x} y={hex.y} id={hex.id} key={index}/>
+                    {hexes.map((hex) =>
+                        <Hex
+                            x={hex.x}
+                            y={hex.y}
+                            id={hex.id}
+                            key = {hex.id}
+                        />
                     )}
                 </div>
             </div>

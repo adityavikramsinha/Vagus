@@ -48,6 +48,14 @@
 .weight-node {
     background-image: url('../assets/weightNode.svg');
     top: 0px;
+    animation : weighNodeDown 1s ease-in-out;
+}
+@keyframes weighNodeDown {
+    0%   {transform: scale(1) translateY(0);}
+    25%  {transform: scale(0.8) translateY(7px);}
+    50%  {transform: scale(1.05) translateY(-2px);}
+    70%  {transform: scale(0.97) translateY(2px);}
+    100% {transform: scale(1) translateY(0);}
 }
 
 .icon:hover {
@@ -56,6 +64,10 @@
 
 .svg-wall-node {
     fill: var(--wall-node-color);
+}
+
+.wall-node {
+    fill: #fff;
 }
 
 .node-hover {

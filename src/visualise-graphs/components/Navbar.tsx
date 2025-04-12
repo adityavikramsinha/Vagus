@@ -23,6 +23,7 @@ import {updateMaze} from "../ts/HexBoardUpdate";
 import Settings from "./Settings";
 import {removeAllClasses, updateIDClass} from "../ts/Utility";
 import Graph from "../ts/Graph";
+import useFrontendStateManager from "../store/store";
 
 
 type activeFileTypes = {
@@ -32,15 +33,12 @@ type activeFileTypes = {
     bat: string | null,
 }
 
-
+// FIXME : Subscription is very expensive, change to equality by moving
+//  it down to individual file components maintaining their state instead of
+//  navbar level.
 const Navbar: FC = () => {
-
-    const [activeFiles, setActiveFiles] = useState<activeFileTypes>({
-        ts : null,
-        io : null,
-        sys : null,
-        bat : null
-    });
+    const changeActiveFiles = useFrontendStateManager(state=>state.changeActiveFiles);
+    const activeFiles = useFrontendStateManager(state=>state.activeFiles);
 
     /**
      * Makes the changes in the Global States for the algorithm, node type, maze type, and speed.
@@ -83,8 +81,8 @@ const Navbar: FC = () => {
             default:
                 return
         }
-        setActiveFiles(changedActiveFiles)
-        updateAddableNodes(typeOf);
+        // updateAddableNodes(typeOf);
+        changeActiveFiles(changedActiveFiles)
     }
 
     const handleStopButtonClick =()=>{
@@ -98,6 +96,7 @@ const Navbar: FC = () => {
         Graph.copy(currentState.initGraph(), currentState.graph(), 1);
         updateIDClass('stop-button', ['button-clicked'], [])
     }
+    // console.log(activeFiles)
     return (
         <div className="navbar">
             <div className="header">

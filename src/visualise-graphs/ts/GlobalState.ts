@@ -48,7 +48,7 @@ class State<T> {
   private Run: boolean;
 
   // holds the global state for css settings.
-  private readonly CSSvariables: Map<string, string>;
+  private readonly CSSVariables: Map<string, string>;
 
 
 // all the identifiers ready to be mapped
@@ -148,12 +148,12 @@ class State<T> {
     this.INIT_GRAPH = _graph;
     this.PRES_GRAPH = _graph;
     this.Run = false;
-    this.CSSvariables = new Map();
+    this.CSSVariables = new Map();
 
     // get the values of the identifiers
     // create a new Map;
     for (let i: number = 0; i < Math.min(this.CSSValues.length, this.CSSIdentifiers.length); i++)
-      this.CSSvariables.set(this.CSSIdentifiers[i], this.CSSValues[i]);
+      this.CSSVariables.set(this.CSSIdentifiers[i], this.CSSValues[i]);
   }
 
   /**
@@ -170,7 +170,7 @@ class State<T> {
 
   /**
    *
-   * @returns the addable node TYPe
+   * @returns the addable node Type
    */
   addableNode(): NodeType { return this.AddableNode; }
 
@@ -220,7 +220,7 @@ class State<T> {
    *
    * @returns the Map of Css variables in the form [identifier : value ]
    */
-  cssVariables() : Map<string , string> { return this.CSSvariables ;  }
+  cssVariables() : Map<string , string> { return this.CSSVariables ;  }
 
   /**
    * Updates the addable node state.
@@ -325,7 +325,7 @@ class State<T> {
     // if it does
     // return change and return true
     // else return false.
-    this.CSSvariables.set(identifier.substring(2), value);
+    this.CSSVariables.set(identifier.substring(2), value);
     if (!CSS.supports(property, value))
       return false;
     document.documentElement.style.setProperty(identifier, value);
@@ -342,7 +342,7 @@ currentState.changeGraph(new Graph<number>((a, b): number => {
   return a === b ? 0 : a < b ? -1 : 1;
 }));
 
-// delcaring the init graph
+// declaring the initial graph
 currentState.changeInitGraph(new Graph<number>((a, b): number => {
   return a === b ? 0 : a < b ? -1 : 1;
 }));

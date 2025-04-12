@@ -9,6 +9,7 @@ import {
     updateRandomVisitedNodes,
     updateVisitedNodes
 } from "../../ts/HexBoardAlgoRunUpdate";
+import Button from "./Button";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -89,17 +90,17 @@ const startButtonClick = (currentNode: Node<number>, running: boolean): void => 
 const StartButton = () => {
 
     return  (
-        <StartButtonIcon
-            onClick={() => {
-                let currentNode: Node<number> = currentState.graph().nodes().get(currentState.startNode())
-                removeAllClasses(1, []);
-                if (currentState.run()) startButtonClick(currentNode, true);
-                else if (!currentState.run()) {
-                    currentState.changeRun();
-                    startButtonClick(currentNode, false)
-                }
-            }}
-        />
+        <Button className = "button" id = "start-button" onClick={() => {
+            let currentNode: Node<number> = currentState.graph().nodes().get(currentState.startNode())
+            removeAllClasses(1, []);
+            if (currentState.run()) startButtonClick(currentNode, true);
+            else if (!currentState.run()) {
+                currentState.changeRun();
+                startButtonClick(currentNode, false)
+            }
+        }}>
+            <StartButtonIcon/>
+        </Button>
     )
 }
 
