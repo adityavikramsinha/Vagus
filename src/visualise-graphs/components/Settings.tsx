@@ -6,7 +6,7 @@ import StopButton from "./action-buttons/StopButton";
 
 export default class Settings extends React.Component {
 
-    // TODO change from DOM to component state management
+
     static toggleDisplay = () => {
         let settings = document.querySelector(".settings-outer") as HTMLElement;
         if (settings.style.display === "none") {
@@ -38,7 +38,6 @@ export default class Settings extends React.Component {
         return keyJSX;
     }
 
-    // TODO change from DOM to component state management
     static updateCSS = () => {
         let keyEle: HTMLElement, valueEle: HTMLElement;
         let key: string, value: string;

@@ -1,38 +1,55 @@
 import {create} from 'zustand'
 import {NOTSET_TYPE, NOTSET} from "../ts/Types";
+import {FileType} from "../components/file/File";
+import {HexProps} from "../components/hex/Hex";
+import populateHexBoard from "../components/hex-board/populateHexBoard";
 
-export type ActiveFileInterface = {
-    ts : string,
-    io : string,
-    bat : string,
-    sys : string
-}
 
 
 type FrontendStateManagerProps = {
     startNodeId : number | NOTSET_TYPE,
     endNodeId : number | NOTSET_TYPE,
     bombNodeId : number | NOTSET_TYPE,
-    activeFiles : ActiveFileInterface
+    activeFiles : Record<FileType, string |NOTSET_TYPE>,
+    hexes: HexProps [],
 }
 
 type FrontendStateManagerActions = {
     changeStartNodeId  : (id : number | NOTSET_TYPE) => void,
     changeEndNodeId  : (id : number | NOTSET_TYPE) => void,
     changeBombNodeId : (id : number | NOTSET_TYPE)=> void,
-    changeActiveFiles : (activeFiles : ActiveFileInterface)=> void
+    changeActiveFiles : (newActiveFileId : string, fileType : FileType)=> void,
+    isActiveFile : (id : string , fileType : FileType) => boolean,
+    setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void
 }
 
 
 const useFrontendStateManager =
-    create<FrontendStateManagerActions & FrontendStateManagerProps>()((set) => ({
+    create<FrontendStateManagerActions & FrontendStateManagerProps>()((set, get) => ({
         startNodeId : NOTSET, endNodeId : NOTSET, bombNodeId : NOTSET,
         changeStartNodeId : (id) => set({startNodeId : id}),
         changeEndNodeId : (id) => set({endNodeId : id}),
         changeBombNodeId : (id) => set({bombNodeId : id}),
         wallNodeIds : new Set(),
-        activeFiles : {ts : null , io : null , bat : null , sys : null},
-        changeActiveFiles : (newActiveFiles)=> set({activeFiles : newActiveFiles }),
+        activeFiles: {
+            [FileType.TS]: NOTSET,
+            [FileType.IO]: NOTSET,
+            [FileType.BAT]: NOTSET,
+            [FileType.SYS]: NOTSET,
+            [FileType.GUI] : NOTSET,
+            [FileType.MD] : NOTSET
+        },
+        changeActiveFiles : (newActiveFileId, fileType)=> set(
+            (state)=>({
+                activeFiles : {
+                    ...state.activeFiles,
+                    [fileType] : newActiveFileId
+                }
+            })
+        ),
+        isActiveFile : (id , fileType)=> get().activeFiles[fileType]===id,
+        hexes : [],
+        setHexBoard :(rows, cols, HEX_WIDTH, HEX_HEIGHT) => set({hexes : populateHexBoard(rows , cols , HEX_WIDTH, HEX_HEIGHT)}),
     }))
 
 

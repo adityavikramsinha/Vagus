@@ -1,50 +1,41 @@
-import * as React from "react";
+import React from "react";
 import Loading from "../Loading";
-import {useEffect, useState} from "react";
-import populateHexBoard from "./populateHexBoard";
 import connectHexBoard from "./connectHexBoard";
-import {updateBiIDClass} from "../../ts/Utility";
-import currentState from "../../ts/GlobalState";
 import Hex from "../hex/Hex";
+import useFrontendStateManager from "../../store/store";
 
 /**
  * Renders the hexagonal board.
  * @returns JSX.Element
  */
 const HexBoard: React.FC = () => {
-    const [dimensions , setDimensions] = useState({width : 0, height : 0});
-    const [isLoading, setLoading] = useState<boolean>(true);
+    const setHexBoard = useFrontendStateManager(s=>s.setHexBoard);
+    const changeStartNodeId = useFrontendStateManager(s=>s.changeStartNodeId);
+    const changeEndNodeId = useFrontendStateManager(s=>s.changeEndNodeId);
+    const [isLoading, setLoading] = React.useState<boolean>(true);
     const HEX_WIDTH = 26 ;
     const HEX_HEIGHT= 30;
 
-    useEffect(() => {
+    React.useEffect(() => {
         const handleResize = () => {
-            setDimensions({
-                width: 0.73 * window.innerWidth,
-                height: window.innerHeight,
-            });
+            const width= 0.73 * window.innerWidth;
+            const height=  window.innerHeight;
+            const rows = Math.ceil(height / HEX_HEIGHT);
+            const cols = Math.ceil(width / HEX_WIDTH);
+            setHexBoard(rows , cols , HEX_WIDTH, HEX_HEIGHT);
+            connectHexBoard(rows,cols, rows* cols);
             setLoading(false);
+            requestAnimationFrame(() => {
+                let startPosition = Math.floor((rows  * cols) * 0.25);
+                let endPosition = Math.floor((rows * cols) * 0.75);
+                changeStartNodeId(startPosition);
+                changeEndNodeId(endPosition);
+            });
         };
-        handleResize() // Set initial dimensions
+        handleResize()
     }, []);
-
-    let rows = Math.ceil(dimensions.height / HEX_HEIGHT);
-    let cols = Math.ceil(dimensions.width / HEX_WIDTH);
-
+    const hexes = useFrontendStateManager(s=>s.hexes);
     if (!isLoading) {
-        let hexes = populateHexBoard(rows , cols , HEX_WIDTH, HEX_HEIGHT);
-        connectHexBoard(rows,cols, hexes.length);
-        requestAnimationFrame(() => {
-            let startPosition = Math.floor((rows  * cols) * 0.25);
-            let endPosition = Math.floor((rows * cols) * 0.75);
-
-            updateBiIDClass(startPosition, ['no-node'], 'start-node');
-            updateBiIDClass(endPosition, ['no-node'], 'end-node');
-
-            currentState.changeStartNode(startPosition);
-            currentState.changeEndNode(endPosition);
-        });
-        currentState.initGraph().freeze();
         return (
             <div className="hex-board" id="hex-board">
                 <div>

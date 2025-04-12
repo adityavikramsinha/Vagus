@@ -1,5 +1,4 @@
 import {addToGraphs} from "../../ts/Utility";
-import currentState from "../../ts/GlobalState";
 
 const connectHexBoard = (rows: number, cols:number, idVar:number) => {
     let columnID = 0;

@@ -23,40 +23,34 @@ const Hex : React.FC<HexProps> = ({x , y , id}) => {
     const [isWallNode, toggleIsWallNode] = React.useState(false);
     const [isWeightNode , toggleIsWeightNode] = React.useState(false);
     const activeFilesIo = useFrontendStateManager(state=>state.activeFiles).io;
+
     const handleHexClick = () => {
-        console.log(id);
         if(isStartNode){
             if(activeFilesIo === 'io-1') return;
             else changeStartNodeId(NOTSET);
         }
         else if(isEndNode) {
-            // we know it is the end node
             if(activeFilesIo === 'io-2') return;
             else changeEndNodeId(NOTSET);
         }
         else if(isBombNode){
-            // we know it is the bomb node
             if(activeFilesIo === 'io-3') return;
             else changeBombNodeId(NOTSET);
         }
         else if (isWeightNode) {
-            // it is a weight node
             if (activeFilesIo === 'io-4') return;
             toggleIsWeightNode(false);
         }
         else if(isWallNode) {
-            // it is a wall node
             if(activeFilesIo === 'io-5') return;
             toggleIsWallNode(false);
         }
         else {
-            // it is unselected as yet
             if(activeFilesIo === 'io-1') changeStartNodeId(id);
             else if (activeFilesIo === 'io-2') changeEndNodeId(id);
             else if (activeFilesIo === 'io-3') changeBombNodeId(id);
             else if (activeFilesIo === 'io-4') toggleIsWeightNode(true);
             else if (activeFilesIo === 'io-5') toggleIsWallNode(true)
-
         }
     }
     const styles : React.CSSProperties = {
@@ -70,12 +64,14 @@ const Hex : React.FC<HexProps> = ({x , y , id}) => {
         "end-node" : isEndNode,
         "weight-node" : isWeightNode
     });
+
     return (
         <div className="hexagon"  style={styles} onClick={handleHexClick}>
+            {/*FIXME there is a # here, it needs to be moved global*/}
             <HexIcon style = {{fill: isWallNode ? "#313244" : ""}}/>
             <div className={classes}/>
         </div>
     );
 }
 
-export default React.memo(Hex);
+export default Hex;
