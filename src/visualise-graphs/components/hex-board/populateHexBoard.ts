@@ -2,7 +2,6 @@ import {HexProps} from "../hex/Hex";
 import {updateGraph} from "../../ts/Utility";
 
 const populateHexBoard = (rows : number, cols :number, HEX_WIDTH:number, HEX_HEIGHT:number ) => {
-    console.log('re-render requested')
     let content: HexProps[] = [];
     let xVar = -14.5;
     let yVar : number;

@@ -3,8 +3,20 @@ import {NOTSET_TYPE, NOTSET} from "../ts/Types";
 import {FileType} from "../components/file/File";
 import {HexProps} from "../components/hex/Hex";
 import populateHexBoard from "../components/hex-board/populateHexBoard";
+import {match, P} from "ts-pattern";
 
+export enum NodeAction {
+    SET= 'set',
+    DELETE ='del'
+}
 
+export enum NodeType {
+    START_NODE='start-node',
+    END_NODE='end-node',
+    WEIGHT_NODE ='weight-node',
+    BOMB_NODE ='bomb-node',
+    WALL_NODE = 'wall-node'
+}
 
 type FrontendStateManagerProps = {
     startNodeId : number | NOTSET_TYPE,
@@ -12,25 +24,20 @@ type FrontendStateManagerProps = {
     bombNodeId : number | NOTSET_TYPE,
     activeFiles : Record<FileType, string |NOTSET_TYPE>,
     hexes: HexProps [],
+    weightNodes : Set<number |NOTSET_TYPE>,
+    wallNodes : Set<number | NOTSET_TYPE>
 }
 
 type FrontendStateManagerActions = {
-    changeStartNodeId  : (id : number | NOTSET_TYPE) => void,
-    changeEndNodeId  : (id : number | NOTSET_TYPE) => void,
-    changeBombNodeId : (id : number | NOTSET_TYPE)=> void,
     changeActiveFiles : (newActiveFileId : string, fileType : FileType)=> void,
-    isActiveFile : (id : string , fileType : FileType) => boolean,
-    setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void
+    setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void,
+    changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_TYPE) : void,
 }
 
 
 const useFrontendStateManager =
     create<FrontendStateManagerActions & FrontendStateManagerProps>()((set, get) => ({
-        startNodeId : NOTSET, endNodeId : NOTSET, bombNodeId : NOTSET,
-        changeStartNodeId : (id) => set({startNodeId : id}),
-        changeEndNodeId : (id) => set({endNodeId : id}),
-        changeBombNodeId : (id) => set({bombNodeId : id}),
-        wallNodeIds : new Set(),
+        startNodeId : NOTSET, endNodeId : NOTSET, bombNodeId : NOTSET, wallNodeIds : new Set(), wallNodes : new Set(),
         activeFiles: {
             [FileType.TS]: NOTSET,
             [FileType.IO]: NOTSET,
@@ -47,9 +54,29 @@ const useFrontendStateManager =
                 }
             })
         ),
-        isActiveFile : (id , fileType)=> get().activeFiles[fileType]===id,
         hexes : [],
         setHexBoard :(rows, cols, HEX_WIDTH, HEX_HEIGHT) => set({hexes : populateHexBoard(rows , cols , HEX_WIDTH, HEX_HEIGHT)}),
+        weightNodes : new Set(),
+        changeNode: (nodeType, nodeAction, id) =>
+            set((state) =>
+                match([nodeType, nodeAction] as const)
+                    .with([NodeType.START_NODE, P._], () => ({startNodeId: id}))
+                    .with([NodeType.END_NODE, P._] , () => ({endNodeId : id}))
+                    .with([NodeType.BOMB_NODE, P._] , () => ({bombNodeId : id}))
+                    .with([NodeType.WEIGHT_NODE, NodeAction.SET], () =>({weightNodes : new Set(state.weightNodes).add(id)}))
+                    .with([NodeType.WEIGHT_NODE, NodeAction.DELETE], ()=>{
+                        const updatedSet = new Set(state.weightNodes);
+                        updatedSet.delete(id);
+                        return {weightNodes: updatedSet}
+                    })
+                    .with([NodeType.WALL_NODE, NodeAction.SET], () =>{console.log('order to add ',state.wallNodes); return {wallNodes : new Set(state.wallNodes).add(id)}})
+                    .with([NodeType.WALL_NODE, NodeAction.DELETE], () => {
+                        const updatedSet = new Set(state.wallNodes);
+                        updatedSet.delete(id);
+                        return {wallNodes: updatedSet}
+                    })
+                    .otherwise(()=>({}))
+            ),
     }))
 
 
