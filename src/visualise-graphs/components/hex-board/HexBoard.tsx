@@ -2,15 +2,15 @@ import React from "react";
 import Loading from "../Loading";
 import connectHexBoard from "./connectHexBoard";
 import Hex from "../hex/Hex";
-import useFrontendStateManager, {NodeAction, NodeType} from "../../store/store";
+import useStateManager, {NodeAction, NodeType} from "../../store/store";
 
 /**
  * Renders the hexagonal board.
  * @returns JSX.Element
  */
 const HexBoard: React.FC = () => {
-    const setHexBoard = useFrontendStateManager(s=>s.setHexBoard);
-    const changeNode = useFrontendStateManager(state => state.changeNode);
+    const setHexBoard = useStateManager(s=>s.setHexBoard);
+    const changeNode = useStateManager(state => state.changeNode);
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const HEX_WIDTH = 26 ;
     const HEX_HEIGHT= 30;
@@ -29,7 +29,7 @@ const HexBoard: React.FC = () => {
             changeNode(NodeType.START_NODE, NodeAction.SET, startPosition);
             changeNode(NodeType.END_NODE , NodeAction.SET , endPosition);
         };
-        handleResize() // first time when mount has happened
+        handleResize() // First time when mount has happened
 
         // Attach resize event listener
         window.addEventListener("resize", handleResize);
@@ -38,11 +38,10 @@ const HexBoard: React.FC = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-    const hexes = useFrontendStateManager(s=>s.hexes);
+    const hexes = useStateManager(s=>s.hexes);
     if (!isLoading) {
         return (
             <div className="hex-board" id="hex-board">
-                <div>
                     {hexes.map((hex) =>
                         <Hex
                             x={hex.x}
@@ -51,7 +50,6 @@ const HexBoard: React.FC = () => {
                             key = {hex.id}
                         />
                     )}
-                </div>
             </div>
         )
     } else {

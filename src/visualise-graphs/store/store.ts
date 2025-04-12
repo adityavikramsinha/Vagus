@@ -15,10 +15,12 @@ export enum NodeType {
     END_NODE='end-node',
     WEIGHT_NODE ='weight-node',
     BOMB_NODE ='bomb-node',
-    WALL_NODE = 'wall-node'
+    WALL_NODE = 'wall-node',
+    VISITED_NODE = "visited-node",
+    PATH_NODE = 'path-node'
 }
 
-type FrontendStateManagerProps = {
+type StateManagerProps = {
     startNodeId : number | NOTSET_TYPE,
     endNodeId : number | NOTSET_TYPE,
     bombNodeId : number | NOTSET_TYPE,
@@ -28,15 +30,15 @@ type FrontendStateManagerProps = {
     wallNodes : Set<number | NOTSET_TYPE>
 }
 
-type FrontendStateManagerActions = {
+type StateManagerActions = {
     changeActiveFiles : (newActiveFileId : string, fileType : FileType)=> void,
     setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void,
     changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_TYPE) : void,
 }
 
 
-const useFrontendStateManager =
-    create<FrontendStateManagerActions & FrontendStateManagerProps>()((set, get) => ({
+const useStateManager =
+    create<StateManagerActions & StateManagerProps>()((set) => ({
         startNodeId : NOTSET, endNodeId : NOTSET, bombNodeId : NOTSET, wallNodeIds : new Set(), wallNodes : new Set(),
         activeFiles: {
             [FileType.TS]: NOTSET,
@@ -69,7 +71,7 @@ const useFrontendStateManager =
                         updatedSet.delete(id);
                         return {weightNodes: updatedSet}
                     })
-                    .with([NodeType.WALL_NODE, NodeAction.SET], () =>{console.log('order to add ',state.wallNodes); return {wallNodes : new Set(state.wallNodes).add(id)}})
+                    .with([NodeType.WALL_NODE, NodeAction.SET], () =>({wallNodes : new Set(state.wallNodes).add(id)}))
                     .with([NodeType.WALL_NODE, NodeAction.DELETE], () => {
                         const updatedSet = new Set(state.wallNodes);
                         updatedSet.delete(id);
@@ -80,4 +82,4 @@ const useFrontendStateManager =
     }))
 
 
-export default useFrontendStateManager;
+export default useStateManager;

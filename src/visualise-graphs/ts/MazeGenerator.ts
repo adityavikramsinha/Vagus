@@ -51,7 +51,6 @@ export class MazeGenerator {
 
     // array to hold the "ridges"
     let ridges: Set<number>[] = [];
-    console.log(this.workableColumns + "," + this.workableRows);
     // function which can be used to create 2 at random entry points for the path.
     function generateRandomEntries(colNo: number): { p1: number, p2: number } {
       let p1: number = Math.floor(Math.random() * (MazeGenerator.workableRows) + ( colNo * MazeGenerator.workableRows ) );
@@ -106,7 +105,6 @@ export class MazeGenerator {
       let randomID = Math.floor(Math.random() * currentState.graph().nodes().size);
       if (randomID !== currentState.startNode() && randomID !== currentState.endNode() && randomID !== currentState.bombNode())
       path.set(randomID, false);
-      console.log(path.size);
     }
     Graph.copy(currentState.initGraph(), currentState.graph(), 1);
 

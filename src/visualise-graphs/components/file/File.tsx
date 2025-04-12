@@ -1,5 +1,5 @@
 import React from 'react';
-import useFrontendStateManager from "../../store/store";
+import useStateManager from "../../store/store";
 export enum FileType {
     TS= "ts",
     IO = "io",
@@ -12,13 +12,13 @@ export enum FileType {
 export type FileProps = {
     type : FileType,
     id : string,
-    text : string,
+    name : string,
     Icon : React.JSX.Element
 }
 // FIXME, SLOW ASF
-const File: React.FC<FileProps> = ({type, id, text, Icon}) => {
-    let isActiveFile = useFrontendStateManager(state=>state.activeFiles[type] ===id);
-    const changeActiveFiles = useFrontendStateManager(state=>state.changeActiveFiles);
+const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
+    let isActiveFile = useStateManager(state=>state.activeFiles[type] ===id);
+    const changeActiveFiles = useStateManager(state=>state.changeActiveFiles);
 
     // just handles the file click
     const handleFileClick = (id : string, type: FileType)=> changeActiveFiles(id , type)
@@ -33,7 +33,7 @@ const File: React.FC<FileProps> = ({type, id, text, Icon}) => {
             }}
         >
             {Icon}
-            <p className="file-name">{text}</p>
+            <p className="file-name">{name}</p>
         </div>
     )
 }

@@ -5,8 +5,6 @@ import {JSX} from "react";
 import StopButton from "./action-buttons/StopButton";
 
 export default class Settings extends React.Component {
-
-
     static toggleDisplay = () => {
         let settings = document.querySelector(".settings-outer") as HTMLElement;
         if (settings.style.display === "none") {
@@ -19,10 +17,6 @@ export default class Settings extends React.Component {
             updateIDClass('hex-board', ['blur-ele'], []);
         }
     }
-
-    static braceOpen = () => { return '{' }
-    static braceClosed = () => { return '}' }
-
     static renderKey = (mapper: Map<string, string>): Array<JSX.Element> => {
         let keyJSX: Array<JSX.Element> = [];
         let i: number = 0;
@@ -37,7 +31,6 @@ export default class Settings extends React.Component {
         });
         return keyJSX;
     }
-
     static updateCSS = () => {
         let keyEle: HTMLElement, valueEle: HTMLElement;
         let key: string, value: string;
@@ -53,7 +46,6 @@ export default class Settings extends React.Component {
             currentState.changeCSSVariable("color", `--${key}`, `#${value}`);
         });
     }
-
     render() {
         return (
             <React.Fragment>
@@ -71,13 +63,13 @@ export default class Settings extends React.Component {
                             </div>
                         </div>
                         <div className="settings-content">
-                            <div className="braces"><p>{Settings.braceOpen()}</p></div>
+                            <div className="braces"><p>{"{"}</p></div>
                             <div className="key-value-master-drop">
                                 <div className="key-value-master">
                                     {Settings.renderKey(currentState.cssVariables())}
                                 </div>
                             </div>
-                            <div className="braces"><p>{Settings.braceClosed()}</p></div>
+                            <div className="braces"><p>{"}"}</p></div>
                         </div>
                     </div>
                 </div>
