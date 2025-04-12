@@ -2,31 +2,15 @@ import React from "react";
 
 import HexIcon from "./HexIcon";
 import useFrontendStateManager from "../../store/store";
-import {updateHexIcon} from "../../ts/HexBoardUpdate";
+import {NOTSET} from "../../ts/Types";
 import cn from "../../css/cn";
-import currentState from "../../ts/GlobalState";
 
 export type HexProps = {
     x: number,
     y: number,
     id: number
 }
-
-
-// export enum HexType  {
-//     START     = 'start-node',
-//     END       = 'end-node',
-//     WEIGHT    = 'weight-node',
-//     WALL      = 'wall-node',
-//     VISITED   = 'visited-node',
-//     UNVISITED = 'unvisited-node',
-//     PATH      = 'path-node',
-//     BOMB      = 'bomb-node',
-//     NO_NODE   = 'no-node',
-// }
-
 /**
- * Returns a Hex Component that is ready to be rendered
  * @returns JSX.Element which has the rendered Hex along with its id
  */
 const Hex : React.FC<HexProps> = ({x , y , id}) => {
@@ -42,38 +26,36 @@ const Hex : React.FC<HexProps> = ({x , y , id}) => {
     const handleHexClick = () => {
         console.log(id);
         if(isStartNode){
-            // we know it is the start Node
-            if(activeFilesIo==='io-1')
-                return;
-            else if (activeFilesIo==='io-2'){
-                changeEndNodeId(id);
-            }
-
+            if(activeFilesIo === 'io-1') return;
+            else changeStartNodeId(NOTSET);
         }
         else if(isEndNode) {
             // we know it is the end node
+            if(activeFilesIo === 'io-2') return;
+            else changeEndNodeId(NOTSET);
         }
         else if(isBombNode){
             // we know it is the bomb node
+            if(activeFilesIo === 'io-3') return;
+            else changeBombNodeId(NOTSET);
         }
         else if (isWeightNode) {
             // it is a weight node
+            if (activeFilesIo === 'io-4') return;
+            toggleIsWeightNode(false);
         }
         else if(isWallNode) {
             // it is a wall node
+            if(activeFilesIo === 'io-5') return;
+            toggleIsWallNode(false);
         }
         else {
             // it is unselected as yet
-            if(activeFilesIo === 'io-1')
-                changeStartNodeId(id);
-            else if (activeFilesIo === 'io-2')
-                changeEndNodeId(id);
-            else if (activeFilesIo === 'io-3')
-                changeBombNodeId(id);
-            else if (activeFilesIo === 'io-4')
-                toggleIsWeightNode(true);
-            else if (activeFilesIo === 'io-5')
-                toggleIsWallNode(true)
+            if(activeFilesIo === 'io-1') changeStartNodeId(id);
+            else if (activeFilesIo === 'io-2') changeEndNodeId(id);
+            else if (activeFilesIo === 'io-3') changeBombNodeId(id);
+            else if (activeFilesIo === 'io-4') toggleIsWeightNode(true);
+            else if (activeFilesIo === 'io-5') toggleIsWallNode(true)
 
         }
     }
@@ -88,9 +70,7 @@ const Hex : React.FC<HexProps> = ({x , y , id}) => {
         "end-node" : isEndNode,
         "weight-node" : isWeightNode
     });
-
     return (
-
         <div className="hexagon"  style={styles} onClick={handleHexClick}>
             <HexIcon style = {{fill: isWallNode ? "#313244" : ""}}/>
             <div className={classes}/>

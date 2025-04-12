@@ -1,4 +1,5 @@
-import { create } from 'zustand'
+import {create} from 'zustand'
+import {NOTSET_TYPE, NOTSET} from "../ts/Types";
 
 export type ActiveFileInterface = {
     ts : string,
@@ -9,23 +10,23 @@ export type ActiveFileInterface = {
 
 
 type FrontendStateManagerProps = {
-    startNodeId : number,
-    endNodeId : number,
-    bombNodeId : number,
+    startNodeId : number | NOTSET_TYPE,
+    endNodeId : number | NOTSET_TYPE,
+    bombNodeId : number | NOTSET_TYPE,
     activeFiles : ActiveFileInterface
 }
 
 type FrontendStateManagerActions = {
-    changeStartNodeId  : (id : number) => void,
-    changeEndNodeId  : (id : number) => void,
-    changeBombNodeId : (id : number )=> void,
+    changeStartNodeId  : (id : number | NOTSET_TYPE) => void,
+    changeEndNodeId  : (id : number | NOTSET_TYPE) => void,
+    changeBombNodeId : (id : number | NOTSET_TYPE)=> void,
     changeActiveFiles : (activeFiles : ActiveFileInterface)=> void
 }
 
 
 const useFrontendStateManager =
     create<FrontendStateManagerActions & FrontendStateManagerProps>()((set) => ({
-        startNodeId : -1, endNodeId : -1, bombNodeId : -1,
+        startNodeId : NOTSET, endNodeId : NOTSET, bombNodeId : NOTSET,
         changeStartNodeId : (id) => set({startNodeId : id}),
         changeEndNodeId : (id) => set({endNodeId : id}),
         changeBombNodeId : (id) => set({bombNodeId : id}),

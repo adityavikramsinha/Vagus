@@ -2,7 +2,7 @@
 
 
 /**
- * Contains the node types for the website. 
+ * Contains the node types for the website.
  */
 export enum NodeType {
   startNode = 'start-node',
@@ -26,8 +26,10 @@ export enum AlgoType {
   bestFirstSearch = 'best-fs'
 }
 
+export const NOTSET = Symbol("__NOTSET__");
+export type NOTSET_TYPE = typeof NOTSET
 /**
- * Contains the maze generatable types for the website
+ * Contains the maze generation types for the website
  */
 export enum MazeGenerationType {
   none = 'none',
