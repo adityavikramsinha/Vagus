@@ -1,5 +1,4 @@
 import currentState from "./GlobalState";
-import { nodeHoverAnimation } from "./HexBoardUpdate";
 import {removeAllClasses} from "./Utility";
 import { updateIDClass, extractIDs } from './Utility';
 import { SpeedType } from "./Types";

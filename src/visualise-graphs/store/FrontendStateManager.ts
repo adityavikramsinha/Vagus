@@ -30,7 +30,8 @@ type StateManagerProps = {
     wallNodes : Set<number | NOTSET_TYPE>,
     hexBoardDimensions : {width : number, height:number},
     hexDimensions : {HEX_WIDTH : number, HEX_HEIGHT:number},
-    hexBoard : Record<number | NOTSET_TYPE, NodeType | NOTSET_TYPE>
+    hexBoard : Record<number | NOTSET_TYPE, NodeType | NOTSET_TYPE>,
+    block : boolean
 }
 
 type StateManagerActions = {
@@ -39,6 +40,7 @@ type StateManagerActions = {
     changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_TYPE) : void,
     setHexBoardDimensions : (dimension :{width : number, height:number})=>void,
     clearHexBoard : () => void,
+    setBlock : (toggle : boolean) => void
 }
 
 
@@ -106,7 +108,9 @@ const useStateManager =
         hexBoard : {
             [NOTSET]: NodeType.START_NODE
         },
-        clearHexBoard : () => set({hexBoard: {[NOTSET]: NodeType.START_NODE}})
+        clearHexBoard : () => set({hexBoard: {[NOTSET]: NodeType.START_NODE}}),
+        block : false,
+        setBlock : (toggle) => set({block : toggle})
     }))
 
 export default useStateManager;

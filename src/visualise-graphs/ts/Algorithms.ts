@@ -1,6 +1,6 @@
 import Graph from './Graph';
 import { MinPriorityQueue } from "@datastructures-js/priority-queue";
-import { AlgoType } from "./Types";
+import {AlgoType, NOTSET_TYPE} from "./Types";
 import currentState from "./GlobalState";
 import { Queue } from "queue-typescript";
 import Node from "./Node";
@@ -368,7 +368,7 @@ export default class Algorithms<T> {
    * from the Start till some point X and second is from the end till the same point X where
    * both of these algorithms meet.
    */
-  biDirectional(start: T, end: T): [T[] | null, Set<T>, Set<T>] {
+  biDirectional(start: T , end: T ): [T[] | null, Set<T>, Set<T>] {
 
     // get the path from start
     const pathFromStart = this.dijkstras(start, end)[0];
@@ -758,22 +758,22 @@ export default class Algorithms<T> {
     // using if else and enums to return an output in the form of [path , visitedInOrder] which
     // is later turned directly into an object and given as return from the function
 
-    if (algoType === AlgoType.dijkstrasSearch)
+    if (algoType === AlgoType.DIJKSTRAS_SEARCH)
       [path, visitedInOrder] = algo.dijkstras(currentState.startNode(), currentState.endNode());
 
-    else if (algoType === AlgoType.aStarSearch)
+    else if (algoType === AlgoType.A_STAR_SEARCH)
       [path, visitedInOrder] = algo.aStar(currentState.startNode(), currentState.endNode());
 
-    else if (algoType === AlgoType.breadthFirstSearch)
+    else if (algoType === AlgoType.BREADTH_FIRST_SEARCH)
       [path, visitedInOrder] = algo.bfs(currentState.startNode(), currentState.endNode());
 
-    else if (algoType === AlgoType.depthFirstSearch)
+    else if (algoType === AlgoType.DEPTH_FIRST_SEARCH)
       [path, visitedInOrder] = algo.dfs(currentState.startNode(), currentState.endNode());
 
-    else if (algoType === AlgoType.bellmanFord)
+    else if (algoType === AlgoType.BELLMAN_FORD)
       [path, visitedInOrder] = algo.bellmanFord(currentState.startNode(), currentState.endNode());
 
-    else if (algoType === AlgoType.bestFirstSearch) {
+    else if (algoType === AlgoType.BEST_FIRST_SEARCH) {
       [path, visitedInOrder] = algo.bestFirstSearch(currentState.startNode(), currentState.endNode());
     }
 
@@ -813,7 +813,7 @@ export default class Algorithms<T> {
       // so we return null along with the visited in order from both start->bomb and bomb->end
       // else we concat both paths and return
       // a full total last path right in the end.
-      case AlgoType.aStarSearch:
+      case AlgoType.A_STAR_SEARCH:
         [pathP1, visitedP1] = algo.aStar(currentState.startNode(), currentState.bombNode());
         [pathP2, visitedP2] = algo.aStar(currentState.bombNode(), currentState.endNode());
         if (pathP1 !== null && pathP2 !== null)
@@ -821,7 +821,7 @@ export default class Algorithms<T> {
         else path = null
         break;
 
-      case AlgoType.breadthFirstSearch:
+      case AlgoType.BREADTH_FIRST_SEARCH:
         [pathP1, visitedP1] = algo.bfs(currentState.startNode(), currentState.bombNode());
         [pathP2, visitedP2] = algo.bfs(currentState.bombNode(), currentState.endNode());
         if (pathP1 !== null && pathP2 !== null)
@@ -829,7 +829,7 @@ export default class Algorithms<T> {
         else path = null
         break;
 
-      case AlgoType.bellmanFord:
+      case AlgoType.BELLMAN_FORD:
         [pathP1, visitedP1] = algo.bellmanFord(currentState.startNode(), currentState.bombNode());
         [pathP2, visitedP2] = algo.bellmanFord(currentState.bombNode(), currentState.endNode());
         if (pathP1 !== null && pathP2 !== null)
@@ -837,7 +837,7 @@ export default class Algorithms<T> {
         else path = null
         break;
 
-      case AlgoType.dijkstrasSearch:
+      case AlgoType.DIJKSTRAS_SEARCH:
         [pathP1, visitedP1] = algo.dijkstras(currentState.startNode(), currentState.bombNode());
         [pathP2, visitedP2] = algo.dijkstras(currentState.bombNode(), currentState.endNode());
         if (pathP1 !== null && pathP2 !== null)
@@ -845,7 +845,7 @@ export default class Algorithms<T> {
         else path = null
         break;
 
-      case AlgoType.depthFirstSearch:
+      case AlgoType.DEPTH_FIRST_SEARCH:
         [pathP1, visitedP1] = algo.dfs(currentState.startNode(), currentState.bombNode());
         [pathP2, visitedP2] = algo.dfs(currentState.bombNode(), currentState.endNode());
         if (pathP1 !== null && pathP2 !== null)
@@ -853,7 +853,7 @@ export default class Algorithms<T> {
         else path = null
         break;
 
-      case AlgoType.bestFirstSearch:
+      case AlgoType.BEST_FIRST_SEARCH:
         [pathP1, visitedP1] = algo.bestFirstSearch(currentState.startNode(), currentState.bombNode());
         [pathP2, visitedP2] = algo.bestFirstSearch(currentState.bombNode(), currentState.endNode());
         if (pathP1 !== null && pathP2 !== null)

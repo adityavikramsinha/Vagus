@@ -1,8 +1,9 @@
 import React from "react";
 import Loading from "../Loading";
-import connectHexBoard from "./connectHexBoard";
 import Hex from "../hex/Hex";
-import useStateManager, {NodeAction, NodeType} from "../../store/store";
+import useStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
+import Syncer from "../../store/Syncer";
+import currentState from "../../ts/GlobalState";
 
 /**
  * Renders the hexagonal board.
@@ -25,13 +26,14 @@ const HexBoard: React.FC = () => {
             const rows = Math.ceil(height / HEX_HEIGHT);
             const cols = Math.ceil(width / HEX_WIDTH);
             setHexBoard(rows, cols, HEX_WIDTH, HEX_HEIGHT);
-            connectHexBoard(rows, cols, rows * cols);
+            Syncer.setGraph(rows, cols, rows * cols);
             setLoading(false);
             let startPosition = Math.floor((rows * cols) * 0.25);
             let endPosition = Math.floor((rows * cols) * 0.75);
             changeNode(NodeType.START_NODE, NodeAction.SET, startPosition);
             changeNode(NodeType.END_NODE, NodeAction.SET, endPosition);
             setHexBoardDimensions({width, height});
+            console.log(currentState.graph());
         };
         handleResize() // First time when mount has happened
 

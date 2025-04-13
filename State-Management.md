@@ -57,4 +57,8 @@ Have one global button component, with the following properties
 1. Icon
 2. isActive ?= condition (default = true)
 3. onClick = call back function that is triggered when clicked.
-4.
+
+`SyncGraph` behaviour specification :
+It takes in a Map of `Node IDs` and `Node Types`
+And then based on the types, it is either a Wall or Weight, and then we need to change
+the nodes in the BackendStateManager.

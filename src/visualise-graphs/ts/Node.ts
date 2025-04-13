@@ -30,16 +30,16 @@ export default class Node<T> {
   // its neighbour node.
   private readonly adjNodes: Edge<T>[];
 
-  // Placement on the hexboard, x coordinate system.
+  // Placement on the hex board, x coordinate system.
   private xCoord: number = 0;
 
-  // Placement on the hexboard, y coordinate system.
+  // Placement on the hex board, y coordinate system.
   private yCoord: number = 0;
 
   /**
    * Function takes in both a string and a number.
-   * Incase it is a number, it will directly assign the coordinate
-   * Incase it is a string, it attempts to parse it.
+   * In case it is a number, it will directly assign the coordinate
+   * In case it is a string, it attempts to parse it.
    * After parsing it and converting it to a number, it will update value
    *
    * If it cannot parse it, then it will lead to an error which means no update will take place
@@ -54,8 +54,8 @@ export default class Node<T> {
 
   /**
    * Function takes in either a string or a number.
-   * Incase it is a number, the function directly assigns the y coordinate
-   * Incase the input is a string, the function attempts to parse it.
+   * In case it is a number, the function directly assigns the y coordinate
+   * In case the input is a string, the function attempts to parse it.
    *
    * If the parsing works, then it will update the value.
    * If the parsing fails, the y coordinate is not updated and remains at
@@ -93,7 +93,7 @@ export default class Node<T> {
 
   /**
    *
-   * @returns The x coordinate of the this node.
+   * @returns The x coordinate of this node.
    */
   x(): number {
     return this.xCoord;
@@ -118,19 +118,19 @@ export default class Node<T> {
 
   // comparator for total ordering in the Node class
   // In this project it is being used in the Priority Queue implementations
-  // of the Algorithnms.
+  // of the Algorithms.
   comparator: (a: T, b: T) => number;
 
   /**
    * Constructs a given Node with the values as given to the constructor.
-   * By default:
+   * By default,
    * The Node has its data as nothing
    * The Node has no comparator
    * The Node has itself as a neighbour
    * The node has 0 , 0 as its x and y coordinates
    *
    * @param data the id of the node a data which needs to be wrapped by the Node class
-   * @param comparator comaparator for total ordering and other le,ge,eq operations
+   * @param comparator comparator for total ordering and other le,ge,eq operations
    * @param x x coordinate of the node
    * @param y y coordinate of the node
    */
@@ -163,7 +163,7 @@ export default class Node<T> {
   /**
    * Adds a given node as a neighbour OR "adjacent node" to this node
    * provided that, there is no other adjacent neighbour with the same ID.
-   * Also, this connection is an out going connection.
+   * Also, this connection is an outgoing connection.
    *
    * @param node The node to add
    * @param cost The cost of travelling form this not to the node to be added
@@ -182,7 +182,7 @@ export default class Node<T> {
    *
    * @param node the node for which the cost needs to be updated
    * @param cost the new cost.
-   * @returns true if there was a successful updation, else false.
+   * @returns true if it was successfully updated, else false.
    */
   updateCostTo(node: Node<T>, cost: number): boolean {
 
@@ -212,7 +212,8 @@ export default class Node<T> {
    * If it does, then it is removed.
    * @param data the data of the Node to be removed
    * @returns
-   * if a node with that data was found, then it returns that node. If it doesnt exist then
+   * if a node with that data was found, then it returns that node. If it
+   * doesn't exist then
    * null is returned
    */
   rmAdjNode(data: T): Node<T> | null {
@@ -230,14 +231,15 @@ export default class Node<T> {
 
   /**
    * An example of the meta-data returned from this function is:
-   * data: xxxx ,
+   * data: <data> ,
    * Neighbours : [
-   *    {data:xxxx, cost:xxxx},
-   *    {data:xxxx, cost:xxxx}
+   *    {data:<data>, cost:<cost>},
+   *    {data:<data>, cost:<cost>}
+   *    ...
    * ]
    * coords: {
-   *    x:XXXX,
-   *    y:YYYY
+   *    x:<x-coordinate>,
+   *    y:<y-coordinate>
    * }
    * @returns the string representation of the given Node
    */

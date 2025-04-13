@@ -8,11 +8,6 @@ export const updateIDClass = (id: string, classesRM: string[], classesADD: strin
     }
 }
 
-export const updateBiIDClass = (id: number, classToRM: string[], classToAdd: string): void => {
-  updateIDClass(`props-${id}`, [...classToRM], [classToAdd]);
-  updateIDClass(`svg-${id}`, [...classToRM], [`svg-${classToAdd}`]);
-}
-
 export const extractIDs = (rawID: number): [id1: string, id2: string] => {
   return [`props-${rawID}`, `svg-${rawID}`];
 }

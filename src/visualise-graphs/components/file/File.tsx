@@ -1,8 +1,9 @@
 import React from 'react';
-import useStateManager, {NodeAction, NodeType} from "../../store/store";
+import useStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
 import {match} from "ts-pattern";
-import {MazeGenerationType} from "../../ts/Types";
+import {MazeType} from "../../ts/Types";
 import MazeGenerator from "../../ts/MazeGenerator";
+import handleBatFileClick from "./handleBatFileClick";
 
 export enum FileType {
     TS = "ts",
@@ -29,39 +30,12 @@ const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
         HEX_WIDTH,
         HEX_HEIGHT
     } = useStateManager(state => state.hexDimensions)
-    // just handles the file click
+
     const handleFileClick = (id: string, type: FileType) => {
         changeActiveFiles(id, type);
-        if (type === FileType.BAT) {
-            match(name.substring(0, name.lastIndexOf('.')))
-                .with(MazeGenerationType.GENERATE_BLOCKED_RIDGES, () => {
-                    const maze = MazeGenerator.genRidges(
-                        Math.ceil(hexBoardDimensions.height / HEX_HEIGHT),
-                        Math.ceil(hexBoardDimensions.width / HEX_WIDTH)
-                    );
-                    maze.forEach(id => changeNode(NodeType.WALL_NODE, NodeAction.SET, id))
-                })
-                .with(MazeGenerationType.GENERATE_WEIGHTED_RIDGES, () => {
-                    const maze = MazeGenerator.genRidges(
-                        Math.ceil(hexBoardDimensions.height / HEX_HEIGHT),
-                        Math.ceil(hexBoardDimensions.width / HEX_WIDTH)
-                    );
-                    maze.forEach(id => changeNode(NodeType.WEIGHT_NODE, NodeAction.SET, id))
-                })
-                .with(MazeGenerationType.GENERATE_RANDOM_MAZE, () => {
-                    const maze = MazeGenerator.genRandomMaze();
-                    maze.forEach(id => changeNode((Math.floor(Math.random() * 2) & 1) == 1 ? NodeType.WALL_NODE : NodeType.WEIGHT_NODE, NodeAction.SET, id))
-                })
-                .with(MazeGenerationType.GENERATE_WEIGHTED_RANDOM_MAZE, () => {
-                    const maze = MazeGenerator.genRandomMaze();
-                    maze.forEach(id => changeNode(NodeType.WEIGHT_NODE, NodeAction.SET, id))
-                })
-                .with(MazeGenerationType.GENERATE_BLOCKED_RANDOM_MAZE, () => {
-                    const maze = MazeGenerator.genRandomMaze();
-                    maze.forEach(id => changeNode(NodeType.WALL_NODE, NodeAction.SET, id))
-                })
-                .otherwise(() => ({}))
-        }
+        match(type)
+            .with(FileType.BAT, ()=>handleBatFileClick(name.substring(0, name.lastIndexOf('.')), {width : hexBoardDimensions.width, height: hexBoardDimensions.height}, changeNode, HEX_HEIGHT, HEX_WIDTH))
+            .otherwise(()=>{})
     }
     return (
         <div

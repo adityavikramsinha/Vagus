@@ -22,7 +22,7 @@ import {
     WallNodeIcon,
     WeightNodeIcon
 } from "./file/FileIcons";
-import useStateManager, {NodeAction, NodeType} from "../store/store";
+import useStateManager, {NodeAction, NodeType} from "../store/FrontendStateManager";
 import {NOTSET} from "../ts/Types";
 
 const Navbar: FC = () => {

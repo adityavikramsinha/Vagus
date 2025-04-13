@@ -1,5 +1,6 @@
 import {HexProps} from "../hex/Hex";
 import {updateGraph} from "../../ts/Utility";
+import Syncer from "../../store/Syncer";
 
 const populateHexBoard = (rows : number, cols :number, HEX_WIDTH:number, HEX_HEIGHT:number ) => {
     let content: HexProps[] = [];
@@ -13,7 +14,7 @@ const populateHexBoard = (rows : number, cols :number, HEX_WIDTH:number, HEX_HEI
         for (let j = 0; j < rows; j++, idVar ++) {
             content.push({ x:xVar, y:yVar, id:idVar})
             yVar += HEX_HEIGHT;
-            updateGraph(xVar, yVar, idVar)
+            Syncer.setNode(xVar, yVar, idVar)
         }
     }
     return content;

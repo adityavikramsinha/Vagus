@@ -1,10 +1,10 @@
 import {
   AlgoType,
-  MazeGenerationType,
+  MazeType,
   SpeedType
 } from "./Types";
 import Graph from "./Graph";
-import {NodeType} from "../store/store";
+import {NodeType} from "../store/FrontendStateManager";
 
 
 
@@ -30,7 +30,7 @@ class State<T> {
   private Algorithm: AlgoType;
 
   // State for the implementable maze
-  private Maze: MazeGenerationType;
+  private Maze: MazeType;
 
   // State for the executable speed.
   private Speed: SpeedType;
@@ -183,7 +183,7 @@ class State<T> {
    *
    * @returns the drawable maze pattern type
    */
-  maze(): MazeGenerationType { return this.Maze; }
+  maze(): MazeType { return this.Maze; }
 
   /**
    *
@@ -244,7 +244,7 @@ class State<T> {
    *
    * @param toThis the state to be updated to
    */
-  changeMaze(toThis: MazeGenerationType): void{
+  changeMaze(toThis: MazeType): void{
     this.Maze = toThis;
   }
 

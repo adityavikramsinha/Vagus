@@ -1,4 +1,4 @@
-import useStateManager from "../store/store";
+import useStateManager from "../store/FrontendStateManager";
 
 /**
  * The basic maze generator class which builds the Sets required for
