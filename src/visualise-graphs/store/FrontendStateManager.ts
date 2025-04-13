@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import {NOTSET_TYPE, NOTSET} from "../ts/Types";
+import {NOTSET_t, NOTSET} from "../ts/Types";
 import {FileType} from "../components/file/File";
 import {HexProps} from "../components/hex/Hex";
 import populateHexBoard from "../components/hex-board/populateHexBoard";
@@ -21,23 +21,23 @@ export enum NodeType {
 }
 
 type StateManagerProps = {
-    startNodeId : number | NOTSET_TYPE,
-    endNodeId : number | NOTSET_TYPE,
-    bombNodeId : number | NOTSET_TYPE,
-    activeFiles : Record<FileType, string |NOTSET_TYPE>,
+    startNodeId : number | NOTSET_t,
+    endNodeId : number | NOTSET_t,
+    bombNodeId : number | NOTSET_t,
+    activeFiles : Record<FileType, string |NOTSET_t>,
     hexes: HexProps [],
-    weightNodes : Set<number |NOTSET_TYPE>,
-    wallNodes : Set<number | NOTSET_TYPE>,
+    weightNodes : Set<number |NOTSET_t>,
+    wallNodes : Set<number | NOTSET_t>,
     hexBoardDimensions : {width : number, height:number},
     hexDimensions : {HEX_WIDTH : number, HEX_HEIGHT:number},
-    hexBoard : Record<number | NOTSET_TYPE, NodeType | NOTSET_TYPE>,
+    hexBoard : Record<number | NOTSET_t, NodeType | NOTSET_t>,
     block : boolean
 }
 
 type StateManagerActions = {
     changeActiveFiles : (newActiveFileId : string, fileType : FileType)=> void,
     setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void,
-    changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_TYPE) : void,
+    changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_t) : void,
     setHexBoardDimensions : (dimension :{width : number, height:number})=>void,
     clearHexBoard : () => void,
     setBlock : (toggle : boolean) => void

@@ -49,7 +49,6 @@ class MazeGenerator {
      */
     static genRidges(workableColumns: number,
                      workableRows: number): Set<number> {
-        console.log(workableRows, workableColumns)
         // first check for nullity case
         if (workableColumns < 2 || workableRows < 2) {
             return new Set();

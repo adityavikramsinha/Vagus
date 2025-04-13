@@ -12,8 +12,9 @@ export enum AlgoType {
   BEST_FIRST_SEARCH = 'best-fs'
 }
 
-export const NOTSET = Symbol("__NOTSET__");
-export type NOTSET_TYPE = typeof NOTSET
+export const NOTSET: unique symbol  = Symbol("__NOTSET__") ;
+export type NOTSET_t = typeof NOTSET;
+
 
 /**
  * Contains the maze generation types for the website

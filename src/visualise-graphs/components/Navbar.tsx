@@ -66,25 +66,25 @@ const Navbar: FC = () => {
                                 <Folder text="un-weighted" divClassName="folder advanced-cp-comp" arrowID="un-weighted-arrow">
                                     <File
                                         name="breadthFirstSearch.ts"
-                                        id="tsx-3"
+                                        id="ts-3"
                                         type={FileType.TS}
                                         Icon={<TsFileIcon />}
                                     />
                                     <File
                                         name="depthFirstSearch.ts"
-                                        id="tsx-4"
+                                        id="ts-4"
                                         type={FileType.TS}
                                         Icon={<TsFileIcon />}
                                     />
                                     <File
                                         name="randomWalk.ts"
-                                        id="tsx-5"
+                                        id="ts-5"
                                         type={FileType.TS}
                                         Icon={<TsFileIcon />}
                                     />
                                     <File
                                         name="bestFirstSearch.ts"
-                                        id="tsx-6"
+                                        id="ts-6"
                                         type={FileType.TS}
                                         Icon={<TsFileIcon />}
                                     />
@@ -92,25 +92,25 @@ const Navbar: FC = () => {
                                 <Folder text="weighted" divClassName="folder advanced-cp-comp" arrowID="weighted-arrow">
                                     <File
                                         name="aStarSearch.ts"
-                                        id="tsx-7"
+                                        id="ts-7"
                                         type={FileType.TS}
                                         Icon={<TsFileIcon />}
                                     />
                                     <File
                                         name="dijkstrasSearch.ts"
-                                        id="tsx-8"
+                                        id="ts-8"
                                         type={FileType.TS}
                                         Icon={<TsFileIcon />}
                                     />
                                     <File
                                         name="bellmanFord.ts"
-                                        id="tsx-9"
+                                        id="ts-9"
                                         type={FileType.TS}
                                         Icon={<TsFileIcon />}
                                     />
                                     <File
                                         name="biDirectionalSearch.ts"
-                                        id="tsx-10"
+                                        id="ts-10"
                                         type={FileType.TS}
                                         Icon={<TsFileIcon />}
                                     />
