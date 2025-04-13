@@ -110,7 +110,7 @@
 .svg-un-visited-bomb-node {
     fill: var(--hex-color);
     transition: all 1s;
-    animation: un-visited-node-transform-yes-bomb 1s 1 linear forwards;
+    animation: un-visited-node-transform-yes-bomb 0.5s 1 linear forwards;
 
 }
 

@@ -27,13 +27,18 @@ type StateManagerProps = {
     activeFiles : Record<FileType, string |NOTSET_TYPE>,
     hexes: HexProps [],
     weightNodes : Set<number |NOTSET_TYPE>,
-    wallNodes : Set<number | NOTSET_TYPE>
+    wallNodes : Set<number | NOTSET_TYPE>,
+    hexBoardDimensions : {width : number, height:number},
+    hexDimensions : {HEX_WIDTH : number, HEX_HEIGHT:number},
+    hexBoard : Record<number | NOTSET_TYPE, NodeType | NOTSET_TYPE>
 }
 
 type StateManagerActions = {
     changeActiveFiles : (newActiveFileId : string, fileType : FileType)=> void,
     setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void,
     changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_TYPE) : void,
+    setHexBoardDimensions : (dimension :{width : number, height:number})=>void,
+    clearHexBoard : () => void,
 }
 
 
@@ -60,26 +65,48 @@ const useStateManager =
         setHexBoard :(rows, cols, HEX_WIDTH, HEX_HEIGHT) => set({hexes : populateHexBoard(rows , cols , HEX_WIDTH, HEX_HEIGHT)}),
         weightNodes : new Set(),
         changeNode: (nodeType, nodeAction, id) =>
-            set((state) =>
-                match([nodeType, nodeAction] as const)
-                    .with([NodeType.START_NODE, P._], () => ({startNodeId: id}))
-                    .with([NodeType.END_NODE, P._] , () => ({endNodeId : id}))
-                    .with([NodeType.BOMB_NODE, P._] , () => ({bombNodeId : id}))
-                    .with([NodeType.WEIGHT_NODE, NodeAction.SET], () =>({weightNodes : new Set(state.weightNodes).add(id)}))
-                    .with([NodeType.WEIGHT_NODE, NodeAction.DELETE], ()=>{
-                        const updatedSet = new Set(state.weightNodes);
-                        updatedSet.delete(id);
-                        return {weightNodes: updatedSet}
+            set((state) => {
+                const newHexBoard = { ...state.hexBoard };
+                return match([nodeType, nodeAction] as const)
+                    .with([NodeType.START_NODE, NodeAction.SET], () => {
+                        newHexBoard[state.startNodeId]=NOTSET;
+                        state.startNodeId = id;
+                        newHexBoard[state.startNodeId] = NodeType.START_NODE;
+                        return { hexBoard: newHexBoard };
                     })
-                    .with([NodeType.WALL_NODE, NodeAction.SET], () =>({wallNodes : new Set(state.wallNodes).add(id)}))
-                    .with([NodeType.WALL_NODE, NodeAction.DELETE], () => {
-                        const updatedSet = new Set(state.wallNodes);
-                        updatedSet.delete(id);
-                        return {wallNodes: updatedSet}
+                    .with([NodeType.END_NODE, NodeAction.SET], () => {
+                        newHexBoard[state.endNodeId] = NOTSET;
+                        state.endNodeId = id;
+                        newHexBoard[state.endNodeId] = NodeType.END_NODE;
+                        return { hexBoard: newHexBoard };
                     })
-                    .otherwise(()=>({}))
-            ),
+                    .with([NodeType.BOMB_NODE, NodeAction.SET], () => {
+                        newHexBoard[state.bombNodeId] = NOTSET;
+                        state.bombNodeId = id;
+                        newHexBoard[state.bombNodeId] = NodeType.BOMB_NODE;
+                        return { hexBoard: newHexBoard };
+                    })
+                    .with([P.union(NodeType.START_NODE, NodeType.END_NODE, NodeType.BOMB_NODE), NodeAction.SET], () => {
+                        newHexBoard[id] = NOTSET;
+                        return { hexBoard: newHexBoard };
+                    })
+                    .with([P.union(NodeType.WALL_NODE, NodeType.WEIGHT_NODE), NodeAction.SET], () => {
+                        newHexBoard[id] = nodeType;
+                        return { hexBoard: newHexBoard };
+                    })
+                    .with([P.union(NodeType.WALL_NODE, NodeType.WEIGHT_NODE), NodeAction.DELETE], () => {
+                        newHexBoard[id] = NOTSET;
+                        return { hexBoard: newHexBoard };
+                    })
+                    .otherwise(() => ({ hexBoard: newHexBoard }));
+            }),
+        hexBoardDimensions : {width :0, height :0},
+        setHexBoardDimensions : (newDimensions)=>set({hexBoardDimensions : newDimensions}),
+        hexDimensions : {HEX_WIDTH : 26 , HEX_HEIGHT : 30},
+        hexBoard : {
+            [NOTSET]: NodeType.START_NODE
+        },
+        clearHexBoard : () => set({hexBoard: {[NOTSET]: NodeType.START_NODE}})
     }))
-
 
 export default useStateManager;

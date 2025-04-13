@@ -1,4 +1,5 @@
 import * as React from "react";
+import {FC} from "react";
 
 import File, {FileType} from "./file/File";
 import PrevButton from "./action-buttons/PrevButton";
@@ -8,29 +9,30 @@ import Folder from "./folder/Folder";
 
 import {
     BatFileIcon,
-    BombNodeIcon, EndNodeIcon,
+    BombNodeIcon,
+    EndNodeIcon,
     IOFileIcon,
     MdFileIcon,
-    ShortestPathNodeIcon, StartNodeIcon,
+    ShortestPathNodeIcon,
+    StartNodeIcon,
     SysFileIcon,
-    TsFileIcon, UnvisitedNodeIcon, VisitedNodeIcon,
-    WallNodeIcon, WeightNodeIcon
+    TsFileIcon,
+    UnvisitedNodeIcon,
+    VisitedNodeIcon,
+    WallNodeIcon,
+    WeightNodeIcon
 } from "./file/FileIcons";
-import { FC} from "react";
-import currentState from "../ts/GlobalState";
-import {removeAllClasses, updateIDClass} from "../ts/Utility";
-import Graph from "../ts/Graph";
+import useStateManager, {NodeAction, NodeType} from "../store/store";
+import {NOTSET} from "../ts/Types";
 
 const Navbar: FC = () => {
+    const changeNode = useStateManager(state=>state.changeNode);
+    const clearHexBoard = useStateManager(state=>state.clearHexBoard);
     const handleStopButtonClick =()=>{
-        if (currentState.run() === true) currentState.changeRun();
-        updateIDClass('stop-button', [], ['button-clicked'])
-        removeAllClasses(500, ['start-node', 'end-node', 'wall-node', 'weight-node', 'bomb-node']);
-        currentState.changeBombNode(null);
-        currentState.changeEndNode(null);
-        currentState.changeStartNode(null);
-        Graph.copy(currentState.initGraph(), currentState.graph(), 1);
-        updateIDClass('stop-button', ['button-clicked'], [])
+        changeNode(NodeType.END_NODE, NodeAction.SET, NOTSET);
+        changeNode(NodeType.START_NODE, NodeAction.SET, NOTSET);
+        changeNode(NodeType.BOMB_NODE, NodeAction.SET, NOTSET);
+        clearHexBoard();
     }
     return (
         <div className="navbar">
@@ -149,33 +151,27 @@ const Navbar: FC = () => {
                         </Folder>
                         <Folder text="mazes" divClassName="folder advanced-cp-comp" arrowID="mazes-arrow">
                             <File
-                                name="none.bat"
-                                id="bat-1"
-                                type={FileType.BAT}
-                                Icon={<BatFileIcon />}
-                            />
-                            <File
                                 name="generateRandomMaze.bat"
-                                id="bat-2"
+                                id="bat-1"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon />}
                             />
                             <Folder text="wall" divClassName="folder advanced-cp-comp" arrowID="wall-arrow">
                                 <File
                                     name="generateLeastCostPathBlocker.bat"
-                                    id="bat-3"
+                                    id="bat-2"
                                     type={FileType.BAT}
                                     Icon={<BatFileIcon />}
                                 />
                                 <File
                                     name="generateBlockedRidges.bat"
-                                    id="bat-4"
+                                    id="bat-3"
                                     type={FileType.BAT}
                                     Icon={<BatFileIcon />}
                                 />
                                 <File
                                     name="generateBlockedRandomMaze.bat"
-                                    id="bat-5"
+                                    id="bat-4"
                                     type={FileType.BAT}
                                     Icon={<BatFileIcon />}
                                 />
@@ -183,13 +179,13 @@ const Navbar: FC = () => {
                             <Folder text="weighted" divClassName="folder advanced-cp-comp" arrowID="weighted-arrow">
                                 <File
                                     name="generateWeightedRidges.bat"
-                                    id="bat-6"
+                                    id="bat-5"
                                     type={FileType.BAT}
                                     Icon={<BatFileIcon />}
                                 />
                                 <File
                                     name="generateWeightedRandomMaze.bat"
-                                    id="bat-7"
+                                    id="bat-6"
                                     type={FileType.BAT}
                                     Icon={<BatFileIcon />}
                                 />

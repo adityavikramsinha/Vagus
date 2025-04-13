@@ -7,21 +7,28 @@ import cn from "../../css/cn";
 import {match} from "ts-pattern";
 
 export type HexProps = {
-    x: number,
-    y: number,
-    id: number
-}
+    x: number;
+    y: number;
+    id: number;
+};
+
 /**
  * @returns JSX.Element which has the rendered Hex along with its id
  */
 const Hex: React.FC<HexProps> = ({x, y, id}) => {
-    const isStartNode = useStateManager(state => state.startNodeId === id);
-    const isEndNode = useStateManager(state => state.endNodeId === id);
-    const isBombNode = useStateManager(state => state.bombNodeId === id);
-    const isWallNode = useStateManager(state => state.wallNodes.has(id));
-    const isWeightNode = useStateManager(s => s.weightNodes.has(id));
+    // Checking the node type from hexBoard map
+
+    const nodeType = useStateManager(state => state.hexBoard[id] || NOTSET);
+    // Whether the hex is start, end, bomb, weight or wall node
+    const isStartNode = nodeType === NodeType.START_NODE;
+    const isEndNode = nodeType === NodeType.END_NODE;
+    const isBombNode = nodeType === NodeType.BOMB_NODE;
+    const isWallNode = nodeType === NodeType.WALL_NODE;
+    const isWeightNode = nodeType === NodeType.WEIGHT_NODE;
+
     const activeFilesIo = useStateManager(state => state.activeFiles).io;
     const changeNode = useStateManager(state => state.changeNode);
+
     const handleHexClick = () => {
         if (isStartNode) {
             if (activeFilesIo !== 'io-1') changeNode(NodeType.START_NODE, NodeAction.SET, NOTSET);
@@ -38,19 +45,21 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
             .with('io-2', () => changeNode(NodeType.END_NODE, NodeAction.SET, id))
             .with('io-3', () => changeNode(NodeType.BOMB_NODE, NodeAction.SET, id))
             .with('io-4', () => changeNode(NodeType.WEIGHT_NODE, NodeAction.SET, id))
-            .with('io-5', () => changeNode(NodeType.WALL_NODE, NodeAction.SET, id))
+            .with('io-5', () => changeNode(NodeType.WALL_NODE, NodeAction.SET, id));
+    };
 
-    }
     const styles: React.CSSProperties = {
         left: `${x}px`,
         top: `${y}px`,
-    }
+    };
+
+    // Apply classes based on node type
     let classes = cn({
         "prop-holder": true,
         "start-node": isStartNode,
         "bomb-node": isBombNode,
         "end-node": isEndNode,
-        "weight-node": isWeightNode
+        "weight-node": isWeightNode,
     });
 
     return (
@@ -60,6 +69,6 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
             <div className={classes}/>
         </div>
     );
-}
+};
 
 export default Hex;

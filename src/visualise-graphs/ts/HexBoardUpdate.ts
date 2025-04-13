@@ -1,10 +1,8 @@
 import currentState from './GlobalState'
 import Graph from "./Graph";
-import { MazeGenerator } from './MazeGenerator';
 import {AlgoType, MazeGenerationType, NodeType, SpeedType} from './Types';
 import {removeAllClasses} from "./Utility";
 import { updateIDClass, updateBiIDClass } from './Utility';
-import {updateAddableNodes} from "../components/file/File";
 
 const updateHexIcon = (propID: string, id: number): void => {
     document.onmousemove = null;
@@ -202,21 +200,21 @@ type displayMazeOptions = {
 }
 
 const displayMaze = (options: displayMazeOptions): void => {
-    if (currentState.maze() === MazeGenerationType.generateRandomMaze) {
+    if (currentState.maze() === MazeGenerationType.GENERATE_RANDOM_MAZE) {
         for (let [id, state] of options.randomMap) {
             if (state) updateBiIDClass(id, ['no-node', 'icon'], 'wall-node');
             else updateBiIDClass(id, ['no-node'], 'weight-node');;
         }
     }
-    else if (currentState.maze() === MazeGenerationType.generateLeastCostPathBlocker)
+    else if (currentState.maze() === MazeGenerationType.GENERATE_LEAST_COST_PATH_BLOCKER_MAZE)
         options.mazeLeastCostArray.forEach(id => updateBiIDClass(id, ['no-node', 'icon'], 'wall-node'));
-    else if (currentState.maze() === MazeGenerationType.generateBlockedRidges)
+    else if (currentState.maze() === MazeGenerationType.GENERATE_BLOCKED_RIDGES)
         options.blockedRidges.forEach(ridge => ridge.forEach(id => updateBiIDClass(id, ['no-node', 'icon'], 'wall-node')));
-    else if (currentState.maze() === MazeGenerationType.generateWeightedRidges)
+    else if (currentState.maze() === MazeGenerationType.GENERATE_WEIGHTED_RIDGES)
         options.weightedRidges.forEach(ridge => ridge.forEach(id => updateBiIDClass(id, ['no-node'], 'weight-node')));
-    else if (currentState.maze() === MazeGenerationType.generateWeightedRandomMaze)
+    else if (currentState.maze() === MazeGenerationType.GENERATE_WEIGHTED_RANDOM_MAZE)
         options.weightedSet.forEach(id => updateBiIDClass(id, ['no-node'], 'weight-node'));
-    else if (currentState.maze() === MazeGenerationType.generateBlockedRandomMaze)
+    else if (currentState.maze() === MazeGenerationType.GENERATE_BLOCKED_RANDOM_MAZE)
         options.blockedSet.forEach(id => updateBiIDClass(id, ['no-node', 'icon'], 'wall-node'));
 }
 
@@ -226,28 +224,28 @@ const updateMaze = (): void => {
     Graph.copy(currentState.initGraph(), currentState.graph(), 1);
     setTimeout(() => {
         switch (currentState.maze()) {
-            case MazeGenerationType.generateRandomMaze:
-                let mazeMap: Map<number, boolean> = MazeGenerator.generateRandomMaze();
+            case MazeGenerationType.GENERATE_RANDOM_MAZE:
+                let mazeMap: Map<number, boolean> = _MazeGenerator.generateRandomMaze();
                 displayMaze({ randomMap: mazeMap });
                 break;
-            case MazeGenerationType.generateWeightedRandomMaze:
-                let mazeSet: Set<number> = MazeGenerator.generateRandomTypedMaze();
+            case MazeGenerationType.GENERATE_WEIGHTED_RANDOM_MAZE:
+                let mazeSet: Set<number> = _MazeGenerator.generateRandomTypedMaze();
                 displayMaze({ weightedSet: mazeSet });
                 break;
-            case MazeGenerationType.generateLeastCostPathBlocker:
-                let mazeLeastPathBlocker: number[] = MazeGenerator.generateLeastCostPathBlocker();
+            case MazeGenerationType.GENERATE_LEAST_COST_PATH_BLOCKER_MAZE:
+                let mazeLeastPathBlocker: number[] = _MazeGenerator.generateLeastCostPathBlocker();
                 displayMaze({ mazeLeastCostArray: mazeLeastPathBlocker });
                 break;
-            case MazeGenerationType.generateBlockedRidges:
-                let mazeGeneratedBlockedRidges: Set<number>[] = MazeGenerator.generateTypedRidges(false);
+            case MazeGenerationType.GENERATE_BLOCKED_RIDGES:
+                let mazeGeneratedBlockedRidges: Set<number>[] = _MazeGenerator.generateTypedRidges(false);
                 displayMaze({ blockedRidges: mazeGeneratedBlockedRidges });
                 break;
-            case MazeGenerationType.generateBlockedRandomMaze:
-                let blockedMazeSet: Set<number> = MazeGenerator.generateRandomTypedMaze(false);
+            case MazeGenerationType.GENERATE_BLOCKED_RANDOM_MAZE:
+                let blockedMazeSet: Set<number> = _MazeGenerator.generateRandomTypedMaze(false);
                 displayMaze({ blockedSet: blockedMazeSet });
                 break;
-            case MazeGenerationType.generateWeightedRidges:
-                let mazeGeneratedWeightedRidges: Set<number>[] = MazeGenerator.generateTypedRidges(true);
+            case MazeGenerationType.GENERATE_WEIGHTED_RIDGES:
+                let mazeGeneratedWeightedRidges: Set<number>[] = _MazeGenerator.generateTypedRidges(true);
                 displayMaze({ weightedRidges: mazeGeneratedWeightedRidges });
                 break;
             default:

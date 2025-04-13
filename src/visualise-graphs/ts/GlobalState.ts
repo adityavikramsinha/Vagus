@@ -1,10 +1,10 @@
 import {
   AlgoType,
   MazeGenerationType,
-  NodeType,
   SpeedType
 } from "./Types";
 import Graph from "./Graph";
+import {NodeType} from "../store/store";
 
 
 
@@ -140,7 +140,6 @@ class State<T> {
   constructor(_start: T = null, _end: T = null, _graph: Graph<T> = null) {
     this.AddableNode = null;
     this.Algorithm = null;
-    this.Maze = MazeGenerationType.none;
     this.Speed = SpeedType.percent100;
     this.StartNode = _start;
     this.EndNode = _end;
