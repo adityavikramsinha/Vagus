@@ -27,12 +27,3 @@ export enum MazeType {
   GENERATE_WEIGHTED_RANDOM_MAZE         = 'generateWeightedRandomMaze',
   GENERATE_BLOCKED_RANDOM_MAZE          = 'generateBlockedRandomMaze'
 }
-
-/**
- * Contains the SpeedTypes for the website
- */
-export enum SpeedType {
-  percent100 = 100,
-  percent50 = 50,
-  percent25 = 25
-}

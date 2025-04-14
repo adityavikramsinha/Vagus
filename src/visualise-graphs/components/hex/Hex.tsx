@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 
 import HexIcon from "./HexIcon";
-import useFrontendStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
+import useFrontendStateManager, {NodeAction, NodeType} from "../../api/FrontendStateManager";
 import {NOTSET} from "../../ts/Types";
 import cn from "../../css/cn";
 import {match} from "ts-pattern";

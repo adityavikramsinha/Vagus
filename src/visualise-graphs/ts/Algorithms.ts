@@ -1,7 +1,7 @@
 import Graph from './Graph';
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 import {AlgoType, NOTSET, NOTSET_t} from "./Types";
-import currentState from "./GlobalState";
+import currentState from "../api/BackendStateManager";
 import {Queue} from "queue-typescript";
 import Node from "./Node";
 import {match} from "ts-pattern";

@@ -1,9 +1,9 @@
 import React from "react";
 import Loading from "../Loading";
 import Hex from "../hex/Hex";
-import useFrontendStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
-import Syncer from "../../store/Syncer";
-import currentState from "../../ts/GlobalState";
+import useFrontendStateManager, {NodeAction, NodeType} from "../../api/FrontendStateManager";
+import Syncer from "../../api/Syncer";
+import currentState from "../../api/BackendStateManager";
 
 /**
  * Renders the hexagonal board.

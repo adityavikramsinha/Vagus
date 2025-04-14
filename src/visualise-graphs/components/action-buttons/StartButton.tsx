@@ -1,12 +1,12 @@
 import React from "react";
-import currentState from "../../ts/GlobalState";
+import currentState from "../../api/BackendStateManager";
 import {AlgoType, NOTSET, NOTSET_t} from "../../ts/Types";
 import Button from "./Button";
-import useFrontendStateManager, {NodeType} from "../../store/FrontendStateManager";
-import Syncer from "../../store/Syncer";
+import useFrontendStateManager, {NodeType} from "../../api/FrontendStateManager";
+import Syncer from "../../api/Syncer";
 import {match, P} from "ts-pattern";
 import Algorithms from "../../ts/Algorithms";
-import Animator from "../../store/Animator";
+import Animator from "../../api/Animator";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {

@@ -22,9 +22,9 @@ import {
     WallNodeIcon,
     WeightNodeIcon
 } from "./file/FileIcons";
-import useFrontendStateManager, {NodeAction, NodeType} from "../store/FrontendStateManager";
+import useFrontendStateManager, {NodeAction, NodeType} from "../api/FrontendStateManager";
 import {NOTSET} from "../ts/Types";
-import Syncer from "../store/Syncer";
+import Syncer from "../api/Syncer";
 
 const Navbar: FC = () => {
     const changeNode = useFrontendStateManager(state=>state.changeNode);

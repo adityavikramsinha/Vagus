@@ -1,5 +1,5 @@
 import React from 'react';
-import useFrontendStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
+import useFrontendStateManager, {NodeAction, NodeType} from "../../api/FrontendStateManager";
 import {match} from "ts-pattern";
 import {MazeType} from "../../ts/Types";
 import MazeGenerator from "../../ts/MazeGenerator";

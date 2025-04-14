@@ -1,15 +1,15 @@
-import Graph from "./Graph";
+import Graph from "../ts/Graph";
 
 
 
 /**
  * This is the global head. The class is tasked and authorised to control
- * the State of all the functions and states present on the
+ * the BackendStateManager of all the functions and states present on the
  * Website.
  *
  * @author aditya , <adityavikramsinha19@gmail.com>
  */
-class State<T> {
+class BackendStateManager<T> {
 
   // Current graph
   private PRES_GRAPH: Graph<T>;
@@ -178,7 +178,7 @@ class State<T> {
 
 // declaring the state variable internally so that
 // it gets imported into every file using it
-let currentState = new State<number>();
+let currentState = new BackendStateManager<number>();
 
 // declaring the pres graph
 currentState.changeGraph(new Graph<number>((a, b): number => {

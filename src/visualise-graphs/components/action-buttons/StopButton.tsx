@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "./Button";
-import useFrontendStateManager from "../../store/FrontendStateManager";
+import useFrontendStateManager from "../../api/FrontendStateManager";
 
 const StopButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
     return (

@@ -1,4 +1,4 @@
-import currentState from "../ts/GlobalState";
+import currentState from "./BackendStateManager";
 import useFrontendStateManager, {NodeAction, NodeType} from "./FrontendStateManager";
 import {NOTSET} from "../ts/Types";
 
