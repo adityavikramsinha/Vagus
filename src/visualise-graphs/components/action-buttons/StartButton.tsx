@@ -7,6 +7,7 @@ import Syncer from "../../api/Syncer";
 import {match, P} from "ts-pattern";
 import Algorithms from "../../ts/Algorithms";
 import Animator from "../../api/Animator";
+import Pipe from "../../api/Pipe";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -64,7 +65,7 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                     await Animator.animatePathNodes(path);
                     useFrontendStateManager.getState().setBlock(false);
                 } else {
@@ -74,6 +75,10 @@ const startButtonClick =  (
                         endNodeId,
                         bombNodeId
                     );
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 }
             })
             .with(P.union('ts-2', 'ts-6'), async () => {
@@ -83,7 +88,7 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                     await Animator.animatePathNodes(path);
                     useFrontendStateManager.getState().setBlock(false);
                 } else {
@@ -93,6 +98,10 @@ const startButtonClick =  (
                         endNodeId,
                         bombNodeId
                     );
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 }
             })
             .with('ts-3', async () => {
@@ -102,7 +111,7 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                     await Animator.animatePathNodes(path);
                     useFrontendStateManager.getState().setBlock(false);
                 } else {
@@ -112,6 +121,10 @@ const startButtonClick =  (
                         endNodeId,
                         bombNodeId
                     );
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 }
             })
             .with('ts-4', async () => {
@@ -121,7 +134,7 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                     await Animator.animatePathNodes(path);
                     useFrontendStateManager.getState().setBlock(false);
                 } else {
@@ -131,6 +144,10 @@ const startButtonClick =  (
                         endNodeId,
                         bombNodeId
                     );
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 }
             })
             .with('ts-8', async () => {
@@ -140,7 +157,7 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                     await Animator.animatePathNodes(path);
                     useFrontendStateManager.getState().setBlock(false);
                 } else {
@@ -150,6 +167,10 @@ const startButtonClick =  (
                         endNodeId,
                         bombNodeId
                     );
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 }
             })
             .with('ts-10', ()=>{
@@ -171,7 +192,7 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                     await Animator.animatePathNodes(path);
                     useFrontendStateManager.getState().setBlock(false);
                 } else {
@@ -181,6 +202,10 @@ const startButtonClick =  (
                         endNodeId,
                         bombNodeId
                     );
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 }
             });
     }

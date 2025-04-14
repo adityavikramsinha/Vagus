@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 
 import HexIcon from "./HexIcon";
 import useFrontendStateManager, {NodeAction, NodeType} from "../../api/FrontendStateManager";
 import {NOTSET} from "../../ts/Types";
 import cn from "../../css/cn";
 import {match} from "ts-pattern";
+
 export type HexProps = {
     x: number;
     y: number;
@@ -17,7 +18,7 @@ export type HexProps = {
 const Hex: React.FC<HexProps> = ({x, y, id}) => {
     // Checking the node type from hexBoard map
     const nodeType = useFrontendStateManager(state => state.hexBoard[id] || NOTSET);
-    const visited = useFrontendStateManager(state =>state.visitedNodes.has(id));
+    const visited = useFrontendStateManager(state =>state.visitedNodes.has(id)? state.visitedNodes.get(id) : NOTSET);
     const pathNode = useFrontendStateManager(state =>state.pathNodes.has(id));
     // Whether the hex is start, end, bomb, weight or wall node
     const isStartNode = nodeType === NodeType.START_NODE;
@@ -53,8 +54,9 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     };
 
     let hexIconClasses = cn({
-        "visited-node":  visited && !pathNode,
-        "icon": !visited,
+        "visited-node":  (visited === NodeType.START_NODE) && !pathNode,
+        "icon": (visited === NOTSET),
+        "visited-node-bomb" : (visited === NodeType.BOMB_NODE) && !pathNode,
         "path-node" : pathNode,
         "wall-node" : isWallNode
     });

@@ -28,7 +28,9 @@ type FrontendStateManagerProps = {
     hexDimensions : {HEX_WIDTH : number, HEX_HEIGHT:number},
     hexBoard : Record<number | NOTSET_t, NodeType | NOTSET_t>,
     block : boolean,
-    visitedNodes : Set<number | NOTSET_t>,
+    // visited contains a map of ids, and the node they were visited from, i.e
+    // from where the path will start.
+    visitedNodes : Map<number | NOTSET_t, NodeType.START_NODE | NodeType.BOMB_NODE>,
     pathNodes : Set<number | NOTSET_t>
 }
 
@@ -107,8 +109,8 @@ const useFrontendStateManager =
         },
         block : false,
         setBlock : (toggle) => set({block : toggle}),
-        visitedNodes : new Set<number | NOTSET_t>(),
-        pathNodes : new Set<number | NOTSET_t>()
+        visitedNodes : new Map(),
+        pathNodes : new Set()
     }))
 
 export default useFrontendStateManager;

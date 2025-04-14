@@ -123,7 +123,7 @@ export default class Syncer {
     }
 
     static cleanHexBoard () {
-        useFrontendStateManager.setState({visitedNodes : new Set()});
+        useFrontendStateManager.setState({visitedNodes : new Map()});
         useFrontendStateManager.setState({pathNodes : new Set()});
     }
 

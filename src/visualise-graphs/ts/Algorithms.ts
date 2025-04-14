@@ -5,6 +5,7 @@ import currentState from "../api/BackendStateManager";
 import {Queue} from "queue-typescript";
 import Node from "./Node";
 import {match} from "ts-pattern";
+import {NodeType} from "../api/FrontendStateManager";
 
 /**
  * Main backbone of the whole backend.
@@ -763,7 +764,6 @@ export default class Algorithms<T> {
             .with(AlgoType.BEST_FIRST_SEARCH, ()=>algo.bestFirstSearch(startNodeId, endNodeId))
             .otherwise(()=>[NOTSET, NOTSET]);
         // @ts-ignore
-        // Because typescript is acting up for some reason, it is taking the unique symbol as j the symbol which is really weird work.
         return {path, visited}
     }
 
