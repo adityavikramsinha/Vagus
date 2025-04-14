@@ -17,9 +17,8 @@ export type HexProps = {
  */
 const Hex: React.FC<HexProps> = ({x, y, id}) => {
     // Checking the node type from hexBoard map
-    const [visited ,setVisited] = React.useState<boolean>(false);
     const nodeType = useStateManager(state => state.hexBoard[id] || NOTSET);
-    const visiting = useStateManager(state =>state.visitingNode===id);
+    const visited = useStateManager(state =>state.visitedNodes.has(id));
     // Whether the hex is start, end, bomb, weight or wall node
     const isStartNode = nodeType === NodeType.START_NODE;
     const isEndNode = nodeType === NodeType.END_NODE;
@@ -29,9 +28,6 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
 
     const activeFilesIo = useStateManager(state => state.activeFiles).io;
     const changeNode = useStateManager(state => state.changeNode);
-    React.useEffect(() => {
-            if (visiting )setVisited(true);
-    }, [visiting]);
     const handleHexClick = () => {
         if (isStartNode) {
             if (activeFilesIo !== 'io-1') changeNode(NodeType.START_NODE, NodeAction.SET, NOTSET);
@@ -57,8 +53,8 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     };
 
     let hexIconClasses = cn({
-        "visited-node": visiting || visited,
-        "icon": !visiting
+        "visited-node":  visited,
+        "icon": !visited
     });
     // Apply classes based on node type
     let classes = cn({

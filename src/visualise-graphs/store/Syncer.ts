@@ -133,17 +133,52 @@ export default class Syncer {
         srcNode.rmAdjNode(dest);
     }
 
-    // TODO cannot force in a delay (minimum is 15ms)
-    static async updateVisitedNodes (visited : Set<number>) {
-        const stream = visited;
+    static async updatePathNodes (path:any) {
+        const store = useStateManager.getState();
+        const internalSet = store.pathNodes;
 
-        useStateManager.getState().setAnimating(true);
+        let changed = false;
+        const updatedNodes = [];
 
-        for await (const node of stream) {
-            useStateManager.getState().setVisitingNode(node);
-            await new Promise(res => setTimeout(res));
+        let i = 0;
+        for (const node of path) {
+            if (!internalSet.has(node)) {
+                internalSet.add(node);
+                updatedNodes.push(node);
+                changed = true;
+                i++;
+            }
+
+            // Have to debounce a bit, or else it is getting exceedingly SLOW.
+            if (i % 5 === 0) {
+                useStateManager.setState({ pathNodes: new Set(internalSet) });
+                await new Promise(res => setTimeout(res, 5));
+            }
         }
-        // useStateManager.getState().setVisitingNode(NOTSET);
-        useStateManager.getState().setAnimating(false);
+
+        // give the dummy signal, or else zustand won't want to hurt it.
+        if (changed) {
+            useStateManager.setState({ pathNodes: new Set(internalSet) });
+        }
+    }
+    static async updateVisitedNodes (visited : Set<number>) {
+        const store = useStateManager.getState();
+        const internalSet = store.visitedNodes;
+
+
+        let i = 0;
+        for (const node of visited) {
+            internalSet.add(node);
+            i++;
+
+            // Every N nodes OR at the end
+            if (i % 4 === 0) {
+                useStateManager.setState({ visitedNodes: new Set(internalSet) });
+                await new Promise(res => setTimeout(res, 2)); // Delay for smooth animation
+            }
+        }
+        // for the last one.
+        useStateManager.setState({ visitedNodes: new Set(internalSet) });
+
     }
 }

@@ -33,8 +33,7 @@ type StateManagerProps = {
     hexBoard : Record<number | NOTSET_t, NodeType | NOTSET_t>,
     block : boolean,
     visitedNodes : Set<number | NOTSET_t>,
-    isAnimating : boolean,
-    visitingNode : number | NOTSET_t
+    pathNodes : Set<number | NOTSET_t>
 }
 
 type StateManagerActions = {
@@ -43,9 +42,7 @@ type StateManagerActions = {
     changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_t) : void,
     setHexBoardDimensions : (dimension :{width : number, height:number})=>void,
     clearHexBoard : () => void,
-    setBlock : (toggle : boolean) => void,
-    setAnimating : (state : boolean)=>void,
-    setVisitingNode : (id : number | NOTSET_t) => void
+    setBlock : (toggle : boolean) => void
 }
 
 
@@ -117,10 +114,7 @@ const useStateManager =
         block : false,
         setBlock : (toggle) => set({block : toggle}),
         visitedNodes : new Set<number | NOTSET_t>(),
-        isAnimating : false,
-        setAnimating: (state : boolean)=> set({isAnimating : state}),
-        visitingNode : NOTSET,
-        setVisitingNode : (id) => set({visitingNode : id})
+        pathNodes : new Set<number | NOTSET_t>()
     }))
 
 export default useStateManager;
