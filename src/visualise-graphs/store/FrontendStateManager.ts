@@ -18,14 +18,12 @@ export enum NodeType {
     WALL_NODE = 'wall-node',
 }
 
-type StateManagerProps = {
+type FrontendStateManagerProps = {
     startNodeId : number | NOTSET_t,
     endNodeId : number | NOTSET_t,
     bombNodeId : number | NOTSET_t,
     activeFiles : Record<FileType, string |NOTSET_t>,
     hexes: HexProps [],
-    weightNodes : Set<number |NOTSET_t>,
-    wallNodes : Set<number | NOTSET_t>,
     hexBoardDimensions : {width : number, height:number},
     hexDimensions : {HEX_WIDTH : number, HEX_HEIGHT:number},
     hexBoard : Record<number | NOTSET_t, NodeType | NOTSET_t>,
@@ -34,19 +32,18 @@ type StateManagerProps = {
     pathNodes : Set<number | NOTSET_t>
 }
 
-type StateManagerActions = {
+type FrontendStateManagerActions = {
     changeActiveFiles : (newActiveFileId : string, fileType : FileType)=> void,
     setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void,
     changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_t) : void,
     setHexBoardDimensions : (dimension :{width : number, height:number})=>void,
-    clearHexBoard : () => void,
     setBlock : (toggle : boolean) => void
 }
 
 
-const useStateManager =
-    create<StateManagerActions & StateManagerProps>()((set) => ({
-        startNodeId : NOTSET, endNodeId : NOTSET, bombNodeId : NOTSET, wallNodeIds : new Set(), wallNodes : new Set(),
+const useFrontendStateManager =
+    create<FrontendStateManagerActions & FrontendStateManagerProps>()((set) => ({
+        startNodeId : NOTSET, endNodeId : NOTSET, bombNodeId : NOTSET,
         activeFiles: {
             [FileType.TS]: NOTSET,
             [FileType.IO]: NOTSET,
@@ -108,11 +105,10 @@ const useStateManager =
         hexBoard : {
             [NOTSET]: NodeType.START_NODE
         },
-        clearHexBoard : () => set({hexBoard: {[NOTSET]: NodeType.START_NODE}}),
         block : false,
         setBlock : (toggle) => set({block : toggle}),
         visitedNodes : new Set<number | NOTSET_t>(),
         pathNodes : new Set<number | NOTSET_t>()
     }))
 
-export default useStateManager;
+export default useFrontendStateManager;

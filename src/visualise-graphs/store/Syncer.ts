@@ -1,5 +1,6 @@
 import currentState from "../ts/GlobalState";
-import useStateManager from "./FrontendStateManager";
+import useFrontendStateManager, {NodeAction, NodeType} from "./FrontendStateManager";
+import {NOTSET} from "../ts/Types";
 
 export default class Syncer {
     static setEdge(source: number, dest: number) {
@@ -122,36 +123,11 @@ export default class Syncer {
     }
 
     static cleanHexBoard () {
-        useStateManager.setState({visitedNodes : new Set()});
-        useStateManager.setState({pathNodes : new Set()});
+        useFrontendStateManager.setState({visitedNodes : new Set()});
+        useFrontendStateManager.setState({pathNodes : new Set()});
     }
-    static async updatePathNodes (path:any) {
-        const store = useStateManager.getState();
-        const internalSet = store.pathNodes;
-        for (const node of path) {
-            internalSet.add(node);
-            useStateManager.setState({ pathNodes: new Set(internalSet) });
-            await new Promise(res => setTimeout(res, 10)); // Delay for smooth animation
-        }
-        // for the last one.
-        useStateManager.setState({ pathNodes: new Set(internalSet) });
-    }
-    static async updateVisitedNodes (visited : Set<number>) {
-        const store = useStateManager.getState();
-        const internalSet = store.visitedNodes;
-        let i = 0;
-        for (const node of visited) {
-            internalSet.add(node);
-            i++;
 
-            // Every 4 nodes, just debounce.
-            if (i % 4 === 0) {
-                useStateManager.setState({ visitedNodes: new Set(internalSet) });
-                await new Promise(res => setTimeout(res, 2)); // Delay for smooth animation
-            }
-        }
-        // for the last one.
-        useStateManager.setState({ visitedNodes: new Set(internalSet) });
-
+    static clearHexBoard () {
+        // TODO, wrk.
     }
 }

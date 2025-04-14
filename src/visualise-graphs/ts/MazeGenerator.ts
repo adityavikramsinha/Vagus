@@ -1,4 +1,4 @@
-import useStateManager from "../store/FrontendStateManager";
+import useFrontendStateManager from "../store/FrontendStateManager";
 
 /**
  * The basic maze generator class which builds the Sets required for
@@ -26,12 +26,12 @@ class MazeGenerator {
      */
     static genRandomMaze(): Set<number> {
         let path: Set<number> = new Set();
-        const size = useStateManager.getState().hexes.length;
+        const size = useFrontendStateManager.getState().hexes.length;
         for (let i = 0; i < size; i++) {
             let randomID = Math.floor(Math.random() * size);
-            if (randomID !== useStateManager.getState().startNodeId &&
-                randomID !== useStateManager.getState().endNodeId &&
-                randomID !== useStateManager.getState().bombNodeId)
+            if (randomID !== useFrontendStateManager.getState().startNodeId &&
+                randomID !== useFrontendStateManager.getState().endNodeId &&
+                randomID !== useFrontendStateManager.getState().bombNodeId)
                 path.add(randomID);
         }
         return path;
@@ -70,7 +70,7 @@ class MazeGenerator {
             if ((i & 1) === 1) {
                 let entryPoints = generateRandomEntries(i);
                 for (let j: number = i * workableRows; j < workableRows * (i + 1); j++) {
-                    if (j !== entryPoints.p1 && j !== entryPoints.p2 && j !== useStateManager.getState().startNodeId && j !== useStateManager.getState().endNodeId && j !== useStateManager.getState().bombNodeId) {
+                    if (j !== entryPoints.p1 && j !== entryPoints.p2 && j !== useFrontendStateManager.getState().startNodeId && j !== useFrontendStateManager.getState().endNodeId && j !== useFrontendStateManager.getState().bombNodeId) {
                         wallNodes.add(j);
                     }
                 }

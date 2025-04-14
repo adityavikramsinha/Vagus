@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "./Button";
-import useStateManager from "../../store/FrontendStateManager";
+import useFrontendStateManager from "../../store/FrontendStateManager";
 
 const StopButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
     return (
@@ -18,7 +18,7 @@ type StopButtonProps = {
 
 const StopButton =(props:StopButtonProps) => {
     return (
-        <Button disabled={useStateManager(state =>state.block)} className = "button" id ="stop-button" onClick={props.onClick}>
+        <Button disabled={useFrontendStateManager(state =>state.block)} className = "button" id ="stop-button" onClick={props.onClick}>
             <StopButtonIcon/>
         </Button>
     )

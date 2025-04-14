@@ -1,5 +1,5 @@
 import React from 'react';
-import useStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
+import useFrontendStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
 import {match} from "ts-pattern";
 import {MazeType} from "../../ts/Types";
 import MazeGenerator from "../../ts/MazeGenerator";
@@ -22,14 +22,14 @@ export type FileProps = {
 }
 // FIXME, SLOW ASF
 const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
-    const isActiveFile = useStateManager(state => state.activeFiles[type] === id);
-    const hexBoardDimensions = useStateManager(state => state.hexBoardDimensions);
-    const changeActiveFiles = useStateManager(state => state.changeActiveFiles);
-    const changeNode = useStateManager(state => state.changeNode)
+    const isActiveFile = useFrontendStateManager(state => state.activeFiles[type] === id);
+    const hexBoardDimensions = useFrontendStateManager(state => state.hexBoardDimensions);
+    const changeActiveFiles = useFrontendStateManager(state => state.changeActiveFiles);
+    const changeNode = useFrontendStateManager(state => state.changeNode)
     const {
         HEX_WIDTH,
         HEX_HEIGHT
-    } = useStateManager(state => state.hexDimensions)
+    } = useFrontendStateManager(state => state.hexDimensions)
 
     const handleFileClick = (id: string, type: FileType) => {
         changeActiveFiles(id, type);

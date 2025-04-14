@@ -2,6 +2,7 @@ import {match} from "ts-pattern";
 import {MazeType} from "../../ts/Types";
 import MazeGenerator from "../../ts/MazeGenerator";
 import {NodeAction, NodeType} from "../../store/FrontendStateManager";
+import Syncer from "../../store/Syncer";
 
 // FIXME: I am a slow-poke
 /**
@@ -22,6 +23,7 @@ const handleBatFileClick = (
     HEX_HEIGHT: number,
     HEX_WIDTH: number
 ) => {
+    Syncer.cleanHexBoard();
     match(name as MazeType)
         .with(MazeType.GENERATE_BLOCKED_RIDGES, () => {
             const maze = MazeGenerator.genRidges(

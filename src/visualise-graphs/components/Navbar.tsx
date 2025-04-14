@@ -22,25 +22,19 @@ import {
     WallNodeIcon,
     WeightNodeIcon
 } from "./file/FileIcons";
-import useStateManager, {NodeAction, NodeType} from "../store/FrontendStateManager";
+import useFrontendStateManager, {NodeAction, NodeType} from "../store/FrontendStateManager";
 import {NOTSET} from "../ts/Types";
+import Syncer from "../store/Syncer";
 
 const Navbar: FC = () => {
-    const changeNode = useStateManager(state=>state.changeNode);
-    const clearHexBoard = useStateManager(state=>state.clearHexBoard);
-    const handleStopButtonClick =()=>{
-        changeNode(NodeType.END_NODE, NodeAction.SET, NOTSET);
-        changeNode(NodeType.START_NODE, NodeAction.SET, NOTSET);
-        changeNode(NodeType.BOMB_NODE, NodeAction.SET, NOTSET);
-        clearHexBoard();
-    }
+    const changeNode = useFrontendStateManager(state=>state.changeNode);
     return (
         <div className="navbar">
             <div className="header">
                 <div className="title">Vagus</div>
                 <div className="buttons">
                     <PrevButton />
-                    <StopButton onClick={()=>handleStopButtonClick()}/>
+                    <StopButton onClick={()=>Syncer.clearHexBoard()}/>
                     <StartButton />
                 </div>
             </div>

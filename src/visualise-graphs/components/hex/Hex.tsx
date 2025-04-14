@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 
 import HexIcon from "./HexIcon";
-import useStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
+import useFrontendStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
 import {NOTSET} from "../../ts/Types";
 import cn from "../../css/cn";
 import {match} from "ts-pattern";
@@ -16,9 +16,9 @@ export type HexProps = {
  */
 const Hex: React.FC<HexProps> = ({x, y, id}) => {
     // Checking the node type from hexBoard map
-    const nodeType = useStateManager(state => state.hexBoard[id] || NOTSET);
-    const visited = useStateManager(state =>state.visitedNodes.has(id));
-    const pathNode = useStateManager(state =>state.pathNodes.has(id));
+    const nodeType = useFrontendStateManager(state => state.hexBoard[id] || NOTSET);
+    const visited = useFrontendStateManager(state =>state.visitedNodes.has(id));
+    const pathNode = useFrontendStateManager(state =>state.pathNodes.has(id));
     // Whether the hex is start, end, bomb, weight or wall node
     const isStartNode = nodeType === NodeType.START_NODE;
     const isEndNode = nodeType === NodeType.END_NODE;
@@ -26,8 +26,8 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     const isWallNode = nodeType === NodeType.WALL_NODE;
     const isWeightNode = nodeType === NodeType.WEIGHT_NODE;
 
-    const activeFilesIo = useStateManager(state => state.activeFiles).io;
-    const changeNode = useStateManager(state => state.changeNode);
+    const activeFilesIo = useFrontendStateManager(state => state.activeFiles).io;
+    const changeNode = useFrontendStateManager(state => state.changeNode);
     const handleHexClick = () => {
         if (isStartNode) {
             if (activeFilesIo !== 'io-1') changeNode(NodeType.START_NODE, NodeAction.SET, NOTSET);

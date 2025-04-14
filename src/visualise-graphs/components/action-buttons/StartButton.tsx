@@ -2,10 +2,11 @@ import React from "react";
 import currentState from "../../ts/GlobalState";
 import {AlgoType, NOTSET, NOTSET_t} from "../../ts/Types";
 import Button from "./Button";
-import useStateManager, {NodeType} from "../../store/FrontendStateManager";
+import useFrontendStateManager, {NodeType} from "../../store/FrontendStateManager";
 import Syncer from "../../store/Syncer";
 import {match, P} from "ts-pattern";
 import Algorithms from "../../ts/Algorithms";
+import Animator from "../../store/Animator";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -29,10 +30,10 @@ const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
 const startButtonClick =  (
     algoFile: string | NOTSET_t
 ): void => {
-    const startNodeId = useStateManager.getState().startNodeId;
-    const endNodeId = useStateManager.getState().endNodeId;
-    const bombNodeId = useStateManager.getState().bombNodeId;
-    if (!useStateManager.getState().block) {
+    const startNodeId = useFrontendStateManager.getState().startNodeId;
+    const endNodeId = useFrontendStateManager.getState().endNodeId;
+    const bombNodeId = useFrontendStateManager.getState().bombNodeId;
+    if (!useFrontendStateManager.getState().block) {
         if (algoFile === NOTSET) {
             alert('Please select an algorithm before continuing!');
             return;
@@ -44,7 +45,7 @@ const startButtonClick =  (
             return;
         }
         // I guess we have to now update the graph.
-        for (const [nodeKey, nodeType] of Object.entries(useStateManager.getState().hexBoard)) {
+        for (const [nodeKey, nodeType] of Object.entries(useFrontendStateManager.getState().hexBoard)) {
             const id = Number(nodeKey);
             if (nodeType === NodeType.WALL_NODE)
                 Syncer.removeNode(id);
@@ -54,7 +55,7 @@ const startButtonClick =  (
             }
         }
         Syncer.cleanHexBoard();
-        useStateManager.getState().setBlock(true);
+        useFrontendStateManager.getState().setBlock(true);
         match(algoFile)
             .with(P.union('ts-1', 'ts-7'), async () => {
                 if (bombNodeId === NOTSET) {
@@ -63,9 +64,9 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Syncer.updateVisitedNodes(visited);
-                    await Syncer.updatePathNodes(path);
-                    useStateManager.getState().setBlock(false);
+                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.A_STAR_SEARCH,
@@ -82,9 +83,9 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Syncer.updateVisitedNodes(visited);
-                    await Syncer.updatePathNodes(path);
-                    useStateManager.getState().setBlock(false);
+                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BEST_FIRST_SEARCH,
@@ -101,9 +102,9 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Syncer.updateVisitedNodes(visited);
-                    await Syncer.updatePathNodes(path);
-                    useStateManager.getState().setBlock(false);
+                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BREADTH_FIRST_SEARCH,
@@ -120,9 +121,9 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Syncer.updateVisitedNodes(visited);
-                    await Syncer.updatePathNodes(path);
-                    useStateManager.getState().setBlock(false);
+                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.DEPTH_FIRST_SEARCH,
@@ -139,9 +140,9 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Syncer.updateVisitedNodes(visited);
-                    await Syncer.updatePathNodes(path);
-                    useStateManager.getState().setBlock(false);
+                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.DIJKSTRAS_SEARCH,
@@ -170,9 +171,9 @@ const startButtonClick =  (
                         startNodeId,
                         endNodeId
                     );
-                    await Syncer.updateVisitedNodes(visited);
-                    await Syncer.updatePathNodes(path);
-                    useStateManager.getState().setBlock(false);
+                    await Animator.animateVisitedNodes(visited);
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BELLMAN_FORD,
@@ -188,8 +189,8 @@ const startButtonClick =  (
 const StartButton = () => {
 
     return (
-        <Button disabled={useStateManager(state =>state.block)} className="button" id="start-button" onClick={() => {
-            const algoFile = useStateManager.getState().activeFiles.ts;
+        <Button disabled={useFrontendStateManager(state =>state.block)} className="button" id="start-button" onClick={() => {
+            const algoFile = useFrontendStateManager.getState().activeFiles.ts;
             startButtonClick(algoFile)
         }}>
             <StartButtonIcon/>

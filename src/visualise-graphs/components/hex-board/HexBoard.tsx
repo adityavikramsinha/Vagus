@@ -1,7 +1,7 @@
 import React from "react";
 import Loading from "../Loading";
 import Hex from "../hex/Hex";
-import useStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
+import useFrontendStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
 import Syncer from "../../store/Syncer";
 import currentState from "../../ts/GlobalState";
 
@@ -10,14 +10,14 @@ import currentState from "../../ts/GlobalState";
  * @returns JSX.Element
  */
 const HexBoard: React.FC = () => {
-    const setHexBoard = useStateManager(s => s.setHexBoard);
-    const setHexBoardDimensions = useStateManager(state => state.setHexBoardDimensions);
-    const changeNode = useStateManager(state => state.changeNode);
+    const setHexBoard = useFrontendStateManager(s => s.setHexBoard);
+    const setHexBoardDimensions = useFrontendStateManager(state => state.setHexBoardDimensions);
+    const changeNode = useFrontendStateManager(state => state.changeNode);
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const {
         HEX_WIDTH,
         HEX_HEIGHT
-    } = useStateManager(state => state.hexDimensions)
+    } = useFrontendStateManager(state => state.hexDimensions)
 
     React.useEffect(() => {
         const handleResize = () => {
@@ -43,7 +43,7 @@ const HexBoard: React.FC = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-    const hexes = useStateManager(s => s.hexes);
+    const hexes = useFrontendStateManager(s => s.hexes);
     if (!isLoading) {
         return (
             <div className="hex-board" id="hex-board">
