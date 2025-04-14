@@ -16,8 +16,6 @@ export enum NodeType {
     WEIGHT_NODE ='weight-node',
     BOMB_NODE ='bomb-node',
     WALL_NODE = 'wall-node',
-    VISITED_NODE = "visited-node",
-    PATH_NODE = 'path-node'
 }
 
 type StateManagerProps = {

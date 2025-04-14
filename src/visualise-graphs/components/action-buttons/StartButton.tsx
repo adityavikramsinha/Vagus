@@ -26,7 +26,7 @@ const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
 }
 
 
-const startButtonClick = (
+const startButtonClick =  (
     algoFile: string | NOTSET_t
 ): void => {
     const startNodeId = useStateManager.getState().startNodeId;
@@ -53,16 +53,19 @@ const startButtonClick = (
                 srcNode.getAdjNodes().forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
             }
         }
-        useStateManager.getState().visitedNodes = new Set();
+        Syncer.cleanHexBoard();
+        useStateManager.getState().setBlock(true);
         match(algoFile)
-            .with(P.union('ts-1', 'ts-7'), () => {
+            .with(P.union('ts-1', 'ts-7'), async () => {
                 if (bombNodeId === NOTSET) {
                     const {path, visited} = Algorithms.runWithoutBombNode(
                         AlgoType.A_STAR_SEARCH,
                         startNodeId,
                         endNodeId
                     );
-                    Syncer.updateVisitedNodes(visited).then(()=>{});
+                    await Syncer.updateVisitedNodes(visited);
+                    await Syncer.updatePathNodes(path);
+                    useStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.A_STAR_SEARCH,
@@ -72,14 +75,16 @@ const startButtonClick = (
                     );
                 }
             })
-            .with(P.union('ts-2', 'ts-6'), () => {
+            .with(P.union('ts-2', 'ts-6'), async () => {
                 if (bombNodeId === NOTSET) {
                     const {path, visited} = Algorithms.runWithoutBombNode(
                         AlgoType.BEST_FIRST_SEARCH,
                         startNodeId,
                         endNodeId
                     );
-                    Syncer.updateVisitedNodes(visited).then(() => {});
+                    await Syncer.updateVisitedNodes(visited);
+                    await Syncer.updatePathNodes(path);
+                    useStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BEST_FIRST_SEARCH,
@@ -89,14 +94,16 @@ const startButtonClick = (
                     );
                 }
             })
-            .with('ts-3', () => {
+            .with('ts-3', async () => {
                 if (bombNodeId === NOTSET) {
                     const {path, visited} = Algorithms.runWithoutBombNode(
                         AlgoType.BREADTH_FIRST_SEARCH,
                         startNodeId,
                         endNodeId
                     );
-                    Syncer.updateVisitedNodes(visited).then(() => {});
+                    await Syncer.updateVisitedNodes(visited);
+                    await Syncer.updatePathNodes(path);
+                    useStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BREADTH_FIRST_SEARCH,
@@ -106,14 +113,16 @@ const startButtonClick = (
                     );
                 }
             })
-            .with('ts-4', () => {
+            .with('ts-4', async () => {
                 if (bombNodeId === NOTSET) {
                     const {path, visited} = Algorithms.runWithoutBombNode(
                         AlgoType.DEPTH_FIRST_SEARCH,
                         startNodeId,
                         endNodeId
                     );
-                    Syncer.updateVisitedNodes(visited).then(() => {});
+                    await Syncer.updateVisitedNodes(visited);
+                    await Syncer.updatePathNodes(path);
+                    useStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.DEPTH_FIRST_SEARCH,
@@ -123,14 +132,16 @@ const startButtonClick = (
                     );
                 }
             })
-            .with('ts-8', () => {
+            .with('ts-8', async () => {
                 if (bombNodeId === NOTSET) {
                     const {path, visited} = Algorithms.runWithoutBombNode(
                         AlgoType.DIJKSTRAS_SEARCH,
                         startNodeId,
                         endNodeId
                     );
-                    Syncer.updateVisitedNodes(visited).then(() => {});
+                    await Syncer.updateVisitedNodes(visited);
+                    await Syncer.updatePathNodes(path);
+                    useStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.DIJKSTRAS_SEARCH,
@@ -152,14 +163,16 @@ const startButtonClick = (
                     return;
                 }
             })
-            .with('ts-9', () => {
+            .with('ts-9', async () => {
                 if (bombNodeId === NOTSET) {
                     const {path, visited} = Algorithms.runWithoutBombNode(
                         AlgoType.BELLMAN_FORD,
                         startNodeId,
                         endNodeId
                     );
-                    Syncer.updateVisitedNodes(visited).then(() => {});
+                    await Syncer.updateVisitedNodes(visited);
+                    await Syncer.updatePathNodes(path);
+                    useStateManager.getState().setBlock(false);
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BELLMAN_FORD,
@@ -175,7 +188,7 @@ const startButtonClick = (
 const StartButton = () => {
 
     return (
-        <Button className="button" id="start-button" onClick={() => {
+        <Button disabled={useStateManager(state =>state.block)} className="button" id="start-button" onClick={() => {
             const algoFile = useStateManager.getState().activeFiles.ts;
             startButtonClick(algoFile)
         }}>

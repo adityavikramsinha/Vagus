@@ -74,7 +74,7 @@
     animation: node-pulsate 1s infinite linear;
 }
 
-.svg-path-node {
+.path-node {
     fill: var(--path-node-color);
     transition: all 0.75s;
     animation: path-node-transform 1s 1 linear forwards;

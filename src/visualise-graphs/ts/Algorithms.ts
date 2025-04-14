@@ -363,7 +363,7 @@ export default class Algorithms<T> {
      * Starts a weighted , bidirectional ,dijkstras search
      * to find a path
      *
-     * @param start the startting node ID
+     * @param start the starting node ID
      * @param end target/end node ID
      * @returns a path | null [path if present, else null] and two sets, first is of a search
      * from the Start till some point X and second is from the end till the same point X where

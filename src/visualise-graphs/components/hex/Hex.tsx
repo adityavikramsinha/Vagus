@@ -1,11 +1,10 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 import HexIcon from "./HexIcon";
 import useStateManager, {NodeAction, NodeType} from "../../store/FrontendStateManager";
 import {NOTSET} from "../../ts/Types";
 import cn from "../../css/cn";
 import {match} from "ts-pattern";
-
 export type HexProps = {
     x: number;
     y: number;
@@ -19,6 +18,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     // Checking the node type from hexBoard map
     const nodeType = useStateManager(state => state.hexBoard[id] || NOTSET);
     const visited = useStateManager(state =>state.visitedNodes.has(id));
+    const pathNode = useStateManager(state =>state.pathNodes.has(id));
     // Whether the hex is start, end, bomb, weight or wall node
     const isStartNode = nodeType === NodeType.START_NODE;
     const isEndNode = nodeType === NodeType.END_NODE;
@@ -53,17 +53,19 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     };
 
     let hexIconClasses = cn({
-        "visited-node":  visited,
-        "icon": !visited
+        "visited-node":  visited && !pathNode,
+        "icon": !visited,
+        "path-node" : pathNode
     });
+    const stringer = "hi"
     // Apply classes based on node type
     let classes = cn({
-        "prop-holder": true,
-        "start-node": isStartNode,
-        "bomb-node": isBombNode,
-        "end-node": isEndNode,
-        "weight-node": isWeightNode,
-    });
+                         "prop-holder": true,
+                         "start-node": isStartNode,
+                         "bomb-node": isBombNode,
+                         "end-node": isEndNode,
+                         "weight-node": isWeightNode,
+                     });
 
     return (
         <div className="hexagon" style={styles} onClick={handleHexClick}>

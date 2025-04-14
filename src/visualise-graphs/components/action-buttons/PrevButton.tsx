@@ -1,6 +1,7 @@
 import React from "react";
-import currentState from "../../ts/GlobalState";
 import Button from "./Button";
+import Syncer from "../../store/Syncer";
+import useStateManager from "../../store/FrontendStateManager";
 
 const PrevButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
     return (
@@ -12,15 +13,12 @@ const PrevButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
 }
 
 const prevButtonClick = (): void => {
-    if (currentState.run() === true) currentState.changeRun();
-    // unUpdateNodes('path-node', 'un-path-node');
-    // unUpdateNodes('visited-node', 'un-visited-node');
-    // unUpdateNodes('visited-node-bomb', 'un-visited-bomb-node');
+    Syncer.cleanHexBoard()
 }
 
 const PrevButton = () =>  {
     return(
-        <Button id = "prev-button" className = "button" onClick={prevButtonClick}>
+        <Button disabled={useStateManager(state =>state.block)} id = "prev-button" className = "button" onClick={prevButtonClick}>
             <PrevButtonIcon/>
         </Button>
 

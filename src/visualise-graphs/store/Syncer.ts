@@ -1,12 +1,5 @@
 import currentState from "../ts/GlobalState";
 import useStateManager from "./FrontendStateManager";
-import {NOTSET} from "../ts/Types";
-import {originConsoleError} from "next/dist/client/components/globals/intercept-console-error";
-
-// set, update, remove ONLY.
-export enum SyncAction {
-    ADD_EDGE = 'add-node',
-}
 
 export default class Syncer {
     static setEdge(source: number, dest: number) {
@@ -128,50 +121,30 @@ export default class Syncer {
         srcNode.updateCostTo(destNode, 10);
     }
 
-    static removeEdge(source:number, dest:number){
-        const srcNode = currentState.graph().nodes().get(source);
-        srcNode.rmAdjNode(dest);
+    static cleanHexBoard () {
+        useStateManager.setState({visitedNodes : new Set()});
+        useStateManager.setState({pathNodes : new Set()});
     }
-
     static async updatePathNodes (path:any) {
         const store = useStateManager.getState();
         const internalSet = store.pathNodes;
-
-        let changed = false;
-        const updatedNodes = [];
-
-        let i = 0;
         for (const node of path) {
-            if (!internalSet.has(node)) {
-                internalSet.add(node);
-                updatedNodes.push(node);
-                changed = true;
-                i++;
-            }
-
-            // Have to debounce a bit, or else it is getting exceedingly SLOW.
-            if (i % 5 === 0) {
-                useStateManager.setState({ pathNodes: new Set(internalSet) });
-                await new Promise(res => setTimeout(res, 5));
-            }
-        }
-
-        // give the dummy signal, or else zustand won't want to hurt it.
-        if (changed) {
+            internalSet.add(node);
             useStateManager.setState({ pathNodes: new Set(internalSet) });
+            await new Promise(res => setTimeout(res, 10)); // Delay for smooth animation
         }
+        // for the last one.
+        useStateManager.setState({ pathNodes: new Set(internalSet) });
     }
     static async updateVisitedNodes (visited : Set<number>) {
         const store = useStateManager.getState();
         const internalSet = store.visitedNodes;
-
-
         let i = 0;
         for (const node of visited) {
             internalSet.add(node);
             i++;
 
-            // Every N nodes OR at the end
+            // Every 4 nodes, just debounce.
             if (i % 4 === 0) {
                 useStateManager.setState({ visitedNodes: new Set(internalSet) });
                 await new Promise(res => setTimeout(res, 2)); // Delay for smooth animation
