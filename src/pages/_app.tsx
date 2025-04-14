@@ -5,6 +5,7 @@ import '../visualise-graphs/css/settings.css'
 import '../visualise-graphs/css/button.css'
 import '../visualise-graphs/css/index.css';
 import '../visualise-graphs/css/loading.css'
+import '../visualise-graphs/css/dialog.css'
 import { AppProps } from 'next/app';
 
 function MyApp({ Component, pageProps }: AppProps) {

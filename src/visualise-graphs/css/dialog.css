@@ -1,0 +1,224 @@
+/* dialog.css (or a similar name) */
+
+.dialog-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background-color: rgba(0, 0, 0, 0.8); /* Equivalent to bg-black/80 */
+    /* Animation classes - these need to be defined in your global CSS or CSS modules */
+    &[data-state=open] {
+        animation: fadeIn 0ms forwards; /* Equivalent to animate-in fade-in-0 */
+    }
+    &[data-state=closed] {
+        animation: fadeOut 0ms forwards; /* Equivalent to animate-out fade-out-0 */
+    }
+}
+
+.dialog-content {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 50;
+    display: grid;
+    width: 100%;
+    max-width: 100px; /* You might need to define a value for 'lg' or use a specific pixel value */
+    transform: translate(-50%, -50%);
+    gap: 1rem; /* Equivalent to gap-4 (assuming default rem unit) */
+    border: 1px solid #e5e7eb; /* Example border color - adjust as needed */
+    background-color: #fff; /* Equivalent to bg-background - adjust as needed */
+    padding: 1.5rem; /* Equivalent to p-6 (assuming default rem unit) */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Equivalent to shadow-lg */
+    transition: all 0.2s ease-in-out; /* Equivalent to duration-200 */
+    border-radius: 0; /* Default - adjust for sm:rounded-lg if needed */
+
+    /* Animation classes */
+    &[data-state=open] {
+        animation: fadeIn 0ms forwards, zoomIn 0.0ms forwards, slideInFromLeft 0.0ms forwards, slideInFromTop 0.0ms forwards;
+    }
+    &[data-state=closed] {
+        animation: fadeOut 0ms forwards, zoomOut 0.0ms forwards, slideOutToLeft 0.0ms forwards, slideOutToTop 0.0ms forwards;
+    }
+
+    @media (min-width: 640px) { /* Equivalent to sm: */
+        border-radius: 0.5rem; /* Example for sm:rounded-lg */
+    }
+}
+
+.dialog-close-button {
+    position: absolute;
+    right: 1rem; /* Equivalent to right-4 (assuming default rem unit) */
+    top: 1rem; /* Equivalent to top-4 (assuming default rem unit) */
+    border-radius: 0.25rem; /* Equivalent to rounded-sm */
+    opacity: 0.7; /* Equivalent to opacity-70 */
+    transition: opacity 0.15s ease-in-out; /* Equivalent to transition-opacity */
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1; /* Equivalent to hover:opacity-100 */
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #9ca3af, 0 0 0 4px #fff; /* Example for focus:ring-2 focus:ring-ring focus:ring-offset-2 */
+    }
+
+    &:disabled {
+        pointer-events: none; /* Equivalent to disabled:pointer-events-none */
+    }
+
+    &[data-state=open] {
+        background-color: #f3f4f6; /* Example for data-[state=open]:bg-accent */
+        color: #4b5563; /* Example for data-[state=open]:text-muted-foreground */
+    }
+}
+
+.dialog-close-icon {
+    height: 1rem; /* Equivalent to h-4 (assuming default rem unit) */
+    width: 1rem; /* Equivalent to w-4 (assuming default rem unit) */
+}
+
+.dialog-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem; /* Equivalent to space-y-1.5 (assuming default rem unit) */
+    text-align: center;
+
+    @media (min-width: 640px) { /* Equivalent to sm: */
+        text-align: left;
+    }
+}
+
+.dialog-footer {
+    display: flex;
+    flex-direction: column-reverse;
+
+    @media (min-width: 640px) { /* Equivalent to sm: */
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 0.5rem; /* Equivalent to sm:space-x-2 (assuming default rem unit) */
+    }
+}
+
+.dialog-title {
+    font-size: 1.125rem; /* Equivalent to text-lg (assuming default rem unit) */
+    font-weight: 600; /* Equivalent to font-semibold */
+    line-height: 1.25; /* Example for leading-none */
+    letter-spacing: -0.025em; /* Example for tracking-tight */
+}
+
+.dialog-description {
+    font-size: 0.875rem; /* Equivalent to text-sm (assuming default rem unit) */
+    color: #6b7280; /* Example for text-muted-foreground */
+}
+
+/* Define your keyframe animations (fadeIn, fadeOut, zoomIn, zoomOut, slideInFromLeft, slideInFromTop, slideOutToLeft, slideOutToTop)
+   in your global CSS or CSS modules. For example: */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes zoomIn {
+    from { transform: translate(-50%, -50%) scale(0.95); }
+    to { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes zoomOut {
+    from { transform: translate(-50%, -50%) scale(1); }
+    to { transform: translate(-50%, -50%) scale(0.95); }
+}
+
+@keyframes slideInFromLeft {
+    from { transform: translate(calc(50% + 1rem), -50%); }
+    to { transform: translate(-50%, -50%); }
+}
+
+@keyframes slideInFromTop {
+    from { transform: translate(-50%, calc(-50% - 1rem)); }
+    to { transform: translate(-50%, -50%); }
+}
+
+@keyframes slideOutToLeft {
+    from { transform: translate(-50%, -50%); }
+    to { transform: translate(calc(50% + 1rem), -50%); }
+}
+
+@keyframes slideOutToTop {
+    from { transform: translate(-50%, -50%); }
+    to { transform: translate(-50%, calc(-50% - 1rem)); }
+}
+
+/* StopButtonDialog.css */
+
+.stop-button-trigger {
+    /* Inherits base button styles from your ButtonComponent */
+    /* Add any specific styling for the trigger button if needed */
+}
+
+.stop-button-icon {
+    width: 17px;
+    height: 17px;
+}
+
+.stop-dialog-content {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 90vw;
+    max-width: 400px;
+}
+
+.stop-dialog-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.stop-dialog-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+.stop-dialog-description {
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.stop-dialog-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.stop-dialog-cancel-button {
+    /* Styles for the cancel button (inherits from Button with variant="secondary") */
+}
+
+.stop-dialog-confirm-button {
+    /* Styles for the confirm button (inherits from Button with variant="destructive") */
+    background-color: #dc2626; /* Example destructive color */
+    color: white;
+}
+
+.stop-dialog-confirm-button:hover {
+    background-color: #b91c1c; /* Example hover for destructive */
+}
