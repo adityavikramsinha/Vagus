@@ -1,5 +1,4 @@
 import * as React from "react";
-import { updateIDClass } from '../ts/Utility';
 import currentState from "../api/BackendStateManager";
 import {JSX} from "react";
 import StopButton from "./action-buttons/StopButton";

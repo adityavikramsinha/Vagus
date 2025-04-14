@@ -55,7 +55,8 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     let hexIconClasses = cn({
         "visited-node":  visited && !pathNode,
         "icon": !visited,
-        "path-node" : pathNode
+        "path-node" : pathNode,
+        "wall-node" : isWallNode
     });
     const stringer = "hi"
     // Apply classes based on node type
@@ -65,12 +66,13 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
                          "bomb-node": isBombNode,
                          "end-node": isEndNode,
                          "weight-node": isWeightNode,
+
                      });
 
     return (
         <div className="hexagon" style={styles} onClick={handleHexClick}>
             {/*FIXME there is a # here, it needs to be moved global*/}
-            <HexIcon className={hexIconClasses} style={{fill: isWallNode ? "#313244" : ""}}/>
+            <HexIcon className={hexIconClasses}/>
             <div className={classes}/>
         </div>
     );

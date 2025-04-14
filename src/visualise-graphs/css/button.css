@@ -14,9 +14,5 @@
 
 button:disabled svg {
     cursor : default;
-    filter: grayscale(40%);
-}
-
-.button-clicked {
-    transform: scale(1.1);
+    filter: grayscale(50%);
 }
