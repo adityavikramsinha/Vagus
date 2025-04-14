@@ -30,6 +30,8 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     const activeFilesIo = useFrontendStateManager(state => state.activeFiles).io;
     const changeNode = useFrontendStateManager(state => state.changeNode);
     const handleHexClick = () => {
+        if (visited !== NOTSET || pathNode)
+            return;
         if (isStartNode) {
             if (activeFilesIo !== 'io-1') changeNode(NodeType.START_NODE, NodeAction.SET, NOTSET);
         } else if (isEndNode) {

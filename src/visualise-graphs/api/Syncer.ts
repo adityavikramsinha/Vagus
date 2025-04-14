@@ -1,8 +1,14 @@
 import currentState from "./BackendStateManager";
 import useFrontendStateManager, {NodeAction, NodeType} from "./FrontendStateManager";
 import {NOTSET} from "../ts/Types";
+import Graph from "../ts/Graph";
 
 export default class Syncer {
+
+    static syncInitialGraph() {
+        Graph.copy(currentState.initGraph(), currentState.graph(), 1);
+    }
+
     static setEdge(source: number, dest: number) {
         currentState.graph().addEdge(source, dest, 1);
         currentState.initGraph().addEdge(source, dest, 1);
@@ -128,6 +134,14 @@ export default class Syncer {
     }
 
     static clearHexBoard () {
-        // TODO, wrk.
+        this.cleanHexBoard();
+        useFrontendStateManager.setState({hexBoard : {
+                [NOTSET]: NodeType.START_NODE
+            }});
+        let prevStartNode = useFrontendStateManager.getState().startNodeId;
+        let prevEndNode = useFrontendStateManager.getState().endNodeId;
+        Syncer.syncInitialGraph();
+        useFrontendStateManager.getState().hexBoard[prevStartNode] = NodeType.START_NODE;
+        useFrontendStateManager.getState().hexBoard[prevEndNode] = NodeType.END_NODE;
     }
 }

@@ -6,7 +6,7 @@ export default class Animator {
         const store = useFrontendStateManager.getState();
         const internalSet = store.pathNodes;
         if(path === NOTSET)
-            return; 
+            return;
         for (const node of path) {
             internalSet.add(node);
             useFrontendStateManager.setState({ pathNodes: new Set(internalSet) });

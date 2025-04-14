@@ -8,6 +8,7 @@ import {match, P} from "ts-pattern";
 import Algorithms from "../../ts/Algorithms";
 import Animator from "../../api/Animator";
 import Pipe from "../../api/Pipe";
+import Graph from "../../ts/Graph";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -45,6 +46,7 @@ const startButtonClick =  (
             alert('Please select a ending node');
             return;
         }
+        Syncer.syncInitialGraph();
         // I guess we have to now update the graph.
         for (const [nodeKey, nodeType] of Object.entries(useFrontendStateManager.getState().hexBoard)) {
             const id = Number(nodeKey);
