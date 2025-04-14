@@ -2,7 +2,7 @@ import * as React from "react";
 
 const HexIcon= (props : React.SVGProps<SVGSVGElement>)=> {
     return (
-        <svg className="icon no-node" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 30"
+        <svg className="icon" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 30"
              fill="currentColor" {...props}>
             <path d="M26.763 27.7849L32.9536 17.0625C33.6904 15.7862 33.6904 14.2138 32.9536 12.9375L26.763
             2.21507C26.0261 0.938788 24.6643 0.152567 23.1906 0.152567L10.8094 0.152567C9.33568 0.152567

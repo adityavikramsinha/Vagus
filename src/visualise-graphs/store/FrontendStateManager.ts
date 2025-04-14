@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import {NOTSET_t, NOTSET} from "../ts/Types";
+import {NOTSET, NOTSET_t} from "../ts/Types";
 import {FileType} from "../components/file/File";
 import {HexProps} from "../components/hex/Hex";
 import populateHexBoard from "../components/hex-board/populateHexBoard";
@@ -31,7 +31,10 @@ type StateManagerProps = {
     hexBoardDimensions : {width : number, height:number},
     hexDimensions : {HEX_WIDTH : number, HEX_HEIGHT:number},
     hexBoard : Record<number | NOTSET_t, NodeType | NOTSET_t>,
-    block : boolean
+    block : boolean,
+    visitedNodes : Set<number | NOTSET_t>,
+    isAnimating : boolean,
+    visitingNode : number | NOTSET_t
 }
 
 type StateManagerActions = {
@@ -40,7 +43,9 @@ type StateManagerActions = {
     changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_t) : void,
     setHexBoardDimensions : (dimension :{width : number, height:number})=>void,
     clearHexBoard : () => void,
-    setBlock : (toggle : boolean) => void
+    setBlock : (toggle : boolean) => void,
+    setAnimating : (state : boolean)=>void,
+    setVisitingNode : (id : number | NOTSET_t) => void
 }
 
 
@@ -110,7 +115,12 @@ const useStateManager =
         },
         clearHexBoard : () => set({hexBoard: {[NOTSET]: NodeType.START_NODE}}),
         block : false,
-        setBlock : (toggle) => set({block : toggle})
+        setBlock : (toggle) => set({block : toggle}),
+        visitedNodes : new Set<number | NOTSET_t>(),
+        isAnimating : false,
+        setAnimating: (state : boolean)=> set({isAnimating : state}),
+        visitingNode : NOTSET,
+        setVisitingNode : (id) => set({visitingNode : id})
     }))
 
 export default useStateManager;

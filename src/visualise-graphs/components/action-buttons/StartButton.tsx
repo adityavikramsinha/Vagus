@@ -6,6 +6,7 @@ import useStateManager, {NodeType} from "../../store/FrontendStateManager";
 import Syncer from "../../store/Syncer";
 import {match, P} from "ts-pattern";
 import Algorithms from "../../ts/Algorithms";
+import {isHigherPrecedenceThanAwait} from "@typescript-eslint/eslint-plugin/dist/util";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -53,6 +54,7 @@ const startButtonClick = (
                 srcNode.getAdjNodes().forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
             }
         }
+        useStateManager.getState().visitedNodes = new Set();
         match(algoFile)
             .with(P.union('ts-1', 'ts-7'), () => {
                 if (bombNodeId === NOTSET) {
@@ -61,6 +63,7 @@ const startButtonClick = (
                         startNodeId,
                         endNodeId
                     );
+                    Syncer.updateVisitedNodes(visited).then(()=>{});
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.A_STAR_SEARCH,
@@ -77,6 +80,7 @@ const startButtonClick = (
                         startNodeId,
                         endNodeId
                     );
+                    Syncer.updateVisitedNodes(visited).then(() => {});
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BEST_FIRST_SEARCH,
@@ -93,6 +97,7 @@ const startButtonClick = (
                         startNodeId,
                         endNodeId
                     );
+                    Syncer.updateVisitedNodes(visited).then(() => {});
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BREADTH_FIRST_SEARCH,
@@ -109,6 +114,7 @@ const startButtonClick = (
                         startNodeId,
                         endNodeId
                     );
+                    Syncer.updateVisitedNodes(visited).then(() => {});
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.DEPTH_FIRST_SEARCH,
@@ -125,6 +131,7 @@ const startButtonClick = (
                         startNodeId,
                         endNodeId
                     );
+                    Syncer.updateVisitedNodes(visited).then(() => {});
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.DIJKSTRAS_SEARCH,
@@ -134,6 +141,18 @@ const startButtonClick = (
                     );
                 }
             })
+            .with('ts-10', ()=>{
+                if (bombNodeId === NOTSET) {
+                    const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
+                        startNodeId,
+                        endNodeId
+                    )
+                }
+                else {
+                    alert("You cannot run Bi Directional Algorithm with Bomb Node");
+                    return;
+                }
+            })
             .with('ts-9', () => {
                 if (bombNodeId === NOTSET) {
                     const {path, visited} = Algorithms.runWithoutBombNode(
@@ -141,6 +160,7 @@ const startButtonClick = (
                         startNodeId,
                         endNodeId
                     );
+                    Syncer.updateVisitedNodes(visited).then(() => {});
                 } else {
                     const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                         AlgoType.BELLMAN_FORD,

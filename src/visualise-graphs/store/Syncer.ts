@@ -1,6 +1,7 @@
-import Graph from "../ts/Graph";
-import {match} from "ts-pattern";
 import currentState from "../ts/GlobalState";
+import useStateManager from "./FrontendStateManager";
+import {NOTSET} from "../ts/Types";
+import {originConsoleError} from "next/dist/client/components/globals/intercept-console-error";
 
 // set, update, remove ONLY.
 export enum SyncAction {
@@ -130,5 +131,19 @@ export default class Syncer {
     static removeEdge(source:number, dest:number){
         const srcNode = currentState.graph().nodes().get(source);
         srcNode.rmAdjNode(dest);
+    }
+
+    // TODO cannot force in a delay (minimum is 15ms)
+    static async updateVisitedNodes (visited : Set<number>) {
+        const stream = visited;
+
+        useStateManager.getState().setAnimating(true);
+
+        for await (const node of stream) {
+            useStateManager.getState().setVisitingNode(node);
+            await new Promise(res => setTimeout(res));
+        }
+        // useStateManager.getState().setVisitingNode(NOTSET);
+        useStateManager.getState().setAnimating(false);
     }
 }

@@ -80,7 +80,7 @@
     animation: path-node-transform 1s 1 linear forwards;
 }
 
-.svg-visited-node {
+.visited-node {
     fill: var(--visited-node-color);
     transition: all 1s;
     animation: visited-node-transform-no-bomb 1s 1 linear forwards;

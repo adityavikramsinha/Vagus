@@ -369,32 +369,33 @@ export default class Algorithms<T> {
      * from the Start till some point X and second is from the end till the same point X where
      * both of these algorithms meet.
      */
-    biDirectional(start: T , end: T ): [T[] | NOTSET_t, Set<T>, Set<T>] {
+    static biDirectional(start: number , end: number ): [number[] | NOTSET_t, Set<number>, Set<number>] {
 
         // get the path from start
-        const pathFromStart = this.dijkstras(start, end)[0];
+        let algo: Algorithms<number> = new Algorithms(currentState.graph());
+        const pathFromStart = algo.dijkstras(start, end)[0];
 
         // if it is null , we automatically know
         // the there is no path possible
         if (pathFromStart === null) {
 
             // we just get visited from start and visited from end Sets
-            let visitedFromStart = this.dijkstras(start, end)[1];
-            let visitedFromEnd = this.dijkstras(end, start)[1];
+            let visitedFromStart = algo.dijkstras(start, end)[1];
+            let visitedFromEnd = algo.dijkstras(end, start)[1];
 
             // we return the path from start [or null] and the two sets as promised.
             return [pathFromStart, visitedFromStart, visitedFromEnd];
         }
 
         // else, we splice the path
-        // at mid point >>1
+        // at mid-point >> 1
         // also we can 100% confirm that it is not NOT_SET
-        let spliceNode : T = pathFromStart[(pathFromStart as T[]).length >> 1];
+        let spliceNode :number = pathFromStart[(pathFromStart as number[]).length >> 1];
 
         // we get from this splicepoint a visited from start
         // and a visited from end
-        let visitedFromStart = this.dijkstras(start, spliceNode)[1];
-        let visitedFromEnd = this.dijkstras(end, spliceNode)[1];
+        let visitedFromStart = algo.dijkstras(start, spliceNode)[1];
+        let visitedFromEnd = algo.dijkstras(end, spliceNode)[1];
 
         // then we return the whole thing as promised.
         return [pathFromStart, visitedFromStart, visitedFromEnd];
@@ -444,7 +445,7 @@ export default class Algorithms<T> {
 
         // creating a type
         // for priority queue
-        // and other sortings
+        // and other sorting
         type Priority = {
 
             // name of the node or its ID
