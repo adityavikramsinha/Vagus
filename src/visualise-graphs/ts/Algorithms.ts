@@ -5,7 +5,6 @@ import currentState from "../api/BackendStateManager";
 import {Queue} from "queue-typescript";
 import Node from "./Node";
 import {match} from "ts-pattern";
-import {NodeType} from "../api/FrontendStateManager";
 
 /**
  * Main backbone of the whole backend.
@@ -210,7 +209,7 @@ export default class Algorithms<T> {
         // the rest is just finding the path to use.
         let path: T[] = [];
 
-        // if distance if Infinity then,
+        // if distance is Infinity then,
         // we know path is not found.
         // directly return
         if (dist.get(end) === Infinity)
@@ -378,14 +377,14 @@ export default class Algorithms<T> {
 
         // if it is null , we automatically know
         // the there is no path possible
-        if (pathFromStart === null) {
+        if (pathFromStart === NOTSET ) {
 
             // we just get visited from start and visited from end Sets
             let visitedFromStart = algo.dijkstras(start, end)[1];
             let visitedFromEnd = algo.dijkstras(end, start)[1];
 
             // we return the path from start [or null] and the two sets as promised.
-            return [pathFromStart, visitedFromStart, visitedFromEnd];
+            return [NOTSET, visitedFromStart, visitedFromEnd];
         }
 
         // else, we splice the path

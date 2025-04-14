@@ -1,9 +1,12 @@
 import useFrontendStateManager, {NodeType} from "./FrontendStateManager";
+import {NOTSET} from "../ts/Types";
 
 export default class Animator {
     static async animatePathNodes (path:any) {
         const store = useFrontendStateManager.getState();
         const internalSet = store.pathNodes;
+        if(path === NOTSET)
+            return; 
         for (const node of path) {
             internalSet.add(node);
             useFrontendStateManager.setState({ pathNodes: new Set(internalSet) });

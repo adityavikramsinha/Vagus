@@ -173,12 +173,15 @@ const startButtonClick =  (
                     useFrontendStateManager.getState().setBlock(false);
                 }
             })
-            .with('ts-10', ()=>{
+            .with('ts-10', async ()=> {
                 if (bombNodeId === NOTSET) {
                     const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
                         startNodeId,
                         endNodeId
                     )
+                    await Animator.animateVisitedNodes(Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
+                    await Animator.animatePathNodes(path);
+                    useFrontendStateManager.getState().setBlock(false);
                 }
                 else {
                     alert("You cannot run Bi Directional Algorithm with Bomb Node");
