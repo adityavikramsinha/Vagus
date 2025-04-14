@@ -108,6 +108,11 @@
     gap: 5px;
 }
 
+.file-active {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
 
 .advanced-cp-border {
     margin-left: 5px;

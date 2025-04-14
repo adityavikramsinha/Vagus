@@ -57,7 +57,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
 
     let hexIconClasses = cn({
         "visited-node":  (visited === NodeType.START_NODE) && !pathNode,
-        "icon": (visited === NOTSET),
+        "icon": true,
         "visited-node-bomb" : (visited === NodeType.BOMB_NODE) && !pathNode,
         "path-node" : pathNode,
         "wall-node" : isWallNode
@@ -70,7 +70,6 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
                          "bomb-node": isBombNode,
                          "end-node": isEndNode,
                          "weight-node": isWeightNode,
-
                      });
 
     return (

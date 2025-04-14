@@ -3,8 +3,7 @@
 ### Branch Naming
 
 - `feat/`  : for a new feature
-- `patch/` : for a minor issues
-- `fix/`   : for major issues
+- `fix/`   : for major issue
 
 _Optionally_, if a ticket/issue exists then
 just use that as the name of the branch,
