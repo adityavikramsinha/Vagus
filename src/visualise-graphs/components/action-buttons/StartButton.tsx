@@ -6,7 +6,6 @@ import useStateManager, {NodeType} from "../../store/FrontendStateManager";
 import Syncer from "../../store/Syncer";
 import {match, P} from "ts-pattern";
 import Algorithms from "../../ts/Algorithms";
-import {isHigherPrecedenceThanAwait} from "@typescript-eslint/eslint-plugin/dist/util";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {

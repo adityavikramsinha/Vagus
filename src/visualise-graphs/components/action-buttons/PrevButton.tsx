@@ -1,6 +1,5 @@
 import React from "react";
 import currentState from "../../ts/GlobalState";
-import {unUpdateNodes} from "../../ts/HexBoardAlgoRunUpdate";
 import Button from "./Button";
 
 const PrevButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
@@ -14,9 +13,9 @@ const PrevButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
 
 const prevButtonClick = (): void => {
     if (currentState.run() === true) currentState.changeRun();
-    unUpdateNodes('path-node', 'un-path-node');
-    unUpdateNodes('visited-node', 'un-visited-node');
-    unUpdateNodes('visited-node-bomb', 'un-visited-bomb-node');
+    // unUpdateNodes('path-node', 'un-path-node');
+    // unUpdateNodes('visited-node', 'un-visited-node');
+    // unUpdateNodes('visited-node-bomb', 'un-visited-bomb-node');
 }
 
 const PrevButton = () =>  {
