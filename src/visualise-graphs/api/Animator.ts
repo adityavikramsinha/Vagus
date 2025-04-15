@@ -12,17 +12,10 @@ export default class Animator {
         for (const node of path) {
             internalSet.add(node);
             useFrontendStateManager.setState({pathNodes: new Set(internalSet)});
-            store.changeNode(NodeType.START_NODE, NodeAction.SET, node);
             await new Promise(res => setTimeout(res, 10)); // Delay for smooth animation
         }
         // for the last one.
         useFrontendStateManager.setState({pathNodes: new Set(internalSet)});
-        for (const node of path.reverse()) {
-            store.changeNode(NodeType.START_NODE, NodeAction.SET, node);
-        }
-        if (prevBombNode !== NOTSET)
-            store.changeNode(NodeType.BOMB_NODE, NodeAction.SET, prevBombNode);
-        store.changeNode(NodeType.END_NODE, NodeAction.SET, path[0]);
     }
 
     static async animateVisitedNodes(visited: Map<number, NodeType.START_NODE | NodeType.BOMB_NODE>) {
