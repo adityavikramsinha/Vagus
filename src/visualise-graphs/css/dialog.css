@@ -146,6 +146,11 @@
     border-radius: 5px;
     background: rgba(38, 43, 61, 0.56);
     border: none;
+    cursor : pointer;
+    transition: box-shadow 0.25s, background 0.25s
+}
+.stop-dialog-cancel-button:hover{
+    box-shadow: 0 0 0 3px rgba(38, 43, 61, 0.56);
 }
 
 .stop-dialog-content {
