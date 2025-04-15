@@ -1,4 +1,4 @@
-import currentState from "@graph/api/BackendStateManager";
+import BackendStateManager from "@graph/api/BackendStateManager";
 import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
 import {NOTSET} from "@graph/ts/Types";
 import Graph from "@graph/ts/Graph";
@@ -6,23 +6,23 @@ import Graph from "@graph/ts/Graph";
 export default class Syncer {
 
     static syncInitialGraph() {
-        Graph.copy(currentState.initGraph(), currentState.graph(), 1);
+        Graph.copy(BackendStateManager.initGraph(), BackendStateManager.graph(), 1);
     }
 
     static setEdge(source: number, dest: number) {
-        currentState.graph().addEdge(source, dest, 1);
-        currentState.initGraph().addEdge(source, dest, 1);
+        BackendStateManager.graph().addEdge(source, dest, 1);
+        BackendStateManager.initGraph().addEdge(source, dest, 1);
     }
 
     static setNode(x: number, y: number, id: number) {
-        currentState.graph().addNode(id);
-        currentState.graph().setNodeCoords(id, {x: x, y: y});
-        currentState.initGraph().addNode(id);
-        currentState.initGraph().setNodeCoords(id, {x: x, y: y});
+        BackendStateManager.graph().addNode(id);
+        BackendStateManager.graph().setNodeCoords(id, {x: x, y: y});
+        BackendStateManager.initGraph().addNode(id);
+        BackendStateManager.initGraph().setNodeCoords(id, {x: x, y: y});
     }
 
     static removeNode(id: number) {
-        currentState.graph().rmNode(id);
+        BackendStateManager.graph().rmNode(id);
     }
 
     static setGraph(
@@ -123,8 +123,8 @@ export default class Syncer {
     }
 
     static updateEdge(source: number, dest: number) {
-        const srcNode = currentState.graph().nodes().get(source);
-        const destNode = currentState.graph().nodes().get(dest);
+        const srcNode = BackendStateManager.graph().nodes().get(source);
+        const destNode = BackendStateManager.graph().nodes().get(dest);
         srcNode.updateCostTo(destNode, 10);
     }
 

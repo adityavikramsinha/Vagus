@@ -1,7 +1,7 @@
 import Graph from './Graph';
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 import {AlgoType, NOTSET, NOTSET_t} from "./Types";
-import currentState from "../api/BackendStateManager";
+import BackendStateManager from "../api/BackendStateManager";
 import {Queue} from "queue-typescript";
 import Node from "./Node";
 import {match} from "ts-pattern";
@@ -372,7 +372,7 @@ export default class Algorithms<T> {
     static biDirectional(start: number , end: number ): [number[] | NOTSET_t, Set<number>, Set<number>] {
 
         // get the path from start
-        let algo: Algorithms<number> = new Algorithms(currentState.graph());
+        let algo: Algorithms<number> = new Algorithms(BackendStateManager.graph());
         const pathFromStart = algo.dijkstras(start, end)[0];
 
         // if it is null , we automatically know
@@ -750,7 +750,7 @@ export default class Algorithms<T> {
     static runWithoutBombNode(algoType : AlgoType, startNodeId:number, endNodeId:number): { path: number[] | NOTSET_t, visited: Set<number> } {
 
         // getting a new algorithm instance to run the functions from
-        let algo: Algorithms<number> = new Algorithms<number>(currentState.graph());
+        let algo: Algorithms<number> = new Algorithms<number>(BackendStateManager.graph());
 
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
@@ -780,7 +780,7 @@ export default class Algorithms<T> {
         bombNodeId: number
     ): { path: number[] | NOTSET_t, visitedP1: Set<number>, visitedP2: Set<number> } {
         // getting an algorithm instance for ease of running
-        let algo = new Algorithms(currentState.graph());
+        let algo = new Algorithms(BackendStateManager.graph());
 
         // @ts-ignore
         return match(algoType)

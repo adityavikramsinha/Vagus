@@ -1,5 +1,5 @@
 import React from "react";
-import currentState from "@graph/api/BackendStateManager";
+import BackendStateManager from "@graph/api/BackendStateManager";
 import {AlgoType, NOTSET, NOTSET_t} from "@graph/ts/Types";
 import Button from "@graph/components/action-buttons/Button";
 import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
@@ -63,7 +63,7 @@ const startButtonClick = (
             if (nodeType === NodeType.WALL_NODE)
                 Syncer.removeNode(id);
             else if (nodeType === NodeType.WEIGHT_NODE) {
-                const srcNode = currentState.graph().nodes().get(id);
+                const srcNode = BackendStateManager.graph().nodes().get(id);
                 srcNode.getAdjNodes().forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
             }
         }

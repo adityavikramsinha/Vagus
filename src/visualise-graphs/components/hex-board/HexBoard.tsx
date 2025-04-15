@@ -3,7 +3,7 @@ import Loading from "@graph/components/Loading";
 import Hex from "@graph/components/hex/Hex";
 import useFrontendStateManager, {NodeAction, NodeType} from "@graph/api/FrontendStateManager";
 import Syncer from "@graph/api/Syncer";
-import currentState from "@graph/api/BackendStateManager";
+import BackendStateManager from "@graph/api/BackendStateManager";
 
 /**
  * Renders the hexagonal board.
@@ -33,7 +33,7 @@ const HexBoard: React.FC = () => {
             changeNode(NodeType.START_NODE, NodeAction.SET, startPosition);
             changeNode(NodeType.END_NODE, NodeAction.SET, endPosition);
             setHexBoardDimensions({width, height});
-            currentState.initGraph().freeze();
+            BackendStateManager.initGraph().freeze();
         };
         handleResize() // First time when mount has happened
 
