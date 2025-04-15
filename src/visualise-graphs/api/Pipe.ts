@@ -6,7 +6,6 @@ export default class Pipe {
         }
         return map;
     }
-
     public static andInterleaveSetsToMap<K,V>(A :Set<K>,B:Set<K>, v:V){
         let map = new Map<K, V>();
         let intermediateArray = new Array<K>(A.size + B.size);
@@ -15,7 +14,6 @@ export default class Pipe {
         const iteratorB = B.values();
         let nextA = iteratorA.next();
         let nextB = iteratorB.next();
-
         while (!nextA.done || !nextB.done) {
             if (!nextA.done) {
                 intermediateArray[index++] = nextA.value;
@@ -26,14 +24,11 @@ export default class Pipe {
                 nextB = iteratorB.next();
             }
         }
-
         for (const key of intermediateArray) {
             if (key !== undefined) { // Ensure we don't process unassigned slots if sizes differ
                 map.set(key, v);
             }
         }
-
         return map;
-
     }
 }
