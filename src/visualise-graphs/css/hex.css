@@ -158,6 +158,37 @@
     }
 }
 
+.random-walk-stepping-stone{
+    animation: anim-random-walk-stepping-stone 0.5s  linear forwards;
+}
+
+
+@keyframes anim-random-walk-stepping-stone {
+    0% {
+        fill: var(--hex-color);
+        transform: scale(1);
+    }
+
+    20% {
+        transform: scale(0.95);
+    }
+
+    40% {
+        fill: var(--path-node-color-2);
+        transform: scale(0.9);
+    }
+
+    60% {
+        fill: var(--path-node-color-3);
+        transform: scale(1.05);
+    }
+
+    100% {
+        fill: var(--path-node-color-1);
+        transform: scale(1);
+    }
+}
+
 
 @keyframes visited-node-transform-no-bomb {
     0% {

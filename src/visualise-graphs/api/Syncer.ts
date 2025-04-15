@@ -138,8 +138,9 @@ export default class Syncer {
         useFrontendStateManager.setState({
             hexBoard: {
                 [NOTSET]: NodeType.START_NODE
-            }
-        });
+            },
+            executingRandomWalk : false
+        })
         let prevStartNode = useFrontendStateManager.getState().startNodeId;
         let prevEndNode = useFrontendStateManager.getState().endNodeId;
         Syncer.syncInitialGraph();

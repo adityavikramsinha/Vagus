@@ -20,7 +20,7 @@ type StopButtonProps = {
 
 const StopButton = (props: StopButtonProps) => {
     return (
-        <Button disabled={useFrontendStateManager(state => state.block)}
+        <Button disabled={useFrontendStateManager(state => state.block && !state.executingRandomWalk)}
                 className="button"
                 id="stop-button"
                 onClick={props.onClick}>

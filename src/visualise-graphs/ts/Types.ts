@@ -21,7 +21,6 @@ export type NOTSET_t = typeof NOTSET;
  */
 export enum MazeType {
   GENERATE_RANDOM_MAZE                  = 'generateRandomMaze',
-  GENERATE_LEAST_COST_PATH_BLOCKER_MAZE = 'generateLeastCostPathBlockerMaze',
   GENERATE_WEIGHTED_RIDGES              = 'generateWeightedRidges',
   GENERATE_BLOCKED_RIDGES               = 'generateBlockedRidges' ,
   GENERATE_WEIGHTED_RANDOM_MAZE         = 'generateWeightedRandomMaze',

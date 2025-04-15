@@ -9,16 +9,6 @@ import useFrontendStateManager from "../api/FrontendStateManager";
 class MazeGenerator {
 
     /**
-     * Generates a maze that blocks the least cost path in the grid
-     *
-     * @returns a Path which highlights the nodes to be blocked because they are part of the least cost path.
-     */
-    // TODO: Not implemented yet.
-    static genLeastCostPathBlocker(): Set<number> {
-        return new Set();
-    }
-
-    /**
      * Generates a random maze.
      * It does take the start-node , bomb-node , end-node into consideration.
      *

@@ -149,12 +149,6 @@ const Navbar: FC = () => {
                             />
                             <Folder text="wall" divClassName="folder advanced-cp-comp" arrowID="wall-arrow">
                                 <File
-                                    name="generateLeastCostPathBlocker.bat"
-                                    id="bat-2"
-                                    type={FileType.BAT}
-                                    Icon={<BatFileIcon/>}
-                                />
-                                <File
                                     name="generateBlockedRidges.bat"
                                     id="bat-3"
                                     type={FileType.BAT}

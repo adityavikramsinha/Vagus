@@ -31,7 +31,9 @@ type FrontendStateManagerProps = {
     // visited contains a map of ids, and the node they were visited from, i.e
     // from where the path will start.
     visitedNodes : Map<number | NOTSET_t, NodeType.START_NODE | NodeType.BOMB_NODE>,
-    pathNodes : Set<number | NOTSET_t>
+    pathNodes : Set<number | NOTSET_t>,
+    executingRandomWalk : boolean,
+    randomPathId : number | NOTSET_t
 }
 
 type FrontendStateManagerActions = {
@@ -110,7 +112,9 @@ const useFrontendStateManager =
         block : false,
         setBlock : (toggle) => set({block : toggle}),
         visitedNodes : new Map(),
-        pathNodes : new Set()
+        pathNodes : new Set(),
+        executingRandomWalk : false,
+        randomPathId : NOTSET
     }))
 
 export default useFrontendStateManager;

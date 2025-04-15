@@ -53,9 +53,6 @@ const handleBatFileClick = (
             const hexBoard = useFrontendStateManager.getState().hexBoard;
             maze.forEach(id => hexBoard[id] = NodeType.WALL_NODE) // Changed to use direct hexBoard update
         })
-        .with(MazeType.GENERATE_LEAST_COST_PATH_BLOCKER_MAZE, () => {
-            // TODO incomplete
-        })
         .exhaustive()
 }
 

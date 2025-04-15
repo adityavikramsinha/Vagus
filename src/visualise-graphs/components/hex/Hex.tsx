@@ -20,6 +20,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     const nodeType = useFrontendStateManager(state => state.hexBoard[id] || NOTSET);
     const visited = useFrontendStateManager(state => state.visitedNodes.has(id) ? state.visitedNodes.get(id) : NOTSET);
     const pathNode = useFrontendStateManager(state => state.pathNodes.has(id));
+    const isRandomAlgorithmSteppingStone = useFrontendStateManager(state =>state.randomPathId === id);
     // Whether the hex is start, end, bomb, weight or wall node
     const isStartNode = nodeType === NodeType.START_NODE;
     const isEndNode = nodeType === NodeType.END_NODE;
@@ -60,7 +61,8 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
         "icon": true,
         "visited-node-bomb": (visited === NodeType.BOMB_NODE) && !pathNode,
         "path-node": pathNode,
-        "wall-node": isWallNode
+        "wall-node": isWallNode,
+        "random-walk-stepping-stone" : isRandomAlgorithmSteppingStone
     });
     const stringer = "hi"
     // Apply classes based on node type

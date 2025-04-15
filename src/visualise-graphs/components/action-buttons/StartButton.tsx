@@ -16,8 +16,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle, DialogTrigger
-} from "../DialogBox";
-import ButtonComponent from "./Button";
+} from "@graph/components/DialogBox";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -162,6 +161,13 @@ const startButtonClick = (
                     useFrontendStateManager.getState().setBlock(false);
                 }
             })
+            .with('ts-5', async () =>{
+                useFrontendStateManager.setState({executingRandomWalk : true});
+                await Animator.animateRandomWalk(useFrontendStateManager.getState().startNodeId);
+                useFrontendStateManager.setState({executingRandomWalk : false});
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({randomPathId : NOTSET});
+            })
             .with('ts-8', async () => {
                 if (bombNodeId === NOTSET) {
                     const {path, visited} = Algorithms.runWithoutBombNode(
@@ -224,7 +230,6 @@ const startButtonClick = (
                     useFrontendStateManager.getState().setBlock(false);
                 }
             });
-        console.log(useFrontendStateManager.getState().visitedNodes);
         return biDirectionalException ? Exception.BI_DIRECTIONAL_EXTRA_ARGS : true;
     }
 }
