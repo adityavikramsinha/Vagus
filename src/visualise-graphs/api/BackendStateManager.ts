@@ -6,7 +6,7 @@ import Graph from "@graph/ts/Graph";
  * the BackendStateManager of all the functions and states present on the
  * Website.
  *
- * @author aditya , <adityavikramsinha19@gmail.com>
+ * @author aditya, <adityavikramsinha19@gmail.com>
  */
 export default class BackendStateManager {
 

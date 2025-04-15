@@ -14,7 +14,6 @@ import {
     IOFileIcon,
     ShortestPathNodeIcon,
     StartNodeIcon,
-    SysFileIcon,
     TsFileIcon,
     UnvisitedNodeIcon,
     VisitedNodeIcon,
@@ -182,26 +181,6 @@ const Navbar: FC = () => {
                                     Icon={<BatFileIcon/>}
                                 />
                             </Folder>
-                        </Folder>
-                        <Folder text="speeds" divClassName="folder advanced-cp-comp" arrowID="speeds-arrow">
-                            <File
-                                name="25percent.sys"
-                                id="sys-1"
-                                type={FileType.SYS}
-                                Icon={<SysFileIcon/>}
-                            />
-                            <File
-                                name="50percent.sys"
-                                id="sys-2"
-                                type={FileType.SYS}
-                                Icon={<SysFileIcon/>}
-                            />
-                            <File
-                                name="100percent.sys"
-                                id="sys-3"
-                                type={FileType.SYS}
-                                Icon={<SysFileIcon/>}
-                            />
                         </Folder>
                         <Folder text="legend" divClassName="folder advanced-cp-comp" arrowID="legend-arrow">
                             <File
