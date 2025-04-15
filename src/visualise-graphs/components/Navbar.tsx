@@ -27,15 +27,15 @@ import {NOTSET} from "../ts/Types";
 import Syncer from "../api/Syncer";
 
 const Navbar: FC = () => {
-    const changeNode = useFrontendStateManager(state=>state.changeNode);
+    const changeNode = useFrontendStateManager(state => state.changeNode);
     return (
         <div className="navbar">
             <div className="header">
                 <div className="title">Vagus</div>
                 <div className="buttons">
-                    <PrevButton />
-                    <StopButton onClick={()=>Syncer.clearHexBoard()}/>
-                    <StartButton />
+                    <PrevButton/>
+                    <StopButton onClick={() => Syncer.clearHexBoard()}/>
+                    <StartButton/>
                 </div>
             </div>
             <div className="folder-panel">
@@ -43,44 +43,46 @@ const Navbar: FC = () => {
                     <div className="advanced-cp-border">
                         <Folder text="algorithms" divClassName="folder advanced-cp-comp" arrowID="algorithms-arrow">
                             <div className="folder-drop-inner">
-                                <Folder text="heuristic" divClassName="folder advanced-cp-comp" arrowID="heuristic-arrow">
+                                <Folder text="heuristic" divClassName="folder advanced-cp-comp"
+                                        arrowID="heuristic-arrow">
                                     <File
                                         name="aStarSearch.ts"
                                         id="ts-1"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                     <File
                                         name="bestFirstSearch.ts"
                                         id="ts-2"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                 </Folder>
-                                <Folder text="un-weighted" divClassName="folder advanced-cp-comp" arrowID="un-weighted-arrow">
+                                <Folder text="un-weighted" divClassName="folder advanced-cp-comp"
+                                        arrowID="un-weighted-arrow">
                                     <File
                                         name="breadthFirstSearch.ts"
                                         id="ts-3"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                     <File
                                         name="depthFirstSearch.ts"
                                         id="ts-4"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                     <File
                                         name="randomWalk.ts"
                                         id="ts-5"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                     <File
                                         name="bestFirstSearch.ts"
                                         id="ts-6"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                 </Folder>
                                 <Folder text="weighted" divClassName="folder advanced-cp-comp" arrowID="weighted-arrow">
@@ -88,25 +90,25 @@ const Navbar: FC = () => {
                                         name="aStarSearch.ts"
                                         id="ts-7"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                     <File
                                         name="dijkstrasSearch.ts"
                                         id="ts-8"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                     <File
                                         name="bellmanFord.ts"
                                         id="ts-9"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                     <File
                                         name="biDirectionalSearch.ts"
                                         id="ts-10"
                                         type={FileType.TS}
-                                        Icon={<TsFileIcon />}
+                                        Icon={<TsFileIcon/>}
                                     />
                                 </Folder>
                             </div>
@@ -116,31 +118,31 @@ const Navbar: FC = () => {
                                 name="startNode.io"
                                 id="io-1"
                                 type={FileType.IO}
-                                Icon={<IOFileIcon />}
+                                Icon={<IOFileIcon/>}
                             />
                             <File
                                 name="endNode.io"
                                 id="io-2"
                                 type={FileType.IO}
-                                Icon={<IOFileIcon />}
+                                Icon={<IOFileIcon/>}
                             />
                             <File
                                 name="bombNode.io"
                                 id="io-3"
                                 type={FileType.IO}
-                                Icon={<IOFileIcon />}
+                                Icon={<IOFileIcon/>}
                             />
                             <File
                                 name="weightNode.io"
                                 id="io-4"
                                 type={FileType.IO}
-                                Icon={<IOFileIcon />}
+                                Icon={<IOFileIcon/>}
                             />
                             <File
                                 name="wallNode.io"
                                 id="io-5"
                                 type={FileType.IO}
-                                Icon={<IOFileIcon />}
+                                Icon={<IOFileIcon/>}
                             />
                         </Folder>
                         <Folder text="mazes" divClassName="folder advanced-cp-comp" arrowID="mazes-arrow">
@@ -148,26 +150,26 @@ const Navbar: FC = () => {
                                 name="generateRandomMaze.bat"
                                 id="bat-1"
                                 type={FileType.BAT}
-                                Icon={<BatFileIcon />}
+                                Icon={<BatFileIcon/>}
                             />
                             <Folder text="wall" divClassName="folder advanced-cp-comp" arrowID="wall-arrow">
                                 <File
                                     name="generateLeastCostPathBlocker.bat"
                                     id="bat-2"
                                     type={FileType.BAT}
-                                    Icon={<BatFileIcon />}
+                                    Icon={<BatFileIcon/>}
                                 />
                                 <File
                                     name="generateBlockedRidges.bat"
                                     id="bat-3"
                                     type={FileType.BAT}
-                                    Icon={<BatFileIcon />}
+                                    Icon={<BatFileIcon/>}
                                 />
                                 <File
                                     name="generateBlockedRandomMaze.bat"
                                     id="bat-4"
                                     type={FileType.BAT}
-                                    Icon={<BatFileIcon />}
+                                    Icon={<BatFileIcon/>}
                                 />
                             </Folder>
                             <Folder text="weighted" divClassName="folder advanced-cp-comp" arrowID="weighted-arrow">
@@ -175,13 +177,13 @@ const Navbar: FC = () => {
                                     name="generateWeightedRidges.bat"
                                     id="bat-5"
                                     type={FileType.BAT}
-                                    Icon={<BatFileIcon />}
+                                    Icon={<BatFileIcon/>}
                                 />
                                 <File
                                     name="generateWeightedRandomMaze.bat"
                                     id="bat-6"
                                     type={FileType.BAT}
-                                    Icon={<BatFileIcon />}
+                                    Icon={<BatFileIcon/>}
                                 />
                             </Folder>
                         </Folder>
@@ -190,68 +192,68 @@ const Navbar: FC = () => {
                                 name="25percent.sys"
                                 id="sys-1"
                                 type={FileType.SYS}
-                                Icon={<SysFileIcon />}
+                                Icon={<SysFileIcon/>}
                             />
                             <File
                                 name="50percent.sys"
                                 id="sys-2"
                                 type={FileType.SYS}
-                                Icon={<SysFileIcon />}
+                                Icon={<SysFileIcon/>}
                             />
                             <File
                                 name="100percent.sys"
                                 id="sys-3"
                                 type={FileType.SYS}
-                                Icon={<SysFileIcon />}
+                                Icon={<SysFileIcon/>}
                             />
                         </Folder>
                         <Folder text="legend" divClassName="folder advanced-cp-comp" arrowID="legend-arrow">
                             <File
                                 name="bombNode.gui"
                                 id="gui-1"
-                                Icon={<BombNodeIcon />}
+                                Icon={<BombNodeIcon/>}
                                 type={FileType.GUI}
                             />
                             <File
                                 name="shortestPathNode.gui"
                                 id="gui-2"
-                                Icon={<ShortestPathNodeIcon />}
+                                Icon={<ShortestPathNodeIcon/>}
                                 type={FileType.GUI}
                             />
                             <File
                                 name="wallNode.gui"
                                 id="gui-3"
-                                Icon={<WallNodeIcon />}
+                                Icon={<WallNodeIcon/>}
                                 type={FileType.GUI}
                             />
                             <File
                                 name="visitedNode.gui"
                                 id="gui-4"
-                                Icon={<VisitedNodeIcon />}
+                                Icon={<VisitedNodeIcon/>}
                                 type={FileType.GUI}
                             />
                             <File
                                 name="unvisitedNode.gui"
                                 id="gui-5"
-                                Icon={<UnvisitedNodeIcon />}
+                                Icon={<UnvisitedNodeIcon/>}
                                 type={FileType.GUI}
                             />
                             <File
                                 name="startNode.gui"
                                 id="gui-6"
-                                Icon={<StartNodeIcon />}
+                                Icon={<StartNodeIcon/>}
                                 type={FileType.GUI}
                             />
                             <File
                                 name="endNode.gui"
                                 id="gui-7"
-                                Icon={<EndNodeIcon />}
+                                Icon={<EndNodeIcon/>}
                                 type={FileType.GUI}
                             />
                             <File
                                 name="weightNode.gui"
                                 id="gui-8"
-                                Icon={<WeightNodeIcon />}
+                                Icon={<WeightNodeIcon/>}
                                 type={FileType.GUI}
                             />
                         </Folder>
@@ -259,7 +261,7 @@ const Navbar: FC = () => {
                             name="settings.json"
                             id="md-1"
                             type={FileType.MD}
-                            Icon={<MdFileIcon />}
+                            Icon={<MdFileIcon/>}
                         />
                     </div>
                 </Folder>

@@ -21,7 +21,7 @@ export default class Syncer {
         currentState.initGraph().setNodeCoords(id, {x: x, y: y});
     }
 
-    static removeNode (id : number){
+    static removeNode(id: number) {
         currentState.graph().rmNode(id);
     }
 
@@ -122,22 +122,24 @@ export default class Syncer {
         }
     }
 
-    static updateEdge(source :number, dest:number) {
+    static updateEdge(source: number, dest: number) {
         const srcNode = currentState.graph().nodes().get(source);
         const destNode = currentState.graph().nodes().get(dest);
         srcNode.updateCostTo(destNode, 10);
     }
 
-    static cleanHexBoard () {
-        useFrontendStateManager.setState({visitedNodes : new Map()});
-        useFrontendStateManager.setState({pathNodes : new Set()});
+    static cleanHexBoard() {
+        useFrontendStateManager.setState({visitedNodes: new Map()});
+        useFrontendStateManager.setState({pathNodes: new Set()});
     }
 
-    static clearHexBoard () {
+    static clearHexBoard() {
         this.cleanHexBoard();
-        useFrontendStateManager.setState({hexBoard : {
+        useFrontendStateManager.setState({
+            hexBoard: {
                 [NOTSET]: NodeType.START_NODE
-            }});
+            }
+        });
         let prevStartNode = useFrontendStateManager.getState().startNodeId;
         let prevEndNode = useFrontendStateManager.getState().endNodeId;
         Syncer.syncInitialGraph();

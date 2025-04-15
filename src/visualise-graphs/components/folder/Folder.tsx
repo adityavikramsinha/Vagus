@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ArrowIcon, FolderOpenIcon, FolderClosedIcon } from "./FolderIcons";
+import React, {useState} from "react";
+import {ArrowIcon, FolderOpenIcon, FolderClosedIcon} from "./FolderIcons";
 
 type FolderComponentProps = {
     children: React.ReactNode;
@@ -8,11 +8,11 @@ type FolderComponentProps = {
     arrowID: string;
 };
 const Folder: React.FC<FolderComponentProps> = ({
-                                                                    children,
-                                                                    text,
-                                                                    divClassName,
-                                                                    arrowID
-                                                                }) => {
+                                                    children,
+                                                    text,
+                                                    divClassName,
+                                                    arrowID
+                                                }) => {
     const [isExpanded, setIsExpanded] = useState(true);
     const toggle = () => setIsExpanded(prev => !prev);
     return (
@@ -22,9 +22,9 @@ const Folder: React.FC<FolderComponentProps> = ({
                     id={arrowID}
                     className={`arrow-icon ${!isExpanded ? "rotated" : ""}`}
                 >
-                    <ArrowIcon />
+                    <ArrowIcon/>
                 </div>
-                {isExpanded ? <FolderOpenIcon /> : <FolderClosedIcon />}
+                {isExpanded ? <FolderOpenIcon/> : <FolderClosedIcon/>}
                 <div className="folder-title">{text}</div>
             </div>
             {isExpanded && <div className="folder-children">

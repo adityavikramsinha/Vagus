@@ -33,7 +33,7 @@ const HexBoard: React.FC = () => {
             changeNode(NodeType.START_NODE, NodeAction.SET, startPosition);
             changeNode(NodeType.END_NODE, NodeAction.SET, endPosition);
             setHexBoardDimensions({width, height});
-            currentState.initGraph().freeze()
+            currentState.initGraph().freeze();
         };
         handleResize() // First time when mount has happened
 

@@ -33,13 +33,15 @@ const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
     const handleFileClick = (id: string, type: FileType) => {
         changeActiveFiles(id, type);
         match(type)
-            .with(FileType.BAT, ()=>handleBatFileClick(name.substring(0, name.lastIndexOf('.')), HEX_HEIGHT, HEX_WIDTH))
-            .otherwise(()=>{})
+            .with(FileType.BAT,
+                () => handleBatFileClick(name.substring(0, name.lastIndexOf('.')), HEX_HEIGHT, HEX_WIDTH))
+            .otherwise(() => {
+            })
     }
 
     let classes = cn({
         "file": true,
-        "file-active" : isActiveFile
+        "file-active": isActiveFile
     })
     return (
         <div

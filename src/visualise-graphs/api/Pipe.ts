@@ -1,12 +1,13 @@
 export default class Pipe {
-    public static setToMap<K,V> (set : Set<K>, v : V) {
+    public static setToMap<K, V>(set: Set<K>, v: V) {
         let map = new Map<K, V>();
-        for (const key of set ) {
+        for (const key of set) {
             map.set(key, v);
         }
         return map;
     }
-    public static andInterleaveSetsToMap<K,V>(A :Set<K>,B:Set<K>, v:V){
+
+    public static andInterleaveSetsToMap<K, V>(A: Set<K>, B: Set<K>, v: V) {
         let map = new Map<K, V>();
         let intermediateArray = new Array<K>(A.size + B.size);
         let index = 0;

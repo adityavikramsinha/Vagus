@@ -198,7 +198,8 @@ const startButtonClick = (
                 } else {
                     useFrontendStateManager.getState().setBlock(false);
                     biDirectionalException = true
-                };
+                }
+                ;
             })
             .with('ts-9', async () => {
                 if (bombNodeId === NOTSET) {

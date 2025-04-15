@@ -18,8 +18,8 @@ export type HexProps = {
 const Hex: React.FC<HexProps> = ({x, y, id}) => {
     // Checking the node type from hexBoard map
     const nodeType = useFrontendStateManager(state => state.hexBoard[id] || NOTSET);
-    const visited = useFrontendStateManager(state =>state.visitedNodes.has(id)? state.visitedNodes.get(id) : NOTSET);
-    const pathNode = useFrontendStateManager(state =>state.pathNodes.has(id));
+    const visited = useFrontendStateManager(state => state.visitedNodes.has(id) ? state.visitedNodes.get(id) : NOTSET);
+    const pathNode = useFrontendStateManager(state => state.pathNodes.has(id));
     // Whether the hex is start, end, bomb, weight or wall node
     const isStartNode = nodeType === NodeType.START_NODE;
     const isEndNode = nodeType === NodeType.END_NODE;
@@ -56,21 +56,21 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     };
 
     let hexIconClasses = cn({
-        "visited-node":  (visited === NodeType.START_NODE) && !pathNode,
+        "visited-node": (visited === NodeType.START_NODE) && !pathNode,
         "icon": true,
-        "visited-node-bomb" : (visited === NodeType.BOMB_NODE) && !pathNode,
-        "path-node" : pathNode,
-        "wall-node" : isWallNode
+        "visited-node-bomb": (visited === NodeType.BOMB_NODE) && !pathNode,
+        "path-node": pathNode,
+        "wall-node": isWallNode
     });
     const stringer = "hi"
     // Apply classes based on node type
     let classes = cn({
-                         "prop-holder": true,
-                         "start-node": isStartNode,
-                         "bomb-node": isBombNode,
-                         "end-node": isEndNode,
-                         "weight-node": isWeightNode,
-                     });
+        "prop-holder": true,
+        "start-node": isStartNode,
+        "bomb-node": isBombNode,
+        "end-node": isEndNode,
+        "weight-node": isWeightNode,
+    });
 
     return (
         <div className="hexagon" style={styles} onClick={handleHexClick}>

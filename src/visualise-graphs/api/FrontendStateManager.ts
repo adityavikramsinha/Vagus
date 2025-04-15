@@ -104,7 +104,7 @@ const useFrontendStateManager =
         hexBoardDimensions : {width :0, height :0},
         setHexBoardDimensions : (newDimensions)=>set({hexBoardDimensions : newDimensions}),
         hexDimensions : {HEX_WIDTH : 26 , HEX_HEIGHT : 30},
-        hexBoard : {
+        hexBoard: {
             [NOTSET]: NodeType.START_NODE
         },
         block : false,
