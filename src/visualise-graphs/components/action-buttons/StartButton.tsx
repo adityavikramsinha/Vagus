@@ -8,7 +8,16 @@ import {match, P} from "ts-pattern";
 import Algorithms from "../../ts/Algorithms";
 import Animator from "../../api/Animator";
 import Pipe from "../../api/Pipe";
-import Graph from "../../ts/Graph";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle, DialogTrigger
+} from "../DialogBox";
+import ButtonComponent from "./Button";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -28,24 +37,25 @@ const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     )
 }
 
+export enum Exception {
+    START_NODE_NOTSET,
+    END_NODE_NOTSET,
+    ALGORITHM_NOTSET,
+    BI_DIRECTIONAL_EXTRA_ARGS
+}
 
-const startButtonClick =  (
+const startButtonClick = (
     algoFile: string | NOTSET_t
-): void => {
+): Exception | true => {
+    let biDirectionalException = false;
     const startNodeId = useFrontendStateManager.getState().startNodeId;
     const endNodeId = useFrontendStateManager.getState().endNodeId;
     const bombNodeId = useFrontendStateManager.getState().bombNodeId;
     if (!useFrontendStateManager.getState().block) {
-        if (algoFile === NOTSET) {
-            alert('Please select an algorithm before continuing!');
-            return;
-        } else if (startNodeId === NOTSET) {
-            alert('Please select a starting node');
-            return;
-        } else if (endNodeId === NOTSET) {
-            alert('Please select a ending node');
-            return;
-        }
+        if (algoFile === NOTSET) return Exception.ALGORITHM_NOTSET;
+        else if (startNodeId === NOTSET) return Exception.START_NODE_NOTSET;
+        else if (endNodeId === NOTSET) return Exception.END_NODE_NOTSET;
+
         Syncer.syncInitialGraph();
         // I guess we have to now update the graph.
         for (const [nodeKey, nodeType] of Object.entries(useFrontendStateManager.getState().hexBoard)) {
@@ -175,20 +185,20 @@ const startButtonClick =  (
                     useFrontendStateManager.getState().setBlock(false);
                 }
             })
-            .with('ts-10', async ()=> {
+            .with('ts-10', async () => {
                 if (bombNodeId === NOTSET) {
                     const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
                         startNodeId,
                         endNodeId
                     )
-                    await Animator.animateVisitedNodes(Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
+                    await Animator.animateVisitedNodes(
+                        Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
                     await Animator.animatePathNodes(path);
                     useFrontendStateManager.getState().setBlock(false);
-                }
-                else {
-                    alert("You cannot run Bi Directional Algorithm with Bomb Node");
-                    return;
-                }
+                } else {
+                    useFrontendStateManager.getState().setBlock(false);
+                    biDirectionalException = true
+                };
             })
             .with('ts-9', async () => {
                 if (bombNodeId === NOTSET) {
@@ -213,18 +223,78 @@ const startButtonClick =  (
                     useFrontendStateManager.getState().setBlock(false);
                 }
             });
+        return biDirectionalException ? Exception.BI_DIRECTIONAL_EXTRA_ARGS : true;
     }
 }
 
 const StartButton = () => {
-
+    const [error, setError] = React.useState<{
+        encountered: boolean,
+        message?: string,
+        header?: string
+    }>({encountered: false})
     return (
-        <Button disabled={useFrontendStateManager(state =>state.block)} className="button" id="start-button" onClick={() => {
-            const algoFile = useFrontendStateManager.getState().activeFiles.ts;
-            startButtonClick(algoFile)
-        }}>
-            <StartButtonIcon/>
-        </Button>
+        <Dialog open={error.encountered} onOpenChange={(open) => !open && setError({encountered: false})}>
+            <DialogTrigger asChild>
+                <Button disabled={useFrontendStateManager(state => state.block)} className="button" id="start-button"
+                        onClick={() => {
+                            const algoFile = useFrontendStateManager.getState().activeFiles.ts;
+                            const err = startButtonClick(algoFile)
+                            match(err)
+                                .with(Exception.START_NODE_NOTSET, () => setError({
+                                    encountered: true,
+                                    message: `
+        Encountered a Runtime Exception while trying to execute, because:
+        Start Node is of type NOTSET.
+        This exception is thrown by the Runtime Environment because no Start Node has been selected.`,
+                                    header: "RTE 0x01"
+                                }))
+                                .with(Exception.END_NODE_NOTSET, () => setError({
+                                    encountered: true,
+                                    message: `
+        Encountered a Runtime Exception while trying to execute, because:
+        End Node is NOTSET.
+        This exception is thrown by the Runtime Environment because no End Node has been selected.`,
+                                    header: "RTE 0x02"
+                                }))
+                                .with(Exception.ALGORITHM_NOTSET, () => setError({
+                                    encountered: true,
+                                    message: `
+        Encountered a Runtime Exception while trying to execute, because:
+        No Algorithm has been selected.
+        Please select an algorithm before attempting to run the visualization.`,
+                                    header: "RTE 0x03"
+                                }))
+                                .with(Exception.BI_DIRECTIONAL_EXTRA_ARGS, () => setError({
+                                    encountered: true,
+                                    message: `
+        Encountered a Runtime Exception while trying to execute, because:
+        Argument mismatch occurred.
+        A Bi Directional Search cannot be started with a Bomb Node, Start Node & End Node.
+        You must have only 2 Nodes, (Start Node & End Node).
+                                    `,
+                                    header: "CTE 0x01"
+                                }))
+                        }}>
+                    <StartButtonIcon/>
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="stop-dialog-content">
+                <DialogHeader className="stop-dialog-header">
+                    <DialogTitle className="stop-dialog-title">{error.header}</DialogTitle>
+                    <DialogDescription className="stop-dialog-description">
+                        {error.message}
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="stop-dialog-footer">
+                    <DialogClose asChild>
+                        <Button className="stop-dialog-cancel-button">
+                            Cancel
+                        </Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
 

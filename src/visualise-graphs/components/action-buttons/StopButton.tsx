@@ -1,16 +1,7 @@
 import React from "react";
-import ButtonComponent from "./Button";
+import Button from "./Button";
 import useFrontendStateManager from "../../api/FrontendStateManager";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-    DialogFooter,
-    DialogClose,
-} from "../DialogBox";
+
 
 const StopButtonIcon= (props: React.SVGProps<SVGSVGElement>)=> {
     return (
@@ -26,31 +17,12 @@ type StopButtonProps = {
 
 const StopButton = (props: StopButtonProps) => {
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <ButtonComponent disabled={useFrontendStateManager(state => state.block)} className="stop-button-trigger button" id="stop-button">
-                    <StopButtonIcon/>
-                </ButtonComponent>
-            </DialogTrigger>
-            <DialogContent className="stop-dialog-content">
-                <DialogHeader className="stop-dialog-header">
-                    <DialogTitle className="stop-dialog-title">Confirm Stop</DialogTitle>
-                    <DialogDescription className="stop-dialog-description">
-                        Are you sure you want to stop the current operation? This action cannot be undone.
-                    </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="stop-dialog-footer">
-                    <DialogClose asChild>
-                        <ButtonComponent type="button" className="stop-dialog-cancel-button">
-                            Cancel
-                        </ButtonComponent>
-                    </DialogClose>
-                    <ButtonComponent type="button" className="stop-dialog-confirm-button" onClick={props.onClick}>
-                        Stop
-                    </ButtonComponent>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        <Button disabled={useFrontendStateManager(state => state.block)}
+                className="button"
+                id="stop-button"
+                onClick={props.onClick}>
+            <StopButtonIcon/>
+        </Button>
     );
 };
 
