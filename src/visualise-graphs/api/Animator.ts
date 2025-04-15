@@ -1,11 +1,10 @@
-import useFrontendStateManager, {NodeAction, NodeType} from "./FrontendStateManager";
-import {NOTSET, NOTSET_t} from "../ts/Types";
+import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
+import {NOTSET, NOTSET_t} from "@graph/ts/Types";
 
 export default class Animator {
     static async animatePathNodes(path: number [] | NOTSET_t) {
         const store = useFrontendStateManager.getState();
         const internalSet = store.pathNodes;
-        const prevBombNode = store.bombNodeId;
         if (path === NOTSET)
             return;
 

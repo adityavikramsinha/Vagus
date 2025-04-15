@@ -1,7 +1,6 @@
 import React from "react";
-import HexBoard from "./hex-board/HexBoard";
-import Navbar from "./Navbar";
-// import Settings from "./Settings";
+import HexBoard from "@graph/components/hex-board/HexBoard";
+import Navbar from "@graph/components/Navbar"
 
 export const GraphVisualiser :React.FC = () => {
     return (
@@ -12,7 +11,6 @@ export const GraphVisualiser :React.FC = () => {
                         <Navbar />
                     </div>
                     <HexBoard />
-                    {/*<Settings />*/}
                 </div>
             </div>
         </React.Fragment >

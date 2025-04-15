@@ -1,18 +1,17 @@
 import * as React from "react";
 import {FC} from "react";
 
-import File, {FileType} from "./file/File";
-import PrevButton from "./action-buttons/PrevButton";
-import StopButton from "./action-buttons/StopButton";
-import StartButton from "./action-buttons/StartButton";
-import Folder from "./folder/Folder";
+import File, {FileType} from "@graph/components/file/File";
+import PrevButton from "@graph/components/action-buttons/PrevButton";
+import StopButton from "@graph/components/action-buttons/StopButton";
+import StartButton from "@graph/components/action-buttons/StartButton";
+import Folder from "@graph/components/folder/Folder";
 
 import {
     BatFileIcon,
     BombNodeIcon,
     EndNodeIcon,
     IOFileIcon,
-    MdFileIcon,
     ShortestPathNodeIcon,
     StartNodeIcon,
     SysFileIcon,
@@ -21,13 +20,10 @@ import {
     VisitedNodeIcon,
     WallNodeIcon,
     WeightNodeIcon
-} from "./file/FileIcons";
-import useFrontendStateManager, {NodeAction, NodeType} from "../api/FrontendStateManager";
-import {NOTSET} from "../ts/Types";
-import Syncer from "../api/Syncer";
+} from "@graph/components/file/FileIcons";
+import Syncer from "@graph/api/Syncer";
 
 const Navbar: FC = () => {
-    const changeNode = useFrontendStateManager(state => state.changeNode);
     return (
         <div className="navbar">
             <div className="header">
@@ -257,12 +253,6 @@ const Navbar: FC = () => {
                                 type={FileType.GUI}
                             />
                         </Folder>
-                        <File
-                            name="settings.json"
-                            id="md-1"
-                            type={FileType.MD}
-                            Icon={<MdFileIcon/>}
-                        />
                     </div>
                 </Folder>
             </div>

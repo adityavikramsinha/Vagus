@@ -1,14 +1,13 @@
-import '../visualise-graphs/css/app.css';
-import '../visualise-graphs/css/hex.css'
-import '../visualise-graphs/css/navbar.css'
-import '../visualise-graphs/css/settings.css'
-import '../visualise-graphs/css/button.css'
-import '../visualise-graphs/css/index.css';
-import '../visualise-graphs/css/loading.css'
-import '../visualise-graphs/css/dialog.css'
-import { AppProps } from 'next/app';
+import '@graph/css/app.css';
+import '@graph/css/hex.css'
+import '@graph/css/navbar.css';
+import '@graph/css/button.css'
+import '@graph/css/index.css';
+import '@graph/css/loading.css'
+import '@graph/css/dialog.css'
+import {AppProps} from 'next/app';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({Component, pageProps}: AppProps) {
     return <Component {...pageProps} />;
 }
 

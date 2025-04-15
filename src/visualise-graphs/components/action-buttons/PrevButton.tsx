@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "./Button";
-import Syncer from "../../api/Syncer";
+import Button from "@graph/components/action-buttons/Button";
+import Syncer from "@graph/api/Syncer";
 import useFrontendStateManager from "../../api/FrontendStateManager";
 
 const PrevButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {

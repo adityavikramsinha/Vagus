@@ -1,4 +1,4 @@
-import Graph from "../ts/Graph";
+import Graph from "@graph/ts/Graph";
 
 
 /**

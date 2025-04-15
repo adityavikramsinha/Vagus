@@ -1,5 +1,5 @@
-import {HexProps} from "../hex/Hex";
-import Syncer from "../../api/Syncer";
+import {HexProps} from "@graph/components/hex/Hex";
+import Syncer from "@graph/api/Syncer";
 
 const populateHexBoard = (rows: number, cols: number, HEX_WIDTH: number, HEX_HEIGHT: number) => {
     let content: HexProps[] = [];

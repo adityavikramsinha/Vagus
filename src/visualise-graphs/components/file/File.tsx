@@ -1,10 +1,8 @@
 import React from 'react';
-import useFrontendStateManager, {NodeAction, NodeType} from "../../api/FrontendStateManager";
+import useFrontendStateManager from "@graph/api/FrontendStateManager";
 import {match} from "ts-pattern";
-import {MazeType} from "../../ts/Types";
-import MazeGenerator from "../../ts/MazeGenerator";
-import handleBatFileClick from "./handleBatFileClick";
-import cn from "../../css/cn";
+import handleBatFileClick from "@graph/components/file/handleBatFileClick";
+import cn from "@graph/css/cn";
 
 export enum FileType {
     TS = "ts",

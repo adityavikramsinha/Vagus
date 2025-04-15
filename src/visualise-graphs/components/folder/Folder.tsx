@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {ArrowIcon, FolderOpenIcon, FolderClosedIcon} from "./FolderIcons";
+import {ArrowIcon, FolderOpenIcon, FolderClosedIcon} from "@graph/components/folder/FolderIcons";
 
 type FolderComponentProps = {
     children: React.ReactNode;

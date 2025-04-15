@@ -1,13 +1,14 @@
-import { StrictMode } from "react";
-import GraphVisualiser from "../visualise-graphs/components/GraphVisualiser";
-import  Head  from "next/head";
-import { JetBrains_Mono} from "next/font/google";
+import {StrictMode} from "react";
+import GraphVisualiser from "@graph/components/GraphVisualiser";
+import Head from "next/head";
+import {JetBrains_Mono} from "next/font/google";
 
 const jetBrainsMono = JetBrains_Mono({
-    subsets : ['latin'],
-    display : 'swap',
-    variable : '--font-jetbrains'
+    subsets: ['latin'],
+    display: 'swap',
+    variable: '--font-jetbrains'
 });
+
 function GraphsPage() {
     return <StrictMode>
         <Head>

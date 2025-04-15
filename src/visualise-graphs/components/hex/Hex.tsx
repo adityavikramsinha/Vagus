@@ -1,9 +1,9 @@
 import React from "react";
 
-import HexIcon from "./HexIcon";
-import useFrontendStateManager, {NodeAction, NodeType} from "../../api/FrontendStateManager";
-import {NOTSET} from "../../ts/Types";
-import cn from "../../css/cn";
+import HexIcon from "@graph/components/hex/HexIcon";
+import useFrontendStateManager, {NodeAction, NodeType} from "@graph/api/FrontendStateManager";
+import {NOTSET} from "@graph/ts/Types";
+import cn from "@graph/css/cn";
 import {match} from "ts-pattern";
 
 export type HexProps = {

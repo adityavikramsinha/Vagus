@@ -1,8 +1,8 @@
 import {match} from "ts-pattern";
-import {MazeType} from "../../ts/Types";
-import MazeGenerator from "../../ts/MazeGenerator";
-import useFrontendStateManager, {NodeType} from "../../api/FrontendStateManager";
-import Syncer from "../../api/Syncer";
+import {MazeType} from "@graph/ts/Types";
+import MazeGenerator from "@graph/ts/MazeGenerator";
+import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
+import Syncer from "@graph/api/Syncer";
 
 /**
  * Handles the click of a File (specifically Bat) and then delegates the

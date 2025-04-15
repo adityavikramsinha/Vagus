@@ -1,13 +1,13 @@
 import React from "react";
-import currentState from "../../api/BackendStateManager";
-import {AlgoType, NOTSET, NOTSET_t} from "../../ts/Types";
-import Button from "./Button";
-import useFrontendStateManager, {NodeType} from "../../api/FrontendStateManager";
-import Syncer from "../../api/Syncer";
+import currentState from "@graph/api/BackendStateManager";
+import {AlgoType, NOTSET, NOTSET_t} from "@graph/ts/Types";
+import Button from "@graph/components/action-buttons/Button";
+import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
+import Syncer from "@graph/api/Syncer";
 import {match, P} from "ts-pattern";
-import Algorithms from "../../ts/Algorithms";
-import Animator from "../../api/Animator";
-import Pipe from "../../api/Pipe";
+import Algorithms from "@graph/ts/Algorithms";
+import Animator from "@graph/api/Animator";
+import Pipe from "@graph/api/Pipe";
 import {
     Dialog,
     DialogClose,

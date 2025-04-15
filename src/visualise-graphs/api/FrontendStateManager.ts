@@ -1,8 +1,8 @@
 import {create} from 'zustand'
-import {NOTSET, NOTSET_t} from "../ts/Types";
-import {FileType} from "../components/file/File";
-import {HexProps} from "../components/hex/Hex";
-import populateHexBoard from "../components/hex-board/populateHexBoard";
+import {NOTSET, NOTSET_t} from "@graph/ts/Types";
+import {FileType} from "@graph/components/file/File";
+import {HexProps} from "@graph/components/hex/Hex";
+import populateHexBoard from "@graph/components/hex-board/populateHexBoard";
 import {match, P} from "ts-pattern";
 
 export enum NodeAction {

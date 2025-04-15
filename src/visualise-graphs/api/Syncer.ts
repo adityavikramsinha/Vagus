@@ -1,7 +1,7 @@
-import currentState from "./BackendStateManager";
-import useFrontendStateManager, {NodeAction, NodeType} from "./FrontendStateManager";
-import {NOTSET} from "../ts/Types";
-import Graph from "../ts/Graph";
+import currentState from "@graph/api/BackendStateManager";
+import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
+import {NOTSET} from "@graph/ts/Types";
+import Graph from "@graph/ts/Graph";
 
 export default class Syncer {
 
