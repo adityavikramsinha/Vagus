@@ -34,12 +34,11 @@ const Navbar: FC = () => {
                 </div>
             </div>
             <div className="folder-panel">
-                <Folder text="graphs" divClassName="folder" arrowID="vagus-master-arrow">
+                <Folder name="graphs" divClassName="folder">
                     <div className="advanced-cp-border">
-                        <Folder text="algorithms" divClassName="folder advanced-cp-comp" arrowID="algorithms-arrow">
+                        <Folder name="algorithms" divClassName="folder advanced-cp-comp">
                             <div className="folder-drop-inner">
-                                <Folder text="heuristic" divClassName="folder advanced-cp-comp"
-                                        arrowID="heuristic-arrow">
+                                <Folder name="heuristic" divClassName="folder advanced-cp-comp">
                                     <File
                                         name="aStarSearch.ts"
                                         id="ts-1"
@@ -53,8 +52,7 @@ const Navbar: FC = () => {
                                         Icon={<TsFileIcon/>}
                                     />
                                 </Folder>
-                                <Folder text="un-weighted" divClassName="folder advanced-cp-comp"
-                                        arrowID="un-weighted-arrow">
+                                <Folder name="un-weighted" divClassName="folder advanced-cp-comp">
                                     <File
                                         name="breadthFirstSearch.ts"
                                         id="ts-3"
@@ -80,7 +78,7 @@ const Navbar: FC = () => {
                                         Icon={<TsFileIcon/>}
                                     />
                                 </Folder>
-                                <Folder text="weighted" divClassName="folder advanced-cp-comp" arrowID="weighted-arrow">
+                                <Folder name="weighted" divClassName="folder advanced-cp-comp">
                                     <File
                                         name="aStarSearch.ts"
                                         id="ts-7"
@@ -108,7 +106,7 @@ const Navbar: FC = () => {
                                 </Folder>
                             </div>
                         </Folder>
-                        <Folder text="addableNodes" divClassName="folder advanced-cp-comp" arrowID="addable-arrow">
+                        <Folder name="addableNodes" divClassName="folder advanced-cp-comp">
                             <File
                                 name="startNode.io"
                                 id="io-1"
@@ -140,14 +138,14 @@ const Navbar: FC = () => {
                                 Icon={<IOFileIcon/>}
                             />
                         </Folder>
-                        <Folder text="mazes" divClassName="folder advanced-cp-comp" arrowID="mazes-arrow">
+                        <Folder name="mazes" divClassName="folder advanced-cp-comp">
                             <File
                                 name="generateRandomMaze.bat"
                                 id="bat-1"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
                             />
-                            <Folder text="wall" divClassName="folder advanced-cp-comp" arrowID="wall-arrow">
+                            <Folder name="wall" divClassName="folder advanced-cp-comp">
                                 <File
                                     name="generateBlockedRidges.bat"
                                     id="bat-3"
@@ -161,7 +159,7 @@ const Navbar: FC = () => {
                                     Icon={<BatFileIcon/>}
                                 />
                             </Folder>
-                            <Folder text="weighted" divClassName="folder advanced-cp-comp" arrowID="weighted-arrow">
+                            <Folder name="weighted" divClassName="folder advanced-cp-comp">
                                 <File
                                     name="generateWeightedRidges.bat"
                                     id="bat-5"
@@ -176,7 +174,7 @@ const Navbar: FC = () => {
                                 />
                             </Folder>
                         </Folder>
-                        <Folder text="legend" divClassName="folder advanced-cp-comp" arrowID="legend-arrow">
+                        <Folder name="legend" divClassName="folder advanced-cp-comp">
                             <File
                                 name="bombNode.gui"
                                 id="gui-1"
