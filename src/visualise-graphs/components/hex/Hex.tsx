@@ -13,6 +13,8 @@ export type HexProps = {
 };
 
 /**
+ * Hex component that controls the internal state (local state) and the external state (hex board, start node and end node)
+ * of a Node (back end equivalent)
  * @returns JSX.Element which has the rendered Hex along with its id
  */
 const Hex: React.FC<HexProps> = ({x, y, id}) => {
@@ -30,6 +32,10 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
 
     const activeFilesIo = useFrontendStateManager(state => state.activeFiles).io;
     const changeNode = useFrontendStateManager(state => state.changeNode);
+
+    /**
+     * Change hex type based on the active IO file.
+     */
     const handleHexClick = () => {
         if (visited !== NOTSET || pathNode)
             return;
@@ -51,11 +57,13 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
             .with('io-5', () => changeNode(NodeType.WALL_NODE, NodeAction.SET, id));
     };
 
+    // Node coordinates.
     const styles: React.CSSProperties = {
         left: `${x}px`,
         top: `${y}px`,
     };
 
+    // Apply classes on the Hex Icon.
     let hexIconClasses = cn({
         "visited-node": (visited === NodeType.START_NODE) && !pathNode,
         "icon": true,
@@ -64,7 +72,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
         "wall-node": isWallNode,
         "random-walk-stepping-stone" : isRandomAlgorithmSteppingStone
     });
-    const stringer = "hi"
+
     // Apply classes based on node type
     let classes = cn({
         "prop-holder": true,
@@ -76,7 +84,6 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
 
     return (
         <div className="hexagon" style={styles} onClick={handleHexClick}>
-            {/*FIXME there is a # here, it needs to be moved global*/}
             <HexIcon className={hexIconClasses}/>
             <div className={classes}/>
         </div>
