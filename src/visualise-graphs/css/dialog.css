@@ -24,7 +24,7 @@
     width: 100%;
     max-width: 100px;
     transform: translate(-50%, -50%);
-    border: 1px solid #262b3d;
+    border: 1px solid rgba(0, 0, 0, 0.71);
     background-color: var(--cmd-bg);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     transition: all 0.2s ease-in-out;

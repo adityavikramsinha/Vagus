@@ -28,11 +28,11 @@ export default class Syncer {
     static setGraph(
         rows: number,
         cols: number,
-        idVar: number
+        ids: number
     ) {
         let columnID = 0;
         let columnIDCenter = 0;
-        for (let i = 0; i < idVar; i++) {
+        for (let i = 0; i < ids; i++) {
             // first row conditions
             if (i % rows === 0) {
                 columnID = i / rows;
@@ -142,9 +142,12 @@ export default class Syncer {
             executingRandomWalk : false
         })
         let prevStartNode = useFrontendStateManager.getState().startNodeId;
-        let prevEndNode = useFrontendStateManager.getState().endNodeId;
+        let prevEndNode = useFrontendStateManager.getState().endNodeId
+        let bombNode = useFrontendStateManager.getState().bombNodeId;
         Syncer.syncInitialGraph();
         useFrontendStateManager.getState().hexBoard[prevStartNode] = NodeType.START_NODE;
         useFrontendStateManager.getState().hexBoard[prevEndNode] = NodeType.END_NODE;
+        if(bombNode !== NOTSET)
+            useFrontendStateManager.getState().hexBoard[bombNode] = NodeType.BOMB_NODE;
     }
 }
