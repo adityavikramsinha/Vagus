@@ -28,12 +28,12 @@ type FrontendStateManagerProps = {
     hexDimensions : {HEX_WIDTH : number, HEX_HEIGHT:number},
     hexBoard : Record<number | NOTSET_t, NodeType | NOTSET_t>,
     block : boolean,
-    // visited contains a map of ids, and the node they were visited from, i.e
+    // visited contains a map of ids, and the node they were visited from, i.e.
     // from where the path will start.
     visitedNodes : Map<number | NOTSET_t, NodeType.START_NODE | NodeType.BOMB_NODE>,
     pathNodes : Set<number | NOTSET_t>,
-    executingRandomWalk : boolean,
-    randomPathId : number | NOTSET_t
+    randomPathId : number | NOTSET_t,
+    executing : boolean
 }
 
 type FrontendStateManagerActions = {
@@ -41,7 +41,6 @@ type FrontendStateManagerActions = {
     setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void,
     changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_t) : void,
     setHexBoardDimensions : (dimension :{width : number, height:number})=>void,
-    setBlock : (toggle : boolean) => void
 }
 
 
@@ -110,11 +109,10 @@ const useFrontendStateManager =
             [NOTSET]: NodeType.START_NODE
         },
         block : false,
-        setBlock : (toggle) => set({block : toggle}),
         visitedNodes : new Map(),
         pathNodes : new Set(),
-        executingRandomWalk : false,
-        randomPathId : NOTSET
+        randomPathId : NOTSET,
+        executing : false
     }))
 
 export default useFrontendStateManager;

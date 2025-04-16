@@ -79,7 +79,10 @@ const startButtonClick = (
     Syncer.cleanHexBoard();
 
     // BLOCK all operations, (this blocks the three buttons)
-    useFrontendStateManager.getState().setBlock(true);
+    useFrontendStateManager.setState({block : true});
+    // Notify the Syncer to be ready to sync state via running blocks of code
+    // that watch for the 'executing' state.
+    useFrontendStateManager.setState({executing : true});
     match(algoFile)
         .with(P.union('ts-1', 'ts-7'), async () => {
             if (bombNodeId === NOTSET) {
@@ -90,7 +93,8 @@ const startButtonClick = (
                 );
                 await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             } else {
                 const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                     AlgoType.A_STAR_SEARCH,
@@ -101,7 +105,8 @@ const startButtonClick = (
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             }
         })
         .with(P.union('ts-2', 'ts-6'), async () => {
@@ -113,7 +118,8 @@ const startButtonClick = (
                 );
                 await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             } else {
                 const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                     AlgoType.BEST_FIRST_SEARCH,
@@ -124,7 +130,8 @@ const startButtonClick = (
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             }
         })
         .with('ts-3', async () => {
@@ -136,7 +143,8 @@ const startButtonClick = (
                 );
                 await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             } else {
                 const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                     AlgoType.BREADTH_FIRST_SEARCH,
@@ -147,7 +155,8 @@ const startButtonClick = (
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             }
         })
         .with('ts-4', async () => {
@@ -159,7 +168,8 @@ const startButtonClick = (
                 );
                 await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             } else {
                 const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                     AlgoType.DEPTH_FIRST_SEARCH,
@@ -170,15 +180,15 @@ const startButtonClick = (
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             }
         })
         .with('ts-5', async () => {
-            useFrontendStateManager.setState({executingRandomWalk: true});
             await Animator.animateRandomWalk(useFrontendStateManager.getState().startNodeId);
-            useFrontendStateManager.setState({executingRandomWalk: false});
             useFrontendStateManager.setState({block: false});
             useFrontendStateManager.setState({randomPathId: NOTSET});
+            useFrontendStateManager.setState({executing : false});
         })
         .with('ts-8', async () => {
             if (bombNodeId === NOTSET) {
@@ -189,7 +199,8 @@ const startButtonClick = (
                 );
                 await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             } else {
                 const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                     AlgoType.DIJKSTRAS_SEARCH,
@@ -200,7 +211,8 @@ const startButtonClick = (
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             }
         })
         .with('ts-10', async () => {
@@ -212,9 +224,11 @@ const startButtonClick = (
                 await Animator.animateVisitedNodes(
                     Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             } else {
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
                 biDirectionalException = true
             }
         })
@@ -227,7 +241,8 @@ const startButtonClick = (
                 );
                 await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             } else {
                 const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
                     AlgoType.BELLMAN_FORD,
@@ -238,7 +253,8 @@ const startButtonClick = (
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
                 await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.getState().setBlock(false);
+                useFrontendStateManager.setState({block : false});
+                useFrontendStateManager.setState({executing : false});
             }
         });
     return biDirectionalException ? Exception.BI_DIRECTIONAL_EXTRA_ARGS : false;
@@ -287,7 +303,7 @@ const StartButton = () => {
                                 .with(Exception.BI_DIRECTIONAL_EXTRA_ARGS, () => setError({
                                     encountered: true,
                                     message: `
-        Encountered a Runtime Exception while trying to execute, because:
+        Encountered a Compile Time Exception while trying to compile, because:
         Argument mismatch occurred.
         A Bi Directional Search cannot be started with a Bomb Node, Start Node & End Node.
         You must have only 2 Nodes, (Start Node & End Node).

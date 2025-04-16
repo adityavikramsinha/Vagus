@@ -1,6 +1,6 @@
 import BackendStateManager from "@graph/api/BackendStateManager";
 import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
-import {NOTSET} from "@graph/ts/Types";
+import {NOTSET, NOTSET_t} from "@graph/ts/Types";
 import Graph from "@graph/ts/Graph";
 
 export default class Syncer {
@@ -135,11 +135,14 @@ export default class Syncer {
 
     static clearHexBoard() {
         Syncer.cleanHexBoard();
+        if(useFrontendStateManager.getState().executing) {
+            useFrontendStateManager.setState({executing : false});
+            return;
+        }
         useFrontendStateManager.setState({
             hexBoard: {
                 [NOTSET]: NodeType.START_NODE
-            },
-            executingRandomWalk : false
+            }
         })
         let prevStartNode = useFrontendStateManager.getState().startNodeId;
         let prevEndNode = useFrontendStateManager.getState().endNodeId
@@ -149,5 +152,11 @@ export default class Syncer {
         useFrontendStateManager.getState().hexBoard[prevEndNode] = NodeType.END_NODE;
         if(bombNode !== NOTSET)
             useFrontendStateManager.getState().hexBoard[bombNode] = NodeType.BOMB_NODE;
+    }
+
+    static async supervise(fn: ()=> Promise<void> | void) {
+        if (!useFrontendStateManager.getState().executing) return;
+        await fn();
+
     }
 }

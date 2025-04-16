@@ -3,7 +3,7 @@ import Button from "@graph/components/action-buttons/Button";
 import useFrontendStateManager from "@graph/api/FrontendStateManager";
 
 
-const StopButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
+const ClearButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none"
              className="stop-button-icon">
@@ -14,17 +14,27 @@ const StopButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     );
 }
 
+const AbortButtonIcon = (props : React.SVGProps<SVGSVGElement>) => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+            <rect x="2.25" y="2.25" width="12.5" height="12.5" rx="3.75" fill="#FF0000" fill-opacity="0.18" stroke="#FF0000" stroke-width="1.5"/>
+        </svg>
+    )
+}
+
 type StopButtonProps = {
     onClick: () => void;
 };
 
 const StopButton = (props: StopButtonProps) => {
+    const isExecuting = useFrontendStateManager(state => state.executing);
     return (
-        <Button disabled={useFrontendStateManager(state => state.block && !state.executingRandomWalk)}
+        <Button disabled={useFrontendStateManager(state => state.block && !state.executing)}
                 className="button"
                 id="stop-button"
                 onClick={props.onClick}>
-            <StopButtonIcon/>
+            { !isExecuting && <ClearButtonIcon/> }
+            { isExecuting && <AbortButtonIcon/>}
         </Button>
     );
 };
