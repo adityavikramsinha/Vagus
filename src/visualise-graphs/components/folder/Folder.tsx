@@ -15,10 +15,10 @@ type FolderProps = {
  * @constructor
  */
 const Folder: React.FC<FolderProps> = ({
-                                                    children,
-                                                    name,
-                                                    divClassName
-                                                }) => {
+                                           children,
+                                           name,
+                                           divClassName
+                                       }) => {
     const [isExpanded, setIsExpanded] = React.useState(true);
     const toggle = () => setIsExpanded(prev => !prev);
     return (

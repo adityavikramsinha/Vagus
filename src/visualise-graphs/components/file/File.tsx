@@ -19,7 +19,13 @@ export type FileProps = {
     name: string,
     Icon: React.JSX.Element
 }
-// FIXME, SLOW ASF
+
+/**
+ * @param type is the type of FileType
+ * @param id id for keeping track of the active file.
+ * @param name name of the file
+ * @param Icon Icon depending on the extension (FileType)
+ */
 const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
     const isActiveFile = useFrontendStateManager(state => state.activeFiles[type] === id);
     const changeActiveFiles = useFrontendStateManager(state => state.changeActiveFiles);
@@ -28,7 +34,8 @@ const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
         HEX_HEIGHT
     } = useFrontendStateManager(state => state.hexDimensions)
 
-    const handleFileClick = (id: string, type: FileType) => {
+    const handleFileClick = () => {
+        if (type === FileType.GUI) return;
         changeActiveFiles(id, type);
         match(type)
             .with(FileType.BAT,
@@ -45,10 +52,7 @@ const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
         <div
             className={classes}
             id={id}
-            onClick={() => {
-                if (type !== FileType.GUI)
-                    handleFileClick(id, type)
-            }}
+            onClick={handleFileClick}
         >
             {Icon}
             <p className="file-name">{name}</p>
