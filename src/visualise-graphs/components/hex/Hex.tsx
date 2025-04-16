@@ -5,6 +5,7 @@ import useFrontendStateManager, {NodeAction, NodeType} from "@graph/api/Frontend
 import {NOTSET} from "@graph/ts/Types";
 import cn from "@graph/css/cn";
 import {match} from "ts-pattern";
+import {FileType} from "../file/File";
 
 export type HexProps = {
     x: number;
@@ -30,9 +31,8 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     const isWallNode = nodeType === NodeType.WALL_NODE;
     const isWeightNode = nodeType === NodeType.WEIGHT_NODE;
 
-    const activeFilesIo = useFrontendStateManager(state => state.activeFiles).io;
+    const activeFilesIo = useFrontendStateManager(state => state.activeFiles.io);
     const changeNode = useFrontendStateManager(state => state.changeNode);
-
     /**
      * Change hex type based on the active IO file.
      */
@@ -40,15 +40,15 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
         if (visited !== NOTSET || pathNode)
             return;
         if (isStartNode) {
-            if (activeFilesIo !== 'io-1') changeNode(NodeType.START_NODE, NodeAction.SET, NOTSET);
+            changeNode(NodeType.START_NODE, NodeAction.SET, NOTSET);
         } else if (isEndNode) {
-            if (activeFilesIo !== 'io-2') changeNode(NodeType.END_NODE, NodeAction.SET, NOTSET);
+            changeNode(NodeType.END_NODE, NodeAction.SET, NOTSET);
         } else if (isBombNode) {
-            if (activeFilesIo !== 'io-3') changeNode(NodeType.BOMB_NODE, NodeAction.SET, NOTSET);
+            changeNode(NodeType.BOMB_NODE, NodeAction.SET, NOTSET);
         } else if (isWeightNode) {
-            if (activeFilesIo !== 'io-4') changeNode(NodeType.WEIGHT_NODE, NodeAction.DELETE, id);
+            changeNode(NodeType.WEIGHT_NODE, NodeAction.DELETE, id);
         } else if (isWallNode) {
-            if (activeFilesIo !== 'io-5') changeNode(NodeType.WALL_NODE, NodeAction.DELETE, id);
+            changeNode(NodeType.WALL_NODE, NodeAction.DELETE, id);
         } else match(activeFilesIo)
             .with('io-1', () => changeNode(NodeType.START_NODE, NodeAction.SET, id))
             .with('io-2', () => changeNode(NodeType.END_NODE, NodeAction.SET, id))
@@ -70,7 +70,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
         "visited-node-bomb": (visited === NodeType.BOMB_NODE) && !pathNode,
         "path-node": pathNode,
         "wall-node": isWallNode,
-        "random-walk-stepping-stone" : isRandomAlgorithmSteppingStone
+        "random-walk-stepping-stone" : isRandomAlgorithmSteppingStone,
     });
 
     // Apply classes based on node type
@@ -79,7 +79,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
         "start-node": isStartNode,
         "bomb-node": isBombNode,
         "end-node": isEndNode,
-        "weight-node": isWeightNode,
+        "weight-node": isWeightNode
     });
 
     return (
