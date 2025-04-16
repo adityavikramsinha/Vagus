@@ -15,7 +15,8 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogTitle, DialogTrigger
+    DialogTitle,
+    DialogTrigger
 } from "@graph/components/DialogBox";
 
 
@@ -43,197 +44,208 @@ export enum Exception {
     BI_DIRECTIONAL_EXTRA_ARGS
 }
 
+/**
+ * Handle clicking the start button. The false means that no error was encountered while checking
+ * the necessary conditions and anything else is just an Exception.
+ * @param algoFile the current FileType (TS), to see the algorithm to run.
+ */
 const startButtonClick = (
     algoFile: string | NOTSET_t
-): Exception | true => {
+): Exception | false => {
     let biDirectionalException = false;
     const startNodeId = useFrontendStateManager.getState().startNodeId;
     const endNodeId = useFrontendStateManager.getState().endNodeId;
     const bombNodeId = useFrontendStateManager.getState().bombNodeId;
-    if (!useFrontendStateManager.getState().block) {
-        if (algoFile === NOTSET) return Exception.ALGORITHM_NOTSET;
-        else if (startNodeId === NOTSET) return Exception.START_NODE_NOTSET;
-        else if (endNodeId === NOTSET) return Exception.END_NODE_NOTSET;
 
-        Syncer.syncInitialGraph();
-        // I guess we have to now update the graph.
-        for (const [nodeKey, nodeType] of Object.entries(useFrontendStateManager.getState().hexBoard)) {
-            const id = Number(nodeKey);
-            if (nodeType === NodeType.WALL_NODE)
-                Syncer.removeNode(id);
-            else if (nodeType === NodeType.WEIGHT_NODE) {
+    // check conditions.
+    if (algoFile === NOTSET) return Exception.ALGORITHM_NOTSET;
+    else if (startNodeId === NOTSET) return Exception.START_NODE_NOTSET;
+    else if (endNodeId === NOTSET) return Exception.END_NODE_NOTSET;
+
+    Syncer.syncInitialGraph();
+    // I guess we have to now update the graph.
+    // we only update the graph in the backend via the Syncer when we HAVE to run the Algorithm.
+    for (const [nodeKey, nodeType] of Object.entries(useFrontendStateManager.getState().hexBoard)) {
+        const id = Number(nodeKey);
+        match(nodeType)
+            .with(NodeType.WALL_NODE, () => Syncer.removeNode(id))
+            .with(NodeType.WEIGHT_NODE, () => {
                 const srcNode = BackendStateManager.graph().nodes().get(id);
                 srcNode.getAdjNodes().forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
-            }
-        }
-        Syncer.cleanHexBoard();
-        useFrontendStateManager.getState().setBlock(true);
-        match(algoFile)
-            .with(P.union('ts-1', 'ts-7'), async () => {
-                if (bombNodeId === NOTSET) {
-                    const {path, visited} = Algorithms.runWithoutBombNode(
-                        AlgoType.A_STAR_SEARCH,
-                        startNodeId,
-                        endNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                } else {
-                    const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                        AlgoType.A_STAR_SEARCH,
-                        startNodeId,
-                        endNodeId,
-                        bombNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                }
             })
-            .with(P.union('ts-2', 'ts-6'), async () => {
-                if (bombNodeId === NOTSET) {
-                    const {path, visited} = Algorithms.runWithoutBombNode(
-                        AlgoType.BEST_FIRST_SEARCH,
-                        startNodeId,
-                        endNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                } else {
-                    const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                        AlgoType.BEST_FIRST_SEARCH,
-                        startNodeId,
-                        endNodeId,
-                        bombNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                }
+            .otherwise(() => {
             })
-            .with('ts-3', async () => {
-                if (bombNodeId === NOTSET) {
-                    const {path, visited} = Algorithms.runWithoutBombNode(
-                        AlgoType.BREADTH_FIRST_SEARCH,
-                        startNodeId,
-                        endNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                } else {
-                    const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                        AlgoType.BREADTH_FIRST_SEARCH,
-                        startNodeId,
-                        endNodeId,
-                        bombNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                }
-            })
-            .with('ts-4', async () => {
-                if (bombNodeId === NOTSET) {
-                    const {path, visited} = Algorithms.runWithoutBombNode(
-                        AlgoType.DEPTH_FIRST_SEARCH,
-                        startNodeId,
-                        endNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                } else {
-                    const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                        AlgoType.DEPTH_FIRST_SEARCH,
-                        startNodeId,
-                        endNodeId,
-                        bombNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                }
-            })
-            .with('ts-5', async () =>{
-                useFrontendStateManager.setState({executingRandomWalk : true});
-                await Animator.animateRandomWalk(useFrontendStateManager.getState().startNodeId);
-                useFrontendStateManager.setState({executingRandomWalk : false});
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({randomPathId : NOTSET});
-            })
-            .with('ts-8', async () => {
-                if (bombNodeId === NOTSET) {
-                    const {path, visited} = Algorithms.runWithoutBombNode(
-                        AlgoType.DIJKSTRAS_SEARCH,
-                        startNodeId,
-                        endNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                } else {
-                    const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                        AlgoType.DIJKSTRAS_SEARCH,
-                        startNodeId,
-                        endNodeId,
-                        bombNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                }
-            })
-            .with('ts-10', async () => {
-                if (bombNodeId === NOTSET) {
-                    const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
-                        startNodeId,
-                        endNodeId
-                    )
-                    await Animator.animateVisitedNodes(
-                        Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                } else {
-                    useFrontendStateManager.getState().setBlock(false);
-                    biDirectionalException = true
-                }
-                ;
-            })
-            .with('ts-9', async () => {
-                if (bombNodeId === NOTSET) {
-                    const {path, visited} = Algorithms.runWithoutBombNode(
-                        AlgoType.BELLMAN_FORD,
-                        startNodeId,
-                        endNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                } else {
-                    const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                        AlgoType.BELLMAN_FORD,
-                        startNodeId,
-                        endNodeId,
-                        bombNodeId
-                    );
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                    await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                    await Animator.animatePathNodes(path);
-                    useFrontendStateManager.getState().setBlock(false);
-                }
-            });
-        return biDirectionalException ? Exception.BI_DIRECTIONAL_EXTRA_ARGS : true;
     }
+    Syncer.cleanHexBoard();
+
+    // BLOCK all operations, (this blocks the three buttons)
+    useFrontendStateManager.getState().setBlock(true);
+    match(algoFile)
+        .with(P.union('ts-1', 'ts-7'), async () => {
+            if (bombNodeId === NOTSET) {
+                const {path, visited} = Algorithms.runWithoutBombNode(
+                    AlgoType.A_STAR_SEARCH,
+                    startNodeId,
+                    endNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            } else {
+                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
+                    AlgoType.A_STAR_SEARCH,
+                    startNodeId,
+                    endNodeId,
+                    bombNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            }
+        })
+        .with(P.union('ts-2', 'ts-6'), async () => {
+            if (bombNodeId === NOTSET) {
+                const {path, visited} = Algorithms.runWithoutBombNode(
+                    AlgoType.BEST_FIRST_SEARCH,
+                    startNodeId,
+                    endNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            } else {
+                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
+                    AlgoType.BEST_FIRST_SEARCH,
+                    startNodeId,
+                    endNodeId,
+                    bombNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            }
+        })
+        .with('ts-3', async () => {
+            if (bombNodeId === NOTSET) {
+                const {path, visited} = Algorithms.runWithoutBombNode(
+                    AlgoType.BREADTH_FIRST_SEARCH,
+                    startNodeId,
+                    endNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            } else {
+                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
+                    AlgoType.BREADTH_FIRST_SEARCH,
+                    startNodeId,
+                    endNodeId,
+                    bombNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            }
+        })
+        .with('ts-4', async () => {
+            if (bombNodeId === NOTSET) {
+                const {path, visited} = Algorithms.runWithoutBombNode(
+                    AlgoType.DEPTH_FIRST_SEARCH,
+                    startNodeId,
+                    endNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            } else {
+                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
+                    AlgoType.DEPTH_FIRST_SEARCH,
+                    startNodeId,
+                    endNodeId,
+                    bombNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            }
+        })
+        .with('ts-5', async () => {
+            useFrontendStateManager.setState({executingRandomWalk: true});
+            await Animator.animateRandomWalk(useFrontendStateManager.getState().startNodeId);
+            useFrontendStateManager.setState({executingRandomWalk: false});
+            useFrontendStateManager.setState({block: false});
+            useFrontendStateManager.setState({randomPathId: NOTSET});
+        })
+        .with('ts-8', async () => {
+            if (bombNodeId === NOTSET) {
+                const {path, visited} = Algorithms.runWithoutBombNode(
+                    AlgoType.DIJKSTRAS_SEARCH,
+                    startNodeId,
+                    endNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            } else {
+                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
+                    AlgoType.DIJKSTRAS_SEARCH,
+                    startNodeId,
+                    endNodeId,
+                    bombNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            }
+        })
+        .with('ts-10', async () => {
+            if (bombNodeId === NOTSET) {
+                const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
+                    startNodeId,
+                    endNodeId
+                )
+                await Animator.animateVisitedNodes(
+                    Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            } else {
+                useFrontendStateManager.getState().setBlock(false);
+                biDirectionalException = true
+            }
+        })
+        .with('ts-9', async () => {
+            if (bombNodeId === NOTSET) {
+                const {path, visited} = Algorithms.runWithoutBombNode(
+                    AlgoType.BELLMAN_FORD,
+                    startNodeId,
+                    endNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            } else {
+                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
+                    AlgoType.BELLMAN_FORD,
+                    startNodeId,
+                    endNodeId,
+                    bombNodeId
+                );
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
+                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
+                await Animator.animatePathNodes(path);
+                useFrontendStateManager.getState().setBlock(false);
+            }
+        });
+    return biDirectionalException ? Exception.BI_DIRECTIONAL_EXTRA_ARGS : false;
+
 }
 
+// Start Button.
 const StartButton = () => {
     const [error, setError] = React.useState<{
         encountered: boolean,

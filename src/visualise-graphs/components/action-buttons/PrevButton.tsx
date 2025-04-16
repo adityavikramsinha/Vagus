@@ -15,6 +15,9 @@ const PrevButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     )
 }
 
+/**
+ * Uses {@link Syncer} to clean up the Hex Board
+ */
 const prevButtonClick = (): void => {
     Syncer.cleanHexBoard()
 }
