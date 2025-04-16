@@ -29,7 +29,7 @@ const Navbar: FC = () => {
                 <div className="title">Vagus</div>
                 <div className="buttons">
                     <PrevButton/>
-                    <StopButton onClick={() => Syncer.clearHexBoard()}/>
+                    <StopButton onClick={Syncer.clearHexBoard}/>
                     <StartButton/>
                 </div>
             </div>

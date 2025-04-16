@@ -134,7 +134,7 @@ export default class Syncer {
     }
 
     static clearHexBoard() {
-        this.cleanHexBoard();
+        Syncer.cleanHexBoard();
         useFrontendStateManager.setState({
             hexBoard: {
                 [NOTSET]: NodeType.START_NODE
