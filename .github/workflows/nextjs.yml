@@ -20,19 +20,15 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-
-            - name: Set Package Manager
-              id: package-manager
-              run: |
-                  echo "manager=pnpm" >> $GITHUB_OUTPUT
-                  echo "command=install" >> $GITHUB_OUTPUT
-                  echo "runner=pnpm" >> $GITHUB_OUTPUT
-
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                version: 10
             - name: Setup Node
               uses: actions/setup-node@v4
               with:
                   node-version: "20"
-                  cache: ${{ steps.package-manager.outputs.manager }}
+                  cache: pnpm
 
             - name: Setup Pages
               uses: actions/configure-pages@v5
@@ -49,16 +45,15 @@ jobs:
                       ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
             - name: Install dependencies
-              run: ${{ steps.package-manager.outputs.manager }} ${{ steps.package-manager.outputs.command }}
+              run: pnpm install
 
             - name: Build with Next.js
-              run: ${{ steps.package-manager.outputs.runner }} next build
+              run: pnpm next build
 
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
                   path: ./out
-
     deploy:
         environment:
             name: github-pages
