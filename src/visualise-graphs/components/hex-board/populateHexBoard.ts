@@ -11,7 +11,7 @@ const populateHexBoard = (rows: number, cols: number, HEX_WIDTH: number, HEX_HEI
         // we have to account for odd even.
         yVar = (i & 1) === 1 ? -2.5 : -17;
         for (let j = 0; j < rows; j++, idVar++) {
-            content.push({x: xVar, y: yVar, id: idVar})
+            content.push({x: xVar, y: yVar, id: idVar});
             yVar += HEX_HEIGHT;
             Syncer.setNode(xVar, yVar, idVar)
         }

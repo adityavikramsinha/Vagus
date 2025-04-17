@@ -2,10 +2,10 @@
     --white: #b7b7b7;
     --cmd-bg: #0c0b0b;
     --cmd-border: #1a1a1a;
-    --moz-sb-color: #313244;
-    --sb-color: #45475a;
-    --sb-color-hover: #585b70;
-    --sb-color-track: #1e1e2e;
+    --moz-sb-color: rgba(255, 255, 255, 0.05);
+    --sb-color: rgba(255, 255, 255, 0.05);
+    --sb-color-hover: rgba(255, 255, 255, 0.05);
+    --sb-color-track: rgba(131, 131, 131, 0.42);
     --hex-color: #0c0b0b;
     --hex-color-hover: #89b4fa;
     --wall-node-color: #212121;

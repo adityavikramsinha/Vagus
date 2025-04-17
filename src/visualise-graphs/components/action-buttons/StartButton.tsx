@@ -1,13 +1,7 @@
 import React from "react";
-import BackendStateManager from "@graph/api/BackendStateManager";
-import {AlgoType, NOTSET, NOTSET_t} from "@graph/ts/Types";
 import Button from "@graph/components/action-buttons/Button";
-import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
-import Syncer from "@graph/api/Syncer";
-import {match, P} from "ts-pattern";
-import Algorithms from "@graph/ts/Algorithms";
-import Animator from "@graph/api/Animator";
-import Pipe from "@graph/api/Pipe";
+import useFrontendStateManager from "@graph/api/FrontendStateManager";
+import {match} from "ts-pattern";
 import {
     Dialog,
     DialogClose,
@@ -18,6 +12,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@graph/components/DialogBox";
+import * as StartButtonActions from "@graph/components/action-buttons/startButtonActions";
 
 
 const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -36,231 +31,6 @@ const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
         </svg>
     )
 }
-
-export enum Exception {
-    START_NODE_NOTSET,
-    END_NODE_NOTSET,
-    ALGORITHM_NOTSET,
-    BI_DIRECTIONAL_EXTRA_ARGS
-}
-
-/**
- * Handle clicking the start button. The false means that no error was encountered while checking
- * the necessary conditions and anything else is just an Exception.
- * @param algoFile the current FileType (TS), to see the algorithm to run.
- */
-const startButtonClick = (
-    algoFile: string | NOTSET_t
-): Exception | false => {
-    let biDirectionalException = false;
-    const startNodeId = useFrontendStateManager.getState().startNodeId;
-    const endNodeId = useFrontendStateManager.getState().endNodeId;
-    const bombNodeId = useFrontendStateManager.getState().bombNodeId;
-
-    // check conditions.
-    if (algoFile === NOTSET) return Exception.ALGORITHM_NOTSET;
-    else if (startNodeId === NOTSET) return Exception.START_NODE_NOTSET;
-    else if (endNodeId === NOTSET) return Exception.END_NODE_NOTSET;
-
-    Syncer.syncInitialGraph();
-    // I guess we have to now update the graph.
-    // we only update the graph in the backend via the Syncer when we HAVE to run the Algorithm.
-    for (const [nodeKey, nodeType] of Object.entries(useFrontendStateManager.getState().hexBoard)) {
-        const id = Number(nodeKey);
-        match(nodeType)
-            .with(NodeType.WALL_NODE, () => Syncer.removeNode(id))
-            .with(NodeType.WEIGHT_NODE, () => {
-                const srcNode = BackendStateManager.graph().nodes().get(id);
-                srcNode.getAdjNodes().forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
-            })
-            .otherwise(() => {
-            })
-    }
-    Syncer.cleanHexBoard();
-
-    // BLOCK all operations, (this blocks the three buttons)
-    useFrontendStateManager.setState({block : true});
-    // Notify the Syncer to be ready to sync state via running blocks of code
-    // that watch for the 'executing' state.
-    useFrontendStateManager.setState({executing : true});
-    match(algoFile)
-        .with(P.union('ts-1', 'ts-7'), async () => {
-            if (bombNodeId === NOTSET) {
-                const {path, visited} = Algorithms.runWithoutBombNode(
-                    AlgoType.A_STAR_SEARCH,
-                    startNodeId,
-                    endNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            } else {
-                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                    AlgoType.A_STAR_SEARCH,
-                    startNodeId,
-                    endNodeId,
-                    bombNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            }
-        })
-        .with(P.union('ts-2', 'ts-6'), async () => {
-            if (bombNodeId === NOTSET) {
-                const {path, visited} = Algorithms.runWithoutBombNode(
-                    AlgoType.BEST_FIRST_SEARCH,
-                    startNodeId,
-                    endNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            } else {
-                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                    AlgoType.BEST_FIRST_SEARCH,
-                    startNodeId,
-                    endNodeId,
-                    bombNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            }
-        })
-        .with('ts-3', async () => {
-            if (bombNodeId === NOTSET) {
-                const {path, visited} = Algorithms.runWithoutBombNode(
-                    AlgoType.BREADTH_FIRST_SEARCH,
-                    startNodeId,
-                    endNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            } else {
-                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                    AlgoType.BREADTH_FIRST_SEARCH,
-                    startNodeId,
-                    endNodeId,
-                    bombNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            }
-        })
-        .with('ts-4', async () => {
-            if (bombNodeId === NOTSET) {
-                const {path, visited} = Algorithms.runWithoutBombNode(
-                    AlgoType.DEPTH_FIRST_SEARCH,
-                    startNodeId,
-                    endNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            } else {
-                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                    AlgoType.DEPTH_FIRST_SEARCH,
-                    startNodeId,
-                    endNodeId,
-                    bombNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            }
-        })
-        .with('ts-5', async () => {
-            await Animator.animateRandomWalk(useFrontendStateManager.getState().startNodeId);
-            useFrontendStateManager.setState({block: false});
-            useFrontendStateManager.setState({randomPathId: NOTSET});
-            useFrontendStateManager.setState({executing : false});
-        })
-        .with('ts-8', async () => {
-            if (bombNodeId === NOTSET) {
-                const {path, visited} = Algorithms.runWithoutBombNode(
-                    AlgoType.DIJKSTRAS_SEARCH,
-                    startNodeId,
-                    endNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            } else {
-                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                    AlgoType.DIJKSTRAS_SEARCH,
-                    startNodeId,
-                    endNodeId,
-                    bombNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            }
-        })
-        .with('ts-10', async () => {
-            if (bombNodeId === NOTSET) {
-                const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
-                    startNodeId,
-                    endNodeId
-                )
-                await Animator.animateVisitedNodes(
-                    Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            } else {
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-                biDirectionalException = true
-            }
-        })
-        .with('ts-9', async () => {
-            if (bombNodeId === NOTSET) {
-                const {path, visited} = Algorithms.runWithoutBombNode(
-                    AlgoType.BELLMAN_FORD,
-                    startNodeId,
-                    endNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            } else {
-                const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
-                    AlgoType.BELLMAN_FORD,
-                    startNodeId,
-                    endNodeId,
-                    bombNodeId
-                );
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
-                await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
-                await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
-            }
-        });
-    return biDirectionalException ? Exception.BI_DIRECTIONAL_EXTRA_ARGS : false;
-
-}
-
 // Start Button.
 const StartButton = () => {
     const [error, setError] = React.useState<{
@@ -274,9 +44,9 @@ const StartButton = () => {
                 <Button disabled={useFrontendStateManager(state => state.block)} className="button" id="start-button"
                         onClick={() => {
                             const algoFile = useFrontendStateManager.getState().activeFiles.ts;
-                            const err = startButtonClick(algoFile)
+                            const err = StartButtonActions.startButtonClick(algoFile)
                             match(err)
-                                .with(Exception.START_NODE_NOTSET, () => setError({
+                                .with(StartButtonActions.Exception.START_NODE_NOTSET, () => setError({
                                     encountered: true,
                                     message: `
         Encountered a Runtime Exception while trying to execute, because:
@@ -284,7 +54,7 @@ const StartButton = () => {
         This exception is thrown by the Runtime Environment because no Start Node has been selected.`,
                                     header: "RTE 0x01"
                                 }))
-                                .with(Exception.END_NODE_NOTSET, () => setError({
+                                .with(StartButtonActions.Exception.END_NODE_NOTSET, () => setError({
                                     encountered: true,
                                     message: `
         Encountered a Runtime Exception while trying to execute, because:
@@ -292,7 +62,7 @@ const StartButton = () => {
         This exception is thrown by the Runtime Environment because no End Node has been selected.`,
                                     header: "RTE 0x02"
                                 }))
-                                .with(Exception.ALGORITHM_NOTSET, () => setError({
+                                .with(StartButtonActions.Exception.ALGORITHM_NOTSET, () => setError({
                                     encountered: true,
                                     message: `
         Encountered a Runtime Exception while trying to execute, because:
@@ -300,7 +70,7 @@ const StartButton = () => {
         Please select an algorithm before attempting to run the visualization.`,
                                     header: "RTE 0x03"
                                 }))
-                                .with(Exception.BI_DIRECTIONAL_EXTRA_ARGS, () => setError({
+                                .with(StartButtonActions.Exception.BI_DIRECTIONAL_EXTRA_ARGS, () => setError({
                                     encountered: true,
                                     message: `
         Encountered a Compile Time Exception while trying to compile, because:

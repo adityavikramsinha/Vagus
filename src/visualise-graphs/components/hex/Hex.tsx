@@ -31,7 +31,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     const isWallNode = nodeType === NodeType.WALL_NODE;
     const isWeightNode = nodeType === NodeType.WEIGHT_NODE;
 
-    const activeFilesIo = useFrontendStateManager(state => state.activeFiles.io);
+    const activeIOFile = useFrontendStateManager(state => state.activeFiles.io);
     const changeNode = useFrontendStateManager(state => state.changeNode);
     /**
      * Change hex type based on the active IO file.
@@ -49,7 +49,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
             changeNode(NodeType.WEIGHT_NODE, NodeAction.DELETE, id);
         } else if (isWallNode) {
             changeNode(NodeType.WALL_NODE, NodeAction.DELETE, id);
-        } else match(activeFilesIo)
+        } else match(activeIOFile)
             .with('io-1', () => changeNode(NodeType.START_NODE, NodeAction.SET, id))
             .with('io-2', () => changeNode(NodeType.END_NODE, NodeAction.SET, id))
             .with('io-3', () => changeNode(NodeType.BOMB_NODE, NodeAction.SET, id))

@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+    // opt-in ?? I dont think so.
+    experimental : {
+        reactCompiler : true
+    },
   reactStrictMode: true,
 };
 

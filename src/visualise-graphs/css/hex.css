@@ -16,9 +16,6 @@
     width: 34px;
     overflow: hidden
 }
-.hexagon:hover{
-    fill: white;
-}
 .icon {
     fill: var(--hex-color);
 }
