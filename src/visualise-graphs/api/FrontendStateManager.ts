@@ -33,7 +33,7 @@ type FrontendStateManagerProps = {
     visitedNodes : Map<number | NOTSET_t, NodeType.START_NODE | NodeType.BOMB_NODE>,
     pathNodes : Set<number | NOTSET_t>,
     randomPathId : number | NOTSET_t,
-    executing : boolean
+    executing : boolean,
 }
 
 type FrontendStateManagerActions = {
@@ -112,7 +112,7 @@ const useFrontendStateManager =
         visitedNodes : new Map(),
         pathNodes : new Set(),
         randomPathId : NOTSET,
-        executing : false
+        executing : false,
     }))
 
 export default useFrontendStateManager;

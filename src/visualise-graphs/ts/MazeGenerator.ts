@@ -1,4 +1,5 @@
 import useFrontendStateManager from "../api/FrontendStateManager";
+import Pipe from "../api/Pipe";
 
 /**
  * The basic maze generator class which builds the Sets required for
@@ -15,16 +16,17 @@ class MazeGenerator {
      * @returns a Set having the drawable IDs
      */
     static genRandomMaze(): Set<number> {
-        let path: Set<number> = new Set();
-        const size = useFrontendStateManager.getState().hexes.length;
-        for (let i = 0; i < size; i++) {
-            let randomID = Math.floor(Math.random() * size);
-            if (randomID !== useFrontendStateManager.getState().startNodeId &&
-                randomID !== useFrontendStateManager.getState().endNodeId &&
-                randomID !== useFrontendStateManager.getState().bombNodeId)
-                path.add(randomID);
+        let hexes = useFrontendStateManager.getState().hexes;
+        let maze: Set<number> = new Set();
+        for (let i = 0; i < hexes.length; i++) {
+            let randomId = Math.floor(Math.random() * hexes.length);
+            let hexId = hexes[randomId].id;
+            if (hexId !== useFrontendStateManager.getState().startNodeId &&
+                hexId !== useFrontendStateManager.getState().endNodeId &&
+                hexId !== useFrontendStateManager.getState().bombNodeId)
+                maze.add(hexes[randomId].id);
         }
-        return path;
+        return maze;
     }
 
     /**
@@ -37,36 +39,10 @@ class MazeGenerator {
      * Each Set contains a collection of IDs for the nodes which
      * can be blocked or changed to weight nodes on the website
      */
-    static genRidges(workableColumns: number,
-                     workableRows: number): Set<number> {
-        // first check for nullity case
-        if (workableColumns < 2 || workableRows < 2) {
-            return new Set();
-        }
-
-        // array to hold the "ridges"
-        let wallNodes: Set<number> = new Set();
-        // function which can be used to create 2 at random entry points for the path.
-        const generateRandomEntries = (colNo: number): {
-            p1: number,
-            p2: number
-        } => {
-            let p1: number = Math.floor(Math.random() * (workableRows) + (colNo * workableRows));
-            let p2: number = p1 + 1;
-            return {p1, p2}
-        }
-
-        for (let i: number = 0; i < workableColumns; i++) {
-            if ((i & 1) === 1) {
-                let entryPoints = generateRandomEntries(i);
-                for (let j: number = i * workableRows; j < workableRows * (i + 1); j++) {
-                    if (j !== entryPoints.p1 && j !== entryPoints.p2 && j !== useFrontendStateManager.getState().startNodeId && j !== useFrontendStateManager.getState().endNodeId && j !== useFrontendStateManager.getState().bombNodeId) {
-                        wallNodes.add(j);
-                    }
-                }
-            }
-        }
-        return wallNodes;
+    static genRidges(workableColumns: number, workableRows: number): Set<number> {
+        if (workableColumns < 2 || workableRows < 2) return new Set();
+        // FIXME, The Hex Board Rendering update has broken this, because this was too tightly
+        // coupled with the board being linear.
     }
 }
 
