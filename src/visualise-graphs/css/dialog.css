@@ -139,18 +139,19 @@
     }
 }
 .stop-dialog-cancel-button{
-    color: rgb(255, 255, 255);
+    color: inherit;
     justify-content: center;
+    font-weight: bold;
     align-items: center;
     padding: 0.5rem;
     border-radius: 5px;
-    background: rgba(38, 43, 61, 0.56);
+    background: white;
     border: none;
     cursor : pointer;
     transition: box-shadow 0.25s, background 0.25s
 }
 .stop-dialog-cancel-button:hover{
-    box-shadow: 0 0 0 3px rgba(38, 43, 61, 0.56);
+    box-shadow: 0 0 0 3px white;
 }
 
 .stop-dialog-content {
