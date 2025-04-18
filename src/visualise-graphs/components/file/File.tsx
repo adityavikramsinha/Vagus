@@ -46,13 +46,17 @@ const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
 
     let classes = cn({
         "file": true,
-        "file-active": isActiveFile
     })
+    let styles: React.CSSProperties = {
+        background: "rgba(255, 255, 255, 0.05)",
+        borderRadius: "4px"
+    }
     return (
         <div
             className={classes}
             id={id}
             onClick={handleFileClick}
+            style={ isActiveFile ? styles : {}}
         >
             {Icon}
             <p className="file-name">{name}</p>

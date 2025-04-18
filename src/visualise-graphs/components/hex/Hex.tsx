@@ -77,7 +77,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
 
     // Apply classes based on node type
     let classes = cn({
-        "prop-holder": true,
+        "node-holder": true,
         "start-node": isStartNode,
         "bomb-node": isBombNode,
         "end-node": isEndNode,

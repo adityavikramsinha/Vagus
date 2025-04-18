@@ -20,7 +20,7 @@
     fill: var(--hex-color);
 }
 
-.prop-holder {
+.node-holder {
     position: absolute;
     z-index: 1;
     width: 100%;

@@ -1,10 +1,10 @@
 import * as React from "react";
 import * as FolderIcons from "@graph/components/folder/FolderIcons";
+import cn from "../../css/cn";
 
 type FolderProps = {
     children: React.ReactNode;
     name: string;
-    divClassName: string;
 };
 
 /**
@@ -16,25 +16,34 @@ type FolderProps = {
  */
 const Folder: React.FC<FolderProps> = ({
                                            children,
-                                           name,
-                                           divClassName
+                                           name
                                        }) => {
     const [isExpanded, setIsExpanded] = React.useState(true);
     const toggle = () => setIsExpanded(prev => !prev);
+    const style = {
+        paddingLeft: `${name === "graphs" ? "18px" : "20px"}`,
+        cursor:"pointer "
+    }
+
+    const arrowClasses = cn({
+        "arrow-icon": true,
+        "rotated" : !isExpanded
+    })
     return (
-        <div className={divClassName}>
-            <div className="folder-id" onClick={toggle}>
-                <div className={`arrow-icon ${!isExpanded ? "rotated" : ""}`}>
+        <div style={style} >
+            <div className="folder-misc" onClick={toggle}>
+                <div className={arrowClasses}>
                     <FolderIcons.ArrowIcon/>
                 </div>
                 {isExpanded ? <FolderIcons.FolderOpenIcon/> : <FolderIcons.FolderClosedIcon/>}
-                <div className="folder-title">{name}</div>
+                <div className="folder-name">{name}</div>
             </div>
-            {isExpanded && <div className="folder-children">
-                <div className="folder-drop-inner">
-                    {children}
-                </div>
-            </div>}
+            {isExpanded &&
+                <div className="folder-children">
+                    <div>
+                        {children}
+                    </div>
+                </div>}
         </div>
     );
 };

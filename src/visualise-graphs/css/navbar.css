@@ -19,18 +19,11 @@
 .title {
     font-size: 1.5rem;
 }
-
-.project-title {
-    margin: 0 0 0 2%;
-    padding: 0;
-    width: 73%;
-}
-
 .buttons {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    gap: 5px;
+    gap: 10px;
 }
 
 .folder-panel {
@@ -57,12 +50,7 @@
     background: var(--sb-color-track);
 }
 
-.arrow {
-    transition: all 0.25s;
-    display: inline-block;
-}
-
-.folder-id{
+.folder-misc{
     display:flex;
     flex-direction:row;
     flex-wrap:nowrap;
@@ -70,25 +58,7 @@
     align-items:center;
     gap:5px;
 }
-
-.folder{
-    padding: 0 0 1px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-left: 7px;
-    margin-top: 1%;
-    cursor:pointer;
-}
-
-.folder-drop {
-}
-
-.folder-drop-inner {
-    margin-left: 7px;
-}
-
-.folder-title {
+.folder-name {
     font-size: 0.75rem;
     font-weight: 300;
 }
@@ -100,44 +70,16 @@
 }
 
 .file {
-    padding: 3px 0 3px 18px;
+    padding: 3px 0 3px 22px;
+    margin: 0 0 0 18px;
     display: flex;
-    background-color: var(--file-bg);
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 5px;
 }
 
-.file-active {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-}
-
-
-.advanced-cp-border {
-    margin-left: 5px;
-    margin-right: 0;
-}
 .rotated {
     transform: rotate(-90deg);
-}
-.weighted-cp-border {
-    border-left: 1px solid var(--cmd-border);
-    margin-left: 5px;
-    margin-right: 0;
-}
-
-.advanced-cp-comp {
-    margin-left: 4px;
-}
-
-.folder-less-file {
-    padding: 5px 0 3px 15px;
-    margin: 3px 0 0 0;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 5px;
 }
 
 @media (max-width: 1168px) {
