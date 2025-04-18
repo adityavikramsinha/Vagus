@@ -73,7 +73,7 @@ const StartButton = () => {
                                 .with(StartButtonActions.Exception.BI_DIRECTIONAL_EXTRA_ARGS, () => setError({
                                     encountered: true,
                                     message: `
-        Encountered a Compile Time Exception while trying to compile, because:
+        Encountered a Compile Time Error while trying to compile, because:
         Argument mismatch occurred.
         A Bi Directional Search cannot be started with a Bomb Node, Start Node & End Node.
         You must have only 2 Nodes, (Start Node & End Node).

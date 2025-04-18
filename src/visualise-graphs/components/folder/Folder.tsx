@@ -29,13 +29,20 @@ const Folder: React.FC<FolderProps> = ({
         "arrow-icon": true,
         "rotated" : !isExpanded
     })
+    const folderIconClasses = cn({
+        "folder-icon" : true,
+        "open" : isExpanded,
+        "close" : !isExpanded
+    })
     return (
         <div style={style} >
             <div className="folder-misc" onClick={toggle}>
                 <div className={arrowClasses}>
                     <FolderIcons.ArrowIcon/>
                 </div>
-                {isExpanded ? <FolderIcons.FolderOpenIcon/> : <FolderIcons.FolderClosedIcon/>}
+                <div className={folderIconClasses}>
+                    {isExpanded ? <FolderIcons.FolderOpenIcon/> : <FolderIcons.FolderClosedIcon/>}
+                </div>
                 <div className="folder-name">{name}</div>
             </div>
             {isExpanded &&
