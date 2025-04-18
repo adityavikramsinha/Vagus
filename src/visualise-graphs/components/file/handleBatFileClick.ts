@@ -1,6 +1,6 @@
 import {match} from "ts-pattern";
 import {MazeType} from "@graph/ts/Types";
-import MazeGenerator from "@graph/ts/MazeGenerator";
+import MazeGenerator from "../../api/MazeGenerator";
 import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
 import Syncer from "@graph/api/Syncer";
 
@@ -23,16 +23,16 @@ const handleBatFileClick = (
     match(name as MazeType)
         .with(MazeType.GENERATE_BLOCKED_RIDGES, () => {
             const maze = MazeGenerator.genRidges(
-                Math.ceil(hexBoardDimensions.height / HEX_HEIGHT),
-                Math.ceil(hexBoardDimensions.width / HEX_WIDTH)
+                Math.ceil(hexBoardDimensions.width / HEX_WIDTH),
+                Math.ceil(hexBoardDimensions.height / HEX_HEIGHT)
             );
             const hexBoard = useFrontendStateManager.getState().hexBoard;
             maze.forEach(id => hexBoard[id] = NodeType.WALL_NODE)
         })
         .with(MazeType.GENERATE_WEIGHTED_RIDGES, () => {
             const maze = MazeGenerator.genRidges(
-                Math.ceil(hexBoardDimensions.height / HEX_HEIGHT),
-                Math.ceil(hexBoardDimensions.width / HEX_WIDTH)
+                Math.ceil(hexBoardDimensions.width / HEX_WIDTH),
+                Math.ceil(hexBoardDimensions.height / HEX_HEIGHT)
             );
             const hexBoard = useFrontendStateManager.getState().hexBoard;
             maze.forEach(id => hexBoard[id] = NodeType.WEIGHT_NODE) // Changed to use direct hexBoard update

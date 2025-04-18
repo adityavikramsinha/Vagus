@@ -1,21 +1,25 @@
-import {HexProps} from "@graph/components/hex/Hex";
-import Syncer from "@graph/api/Syncer";
-
+import {HexProps} from "../hex/Hex";
+import Syncer from "../../api/Syncer";
+import Pipe from "../../api/Pipe";
 const populateHexBoard = (rows: number, cols: number, HEX_WIDTH: number, HEX_HEIGHT: number) => {
     let content: HexProps[] = [];
-    let xVar = -14.5;
-    let yVar: number;
-    let idVar = 0;
-    for (let i = 0; i < cols; i++, xVar += HEX_WIDTH) {
-        // since the hexagons aren't in straight lines,
-        // we have to account for odd even.
-        yVar = (i & 1) === 1 ? -2.5 : -17;
-        for (let j = 0; j < rows; j++, idVar++) {
-            content.push({x: xVar, y: yVar, id: idVar});
-            yVar += HEX_HEIGHT;
-            Syncer.setNode(xVar, yVar, idVar)
+    let x = -14.5;
+
+    for (let col = 0; col < cols; col++, x += HEX_WIDTH) {
+        const isOddCol = (col & 1) === 1;
+        let y = isOddCol ? -2.5 : -17;
+
+        // see https://www.redblobgames.com/grids/hexagons/#coordinates-doubled for visualisation
+        let doubledCoordinates = isOddCol ? 1 : 0;
+
+        for (let row = 0; row < rows; row++, doubledCoordinates += 2, y += HEX_HEIGHT) {
+            const id = Pipe.pairToUUID(doubledCoordinates, col);
+            content.push({ x, y, id });
+            Syncer.setNode(x, y, id);
         }
     }
+
     return content;
-}
+};
+
 export default populateHexBoard;

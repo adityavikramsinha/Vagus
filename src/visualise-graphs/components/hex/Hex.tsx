@@ -6,6 +6,7 @@ import {NOTSET} from "@graph/ts/Types";
 import cn from "@graph/css/cn";
 import {match} from "ts-pattern";
 import {FileType} from "../file/File";
+import BackendStateManager from "../../api/BackendStateManager";
 
 export type HexProps = {
     x: number;
@@ -33,6 +34,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
 
     const activeIOFile = useFrontendStateManager(state => state.activeFiles.io);
     const changeNode = useFrontendStateManager(state => state.changeNode);
+
     /**
      * Change hex type based on the active IO file.
      */
@@ -65,7 +67,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
 
     // Apply classes on the Hex Icon.
     let hexIconClasses = cn({
-        "visited-node": (visited === NodeType.START_NODE) && !pathNode,
+        "visited-node": (visited === NodeType.START_NODE) && !pathNode ,
         "icon": true,
         "visited-node-bomb": (visited === NodeType.BOMB_NODE) && !pathNode,
         "path-node": pathNode,

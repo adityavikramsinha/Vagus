@@ -1,7 +1,8 @@
 import BackendStateManager from "@graph/api/BackendStateManager";
 import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
-import {NOTSET, NOTSET_t} from "@graph/ts/Types";
+import {NOTSET} from "@graph/ts/Types";
 import Graph from "@graph/ts/Graph";
+import Pipe from "./Pipe";
 
 export default class Syncer {
 
@@ -25,98 +26,32 @@ export default class Syncer {
         BackendStateManager.graph().rmNode(id);
     }
 
+    // STABLE.
     static setGraph(
         rows: number,
         cols: number,
-        ids: number
     ) {
-        let columnID = 0;
-        let columnIDCenter = 0;
-        for (let i = 0; i < ids; i++) {
-            // first row conditions
-            if (i % rows === 0) {
-                columnID = i / rows;
-                if (columnID === 0) { // adj 2
-                    Syncer.setEdge(i, i + 1)
-                    Syncer.setEdge(i, i + rows)
-                } else if (columnID === cols - 1) {
-                    if (cols % 2 === 0) { // adj 3
-                        Syncer.setEdge(i, i + 1)
-                        Syncer.setEdge(i, i - rows)
-                        Syncer.setEdge(i, i - rows + 1)
-                    } else { // adj 2
-                        Syncer.setEdge(i, i + 1)
-                        Syncer.setEdge(i, i - rows)
+        // New implementation,
+        // 1st one is col, 2nd one is row.
+        // see https://www.redblobgames.com/grids/hexagons/#coordinates-doubled for visualisation + logic.
+        const offsets = [
+            [0, 2], [0, -2], [1, -1], [1, + 1], [-1, -1], [-1, +1]
+        ];
+
+        // Absolutely gorgeous.
+        for (let col = 0; col < cols; ++col) {
+            const startDoubledRow = (col & 1) === 1 ? 1 : 0;
+            for (let row = 0, doubledCoordinates = startDoubledRow; row < rows; ++row, doubledCoordinates += 2) {
+                const fromId = Pipe.pairToUUID(doubledCoordinates, col);
+                for (const [dc, dr] of offsets) {
+                    // dc, dx (differential element?) and Delta Column and Delta Double Coordinates (c+dc)
+                    const Dc = col + dc;
+                    const Ddc = doubledCoordinates + dr;
+                    // Bounds: col [0, cols), doubledRow [0, 2 * rows)
+                    if (Dc >= 0 && Dc < cols && Ddc >= 0 && Ddc < 2 * rows) {
+                        const toId = Pipe.pairToUUID(Ddc, Dc);
+                        Syncer.setEdge(fromId, toId);
                     }
-                } else if (columnID % 2 === 0) { // 3 adj
-                    Syncer.setEdge(i, i + 1)
-                    Syncer.setEdge(i, i - rows)
-                    Syncer.setEdge(i, i + rows + 1)
-                } else { // 5 adj
-                    Syncer.setEdge(i, i + 1)
-                    Syncer.setEdge(i, i - rows)
-                    Syncer.setEdge(i, i + rows)
-                    Syncer.setEdge(i, i - rows + 1)
-                    Syncer.setEdge(i, i + rows + 1)
-                }
-            }
-            // last row conditions
-            else if ((i + 1) % rows === 0) {
-                columnID = (i + 1) / rows;
-                if (columnID === 1) { // adj 3
-                    Syncer.setEdge(i, i - 1)
-                    Syncer.setEdge(i, i + rows)
-                    Syncer.setEdge(i, i + rows - 1)
-                } else if (columnID === cols) {
-                    if (cols % 2 === 0) { // adj 2
-                        Syncer.setEdge(i, i - 1)
-                        Syncer.setEdge(i, i - rows)
-                    } else { // adj 3
-                        Syncer.setEdge(i, i - 1)
-                        Syncer.setEdge(i, i - rows)
-                        Syncer.setEdge(i, i - rows - 1)
-                    }
-                } else if (columnID % 2 === 0) { // 3 adj
-                    Syncer.setEdge(i, i - 1)
-                    Syncer.setEdge(i, i - rows)
-                    Syncer.setEdge(i, i + rows)
-                } else { // 5 adj
-                    Syncer.setEdge(i, i - 1)
-                    Syncer.setEdge(i, i - rows)
-                    Syncer.setEdge(i, i + rows)
-                    Syncer.setEdge(i, i - rows - 1)
-                    Syncer.setEdge(i, i + rows - 1)
-                }
-            }
-            // first column conditions
-            else if (i <= rows) { // adj 4
-                Syncer.setEdge(i, i - 1)
-                Syncer.setEdge(i, i + 1)
-                Syncer.setEdge(i, i + rows)
-                Syncer.setEdge(i, i + rows - 1)
-            }
-            //last column conditions
-            else if (i > (rows * (cols - 1))) { // adj 4
-                Syncer.setEdge(i, i - 1)
-                Syncer.setEdge(i, i + 1)
-                Syncer.setEdge(i, i - rows)
-                Syncer.setEdge(i, i - rows - 1)
-            } else { // adj 6
-                columnIDCenter = Math.floor(i / rows);
-                if (columnIDCenter % 2 !== 0) {
-                    Syncer.setEdge(i, i - 1)
-                    Syncer.setEdge(i, i + 1)
-                    Syncer.setEdge(i, i - rows)
-                    Syncer.setEdge(i, i + rows)
-                    Syncer.setEdge(i, i - rows + 1)
-                    Syncer.setEdge(i, i + rows + 1)
-                } else if (columnIDCenter % 2 === 0) {
-                    Syncer.setEdge(i, i - 1)
-                    Syncer.setEdge(i, i + 1)
-                    Syncer.setEdge(i, i - rows)
-                    Syncer.setEdge(i, i + rows)
-                    Syncer.setEdge(i, i - rows - 1)
-                    Syncer.setEdge(i, i + rows - 1)
                 }
             }
         }
@@ -157,6 +92,5 @@ export default class Syncer {
     static async supervise(fn: ()=> Promise<void> | void) {
         if (!useFrontendStateManager.getState().executing) return;
         await fn();
-
     }
 }

@@ -32,4 +32,16 @@ export default class Pipe {
         }
         return map;
     }
+
+    /**
+     * Implementation of Szudzik's Elegant Pair function for two integers. It pipes 2 numbers through a tunnel
+     * and returns a collision free deterministic and unique consolidated integer every single time, and can serve
+     * the purpose of UUID in this case since it is easily reproducible. See {@link [this](http://szudzik.com/ElegantPairing.pdf)} for detailed paper
+     * and {@link [here](https://stackoverflow.com/questions/919612/mapping-two-integers-to-one-in-a-unique-and-deterministic-way)} for reference
+     * @param x
+     * @param y
+     */
+    public static pairToUUID(x : number , y : number) {
+        return Math.max(x, y) === x ? x * x + x + y : y * y + x;
+    }
 }
