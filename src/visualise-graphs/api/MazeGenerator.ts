@@ -1,5 +1,5 @@
-import useFrontendStateManager from "../api/FrontendStateManager";
-import Pipe from "../api/Pipe";
+import useFrontendStateManager from "./FrontendStateManager";
+import Pipe from "./Pipe";
 
 /**
  * The basic maze generator class which builds the Sets required for
@@ -41,8 +41,34 @@ class MazeGenerator {
      */
     static genRidges(workableColumns: number, workableRows: number): Set<number> {
         if (workableColumns < 2 || workableRows < 2) return new Set();
-        // FIXME, The Hex Board Rendering update has broken this, because this was too tightly
-        // coupled with the board being linear.
+
+        let maze = new Set<number>()
+
+        const getDoors = (rows : number) :  [number, number] => {
+            const a = Math.floor(Math.random() * rows);
+            let b = Math.floor(Math.random() * (rows - 1));
+            if (b >= a) b += 1; // avoid collisions
+
+            return [a, b];
+        }
+
+        for (let col = 0 ; col<workableColumns ;col +=2){
+            // keep 2 random hex's/nodes in the column free to move around.
+            let [door1, door2] = getDoors(workableRows);
+            for (let row = 0 , doubledCoordinates = (col & 1) ===1 ? 1 : 0; row <workableRows ; ++row , doubledCoordinates +=2) {
+                const id = Pipe.pairToUUID(doubledCoordinates, col);
+                const startNodeId = useFrontendStateManager.getState().startNodeId;
+                const endNodeId = useFrontendStateManager.getState().endNodeId;
+                const bombNodeId = useFrontendStateManager.getState().bombNodeId;
+                if(door1 !== row &&
+                    door2 !== row &&
+                    id !== startNodeId &&
+                    id !== endNodeId &&
+                    id !== bombNodeId
+                ) maze.add(id);
+            }
+        }
+        return maze;
     }
 }
 

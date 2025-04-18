@@ -26,14 +26,14 @@ export default class Syncer {
         BackendStateManager.graph().rmNode(id);
     }
 
-    // UNSTABLE.
+    // STABLE.
     static setGraph(
         rows: number,
         cols: number,
     ) {
         // New implementation,
         // 1st one is col, 2nd one is row.
-        // see https://www.redblobgames.com/grids/hexagons/#coordinates-doubled this visualisation + logic.
+        // see https://www.redblobgames.com/grids/hexagons/#coordinates-doubled for visualisation + logic.
         const offsets = [
             [0, 2], [0, -2], [1, -1], [1, + 1], [-1, -1], [-1, +1]
         ];
@@ -44,6 +44,7 @@ export default class Syncer {
             for (let row = 0, doubledCoordinates = startDoubledRow; row < rows; ++row, doubledCoordinates += 2) {
                 const fromId = Pipe.pairToUUID(doubledCoordinates, col);
                 for (const [dc, dr] of offsets) {
+                    // dc, dx (differential element?) and Delta Column and Delta Double Coordinates (c+dc)
                     const Dc = col + dc;
                     const Ddc = doubledCoordinates + dr;
                     // Bounds: col [0, cols), doubledRow [0, 2 * rows)
@@ -91,6 +92,5 @@ export default class Syncer {
     static async supervise(fn: ()=> Promise<void> | void) {
         if (!useFrontendStateManager.getState().executing) return;
         await fn();
-
     }
 }
