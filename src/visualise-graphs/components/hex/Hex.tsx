@@ -5,8 +5,6 @@ import useFrontendStateManager, {NodeAction, NodeType} from "@graph/api/Frontend
 import {NOTSET} from "@graph/ts/Types";
 import cn from "@graph/css/cn";
 import {match} from "ts-pattern";
-import {FileType} from "../file/File";
-import BackendStateManager from "../../api/BackendStateManager";
 
 export type HexProps = {
     x: number;

@@ -5,13 +5,13 @@ import useFrontendStateManager, {NodeAction, NodeType} from "@graph/api/Frontend
 import Syncer from "@graph/api/Syncer";
 import BackendStateManager from "@graph/api/BackendStateManager";
 import Pipe from "../../api/Pipe";
+import getHexes from "./getHexes";
 
 /**
  * Renders the hexagonal board.
  * @returns JSX.Element
  */
 const HexBoard: React.FC = () => {
-    const setHexBoard = useFrontendStateManager(s => s.setHexBoard);
     const setHexBoardDimensions = useFrontendStateManager(state => state.setHexBoardDimensions);
     const changeNode = useFrontendStateManager(state => state.changeNode);
     const [isLoading, setLoading] = React.useState<boolean>(true);
@@ -22,12 +22,23 @@ const HexBoard: React.FC = () => {
 
     React.useEffect(() => {
         const handleResize = () => {
+
+            // If we are setting the graphs,
+            // then we must ensure that the Initial Graph is clean and does not
+            // hold reference to any previous object, or else it will become soup.
+            BackendStateManager.resetInitialGraph();
+            // We don't need to reset the current graph. Since it is always updating, it doesn't
+            // make sense for us to reset it and clean it up because for each run it
+            // is reconstructed anyway.
+
             const width = 0.73 * window.innerWidth;
             const height = window.innerHeight;
             const rows = Math.ceil(height / HEX_HEIGHT);
             const cols = Math.ceil(width / HEX_WIDTH);
-            setHexBoard(rows, cols, HEX_WIDTH, HEX_HEIGHT);
-            Syncer.setGraph(rows, cols);
+
+            useFrontendStateManager.setState({hexes : getHexes(rows , cols ,HEX_WIDTH, HEX_HEIGHT)});
+            Syncer.setGraph(useFrontendStateManager.getState().hexes)
+                  .connectGraph(rows, cols);
             setLoading(false);
             let startPosition = Math.floor((rows * cols) * 0.25);
             let endPosition = Math.floor((rows * cols) * 0.75);
@@ -48,6 +59,9 @@ const HexBoard: React.FC = () => {
             changeNode(NodeType.START_NODE, NodeAction.SET, startId);
             changeNode(NodeType.END_NODE, NodeAction.SET, endId);
             setHexBoardDimensions({width, height});
+
+            // We must now freeze the initial graph,
+            // so that no further changes can occur.
             BackendStateManager.initGraph().freeze();
         };
         handleResize() // First time when mount has happened

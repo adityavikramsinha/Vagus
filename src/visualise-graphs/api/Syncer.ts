@@ -3,6 +3,7 @@ import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager
 import {NOTSET} from "@graph/ts/Types";
 import Graph from "@graph/ts/Graph";
 import Pipe from "./Pipe";
+import {HexProps} from "../components/hex/Hex";
 
 export default class Syncer {
 
@@ -26,20 +27,21 @@ export default class Syncer {
         BackendStateManager.graph().rmNode(id);
     }
 
-    // STABLE.
-    static setGraph(
+    /**
+     * Set up the graph by initialising nodes that will be a part of the graph
+     * but not connecting them,
+     * @param hexes holds the information for the nodes
+     */
+    static setGraph (hexes : HexProps []) {
+        hexes.forEach(({x,y,id})=> Syncer.setNode(x, y, id));
+        return this;
+    }
+
+    // STABLE. (v2.0.0)
+    static connectGraph(
         rows: number,
         cols: number,
     ) {
-        // If we are setting the graphs,
-        // then we must ensure that the Initial Graph is clean and does not
-        // hold reference to any previous object, or else it will become soup.
-        BackendStateManager.resetInitialGraph();
-        // We don't need to reset the current graph. Since it is always updating, it doesn't
-        // make sense for us to reset it and clean it up because for each run it
-        // is reconstructed anyways.
-
-
         // New implementation,
         // 1st one is col, 2nd one is row.
         // see https://www.redblobgames.com/grids/hexagons/#coordinates-doubled for visualisation + logic.
@@ -64,6 +66,7 @@ export default class Syncer {
                 }
             }
         }
+        return this;
     }
 
     static updateEdge(source: number, dest: number) {

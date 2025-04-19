@@ -2,7 +2,6 @@ import {create} from 'zustand'
 import {NOTSET, NOTSET_t} from "@graph/ts/Types";
 import {FileType} from "@graph/components/file/File";
 import {HexProps} from "@graph/components/hex/Hex";
-import populateHexBoard from "@graph/components/hex-board/populateHexBoard";
 import {match, P} from "ts-pattern";
 
 export enum NodeAction {
@@ -38,7 +37,6 @@ type FrontendStateManagerProps = {
 
 type FrontendStateManagerActions = {
     changeActiveFiles : (newActiveFileId : string, fileType : FileType)=> void,
-    setHexBoard  :(rows : number, cols : number , HEX_WIDTH : number, HEX_HEIGHT : number) => void,
     changeNode (nodeType : NodeType, actionType: NodeAction , id : number | NOTSET_t) : void,
     setHexBoardDimensions : (dimension :{width : number, height:number})=>void,
 }
@@ -64,7 +62,6 @@ const useFrontendStateManager =
             })
         ),
         hexes : [],
-        setHexBoard :(rows, cols, HEX_WIDTH, HEX_HEIGHT) => set({hexes : populateHexBoard(rows , cols , HEX_WIDTH, HEX_HEIGHT)}),
         weightNodes : new Set(),
         changeNode: (nodeType, nodeAction, id) =>
             set((state) => {
