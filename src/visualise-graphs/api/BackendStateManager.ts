@@ -11,14 +11,10 @@ import Graph from "@graph/ts/Graph";
 export default class BackendStateManager {
 
     // Current graph
-    private static PRES_GRAPH: Graph<number>= new Graph<number>((a,b):number=>{
-        return a === b ? 0 : a < b? -1 : 1;
-    });
+    private static PRES_GRAPH: Graph<number>= new Graph<number>((a,b)=>a-b);
 
     // Initialising graph.
-    private static INIT_GRAPH: Graph<number>= new Graph<number>((a,b)=>{
-        return a === b ? 0 : a < b ? -1 : 1;
-    });
+    private static INIT_GRAPH: Graph<number>= new Graph<number>((a,b)=> a-b);
 
     /**
      *
@@ -34,5 +30,19 @@ export default class BackendStateManager {
      */
     static initGraph(): Graph<number> {
         return this.INIT_GRAPH;
+    }
+
+    /**
+     * Resets the present graph to clean new graph.
+     */
+    static resetGraph() {
+        this.PRES_GRAPH = new Graph<number>((a,b)=> a-b);
+    }
+
+    /**
+     * Resets the initial graph to a clean new graph.
+     */
+    static resetInitialGraph () {
+        this.INIT_GRAPH = new Graph<number>((a,b)=> a-b);
     }
 }

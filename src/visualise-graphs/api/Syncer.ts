@@ -31,6 +31,15 @@ export default class Syncer {
         rows: number,
         cols: number,
     ) {
+        // If we are setting the graphs,
+        // then we must ensure that the Initial Graph is clean and does not
+        // hold reference to any previous object, or else it will become soup.
+        BackendStateManager.resetInitialGraph();
+        // We don't need to reset the current graph. Since it is always updating, it doesn't
+        // make sense for us to reset it and clean it up because for each run it
+        // is reconstructed anyways.
+
+
         // New implementation,
         // 1st one is col, 2nd one is row.
         // see https://www.redblobgames.com/grids/hexagons/#coordinates-doubled for visualisation + logic.
