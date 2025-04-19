@@ -310,8 +310,7 @@ export default class Algorithms<T> {
 
         // Set of visited nodes inorder
         let visited: Set<T> = new Set();
-
-        // Map to help in pathj reconstruction
+        // Map to help in path reconstruction
         let prev: Map<T, T> = new Map();
 
         // Set all the dist to Infinity
@@ -320,12 +319,20 @@ export default class Algorithms<T> {
             node.getData() !== start ? dist.set(node.getData(), Infinity) : dist.set(start, 0);
         });
 
-        // then we take the size and make it V
+        // then we take the count of the number of vertices
+        // since Bellman ford must go from 0...V-1 (at most). It can end before
+        // too.
         const V = this.graph.nodes().size;
 
-        // for V - 1 times we run this loop from 0....V-1.
-        for (let v: number = 0; v < V - 1; v++) {
+        // this keeps track of number of relaxations in a pass through
+        // if the changes goes down to 0, then we know any subsequent pass will yield the same
+        // results so we can ignore 0...V-1 and do less
+        // it's a quirky optimisation.
+        let changes = 1 ;
 
+        for (let v = 0; v < V - 1 && changes > 0 ; v++) {
+
+            changes = 0
             // each time we go through each node of the graph
             this.graph.nodes().forEach((node) => {
 
@@ -350,6 +357,9 @@ export default class Algorithms<T> {
 
                         // set it as a possible path candidate
                         prev.set(edge.dest.getData(), node.getData());
+
+                        // update changes
+                        changes ++;
                     }
                 })
             })
