@@ -243,7 +243,7 @@ export default class Algorithms<T> {
         // this is just to reconstruct the path for a*;
         let path: T[] = [];
 
-        // if distance if infinity
+        // if distance is infinity,
         // we automatically understand no path is possible
         // thus, return null
         if (dist.get(end) === Infinity)
