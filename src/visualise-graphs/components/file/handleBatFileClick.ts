@@ -26,32 +26,37 @@ const handleBatFileClick = (
                 Math.ceil(hexBoardDimensions.width / HEX_WIDTH),
                 Math.ceil(hexBoardDimensions.height / HEX_HEIGHT)
             );
-            const hexBoard = useFrontendStateManager.getState().hexBoard;
-            maze.forEach(id => hexBoard[id] = NodeType.WALL_NODE)
+            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            maze.forEach(id => updatedHexBoard[id] = NodeType.WALL_NODE)
+            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
         })
         .with(MazeType.GENERATE_WEIGHTED_RIDGES, () => {
             const maze = MazeGenerator.genRidges(
                 Math.ceil(hexBoardDimensions.width / HEX_WIDTH),
                 Math.ceil(hexBoardDimensions.height / HEX_HEIGHT)
             );
-            const hexBoard = useFrontendStateManager.getState().hexBoard;
-            maze.forEach(id => hexBoard[id] = NodeType.WEIGHT_NODE) // Changed to use direct hexBoard update
+            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            maze.forEach(id => updatedHexBoard[id] = NodeType.WEIGHT_NODE)
+            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
         })
         .with(MazeType.GENERATE_RANDOM_MAZE, () => {
             const maze = MazeGenerator.genRandomMaze();
-            const hexBoard = useFrontendStateManager.getState().hexBoard;
-            maze.forEach(id => hexBoard[id] = (Math.floor(
+            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            maze.forEach(id => updatedHexBoard[id] = (Math.floor(
                 Math.random() * 2) & 1) == 1 ? NodeType.WALL_NODE : NodeType.WEIGHT_NODE)
+            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
         })
         .with(MazeType.GENERATE_WEIGHTED_RANDOM_MAZE, () => {
             const maze = MazeGenerator.genRandomMaze();
-            const hexBoard = useFrontendStateManager.getState().hexBoard;
-            maze.forEach(id => hexBoard[id] = NodeType.WEIGHT_NODE) // Changed to use direct hexBoard update
+            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            maze.forEach(id => updatedHexBoard[id] = NodeType.WEIGHT_NODE);
+            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
         })
-        .with(MazeType.GENERATE_BLOCKED_RANDOM_MAZE, () => {
+        .with(MazeType.GENERATE_BLOCKED_RANDOM_MAZE, async () => {
             const maze = MazeGenerator.genRandomMaze();
-            const hexBoard = useFrontendStateManager.getState().hexBoard;
-            maze.forEach(id => hexBoard[id] = NodeType.WALL_NODE) // Changed to use direct hexBoard update
+            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            maze.forEach(id => updatedHexBoard[id] = NodeType.WALL_NODE);
+            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
         })
         .exhaustive()
 }
