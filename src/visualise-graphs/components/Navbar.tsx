@@ -21,6 +21,8 @@ import {
     WeightNodeIcon
 } from "@graph/components/file/FileIcons";
 import Syncer from "@graph/api/Syncer";
+import handleBatFileClick from "./file/handleBatFileClick";
+import {MazeType} from "../ts/Types";
 
 const Navbar: FC = () => {
     return (
@@ -144,6 +146,7 @@ const Navbar: FC = () => {
                             id="bat-1"
                             type={FileType.BAT}
                             Icon={<BatFileIcon/>}
+                            onClick ={() => handleBatFileClick(MazeType.GENERATE_RANDOM_MAZE)}
                         />
                         <Folder name="wall">
                             <File
@@ -151,12 +154,14 @@ const Navbar: FC = () => {
                                 id="bat-3"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
+                                onClick ={() => handleBatFileClick(MazeType.GENERATE_BLOCKED_RIDGES)}
                             />
                             <File
                                 name="generateBlockedRandomMaze.bat"
                                 id="bat-4"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
+                                onClick ={() => handleBatFileClick(MazeType.GENERATE_BLOCKED_RANDOM_MAZE)}
                             />
                         </Folder>
                         <Folder name="weighted">
@@ -165,12 +170,15 @@ const Navbar: FC = () => {
                                 id="bat-5"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
+                                onClick ={() => handleBatFileClick(MazeType.GENERATE_WEIGHTED_RIDGES)}
                             />
                             <File
                                 name="generateWeightedRandomMaze.bat"
                                 id="bat-6"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
+                                onClick ={() => handleBatFileClick(MazeType.GENERATE_WEIGHTED_RANDOM_MAZE)}
+
                             />
                         </Folder>
                     </Folder>

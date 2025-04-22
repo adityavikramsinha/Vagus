@@ -17,7 +17,8 @@ export type FileProps = {
     type: FileType,
     id: string,
     name: string,
-    Icon: React.JSX.Element
+    Icon: React.JSX.Element,
+    onClick ?: () => void
 }
 
 /**
@@ -25,25 +26,14 @@ export type FileProps = {
  * @param id id for keeping track of the active file.
  * @param name name of the file
  * @param Icon Icon depending on the extension (FileType)
+ * @param OnClick Is a function that is to be executed when the File is Clicked,
+ *                by default, when the file is clicked the function to be executed is related to the internal
+ *                state and style of the file. But extra functionality can be added via the onClick function for
+ *                specific files.
  */
-const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
+const File: React.FC<FileProps> = ({type, id, name, Icon, onClick}) => {
     const isActiveFile = useFrontendStateManager(state => state.activeFiles[type] === id);
     const changeActiveFiles = useFrontendStateManager(state => state.changeActiveFiles);
-    const {
-        HEX_WIDTH,
-        HEX_HEIGHT
-    } = useFrontendStateManager(state => state.hexDimensions)
-
-    const handleFileClick = () => {
-        if (type === FileType.GUI) return;
-        changeActiveFiles(id, type);
-        match(type)
-            .with(FileType.BAT,
-                () => handleBatFileClick(name.substring(0, name.lastIndexOf('.')), HEX_HEIGHT, HEX_WIDTH))
-            .otherwise(() => {
-            })
-    }
-
     let classes = cn({
         "file": true,
     })
@@ -55,7 +45,11 @@ const File: React.FC<FileProps> = ({type, id, name, Icon}) => {
         <div
             className={classes}
             id={id}
-            onClick={handleFileClick}
+            onClick={()=>{
+                if (type !== FileType.GUI)
+                    changeActiveFiles(id, type);
+                onClick?.();
+            }}
             style={ isActiveFile ? styles : {}}
         >
             {Icon}

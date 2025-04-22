@@ -6,21 +6,17 @@ import Syncer from "@graph/api/Syncer";
 
 /**
  * Handles the click of a File (specifically Bat) and then delegates the
- * Maze generation to a pattern matcher that systemically goes and tries to
+ * Maze generation to a matcher that systemically goes and tries to
  * generate each maze.
- * @param name name of the file without the extension to be compared with
- * the types
- * @param HEX_HEIGHT height of a node (pretty self-explanatory)
- * @param HEX_WIDTH width of a node (pretty self-explanatory)
+ * @param type Of Maze to Generate.
  */
 const handleBatFileClick = (
-    name: string,
-    HEX_HEIGHT: number,
-    HEX_WIDTH: number
+    type: MazeType
 ) => {
-    let hexBoardDimensions = useFrontendStateManager.getState().hexBoardDimensions;
+    const hexBoardDimensions = useFrontendStateManager.getState().hexBoardDimensions;
+    const {HEX_WIDTH, HEX_HEIGHT} = useFrontendStateManager.getState().hexDimensions;
     Syncer.clearHexBoard();
-    match(name as MazeType)
+    match(type)
         .with(MazeType.GENERATE_BLOCKED_RIDGES, () => {
             const maze = MazeGenerator.genRidges(
                 Math.ceil(hexBoardDimensions.width / HEX_WIDTH),
