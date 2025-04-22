@@ -1,5 +1,5 @@
 import BackendStateManager from "@graph/api/BackendStateManager";
-import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeType} from "@graph/api/FrontendStateManager";
 import {NOTSET} from "@graph/ts/Types";
 import Graph from "@graph/ts/Graph";
 import Pipe from "./Pipe";
@@ -76,33 +76,33 @@ export default class Syncer {
     }
 
     static cleanHexBoard() {
-        useFrontendStateManager.setState({visitedNodes: new Map()});
-        useFrontendStateManager.setState({pathNodes: new Set()});
+        useGraphStore.setState({visitedNodes: new Map()});
+        useGraphStore.setState({pathNodes: new Set()});
     }
 
     static clearHexBoard() {
         Syncer.cleanHexBoard();
-        if(useFrontendStateManager.getState().executing) {
-            useFrontendStateManager.setState({executing : false});
+        if(useGraphStore.getState().executing) {
+            useGraphStore.setState({executing : false});
             return;
         }
-        useFrontendStateManager.setState({
+        useGraphStore.setState({
             hexBoard: {
                 [NOTSET]: NodeType.START_NODE
             }
         })
-        let prevStartNode = useFrontendStateManager.getState().startNodeId;
-        let prevEndNode = useFrontendStateManager.getState().endNodeId
-        let bombNode = useFrontendStateManager.getState().bombNodeId;
+        let prevStartNode = useGraphStore.getState().startNodeId;
+        let prevEndNode = useGraphStore.getState().endNodeId
+        let bombNode = useGraphStore.getState().bombNodeId;
         Syncer.syncInitialGraph();
-        useFrontendStateManager.getState().hexBoard[prevStartNode] = NodeType.START_NODE;
-        useFrontendStateManager.getState().hexBoard[prevEndNode] = NodeType.END_NODE;
+        useGraphStore.getState().hexBoard[prevStartNode] = NodeType.START_NODE;
+        useGraphStore.getState().hexBoard[prevEndNode] = NodeType.END_NODE;
         if(bombNode !== NOTSET)
-            useFrontendStateManager.getState().hexBoard[bombNode] = NodeType.BOMB_NODE;
+            useGraphStore.getState().hexBoard[bombNode] = NodeType.BOMB_NODE;
     }
 
     static async supervise(fn: ()=> Promise<void> | void) {
-        if (!useFrontendStateManager.getState().executing) return;
+        if (!useGraphStore.getState().executing) return;
         await fn();
     }
 }

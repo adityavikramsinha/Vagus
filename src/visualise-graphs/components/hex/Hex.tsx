@@ -1,7 +1,7 @@
 import React from "react";
 
 import HexIcon from "@graph/components/hex/HexIcon";
-import useFrontendStateManager, {NodeAction, NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeAction, NodeType} from "@graph/api/FrontendStateManager";
 import {NOTSET} from "@graph/ts/Types";
 import cn from "@graph/css/cn";
 import {match} from "ts-pattern";
@@ -19,10 +19,10 @@ export type HexProps = {
  */
 const Hex: React.FC<HexProps> = ({x, y, id}) => {
     // Checking the node type from hexBoard map
-    const nodeType = useFrontendStateManager(state => state.hexBoard[id] || NOTSET);
-    const visited = useFrontendStateManager(state => state.visitedNodes.has(id) ? state.visitedNodes.get(id) : NOTSET);
-    const pathNode = useFrontendStateManager(state => state.pathNodes.has(id));
-    const isRandomAlgorithmSteppingStone = useFrontendStateManager(state =>state.randomPathId === id);
+    const nodeType = useGraphStore(state => state.hexBoard[id] || NOTSET);
+    const visited = useGraphStore(state => state.visitedNodes.has(id) ? state.visitedNodes.get(id) : NOTSET);
+    const pathNode = useGraphStore(state => state.pathNodes.has(id));
+    const isRandomAlgorithmSteppingStone = useGraphStore(state =>state.randomPathId === id);
     // Whether the hex is start, end, bomb, weight or wall node
     const isStartNode = nodeType === NodeType.START_NODE;
     const isEndNode = nodeType === NodeType.END_NODE;
@@ -30,8 +30,8 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     const isWallNode = nodeType === NodeType.WALL_NODE;
     const isWeightNode = nodeType === NodeType.WEIGHT_NODE;
 
-    const activeIOFile = useFrontendStateManager(state => state.activeFiles.io);
-    const changeNode = useFrontendStateManager(state => state.changeNode);
+    const activeIOFile = useGraphStore(state => state.activeFiles.io);
+    const changeNode = useGraphStore(state => state.changeNode);
 
     /**
      * Change hex type based on the active IO file.

@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@graph/components/action-buttons/Button";
-import useFrontendStateManager from "@graph/api/FrontendStateManager";
+import useGraphStore from "@graph/api/FrontendStateManager";
 
 
 const ClearButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -27,9 +27,9 @@ type StopButtonProps = {
 };
 
 const StopButton = (props: StopButtonProps) => {
-    const isExecuting = useFrontendStateManager(state => state.executing);
+    const isExecuting = useGraphStore(state => state.executing);
     return (
-        <Button disabled={useFrontendStateManager(state => state.block && !state.executing)}
+        <Button disabled={useGraphStore(state => state.block && !state.executing)}
                 className="button"
                 id="stop-button"
                 onClick={props.onClick}>

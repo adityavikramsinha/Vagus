@@ -1,11 +1,11 @@
 import * as React from "react";
 import {FC} from "react";
 
-import File, {FileType} from "@graph/components/file/File";
+import File, {FileType} from "../../components/file/File";
 import PrevButton from "@graph/components/action-buttons/PrevButton";
 import StopButton from "@graph/components/action-buttons/StopButton";
 import StartButton from "@graph/components/action-buttons/StartButton";
-import Folder from "@graph/components/folder/Folder";
+import Folder from "../../components/folder/Folder";
 
 import {
     BatFileIcon,
@@ -19,9 +19,9 @@ import {
     VisitedNodeIcon,
     WallNodeIcon,
     WeightNodeIcon
-} from "@graph/components/file/FileIcons";
+} from "../../components/file/FileIcons";
 import Syncer from "@graph/api/Syncer";
-import handleBatFileClick from "./file/handleBatFileClick";
+import handleBatFileClick from "../../components/file/handleBatFileClick";
 import {MazeType} from "../ts/Types";
 
 const Navbar: FC = () => {

@@ -1,4 +1,4 @@
-import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeType} from "@graph/api/FrontendStateManager";
 import Pipe from "@graph/api/Pipe";
 import Syncer from "@graph/api/Syncer";
 import Algorithms from "@graph/ts/Algorithms";
@@ -26,10 +26,10 @@ const runAlgorithmAnimation = async (
         bombNodeId : number | NOTSET_t
     })=>{
     // BLOCK all operations, (this blocks the three buttons)
-    useFrontendStateManager.setState({block : true});
+    useGraphStore.setState({block : true});
     // Notify the Syncer to be ready to sync state via running blocks of code
     // that watch for the 'executing' state.
-    useFrontendStateManager.setState({executing : true});
+    useGraphStore.setState({executing : true});
     if (bombNodeId === NOTSET) {
         const {path, visited} = Algorithms.runWithoutBombNode(
             type,
@@ -40,8 +40,8 @@ const runAlgorithmAnimation = async (
         await Animator.animatePathNodes(path);
 
         // free resource
-        useFrontendStateManager.setState({block : false});
-        useFrontendStateManager.setState({executing : false});
+        useGraphStore.setState({block : false});
+        useGraphStore.setState({executing : false});
     } else {
         const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
             type,
@@ -54,8 +54,8 @@ const runAlgorithmAnimation = async (
         await Animator.animatePathNodes(path);
 
         // free resource
-        useFrontendStateManager.setState({block : false});
-        useFrontendStateManager.setState({executing : false});
+        useGraphStore.setState({block : false});
+        useGraphStore.setState({executing : false});
     }
 }
 
@@ -73,9 +73,9 @@ export enum Exception {
 export const startButtonClick = (
     algoFile: string | NOTSET_t
 ): Exception => {
-    const startNodeId = useFrontendStateManager.getState().startNodeId;
-    const endNodeId = useFrontendStateManager.getState().endNodeId;
-    const bombNodeId = useFrontendStateManager.getState().bombNodeId;
+    const startNodeId = useGraphStore.getState().startNodeId;
+    const endNodeId = useGraphStore.getState().endNodeId;
+    const bombNodeId = useGraphStore.getState().bombNodeId;
 
     // check conditions.
     if (algoFile === NOTSET) return Exception.ALGORITHM_NOTSET;
@@ -86,7 +86,7 @@ export const startButtonClick = (
     Syncer.syncInitialGraph();
     // I guess we have to now update the graph.
     // we only update the graph in the backend via the Syncer when we HAVE to run the Algorithm.
-    for (const [nodeKey, nodeType] of Object.entries(useFrontendStateManager.getState().hexBoard)) {
+    for (const [nodeKey, nodeType] of Object.entries(useGraphStore.getState().hexBoard)) {
         const id = Number(nodeKey);
         match(nodeType)
             .with(NodeType.WALL_NODE, () => Syncer.removeNode(id))
@@ -106,22 +106,22 @@ export const startButtonClick = (
         .with('ts-4', async () => await runAlgorithmAnimation(AlgoType.DEPTH_FIRST_SEARCH, {startNodeId, endNodeId, bombNodeId} ))
         .with('ts-5', async () => {
             // BLOCK all operations, (this blocks the three buttons)
-            useFrontendStateManager.setState({block : true});
+            useGraphStore.setState({block : true});
             // Notify the Syncer to be ready to sync state via running blocks of code
             // that watch for the 'executing' state.
-            useFrontendStateManager.setState({executing : true});
-            await Animator.animateRandomWalk(useFrontendStateManager.getState().startNodeId);
-            useFrontendStateManager.setState({block: false});
-            useFrontendStateManager.setState({randomPathId: NOTSET});
-            useFrontendStateManager.setState({executing : false});
+            useGraphStore.setState({executing : true});
+            await Animator.animateRandomWalk(useGraphStore.getState().startNodeId);
+            useGraphStore.setState({block: false});
+            useGraphStore.setState({randomPathId: NOTSET});
+            useGraphStore.setState({executing : false});
         })
         .with('ts-8', async () => await runAlgorithmAnimation(AlgoType.DIJKSTRAS_SEARCH, {startNodeId, endNodeId, bombNodeId}))
         .with('ts-10', async () => {
             // BLOCK all operations, (this blocks the three buttons)
-            useFrontendStateManager.setState({block : true});
+            useGraphStore.setState({block : true});
             // Notify the Syncer to be ready to sync state via running blocks of code
             // that watch for the 'executing' state.
-            useFrontendStateManager.setState({executing : true});
+            useGraphStore.setState({executing : true});
             if (bombNodeId === NOTSET) {
                 const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
                     startNodeId,
@@ -130,11 +130,11 @@ export const startButtonClick = (
                 await Animator.animateVisitedNodes(
                     Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
+                useGraphStore.setState({block : false});
+                useGraphStore.setState({executing : false});
             } else {
-                useFrontendStateManager.setState({block : false});
-                useFrontendStateManager.setState({executing : false});
+                useGraphStore.setState({block : false});
+                useGraphStore.setState({executing : false});
             }
         })
         .with('ts-9', async () => await runAlgorithmAnimation(AlgoType.BELLMAN_FORD, {startNodeId, endNodeId , bombNodeId}));

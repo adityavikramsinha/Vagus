@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@graph/components/action-buttons/Button";
 import Syncer from "@graph/api/Syncer";
-import useFrontendStateManager from "../../api/FrontendStateManager";
+import useGraphStore from "../../api/FrontendStateManager";
 
 const PrevButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     return (
@@ -24,7 +24,7 @@ const prevButtonClick = (): void => {
 
 const PrevButton = () => {
     return (
-        <Button disabled={useFrontendStateManager(state => state.block)} id="prev-button" className="button"
+        <Button disabled={useGraphStore(state => state.block)} id="prev-button" className="button"
                 onClick={prevButtonClick}>
             <PrevButtonIcon/>
         </Button>

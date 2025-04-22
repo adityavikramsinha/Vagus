@@ -1,4 +1,4 @@
-import useFrontendStateManager from "./FrontendStateManager";
+import useGraphStore from "./FrontendStateManager";
 import Pipe from "./Pipe";
 
 /**
@@ -16,14 +16,14 @@ class MazeGenerator {
      * @returns a Set having the drawable IDs
      */
     static genRandomMaze(): Set<number> {
-        let hexes = useFrontendStateManager.getState().hexes;
+        let hexes = useGraphStore.getState().hexes;
         let maze: Set<number> = new Set();
         for (let i = 0; i < hexes.length; i++) {
             let randomId = Math.floor(Math.random() * hexes.length);
             let hexId = hexes[randomId].id;
-            if (hexId !== useFrontendStateManager.getState().startNodeId &&
-                hexId !== useFrontendStateManager.getState().endNodeId &&
-                hexId !== useFrontendStateManager.getState().bombNodeId)
+            if (hexId !== useGraphStore.getState().startNodeId &&
+                hexId !== useGraphStore.getState().endNodeId &&
+                hexId !== useGraphStore.getState().bombNodeId)
                 maze.add(hexes[randomId].id);
         }
         return maze;
@@ -57,9 +57,9 @@ class MazeGenerator {
             let [door1, door2] = getDoors(workableRows);
             for (let row = 0 , doubledCoordinates = (col & 1) ===1 ? 1 : 0; row <workableRows ; ++row , doubledCoordinates +=2) {
                 const id = Pipe.pairToUUID(doubledCoordinates, col);
-                const startNodeId = useFrontendStateManager.getState().startNodeId;
-                const endNodeId = useFrontendStateManager.getState().endNodeId;
-                const bombNodeId = useFrontendStateManager.getState().bombNodeId;
+                const startNodeId = useGraphStore.getState().startNodeId;
+                const endNodeId = useGraphStore.getState().endNodeId;
+                const bombNodeId = useGraphStore.getState().bombNodeId;
                 if(door1 !== row &&
                     door2 !== row &&
                     id !== startNodeId &&

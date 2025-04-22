@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@graph/components/action-buttons/Button";
-import useFrontendStateManager from "@graph/api/FrontendStateManager";
+import useGraphStore from "@graph/api/FrontendStateManager";
 import {match} from "ts-pattern";
 import {
     Dialog,
@@ -41,9 +41,9 @@ const StartButton = () => {
     return (
         <Dialog open={error.encountered} onOpenChange={(open) => !open && setError({encountered: false})}>
             <DialogTrigger asChild>
-                <Button disabled={useFrontendStateManager(state => state.block)} className="button" id="start-button"
+                <Button disabled={useGraphStore(state => state.block)} className="button" id="start-button"
                         onClick={() => {
-                            const algoFile = useFrontendStateManager.getState().activeFiles.ts;
+                            const algoFile = useGraphStore.getState().activeFiles.ts;
                             const err = StartButtonActions.startButtonClick(algoFile)
                             match(err)
                                 .with(StartButtonActions.Exception.START_NODE_NOTSET, () => setError({

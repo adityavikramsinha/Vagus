@@ -1,7 +1,7 @@
 import React from "react";
 import Loading from "@graph/components/Loading";
 import Hex from "@graph/components/hex/Hex";
-import useFrontendStateManager, {NodeAction, NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeAction, NodeType} from "@graph/api/FrontendStateManager";
 import Syncer from "@graph/api/Syncer";
 import BackendStateManager from "@graph/api/BackendStateManager";
 import Pipe from "../../api/Pipe";
@@ -12,13 +12,13 @@ import getHexes from "./getHexes";
  * @returns JSX.Element
  */
 const HexBoard: React.FC = () => {
-    const setHexBoardDimensions = useFrontendStateManager(state => state.setHexBoardDimensions);
-    const changeNode = useFrontendStateManager(state => state.changeNode);
+    const setHexBoardDimensions = useGraphStore(state => state.setHexBoardDimensions);
+    const changeNode = useGraphStore(state => state.changeNode);
     const [isLoading, setLoading] = React.useState<boolean>(true);
     const {
         HEX_WIDTH,
         HEX_HEIGHT
-    } = useFrontendStateManager(state => state.hexDimensions)
+    } = useGraphStore(state => state.hexDimensions)
 
     React.useEffect(() => {
         const handleResize = () => {
@@ -36,8 +36,8 @@ const HexBoard: React.FC = () => {
             const rows = Math.ceil(height / HEX_HEIGHT);
             const cols = Math.ceil(width / HEX_WIDTH);
 
-            useFrontendStateManager.setState({hexes : getHexes(rows , cols ,HEX_WIDTH, HEX_HEIGHT)});
-            Syncer.setGraph(useFrontendStateManager.getState().hexes)
+            useGraphStore.setState({hexes : getHexes(rows , cols ,HEX_WIDTH, HEX_HEIGHT)});
+            Syncer.setGraph(useGraphStore.getState().hexes)
                   .connectGraph(rows, cols);
             setLoading(false);
             let startPosition = Math.floor((rows * cols) * 0.25);
@@ -73,7 +73,7 @@ const HexBoard: React.FC = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, []);
-    const hexes = useFrontendStateManager(s => s.hexes);
+    const hexes = useGraphStore(s => s.hexes);
     if (!isLoading) {
         return (
             <div className="hex-board" id="hex-board">

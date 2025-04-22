@@ -1,8 +1,8 @@
 import {match} from "ts-pattern";
-import {MazeType} from "@graph/ts/Types";
-import MazeGenerator from "../../api/MazeGenerator";
-import useFrontendStateManager, {NodeType} from "@graph/api/FrontendStateManager";
-import Syncer from "@graph/api/Syncer";
+import {MazeType} from "../../visualise-graphs/ts/Types";
+import MazeGenerator from "../../visualise-graphs/api/MazeGenerator";
+import useGraphStore, {NodeType} from "../../visualise-graphs/api/FrontendStateManager";
+import Syncer from "../../visualise-graphs/api/Syncer";
 
 /**
  * Handles the click of a File (specifically Bat) and then delegates the
@@ -13,8 +13,8 @@ import Syncer from "@graph/api/Syncer";
 const handleBatFileClick = (
     type: MazeType
 ) => {
-    const hexBoardDimensions = useFrontendStateManager.getState().hexBoardDimensions;
-    const {HEX_WIDTH, HEX_HEIGHT} = useFrontendStateManager.getState().hexDimensions;
+    const hexBoardDimensions = useGraphStore.getState().hexBoardDimensions;
+    const {HEX_WIDTH, HEX_HEIGHT} = useGraphStore.getState().hexDimensions;
     Syncer.clearHexBoard();
     match(type)
         .with(MazeType.GENERATE_BLOCKED_RIDGES, () => {
@@ -22,37 +22,37 @@ const handleBatFileClick = (
                 Math.ceil(hexBoardDimensions.width / HEX_WIDTH),
                 Math.ceil(hexBoardDimensions.height / HEX_HEIGHT)
             );
-            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            const updatedHexBoard = {...useGraphStore.getState().hexBoard};
             maze.forEach(id => updatedHexBoard[id] = NodeType.WALL_NODE)
-            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
+            useGraphStore.setState({hexBoard : updatedHexBoard});
         })
         .with(MazeType.GENERATE_WEIGHTED_RIDGES, () => {
             const maze = MazeGenerator.genRidges(
                 Math.ceil(hexBoardDimensions.width / HEX_WIDTH),
                 Math.ceil(hexBoardDimensions.height / HEX_HEIGHT)
             );
-            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            const updatedHexBoard = {...useGraphStore.getState().hexBoard};
             maze.forEach(id => updatedHexBoard[id] = NodeType.WEIGHT_NODE)
-            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
+            useGraphStore.setState({hexBoard : updatedHexBoard});
         })
         .with(MazeType.GENERATE_RANDOM_MAZE, () => {
             const maze = MazeGenerator.genRandomMaze();
-            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            const updatedHexBoard = {...useGraphStore.getState().hexBoard};
             maze.forEach(id => updatedHexBoard[id] = (Math.floor(
                 Math.random() * 2) & 1) == 1 ? NodeType.WALL_NODE : NodeType.WEIGHT_NODE)
-            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
+            useGraphStore.setState({hexBoard : updatedHexBoard});
         })
         .with(MazeType.GENERATE_WEIGHTED_RANDOM_MAZE, () => {
             const maze = MazeGenerator.genRandomMaze();
-            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            const updatedHexBoard = {...useGraphStore.getState().hexBoard};
             maze.forEach(id => updatedHexBoard[id] = NodeType.WEIGHT_NODE);
-            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
+            useGraphStore.setState({hexBoard : updatedHexBoard});
         })
         .with(MazeType.GENERATE_BLOCKED_RANDOM_MAZE, async () => {
             const maze = MazeGenerator.genRandomMaze();
-            const updatedHexBoard = {...useFrontendStateManager.getState().hexBoard};
+            const updatedHexBoard = {...useGraphStore.getState().hexBoard};
             maze.forEach(id => updatedHexBoard[id] = NodeType.WALL_NODE);
-            useFrontendStateManager.setState({hexBoard : updatedHexBoard});
+            useGraphStore.setState({hexBoard : updatedHexBoard});
         })
         .exhaustive()
 }
