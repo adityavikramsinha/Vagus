@@ -1,18 +1,12 @@
 import {FileType} from "../components/file/File";
-import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import {NOTSET} from "../visualise-graphs/ts/Types";
 import {create} from "zustand";
 import {storeApi, useProvidedStore} from "../providers/StoreProvider";
+import {FileStore} from "../providers/FileExplorer";
 
-type TreeStoreProps = {
-    activeFiles: Record<FileType, string | NOTSET_t>,
-}
-
-type TreeStoreActions = {
-    changeActiveFiles: (newActiveFileId: string, fileType: FileType) => void
-}
-
-
-type TreeStore = TreeStoreProps & TreeStoreActions;
+interface TreeStoreProps  {}
+interface TreeStoreActions  {}
+export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {}
 
 export const treeStore =
     create<TreeStore>()((set) => ({

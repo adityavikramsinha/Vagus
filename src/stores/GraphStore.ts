@@ -4,6 +4,7 @@ import {FileType} from "../components/file/File";
 import {HexProps} from "../visualise-graphs/components/hex/Hex";
 import {match, P} from "ts-pattern";
 import {useProvidedStore, storeApi} from "../providers/StoreProvider";
+import {FileStore} from "../providers/FileExplorer";
 
 export enum NodeAction {
     SET = 'set',
@@ -18,11 +19,10 @@ export enum NodeType {
     WALL_NODE = 'wall-node',
 }
 
-type GraphStoreProps = {
+interface GraphStoreProps {
     startNodeId: number | NOTSET_t,
     endNodeId: number | NOTSET_t,
     bombNodeId: number | NOTSET_t,
-    activeFiles: Record<FileType, string | NOTSET_t>,
     hexes: HexProps [],
     hexBoardDimensions: { width: number, height: number },
     hexDimensions: { HEX_WIDTH: number, HEX_HEIGHT: number },
@@ -36,13 +36,12 @@ type GraphStoreProps = {
     executing: boolean,
 }
 
-type GraphStoreActions = {
-    changeActiveFiles: (newActiveFileId: string, fileType: FileType) => void,
+interface GraphStoreActions  {
     changeNode(nodeType: NodeType, actionType: NodeAction, id: number | NOTSET_t): void,
     setHexBoardDimensions: (dimension: { width: number, height: number }) => void,
 }
 
-export type GraphStore = GraphStoreActions & GraphStoreProps
+export interface GraphStore extends GraphStoreActions, GraphStoreProps, FileStore {}
 
 
 export const graphStore =

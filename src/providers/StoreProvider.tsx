@@ -1,17 +1,17 @@
 import React, { createContext, useContext } from "react";
 import { StoreApi, useStore } from "zustand";
+import {FileStore} from "./FileExplorer";
 
 
-// Provides the context for the Store,
-// it is <any> since we don't have the exact types for
-// the Stores, however a unified interface should be
-// build later on that is super-type of individual store types.
-export const StoreCtx = createContext<StoreApi<any> | null>(null);
+export interface BaseStore extends FileStore {}
+
+// Provides the context for the Store for a Store that MUST extend BaseStore.
+export const StoreCtx = createContext<StoreApi<BaseStore> | null>(null);
 // _store for using store outside hooks.
-let _store : StoreApi<any> | null;
+let _store : StoreApi<BaseStore> | null;
 
 
-type StoreProviderProps<T> = {
+type StoreProviderProps<T extends BaseStore>= {
     useStore: StoreApi<T>;
     children: React.ReactNode;
 };
@@ -22,7 +22,7 @@ type StoreProviderProps<T> = {
  * @param children
  * @constructor
  */
-export const StoreProvider = <T,>({ useStore, children }: StoreProviderProps<T>) => {
+export const StoreProvider = <T extends BaseStore,>({ useStore, children }: StoreProviderProps<T>) => {
     return (
         <StoreCtx.Provider value={useStore}>
             {children}
@@ -36,7 +36,7 @@ export const StoreProvider = <T,>({ useStore, children }: StoreProviderProps<T>)
  * If there is none, this will error out since it is being used outside a context.
  * @param selector to select store slice.
  */
-export const useProvidedStore = <T, U>(selector: (state: T) => U): U => {
+export const useProvidedStore = <T extends BaseStore, U>(selector: (state: T) => U): U => {
     const store = useContext(StoreCtx) as StoreApi<T> | null;
     _store = store;
     if (store === null) {
@@ -52,14 +52,14 @@ export const useProvidedStore = <T, U>(selector: (state: T) => U): U => {
  * Exposes the store API like a vanilla Zustand store, for usage outside of
  * components and .tsx files.
  */
-export const storeApi = <T,>() => {
+export const storeApi = <T extends BaseStore,>() => {
 
     // This is of StoreApi<any> initially
     // we can do better, since we have to ensure that the
     const store = _store as StoreApi<T>;
     if(store === null) {
         throw new Error (
-            "Store Api must be used within a Store Provider.Make sure your component is wrapped in a provider."
+            `Store Api(of type extending BaseStore) must be used within a Store Provider.Make sure your component is wrapped in a provider.`
         )
     }
 

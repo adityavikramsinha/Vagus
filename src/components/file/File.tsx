@@ -1,9 +1,7 @@
 import React from 'react';
-import useGraphStore from "../../stores/GraphStore";
-import {match} from "ts-pattern";
-import handleBatFileClick from "./handleBatFileClick";
 import cn from "../../visualise-graphs/css/cn";
 import useFileExplorer from "../../providers/FileExplorer";
+import {BaseStore} from "../../providers/StoreProvider";
 
 export enum FileType {
     TS = "ts",
@@ -33,8 +31,8 @@ export type FileProps = {
  *                specific files.
  */
 const File: React.FC<FileProps> = ({type, id, name, Icon, onClick}) => {
-    const isActiveFile = useFileExplorer((state : any)  => state.activeFiles[type] === id);
-    const changeActiveFiles = useFileExplorer((state : any) => state.changeActiveFiles);
+    const isActiveFile = useFileExplorer((state : BaseStore)  => state.activeFiles[type] === id);
+    const changeActiveFiles = useFileExplorer((state : BaseStore) => state.changeActiveFiles);
     let classes = cn({
         "file": true,
     })
