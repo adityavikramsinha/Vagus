@@ -3,7 +3,7 @@ import { StoreApi, useStore } from "zustand";
 
 
 // Provides the context for the Store,
-// it is <any> since we dont have the exact types for
+// it is <any> since we don't have the exact types for
 // the Stores, however a unified interface should be
 // build later on that is super-type of individual store types.
 export const StoreCtx = createContext<StoreApi<any> | null>(null);

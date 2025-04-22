@@ -1,7 +1,7 @@
 import {match} from "ts-pattern";
 import {MazeType} from "../../visualise-graphs/ts/Types";
 import MazeGenerator from "../../visualise-graphs/api/MazeGenerator";
-import useGraphStore, {NodeType} from "../../visualise-graphs/api/FrontendStateManager";
+import useGraphStore, {NodeType} from "../../stores/GraphStore";
 import Syncer from "../../visualise-graphs/api/Syncer";
 
 /**

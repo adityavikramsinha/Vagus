@@ -1,7 +1,7 @@
 import React from "react";
 
 import HexIcon from "@graph/components/hex/HexIcon";
-import useGraphStore, {NodeAction, NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeAction, NodeType} from "../../../stores/GraphStore";
 import {NOTSET} from "@graph/ts/Types";
 import cn from "@graph/css/cn";
 import {match} from "ts-pattern";

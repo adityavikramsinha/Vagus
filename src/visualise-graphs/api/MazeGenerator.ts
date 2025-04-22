@@ -1,4 +1,4 @@
-import useGraphStore from "./FrontendStateManager";
+import useGraphStore from "../../stores/GraphStore";
 import Pipe from "./Pipe";
 
 /**

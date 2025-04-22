@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@graph/components/action-buttons/Button";
-import useGraphStore from "@graph/api/FrontendStateManager";
+import useGraphStore from "../../../stores/GraphStore";
 import {match} from "ts-pattern";
 import {
     Dialog,

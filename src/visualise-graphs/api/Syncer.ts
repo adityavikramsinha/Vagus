@@ -1,5 +1,5 @@
 import BackendStateManager from "@graph/api/BackendStateManager";
-import useGraphStore, {NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeType} from "../../stores/GraphStore";
 import {NOTSET} from "@graph/ts/Types";
 import Graph from "@graph/ts/Graph";
 import Pipe from "./Pipe";

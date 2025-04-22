@@ -1,7 +1,7 @@
 import React from "react";
 import Loading from "@graph/components/Loading";
 import Hex from "@graph/components/hex/Hex";
-import useGraphStore, {NodeAction, NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeAction, NodeType} from "../../../stores/GraphStore";
 import Syncer from "@graph/api/Syncer";
 import BackendStateManager from "@graph/api/BackendStateManager";
 import Pipe from "../../api/Pipe";

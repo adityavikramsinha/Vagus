@@ -1,4 +1,4 @@
-import useGraphStore, {NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeType} from "../../../stores/GraphStore";
 import Pipe from "@graph/api/Pipe";
 import Syncer from "@graph/api/Syncer";
 import Algorithms from "@graph/ts/Algorithms";

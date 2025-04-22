@@ -1,4 +1,4 @@
-import useGraphStore, {NodeType} from "@graph/api/FrontendStateManager";
+import useGraphStore, {NodeType} from "../../stores/GraphStore";
 import {NOTSET, NOTSET_t} from "@graph/ts/Types";
 import BackendStateManager from "./BackendStateManager";
 import Syncer from "./Syncer";

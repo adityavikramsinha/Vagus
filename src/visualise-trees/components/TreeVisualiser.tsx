@@ -1,23 +1,23 @@
 import React from "react";
 import HexBoard from "@graph/components/hex-board/HexBoard";
-import Navbar from "@graph/components/Navbar"
+import Navbar from "./Navbar"
 import {StoreProvider} from "../../providers/StoreProvider";
-import {graphStore} from "../../stores/GraphStore";
+import {treeStore} from "../../stores/TreeStore";
 
-export const GraphVisualiser: React.FC = () => {
+
+export const TreeVisualiserApp: React.FC = () => {
     return (
         <React.Fragment>
-            <StoreProvider useStore={graphStore}>
+            <StoreProvider useStore={treeStore}>
                 <div className="App">
                     <div className="content">
                         <div className="left-cmd" id="left-cmd">
                             <Navbar/>
                         </div>
-                        <HexBoard/>
                     </div>
                 </div>
             </StoreProvider>
         </React.Fragment>
     );
 }
-export default GraphVisualiser;
+export default TreeVisualiserApp;

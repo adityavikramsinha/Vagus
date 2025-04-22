@@ -1,9 +1,9 @@
 import {create} from 'zustand'
-import {NOTSET, NOTSET_t} from "@graph/ts/Types";
-import {FileType} from "../../components/file/File";
-import {HexProps} from "@graph/components/hex/Hex";
+import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import {FileType} from "../components/file/File";
+import {HexProps} from "../visualise-graphs/components/hex/Hex";
 import {match, P} from "ts-pattern";
-import {useProvidedStore, storeApi} from "../../providers/StoreProvider";
+import {useProvidedStore, storeApi} from "../providers/StoreProvider";
 
 export enum NodeAction {
     SET = 'set',
@@ -46,7 +46,7 @@ export type GraphStore = GraphStoreActions & GraphStoreProps
 
 
 export const graphStore =
-    create<GraphStoreActions & GraphStoreProps>()((set) => ({
+    create<GraphStore>()((set) => ({
         startNodeId: NOTSET, endNodeId: NOTSET, bombNodeId: NOTSET,
         activeFiles: {
             [FileType.TS]: NOTSET,
