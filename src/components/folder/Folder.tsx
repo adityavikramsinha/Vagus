@@ -29,7 +29,6 @@ const Folder: React.FC<FolderProps> = ({
         "rotate-[-90deg]": !isExpanded
     });
     const folderIconClasses = cn(
-        "folder-icon",
         "transition-transform",
         "transition-opacity",
         isExpanded
@@ -38,7 +37,7 @@ const Folder: React.FC<FolderProps> = ({
     );
     return (
         <div style={style}>
-            <div className="flex flex-nowrap max-w-2xs items-center gap-1" onClick={toggle}>
+            <div className="flex flex-nowrap max-w-2xs items-center gap-1 pt-[3px] pb-[3px]" onClick={toggle}>
                 <div className={arrowClasses}>
                     <FolderIcons.ArrowIcon/>
                 </div>

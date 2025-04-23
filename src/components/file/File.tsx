@@ -17,7 +17,7 @@ export type FileProps = {
     id: string,
     name: string,
     Icon: React.JSX.Element,
-    onClick ?: () => void
+    onClick?: () => void
 }
 
 /**
@@ -31,28 +31,25 @@ export type FileProps = {
  *                specific files.
  */
 const File: React.FC<FileProps> = ({type, id, name, Icon, onClick}) => {
-    const isActiveFile = useFileExplorer((state : BaseStore)  => state.activeFiles[type] === id);
-    const changeActiveFiles = useFileExplorer((state : BaseStore) => state.changeActiveFiles);
-    let classes = cn({
-        "file": true,
-    })
+    const isActiveFile = useFileExplorer((state: BaseStore) => state.activeFiles[type] === id);
+    const changeActiveFiles = useFileExplorer((state: BaseStore) => state.changeActiveFiles);
     let styles: React.CSSProperties = {
         background: "rgba(255, 255, 255, 0.05)",
         borderRadius: "4px"
     }
     return (
         <div
-            className={classes}
+            className="p-[1px_0_3px_22px] m-[0_2px_0_18px] flex flex-nowrap gap-[5px] pt-[2.5px] pb-[2.5px]"
             id={id}
-            onClick={()=>{
+            onClick={() => {
                 if (type !== FileType.GUI)
                     changeActiveFiles(id, type);
                 onClick?.();
             }}
-            style={ isActiveFile ? styles : {}}
+            style={isActiveFile ? styles : {}}
         >
             {Icon}
-            <p className="file-name">{name}</p>
+            <p className="text-xs font-light">{name}</p>
         </div>
     )
 }

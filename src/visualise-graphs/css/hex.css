@@ -17,7 +17,7 @@
     overflow: hidden
 }
 .icon {
-    fill: var(--hex-color);
+    fill: var(--color-hex-color);
 }
 
 .node-holder {
