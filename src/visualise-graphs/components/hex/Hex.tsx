@@ -63,8 +63,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
         top: `${y}px`,
     };
     return (
-        // removed height and width, so might cause issues later.
-        <div className={`absolute flex items-center justify-center overflow-hidden`} style={styles}
+        <div className={`absolute flex items-center h-[34px] w-[34px] justify-center overflow-hidden`} style={styles}
              onClick={handleHexClick}>
             <HexIcon className={cn(
                 "fill-hex-color", {

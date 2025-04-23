@@ -26,8 +26,8 @@
     --color-file-bg-selected: rgba(17, 17, 27, 0.63);
 
 
-    --animate-visited-node-without-bomb : visited-node-animation-without-bomb 1s linear forwards;
-    @keyframes visited-node-animation-without-bomb{
+    --animate-visited-node-without-bomb: visited-node-animation-without-bomb 1s linear forwards;
+    @keyframes visited-node-animation-without-bomb {
         0% {
             fill: var(--color-hex-color);
         }
@@ -42,7 +42,7 @@
         }
     }
 
-    --animate-visited-node-with-bomb : visited-node-animation-with-bomb 1s linear forwards;
+    --animate-visited-node-with-bomb: visited-node-animation-with-bomb 1s linear forwards;
     @keyframes visited-node-animation-with-bomb {
         0% {
             fill: var(--color-hex-color);
@@ -61,7 +61,7 @@
         }
     }
 
-    --animate-path : path-animation 1s linear forwards ;
+    --animate-path: path-animation 1s linear forwards ;
     @keyframes path-animation {
         0% {
             fill: var(--color-hex-color);
@@ -92,7 +92,7 @@
         }
     }
 
-    --animate-random-walk : random-walk-animation 1s linear fowards;
+    --animate-random-walk: random-walk-animation 1s linear fowards;
     @keyframes random-walk-animation {
         0% {
             fill: var(--color-hex-color);
