@@ -1,18 +1,18 @@
-﻿body,
-html {
-    background-color: #000000;
-    height: 90vh;
-    padding: 0;
-    margin: 0;
-    font-family: 'JetBrains Mono', monospace;
-}
+﻿/*body,*/
+/*html {*/
+/*    background-color: #000000;*/
+/*    height: 90vh;*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*    font-family: 'JetBrains Mono', monospace;*/
+/*}*/
 
-#root {
-    height: 90vh;
-    padding: 0;
-    margin: 0;
-    --duration: 1.5s;
-    --container-size: 250px;
-    --box-size: 33px;
-    --box-border-radius: 15%;
-}
+/*#root {*/
+/*    height: 90vh;*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*    --duration: 1.5s;*/
+/*    --container-size: 250px;*/
+/*    --box-size: 33px;*/
+/*    --box-border-radius: 15%;*/
+/*}*/

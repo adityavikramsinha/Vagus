@@ -30,7 +30,6 @@ const StopButton = (props: StopButtonProps) => {
     const isExecuting = useGraphStore(state => state.executing);
     return (
         <Button disabled={useGraphStore(state => state.block && !state.executing)}
-                className="button"
                 id="stop-button"
                 onClick={props.onClick}>
             { !isExecuting && <ClearButtonIcon/> }

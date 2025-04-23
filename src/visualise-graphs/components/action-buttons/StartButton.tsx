@@ -41,7 +41,7 @@ const StartButton = () => {
     return (
         <Dialog open={error.encountered} onOpenChange={(open) => !open && setError({encountered: false})}>
             <DialogTrigger asChild>
-                <Button disabled={useGraphStore(state => state.block)} className="button" id="start-button"
+                <Button disabled={useGraphStore(state => state.block)} id="start-button"
                         onClick={() => {
                             const algoFile = useGraphStore.getState().activeFiles.ts;
                             const err = StartButtonActions.startButtonClick(algoFile)

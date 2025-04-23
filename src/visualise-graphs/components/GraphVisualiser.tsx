@@ -8,13 +8,11 @@ export const GraphVisualiser: React.FC = () => {
     return (
         <React.Fragment>
             <StoreProvider useStore={graphStore}>
-                <div className="App">
-                    <div className="w-full h-screen flex">
-                        <div className="w-[30vw] border-r border-r-cmd-border" id="left-cmd">
-                            <Navbar/>
-                        </div>
-                        <HexBoard/>
+                <div className="w-full h-screen flex bg-black">
+                    <div className="w-[30vw] border-r border-r-cmd-border" id="left-cmd">
+                        <Navbar/>
                     </div>
+                    <HexBoard/>
                 </div>
             </StoreProvider>
         </React.Fragment>

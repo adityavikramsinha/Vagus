@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@graph/components/action-buttons/Button";
 import Syncer from "@graph/api/Syncer";
 import useGraphStore from "../../../stores/GraphStore";
+import cn from "../../css/cn";
 
 const PrevButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     return (
@@ -15,17 +16,10 @@ const PrevButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     )
 }
 
-/**
- * Uses {@link Syncer} to clean up the Hex Board
- */
-const prevButtonClick = (): void => {
-    Syncer.cleanHexBoard()
-}
-
 const PrevButton = () => {
     return (
-        <Button disabled={useGraphStore(state => state.block)} id="prev-button" className="button"
-                onClick={prevButtonClick}>
+        <Button disabled={useGraphStore(state => state.block)} id="prev-button"
+                onClick={Syncer.cleanHexBoard}>
             <PrevButtonIcon/>
         </Button>
 
