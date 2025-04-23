@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@graph/components/action-buttons/Button";
 import Syncer from "@graph/api/Syncer";
 import useGraphStore from "../../../stores/GraphStore";
-import cn from "../../css/cn";
+import cn from "../../../cn";
 
 const PrevButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     return (

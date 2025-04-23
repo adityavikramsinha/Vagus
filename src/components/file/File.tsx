@@ -1,5 +1,5 @@
 import React from 'react';
-import cn from "../../visualise-graphs/css/cn";
+import cn from "../../cn";
 import useFileExplorer from "../../providers/FileExplorer";
 import {BaseStore} from "../../providers/StoreProvider";
 

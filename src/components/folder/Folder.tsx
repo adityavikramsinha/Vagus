@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as FolderIcons from "./FolderIcons";
-import cn from "../../visualise-graphs/css/cn";
+import cn from "../../cn";
 
 type FolderProps = {
     children: React.ReactNode;

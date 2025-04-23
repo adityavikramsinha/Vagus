@@ -1,5 +1,5 @@
 import React from "react";
-import cn from "../../css/cn";
+import cn from "../../../cn";
 
 type ButtonProps = React.ComponentPropsWithoutRef<"button">
 

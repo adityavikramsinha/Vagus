@@ -3,8 +3,9 @@ import React from "react";
 import HexIcon from "@graph/components/hex/HexIcon";
 import useGraphStore, {NodeAction, NodeType} from "../../../stores/GraphStore";
 import {NOTSET} from "@graph/ts/Types";
-import cn from "@graph/css/cn";
+import cn from "../../../cn";
 import {match} from "ts-pattern";
+import * as NodeIcon from "./NodeIcons";
 
 export type HexProps = {
     x: number;
@@ -74,12 +75,12 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
                     "animate-random-walk": isRandomAlgorithmSteppingStone,
                 })}/>
             <div className={cn(
-                "absolute z-[1] w-full h-full justify-center items-center", {
-                    "start-node": isStartNode,
-                    "bomb-node": isBombNode,
-                    "end-node": isEndNode,
-                    "weight-node": isWeightNode
-                })}/>
+                "absolute z-[1] w-full h-full justify-center items-center")}>
+                {isStartNode && <NodeIcon.StartNodeIcon/>}
+                {isBombNode && <NodeIcon.BombNodeIcon/>}
+                {isEndNode && <NodeIcon.EndNodeIcon/>}
+                {isWeightNode && <NodeIcon.WeightNodeIcon/>}
+            </div>
         </div>
     );
 };
