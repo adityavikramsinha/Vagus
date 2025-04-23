@@ -1,12 +1,3 @@
-.hex-board {
-    position: relative;
-    overflow: hidden;
-    width: 79vw;
-    display : flex;
-    align-content: center;
-    justify-content: center;
-
-}
 .hexagon {
     position: absolute;
     display: flex;

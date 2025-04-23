@@ -76,7 +76,7 @@ const HexBoard: React.FC = () => {
     const hexes = useGraphStore(s => s.hexes);
     if (!isLoading) {
         return (
-            <div className="hex-board" id="hex-board">
+            <div className="relative overflow-hidden w-[79vw] flex content-center justify-center" id="hex-board">
                 {hexes.map((hex) =>
                     <Hex
                         x={hex.x}
@@ -89,7 +89,7 @@ const HexBoard: React.FC = () => {
         )
     } else {
         return (
-            <div className="hex-board" id="hex-board">
+            <div className="relative overflow-hidden w-[79vw] flex content-center justify-center" id="hex-board-loading">
                 <Loading/>
             </div>
         )
