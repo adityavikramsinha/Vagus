@@ -26,20 +26,28 @@ import {MazeType} from "../ts/Types";
 
 const Navbar: FC = () => {
     return (
-        <div className="navbar">
-            <div className="header">
-                <div className="title">Vagus</div>
-                <div className="buttons">
+        <div className="bg-cmd-bg w-[100%] h-[100%] text-white select-none">
+            <div className="h-1/10 font-medium flex items-center justify-between pr-4 pl-4">
+                <div className="text-2xl">Vagus</div>
+                <div className="flex flex-nowrap gap-2.5">
                     <PrevButton/>
                     <StopButton onClick={Syncer.clearHexBoard}/>
                     <StartButton/>
                 </div>
             </div>
-            <div className="folder-panel">
+
+            <div className="
+                            pt-[5px]
+                            h-[86%]
+                            overflow-y-auto
+                            [scrollbar-color:var(--color-moz-sb-color)_transparent]
+                            [&::-webkit-scrollbar]:w-[5px]
+                            [&::-webkit-scrollbar-thumb]:bg-[var(--color-sb-color)]
+                            [&::-webkit-scrollbar-thumb:hover]:bg-[var(--color-sb-color-hover)]
+                            [&::-webkit-scrollbar-track]:bg-[var(--color-sb-color-track)]
+                            ">
                 <Folder name="graphs">
-
                     <Folder name="algorithms">
-
                         <Folder name="heuristic">
                             <File
                                 name="aStarSearch.ts"
@@ -106,7 +114,6 @@ const Navbar: FC = () => {
                                 Icon={<TsFileIcon/>}
                             />
                         </Folder>
-
                     </Folder>
                     <Folder name="addableNodes">
                         <File
@@ -146,7 +153,7 @@ const Navbar: FC = () => {
                             id="bat-1"
                             type={FileType.BAT}
                             Icon={<BatFileIcon/>}
-                            onClick ={() => handleBatFileClick(MazeType.GENERATE_RANDOM_MAZE)}
+                            onClick={() => handleBatFileClick(MazeType.GENERATE_RANDOM_MAZE)}
                         />
                         <Folder name="wall">
                             <File
@@ -154,14 +161,14 @@ const Navbar: FC = () => {
                                 id="bat-3"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
-                                onClick ={() => handleBatFileClick(MazeType.GENERATE_BLOCKED_RIDGES)}
+                                onClick={() => handleBatFileClick(MazeType.GENERATE_BLOCKED_RIDGES)}
                             />
                             <File
                                 name="generateBlockedRandomMaze.bat"
                                 id="bat-4"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
-                                onClick ={() => handleBatFileClick(MazeType.GENERATE_BLOCKED_RANDOM_MAZE)}
+                                onClick={() => handleBatFileClick(MazeType.GENERATE_BLOCKED_RANDOM_MAZE)}
                             />
                         </Folder>
                         <Folder name="weighted">
@@ -170,14 +177,14 @@ const Navbar: FC = () => {
                                 id="bat-5"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
-                                onClick ={() => handleBatFileClick(MazeType.GENERATE_WEIGHTED_RIDGES)}
+                                onClick={() => handleBatFileClick(MazeType.GENERATE_WEIGHTED_RIDGES)}
                             />
                             <File
                                 name="generateWeightedRandomMaze.bat"
                                 id="bat-6"
                                 type={FileType.BAT}
                                 Icon={<BatFileIcon/>}
-                                onClick ={() => handleBatFileClick(MazeType.GENERATE_WEIGHTED_RANDOM_MAZE)}
+                                onClick={() => handleBatFileClick(MazeType.GENERATE_WEIGHTED_RANDOM_MAZE)}
 
                             />
                         </Folder>
