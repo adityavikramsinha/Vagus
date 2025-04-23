@@ -26,7 +26,7 @@ import {MazeType} from "../ts/Types";
 
 const Navbar: FC = () => {
     return (
-        <div className="bg-cmd-bg w-full h-full text-white select-none">
+        <div className="w-[30vw] border-r border-r-cmd-border bg-cmd-bg h-full text-white select-none">
             <div className="h-1/10 font-medium flex items-center justify-between pr-4 pl-4">
                 <div className="text-2xl">Vagus</div>
                 <div className="flex flex-nowrap gap-2.5">

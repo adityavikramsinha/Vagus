@@ -22,7 +22,7 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
     const nodeType = useGraphStore(state => state.hexBoard[id] || NOTSET);
     const visited = useGraphStore(state => state.visitedNodes.has(id) ? state.visitedNodes.get(id) : NOTSET);
     const pathNode = useGraphStore(state => state.pathNodes.has(id));
-    const isRandomAlgorithmSteppingStone = useGraphStore(state =>state.randomPathId === id);
+    const isRandomAlgorithmSteppingStone = useGraphStore(state => state.randomPathId === id);
     // Whether the hex is start, end, bomb, weight or wall node
     const isStartNode = nodeType === NodeType.START_NODE;
     const isEndNode = nodeType === NodeType.END_NODE;
@@ -57,35 +57,30 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
             .with('io-5', () => changeNode(NodeType.WALL_NODE, NodeAction.SET, id));
     };
 
-    // Node coordinates.
+    // Hex coordinates.
     const styles: React.CSSProperties = {
         left: `${x}px`,
         top: `${y}px`,
     };
-
-    // Apply classes on the Hex Icon.
-    let hexIconClasses = cn({
-        "visited-node": (visited === NodeType.START_NODE) && !pathNode ,
-        "icon": true,
-        "visited-node-bomb": (visited === NodeType.BOMB_NODE) && !pathNode,
-        "path-node": pathNode,
-        "wall-node": isWallNode,
-        "random-walk-stepping-stone" : isRandomAlgorithmSteppingStone,
-    });
-
-    // Apply classes based on node type
-    let classes = cn({
-        "node-holder": true,
-        "start-node": isStartNode,
-        "bomb-node": isBombNode,
-        "end-node": isEndNode,
-        "weight-node": isWeightNode
-    });
-
     return (
-        <div className="hexagon" style={styles} onClick={handleHexClick}>
-            <HexIcon className={hexIconClasses}/>
-            <div className={classes}/>
+        // removed height and width, so might cause issues later.
+        <div className={`absolute flex items-center justify-center overflow-hidden`} style={styles}
+             onClick={handleHexClick}>
+            <HexIcon className={cn(
+                "fill-hex-color", {
+                    "fill-visited-node-color-1 transition-all duration-[1s] animate-visited-node-without-bomb": (visited === NodeType.START_NODE) && !pathNode,
+                    "fill-visited-node-color-11 transition-all duration-[1s] animate-visited-node-with-bomb": (visited === NodeType.BOMB_NODE) && !pathNode,
+                    "fill-path-node-color-1 transition-all duration-[750ms] animate-path": pathNode,
+                    "fill-wall-node-color": isWallNode,
+                    "animate-random-walk": isRandomAlgorithmSteppingStone,
+                })}/>
+            <div className={cn(
+                "absolute z-[1] w-full h-full justify-center items-center", {
+                    "start-node": isStartNode,
+                    "bomb-node": isBombNode,
+                    "end-node": isEndNode,
+                    "weight-node": isWeightNode
+                })}/>
         </div>
     );
 };

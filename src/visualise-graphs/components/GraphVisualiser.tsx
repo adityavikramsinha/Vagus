@@ -9,9 +9,7 @@ export const GraphVisualiser: React.FC = () => {
         <React.Fragment>
             <StoreProvider useStore={graphStore}>
                 <div className="w-full h-screen flex bg-black">
-                    <div className="w-[30vw] border-r border-r-cmd-border" id="left-cmd">
-                        <Navbar/>
-                    </div>
+                    <Navbar/>
                     <HexBoard/>
                 </div>
             </StoreProvider>
