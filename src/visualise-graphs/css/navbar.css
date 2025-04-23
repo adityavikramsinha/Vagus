@@ -1,27 +1,3 @@
-.folder-icon {
-    display: inline-block;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.folder-icon.open {
-    transform: rotate(0deg) scale(1.1);
-    opacity: 1;
-}
-
-.folder-icon.closed {
-    transform: rotate(-15deg) scale(0.95);
-    opacity: 0.85;
-}
-
-.folder-misc {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    max-width: 270px;
-    align-items: center;
-    gap: 5px;
-}
-
 .folder-name {
     font-size: 0.75rem;
     font-weight: 300;
@@ -40,20 +16,4 @@
     flex-direction: row;
     flex-wrap: nowrap;
     gap: 5px;
-}
-
-.rotated {
-    transform: rotate(-90deg);
-}
-
-@media (max-width: 1168px) {
-    html {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 1068px) {
-    html {
-        font-size: 12px;
-    }
 }

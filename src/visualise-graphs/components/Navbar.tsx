@@ -35,7 +35,6 @@ const Navbar: FC = () => {
                     <StartButton/>
                 </div>
             </div>
-
             <div className="
                             pt-[5px]
                             h-[86%]

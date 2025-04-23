@@ -22,34 +22,34 @@ const Folder: React.FC<FolderProps> = ({
     const toggle = () => setIsExpanded(prev => !prev);
     const style = {
         paddingLeft: `${name === "graphs" ? "18px" : "20px"}`,
-        cursor:"pointer "
+        cursor: "pointer "
     }
 
     const arrowClasses = cn({
-        "arrow-icon": true,
-        "rotated" : !isExpanded
-    })
-    const folderIconClasses = cn({
-        "folder-icon" : true,
-        "open" : isExpanded,
-        "close" : !isExpanded
-    })
+        "rotate-[-90deg]": !isExpanded
+    });
+    const folderIconClasses = cn(
+        "folder-icon",
+        "transition-transform",
+        "transition-opacity",
+        isExpanded
+            ? "transform scale-[1.05] opacity-100"
+            : "transform scale-[0.95] opacity-[0.85]"
+    );
     return (
-        <div style={style} >
-            <div className="folder-misc" onClick={toggle}>
+        <div style={style}>
+            <div className="flex flex-nowrap max-w-2xs items-center gap-1" onClick={toggle}>
                 <div className={arrowClasses}>
                     <FolderIcons.ArrowIcon/>
                 </div>
                 <div className={folderIconClasses}>
                     {isExpanded ? <FolderIcons.FolderOpenIcon/> : <FolderIcons.FolderClosedIcon/>}
                 </div>
-                <div className="folder-name">{name}</div>
+                <p className="text-xs font-light">{name}</p>
             </div>
             {isExpanded &&
-                <div className="folder-children">
-                    <div>
-                        {children}
-                    </div>
+                <div>
+                    {children}
                 </div>}
         </div>
     );
