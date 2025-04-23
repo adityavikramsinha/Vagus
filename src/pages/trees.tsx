@@ -12,7 +12,7 @@ function GraphsPage() {
     return <StrictMode>
         <Head>
             <link rel="icon" href="/images/favicon.svg"/>
-            <title>Vagus — A Path Visualiser</title>
+            <title>Vagus — A Tree Visualiser</title>
         </Head>
         <div id="root" className={jetBrainsMono.className}>
             <TreeVisualiserApp/>

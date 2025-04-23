@@ -11,7 +11,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger
-} from "@graph/components/DialogBox";
+} from "../../../components/DialogBox";
 import * as StartButtonActions from "@graph/components/action-buttons/startButtonActions";
 
 
