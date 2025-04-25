@@ -36,7 +36,7 @@ const HexBoard: React.FC = () => {
             const rows = Math.ceil(height / HEX_HEIGHT);
             const cols = Math.ceil(width / HEX_WIDTH);
 
-            useGraphStore.setState({hexes : getHexes(rows , cols ,HEX_WIDTH, HEX_HEIGHT)});
+            useGraphStore.setState({hexes: getHexes(rows, cols, HEX_WIDTH, HEX_HEIGHT)});
             Syncer.setGraph(useGraphStore.getState().hexes)
                   .connectGraph(rows, cols);
             setLoading(false);
@@ -74,26 +74,18 @@ const HexBoard: React.FC = () => {
         };
     }, []);
     const hexes = useGraphStore(s => s.hexes);
-    if (!isLoading) {
-        return (
-            <div className="relative overflow-hidden w-[79vw] flex content-center justify-center" id="hex-board">
-                {hexes.map((hex) =>
-                    <Hex
-                        x={hex.x}
-                        y={hex.y}
-                        id={hex.id}
-                        key={hex.id}
-                    />
-                )}
-            </div>
-        )
-    } else {
-        return (
-            <div className="relative overflow-hidden w-[79vw] flex content-center justify-center" id="hex-board-loading">
-                <Loading/>
-            </div>
-        )
-    }
-};
+    return (
+        <div className="relative overflow-hidden w-[79vw] flex content-center justify-center" id="hex-board">
+            {isLoading ? <Loading/> : hexes.map(({x, y, id}) =>
+                <Hex
+                    x={x}
+                    y={y}
+                    id={id}
+                    key={id}
+                />
+            )}
+        </div>
+    )
+}
 
 export default HexBoard;

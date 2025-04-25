@@ -9,7 +9,7 @@
     --color-sb-color-hover: rgba(255, 255, 255, 0.05);
     --color-sb-color-track: rgba(131, 131, 131, 0.42);
     --color-hex-color: #0c0b0b;
-    --color-hex-color-hover: #89b4fa;
+    --color-hex-color-hover: #a19ca6;
     --color-wall-node-color: #212121;
     --color-path-node-color-1: #ff740d;
     --color-path-node-color-2: #ff5b00;
@@ -24,10 +24,10 @@
     --color-visited-node-color-31: #cba6f7;
     --color-file-bg: #0c0b0b;
     --color-file-bg-selected: rgba(17, 17, 27, 0.63);
-    --loading-epoch : 1.5s;
-    --loading-container-size : 250px;
-    --loading-box-size : 33px ;
-    --loading-box-border-radius : 15%;
+    --loading-epoch: 1.5s;
+    --loading-container-size: 250px;
+    --loading-box-size: 33px ;
+    --loading-box-border-radius: 15%;
 
 
     --animate-visited-node-without-bomb: visited-node-animation-without-bomb 1s linear forwards;
@@ -119,6 +119,29 @@
 
         100% {
             fill: var(--color-path-node-color-1);
+            transform: scale(1);
+        }
+    }
+
+    --animate-hex-hover: hex-hover-animation 1s linear infinite;
+    @keyframes hex-hover-animation {
+        0% {
+            transform: scale(1);
+        }
+
+        20% {
+            transform: scale(0.95);
+        }
+
+        40% {
+            transform: scale(0.9);
+        }
+
+        60% {
+            transform: scale(1.2);
+        }
+
+        100% {
             transform: scale(1);
         }
     }

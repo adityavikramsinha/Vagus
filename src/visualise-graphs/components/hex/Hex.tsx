@@ -67,17 +67,13 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
         <div onClick={handleHexClick}
              className={`absolute flex items-center h-[34px] w-[34px] justify-center overflow-hidden group`} style={styles}>
             <HexIcon className={cn(
-                `fill-hex-color
-                transition-colors
-                duration-[750ms]
-                ease-out
-                `, {
+                "fill-hex-color", {
                     "fill-visited-node-color-1 transition-all duration-[1s] animate-visited-node-without-bomb": (visited === NodeType.START_NODE) && !pathNode,
                     "fill-visited-node-color-11 transition-all duration-[1s] animate-visited-node-with-bomb": (visited === NodeType.BOMB_NODE) && !pathNode,
                     "fill-path-node-color-1 transition-all duration-[750ms] animate-path": pathNode,
                     "fill-wall-node-color": isWallNode,
                     "animate-random-walk": isRandomAlgorithmSteppingStone,
-                    "group-hover:fill-emerald-400 group-hover:animate-pulse" :
+                    "group-hover:fill-hex-color-hover transition-colors duration-[750ms] ease-out" :
                         !isWallNode &&
                         !pathNode &&
                         !isRandomAlgorithmSteppingStone &&
@@ -85,10 +81,10 @@ const Hex: React.FC<HexProps> = ({x, y, id}) => {
                 })}
             />
             <div className={cn(
-                "absolute z-[1] w-full h-full justify-center items-center")}>
-                {isStartNode && <NodeIcon.StartNodeIcon />}
-                {isBombNode && <NodeIcon.BombNodeIcon/>}
-                {isEndNode && <NodeIcon.EndNodeIcon/>}
+                "absolute z-[1] w-full h-full justify-center items-center pointer-events-none")}>
+                {isStartNode && <NodeIcon.StartNodeIcon  className ="group-hover:animate-hex-hover origin-center" />}
+                {isBombNode && <NodeIcon.BombNodeIcon    className ="group-hover:animate-hex-hover origin-center"/>}
+                {isEndNode && <NodeIcon.EndNodeIcon      className ="group-hover:animate-hex-hover origin-center"/>}
                 {isWeightNode && <NodeIcon.WeightNodeIcon/>}
             </div>
         </div>
