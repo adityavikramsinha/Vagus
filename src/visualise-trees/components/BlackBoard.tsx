@@ -1,31 +1,52 @@
-import React, { useRef, useEffect } from "react";
-import Node from "./Node";
+import React, { useEffect, useRef } from "react";
+import Node, {SpringyNode} from "./Node";
 import * as m from "motion/react";
 import ElasticBand from "./ElasticBand";
 
-type SpringNode = {
-    x: m.MotionValue<number>;
-    y: m.MotionValue<number>;
-    vx: number;
-    vy: number;
-    mass: number;
-    isDragging: boolean;
-};
-
-function createNode(x: number, y: number): SpringNode {
+// Create a node with initial properties
+function createNode(x: number, y: number): SpringyNode {
     return {
         x: m.motionValue(x),
         y: m.motionValue(y),
         vx: 0,
         vy: 0,
-        mass: 1,
+        mass: 2,
         isDragging: false,
     };
 }
 
+// Function to calculate spring force
+const springForce = (dl: number, dist: number, stretch: number, k: number) => {
+    return (dl / dist) * stretch * k;
+};
+
+// Function to calculate the repulsive force
+const repulsiveForce = (n1: SpringyNode, n2: SpringyNode, kRepel: number, minDist: number) => {
+    const dx = n2.x.get() - n1.x.get();
+    const dy = n2.y.get() - n1.y.get();
+    const dist = Math.hypot(dx, dy) || 1;
+
+    if (dist < minDist) {
+        const force = kRepel * (minDist - dist);
+        const forceX = (dx / dist) * force;
+        const forceY = (dy / dist) * force;
+
+        if (!n1.isDragging) {
+            n1.vx -= forceX / n1.mass;
+            n1.vy -= forceY / n1.mass;
+        }
+
+        if (!n2.isDragging) {
+            n2.vx += forceX / n2.mass;
+            n2.vy += forceY / n2.mass;
+        }
+    }
+};
+
 export const Blackboard = () => {
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // Define nodes
     const nodes = [
         createNode(100, 100),
         createNode(300, 300),
@@ -42,13 +63,6 @@ export const Blackboard = () => {
         createNode(500, 500),
     ];
 
-    const updatePosition = (index: number, newX: number, newY: number) => {
-        if (nodes[index] && nodes[index].isDragging) {
-            nodes[index].x.set(newX);
-            nodes[index].y.set(newY);
-        }
-    };
-
     const edges: [number, number][] = [
         [0, 1],
         [1, 2],
@@ -64,14 +78,25 @@ export const Blackboard = () => {
         [5, 10],
     ];
 
+    // Update node position
+    const updatePosition = (index: number, newX: number, newY: number) => {
+        if (nodes[index] && nodes[index].isDragging) {
+            nodes[index].x.set(newX);
+            nodes[index].y.set(newY);
+        }
+    };
+
     useEffect(() => {
         let frameId: number;
 
-        const spring = () => {
-            const k = 0.01;
-            const damping = 0.8;
-            const restLength = 150;
+        const forces = () => {
+            const k = 0.5;  // Spring constant
+            const damping = 0.5;  // Damping factor
+            const restLength = 100;  // Rest length of springs
+            const kRepel = 0.05;  // Repulsive force constant
+            const minDist = 50;  // Minimum distance to prevent overlap
 
+            // Apply spring force for connected nodes
             for (const [i1, i2] of edges) {
                 const n1 = nodes[i1];
                 const n2 = nodes[i2];
@@ -82,8 +107,8 @@ export const Blackboard = () => {
                 const dist = Math.max(0.1, Math.hypot(dx, dy));
                 const stretch = dist - restLength;
 
-                const forceX = (dx / dist) * stretch * k;
-                const forceY = (dy / dist) * stretch * k;
+                const forceX = springForce(dx, dist, stretch, k);
+                const forceY = springForce(dy, dist, stretch, k);
 
                 if (!n1.isDragging) {
                     n1.vx += forceX / n1.mass;
@@ -95,7 +120,14 @@ export const Blackboard = () => {
                 }
             }
 
-            // Apply movement
+            // Apply repulsive force between all pairs of nodes
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    repulsiveForce(nodes[i], nodes[j], kRepel, minDist);
+                }
+            }
+
+            // Apply movement and damping
             for (const node of nodes) {
                 if (!node.isDragging) {
                     node.vx *= damping;
@@ -105,14 +137,15 @@ export const Blackboard = () => {
                 }
             }
 
-            frameId = requestAnimationFrame(spring);
+            frameId = requestAnimationFrame(forces);
         };
 
-        frameId = requestAnimationFrame(spring);
+        frameId = requestAnimationFrame(forces);
 
         return () => cancelAnimationFrame(frameId);
     }, [nodes]);
 
+    // Set dragging state
     const setDragging = (index: number, dragging: boolean) => {
         if (nodes[index]) {
             nodes[index].isDragging = dragging;
@@ -131,14 +164,13 @@ export const Blackboard = () => {
                 ))}
             </svg>
 
-            {nodes.map((node, i) => (
+            {nodes.map((springyNodeProps, i) => (
                 <Node
                     key={i}
-                    index={i}
-                    x={node.x}
-                    y={node.y}
+                    id={i}
                     onUpdate={updatePosition}
                     onDragChange={setDragging}
+                    {...springyNodeProps}
                 />
             ))}
         </div>

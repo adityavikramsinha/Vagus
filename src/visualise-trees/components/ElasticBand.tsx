@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { MotionValue } from "motion";
 
 type ElasticBandProps = {
-    start: { x: MotionValue<number>; y: MotionValue<number> };
-    end: { x: MotionValue<number>; y: MotionValue<number> };
+    start: { x: MotionValue<number>; y: MotionValue<number>};
+    end: { x: MotionValue<number>; y: MotionValue<number>};
 };
 
 const BALL_SIZE = 25;
 const RADIUS = BALL_SIZE / 2; // 12.5
 
 const ElasticBand: React.FC<ElasticBandProps> = ({ start, end }) => {
-    const [path, setPath] = useState<string>("");
+    const pathRef = useRef<SVGPathElement | null>(null);
 
     const updatePath = () => {
         const x1 = start.x.get();
@@ -39,11 +39,17 @@ const ElasticBand: React.FC<ElasticBandProps> = ({ start, end }) => {
         const cx = (newX1 + newX2) / 2;
         const cy = (newY1 + newY2) / 2;
 
-        setPath(`M ${newX1} ${newY1} Q ${cx} ${cy} ${newX2} ${newY2}`);
+        // Directly update the path
+        if (pathRef.current) {
+            pathRef.current.setAttribute("d", `M ${newX1} ${newY1} Q ${cx} ${cy} ${newX2} ${newY2}`);
+        }
     };
 
     useEffect(() => {
+        // Initial update
         updatePath();
+
+        // Subscribe to motion changes
         const unsubX1 = start.x.on("change", updatePath);
         const unsubY1 = start.y.on("change", updatePath);
         const unsubX2 = end.x.on("change", updatePath);
@@ -59,8 +65,8 @@ const ElasticBand: React.FC<ElasticBandProps> = ({ start, end }) => {
 
     return (
         <path
-            d={path}
-            stroke="white"
+            ref={pathRef}
+            stroke="gray"
             strokeWidth={2}
             fill="none"
         />
