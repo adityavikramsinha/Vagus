@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "./Navbar"
 import {StoreProvider} from "../../providers/StoreProvider";
 import {treeStore} from "../../stores/TreeStore";
-import BlackBoard from "./BlackBoard";
+import BlackBoard from "./black-board/BlackBoard";
 
 
 export const TreeVisualiserApp: React.FC = () => {

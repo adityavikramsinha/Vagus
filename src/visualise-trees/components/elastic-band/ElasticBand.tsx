@@ -30,7 +30,7 @@ const ElasticBand: React.FC<ElasticBandProps> = ({x1, x2, y1, y2}) => {
     );
 
     return (
-        <m.motion.path d={d} stroke="gray" strokeWidth={2} fill="none"/>
+        <m.motion.path d={d} stroke="#ffb86a" strokeWidth={3} fill="none" opacity={0.25}/>
     );
 };
 

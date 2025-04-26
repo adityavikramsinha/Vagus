@@ -3,10 +3,17 @@ import {NOTSET} from "../visualise-graphs/ts/Types";
 import {create} from "zustand";
 import {storeApi, useProvidedStore} from "../providers/StoreProvider";
 import {FileStore} from "../providers/FileExplorer";
+import {SpringyNode} from "../visualise-trees/components/Node";
 
-interface TreeStoreProps  {}
-interface TreeStoreActions  {}
-export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {}
+interface TreeStoreProps {
+    nodes: SpringyNode []
+}
+
+interface TreeStoreActions {
+}
+
+export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {
+}
 
 export const treeStore =
     create<TreeStore>()((set) => ({
@@ -26,6 +33,8 @@ export const treeStore =
                 }
             })
         ),
+
+        nodes: []
     }))
 
 
@@ -33,8 +42,8 @@ const useTreeStore = <U>(selector: (state: TreeStore) => U): U => useProvidedSto
 
 useTreeStore.getState = () => storeApi<TreeStore>().getState();
 useTreeStore.setState = (partial: TreeStore
-                              | Partial<TreeStore>
-                              | ((state: TreeStore) => TreeStore | Partial<TreeStore>),
+                             | Partial<TreeStore>
+                             | ((state: TreeStore) => TreeStore | Partial<TreeStore>),
                          replace ?: false
 ) => storeApi<TreeStore>().setState(partial, replace)
 

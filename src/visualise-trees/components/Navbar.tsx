@@ -2,7 +2,7 @@ import * as React from "react";
 import {FC} from "react";
 
 
-import {TsFileIcon} from "../../components/file/FileIcons";
+import {IOFileIcon} from "../../components/file/FileIcons";
 import Folder from "../../components/folder/Folder";
 import File, {FileType} from "../../components/file/File";
 
@@ -23,8 +23,9 @@ const Navbar: FC = () => {
                             [&::-webkit-scrollbar-track]:bg-[var(--color-sb-color-track)]
                             ">
                 <Folder name="graphs">
-                    <Folder name="algorithms">
-                        <File type={FileType.TS} id={'ts-1'} name="minimumSpanningTree" Icon={<TsFileIcon/>}/>
+                    <Folder name="actions">
+                        <File type={FileType.IO} id={'io-1'} name="addNode" Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id={'io-2'} name="deleteNode" Icon={<IOFileIcon/>}/>
                     </Folder>
                 </Folder>
             </div>
