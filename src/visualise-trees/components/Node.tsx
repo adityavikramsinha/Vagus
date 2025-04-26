@@ -30,7 +30,7 @@ const Node: React.FC<NodeProps & SpringyNode> = ({ id, x, y, onUpdate, onDragCha
             dragMomentum
             onDragStart={() => onDragChange(id, true)}
             onDragEnd={() => onDragChange(id, false)}
-            className={"w-[25px] h-[25px] bg-amber-200 rounded-[50%] cursor-grabbing absolute opacity-[75%]"}
+            className={"w-[25px] h-[25px] bg-amber-200 rounded-[50%] cursor-grabbing absolute"}
             style={{x, y}}
         />
     );

@@ -1,7 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import Node, {SpringyNode} from "./Node";
 import * as m from "motion/react";
-import ElasticBand from "./ElasticBand";
+import ElasticBand from "./elastic-band/ElasticBand";
+
+
+// TODO, change Node and Edge List to Node and EdgeList in @graphs/ts/Algorithms
+
 
 // Create a node with initial properties
 function createNode(x: number, y: number): SpringyNode {
@@ -27,7 +31,7 @@ const repulsiveForce = (n1: SpringyNode, n2: SpringyNode, kRepel: number, minDis
     const dist = Math.hypot(dx, dy) || 1;
 
     if (dist < minDist) {
-        const force = kRepel * (minDist - dist);
+        const force = kRepel * (minDist - dist) * (minDist - dist);
         const forceX = (dx / dist) * force;
         const forceY = (dy / dist) * force;
 
@@ -45,7 +49,6 @@ const repulsiveForce = (n1: SpringyNode, n2: SpringyNode, kRepel: number, minDis
 
 export const Blackboard = () => {
     const containerRef = useRef<HTMLDivElement>(null);
-
     // Define nodes
     const nodes = [
         createNode(100, 100),
@@ -96,7 +99,9 @@ export const Blackboard = () => {
             const kRepel = 0.05;  // Repulsive force constant
             const minDist = 50;  // Minimum distance to prevent overlap
 
-            // Apply spring force for connected nodes
+            // Go over all pairs
+            // of connected nodes via their edges
+            // and then get the nodes.
             for (const [i1, i2] of edges) {
                 const n1 = nodes[i1];
                 const n2 = nodes[i2];
@@ -153,13 +158,15 @@ export const Blackboard = () => {
     };
 
     return (
-        <div ref={containerRef} className="relative w-full h-screen bg-black text-white overflow-hidden">
+        <div ref={containerRef} className="relative w-full h-full bg-black text-white border border-white overflow-hidden">
             <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
                 {edges.map(([i1, i2], idx) => (
                     <ElasticBand
                         key={idx}
-                        start={{ x: nodes[i1].x, y: nodes[i1].y }}
-                        end={{ x: nodes[i2].x, y: nodes[i2].y }}
+                        x1={nodes[i1].x}
+                        y1={nodes[i1].y}
+                        x2={nodes[i2].x}
+                        y2={nodes[i2].y}
                     />
                 ))}
             </svg>
