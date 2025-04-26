@@ -158,7 +158,7 @@ export const Blackboard = () => {
     };
 
     return (
-        <div ref={containerRef} className="relative w-full h-full bg-black text-white border border-white overflow-hidden">
+        <div ref={containerRef} className="relative w-full h-full bg-black text-white overflow-hidden">
             <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
                 {edges.map(([i1, i2], idx) => (
                     <ElasticBand
