@@ -3,15 +3,12 @@ import * as m from "motion/react";
 
 export type NodeProps = {
     index: number;
-    position: { x: number; y: number };
+    x: m.MotionValue<number>;
+    y: m.MotionValue<number>;
     onUpdate: (index: number, x: number, y: number) => void;
+    onDragChange: (index: number, dragging: boolean) => void;
 };
-
-const Node: React.FC<NodeProps> = ({ index, position, onUpdate }) => {
-    const ballRef = React.useRef<HTMLDivElement>(null);
-    const x = m.useMotionValue(position.x);
-    const y = m.useMotionValue(position.y);
-
+const Node: React.FC<NodeProps> = ({ index, x, y, onUpdate, onDragChange }) => {
     m.useMotionValueEvent(x, "change", (latestX) => {
         onUpdate(index, latestX, y.get());
     });
@@ -22,15 +19,16 @@ const Node: React.FC<NodeProps> = ({ index, position, onUpdate }) => {
 
     return (
         <m.motion.div
-            ref={ballRef}
             drag
             dragMomentum
+            onDragStart={() => onDragChange(index, true)}
+            onDragEnd={() => onDragChange(index, false)}
             style={{
                 ...ball,
                 x,
                 y,
                 position: "absolute",
-                zIndex : 3
+                zIndex: 3,
             }}
         />
     );
