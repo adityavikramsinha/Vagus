@@ -1,6 +1,7 @@
 import React from "react";
 import * as m from "motion/react";
-export type SpringyNode = {
+
+export type Particle = {
     x: m.MotionValue<number>;
     y: m.MotionValue<number>;
     vx: number;
@@ -13,17 +14,14 @@ export type NodeProps = {
     id: number;
     onUpdate: (index: number, x: number, y: number) => void;
     onDragChange: (index: number, dragging: boolean) => void;
-};
+} & Particle;
 
-const Node: React.FC<NodeProps & SpringyNode> = ({ id, x, y, onUpdate, onDragChange }) => {
-    m.useMotionValueEvent(x, "change", (latestX) => {
-        onUpdate(id, latestX, y.get());
-    });
+const Node: React.FC<NodeProps> = ({id, x, y, onUpdate, onDragChange}) => {
 
-    m.useMotionValueEvent(y, "change", (latestY) => {
-        onUpdate(id, x.get(), latestY);
-    });
-
+    // Tracks the 'x' & 'y' motion values, and handles the binding of "change" (anything)
+    // to both of these props, that way we do not have to think about the cursor position
+    m.useMotionValueEvent(x, "change", (latestX) => onUpdate(id, latestX, y.get()));
+    m.useMotionValueEvent(y, "change", (latestY) => onUpdate(id, x.get(), latestY));
     return (
         <m.motion.div
             drag
