@@ -30,6 +30,13 @@ const Node: React.FC<NodeProps> = ({id, x, y, onUpdate, onDragChange}) => {
             onDragEnd={() => onDragChange(id, false)}
             className={"w-[25px] h-[25px] bg-amber-200 rounded-[50%] cursor-grabbing absolute"}
             style={{x, y}}
+            onClick={(event: React.MouseEvent) =>
+                // stop propagation of click to parent,
+                // since the parent really has nothing to do with this click.
+                event.stopPropagation()
+                // There is little information about this on MDN, but in a way t
+                // this is preventing bubble up of the event.
+            }
         />
     );
 };

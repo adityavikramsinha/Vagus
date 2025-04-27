@@ -120,11 +120,10 @@ export const Blackboard = () => {
                     />
                 ))}
             </svg>
-
-            {nodes.map((nodeProps) => (
-                <Node
-                    {...nodeProps}
-                />
+            {nodes.map((nodeProps, idx) => (
+                    <Node
+                        {...nodeProps}
+                    />
             ))}
         </div>
     );
