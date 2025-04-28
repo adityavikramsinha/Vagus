@@ -15,9 +15,9 @@ class MazeGenerator {
      *
      * @returns a Set having the drawable IDs
      */
-    static genRandomMaze(): Set<number> {
+    static genRandomMaze(): Set<string> {
         let hexes = useGraphStore.getState().hexes;
-        let maze: Set<number> = new Set();
+        let maze: Set<string> = new Set();
         for (let i = 0; i < hexes.length; i++) {
             let randomId = Math.floor(Math.random() * hexes.length);
             let hexId = hexes[randomId].id;
@@ -39,10 +39,10 @@ class MazeGenerator {
      * Each Set contains a collection of IDs for the nodes which
      * can be blocked or changed to weight nodes on the website
      */
-    static genRidges(workableColumns: number, workableRows: number): Set<number> {
+    static genRidges(workableColumns: number, workableRows: number): Set<string> {
         if (workableColumns < 2 || workableRows < 2) return new Set();
 
-        let maze = new Set<number>()
+        let maze = new Set<string>()
 
         const getDoors = (rows : number) :  [number, number] => {
             const a = Math.floor(Math.random() * rows);
@@ -56,7 +56,7 @@ class MazeGenerator {
             // keep 2 random hex's/nodes in the column free to move around.
             let [door1, door2] = getDoors(workableRows);
             for (let row = 0 , doubledCoordinates = (col & 1) ===1 ? 1 : 0; row <workableRows ; ++row , doubledCoordinates +=2) {
-                const id = Pipe.pairToUUID(doubledCoordinates, col);
+                const id = Pipe.pairToUUID(doubledCoordinates, col).toString();
                 const startNodeId = useGraphStore.getState().startNodeId;
                 const endNodeId = useGraphStore.getState().endNodeId;
                 const bombNodeId = useGraphStore.getState().bombNodeId;

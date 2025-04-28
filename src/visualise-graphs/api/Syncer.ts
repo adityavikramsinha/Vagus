@@ -11,19 +11,19 @@ export default class Syncer {
         Graph.copy(BackendStateManager.initGraph(), BackendStateManager.graph(), 1);
     }
 
-    static setEdge(source: number, dest: number) {
+    static setEdge(source: string, dest: string) {
         BackendStateManager.graph().addEdge(source, dest, 1);
         BackendStateManager.initGraph().addEdge(source, dest, 1);
     }
 
-    static setNode(x: number, y: number, id: number) {
+    static setNode(x: number, y: number, id: string) {
         BackendStateManager.graph().addNode(id);
         BackendStateManager.graph().setNodeCoords(id, {x: x, y: y});
         BackendStateManager.initGraph().addNode(id);
         BackendStateManager.initGraph().setNodeCoords(id, {x: x, y: y});
     }
 
-    static removeNode(id: number) {
+    static removeNode(id: string) {
         BackendStateManager.graph().rmNode(id);
     }
 
@@ -61,7 +61,7 @@ export default class Syncer {
                     // Bounds: col [0, cols), doubledRow [0, 2 * rows)
                     if (Dc >= 0 && Dc < cols && Ddc >= 0 && Ddc < 2 * rows) {
                         const toId = Pipe.pairToUUID(Ddc, Dc);
-                        Syncer.setEdge(fromId, toId);
+                        Syncer.setEdge(fromId.toString(), toId.toString());
                     }
                 }
             }
@@ -69,7 +69,7 @@ export default class Syncer {
         return this;
     }
 
-    static updateEdge(source: number, dest: number) {
+    static updateEdge(source: string, dest: string) {
         const srcNode = BackendStateManager.graph().nodes().get(source);
         const destNode = BackendStateManager.graph().nodes().get(dest);
         srcNode.updateCostTo(destNode, 10);

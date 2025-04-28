@@ -10,7 +10,7 @@ import * as NodeIcon from "./NodeIcons";
 export type HexProps = {
     x: number;
     y: number;
-    id: number;
+    id: string;
 };
 
 /**

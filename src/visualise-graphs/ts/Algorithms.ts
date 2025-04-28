@@ -379,10 +379,10 @@ export default class Algorithms<T> {
      * from the Start till some point X and second is from the end till the same point X where
      * both of these algorithms meet.
      */
-    static biDirectional(start: number , end: number ): [number[] | NOTSET_t, Set<number>, Set<number>] {
+    static biDirectional(start: string , end:string): [string[] | NOTSET_t, Set<string>, Set<string>] {
 
         // get the path from start
-        let algo: Algorithms<number> = new Algorithms(BackendStateManager.graph());
+        let algo: Algorithms<string> = new Algorithms(BackendStateManager.graph());
         const pathFromStart = algo.dijkstras(start, end)[0];
 
         // if it is null , we automatically know
@@ -400,7 +400,7 @@ export default class Algorithms<T> {
         // else, we splice the path
         // at mid-point >> 1
         // also we can 100% confirm that it is not NOT_SET
-        let spliceNode :number = pathFromStart[(pathFromStart as number[]).length >> 1];
+        let spliceNode :string= pathFromStart[(pathFromStart as string[]).length >> 1];
 
         // we get from this splicepoint a visited from start
         // and a visited from end
@@ -757,10 +757,10 @@ export default class Algorithms<T> {
      * the path contains the path from start->end for currentState and visitedInOrder contains
      * the nodes that were visited [inorder] to reach to that path
      */
-    static runWithoutBombNode(algoType : AlgoType, startNodeId:number, endNodeId:number): { path: number[] | NOTSET_t, visited: Set<number> } {
+    static runWithoutBombNode(algoType : AlgoType, startNodeId:string, endNodeId:string): { path: string[] | NOTSET_t, visited: Set<string> } {
 
         // getting a new algorithm instance to run the functions from
-        let algo: Algorithms<number> = new Algorithms<number>(BackendStateManager.graph());
+        let algo: Algorithms<string> = new Algorithms<string>(BackendStateManager.graph());
 
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
@@ -785,10 +785,10 @@ export default class Algorithms<T> {
      */
     static runWithBombNode(
         algoType: AlgoType,
-        startNodeId: number,
-        endNodeId: number,
-        bombNodeId: number
-    ): { path: number[] | NOTSET_t, visitedP1: Set<number>, visitedP2: Set<number> } {
+        startNodeId: string,
+        endNodeId: string,
+        bombNodeId: string
+    ): { path: string[] | NOTSET_t, visitedP1: Set<string>, visitedP2: Set<string> } {
         // getting an algorithm instance for ease of running
         let algo = new Algorithms(BackendStateManager.graph());
 
@@ -799,7 +799,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.aStar(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -808,7 +808,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.bfs(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -817,7 +817,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.bellmanFord(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -826,7 +826,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.dijkstras(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -835,7 +835,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.dfs(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -844,13 +844,13 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.bestFirstSearch(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
             .otherwise(() => {
                 console.error("Internal error, the algorithm selected does not match with the algorithms possible");
-                return { path: NOTSET as NOTSET_t, visitedP1: new Set<number>(), visitedP2: new Set<number>() };
+                return { path: NOTSET as NOTSET_t, visitedP1: new Set<string>(), visitedP2: new Set<string>() };
             });
     }
 }

@@ -21,9 +21,9 @@ import Animator from "@graph/api/Animator";
  */
 const runAlgorithmAnimation = async (
     type:AlgoType, {startNodeId, endNodeId, bombNodeId}:{
-        startNodeId:number,
-        endNodeId:number,
-        bombNodeId : number | NOTSET_t
+        startNodeId:string,
+        endNodeId:string,
+        bombNodeId : string| NOTSET_t
     })=>{
     // BLOCK all operations, (this blocks the three buttons)
     useGraphStore.setState({block : true});
@@ -86,8 +86,7 @@ export const startButtonClick = (
     Syncer.syncInitialGraph();
     // I guess we have to now update the graph.
     // we only update the graph in the backend via the Syncer when we HAVE to run the Algorithm.
-    for (const [nodeKey, nodeType] of Object.entries(useGraphStore.getState().hexBoard)) {
-        const id = Number(nodeKey);
+    for (const [id, nodeType] of Object.entries(useGraphStore.getState().hexBoard)) {
         match(nodeType)
             .with(NodeType.WALL_NODE, () => Syncer.removeNode(id))
             .with(NodeType.WEIGHT_NODE, () => {
