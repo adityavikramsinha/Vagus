@@ -1,7 +1,5 @@
 import Edge from './Edge';
 
-
-
 /**
  * This is the node class of this project.
  * This is also the most important class in this project.
@@ -16,17 +14,17 @@ import Edge from './Edge';
  * This class can also deal with any type of "node", in our project it is
  * a number.
  *
- * @author aditya , <adityavikramsinha19@gmail.com>
+ * @author aditya, <adityavikramsinha19@gmail.com>
  */
-export default class Node<T> {
+export default class Vertex {
 
   //id or the UID of a node
-  private readonly data: T;
+  private readonly data: string;
 
   // List of neighbours [refer to logical diagram] in the form of
   // src -> cost -> dest where cost is the cost of moving from THIS node to
   // its neighbour node.
-  private readonly adjNodes: Edge<T>[];
+  private readonly adjNodes: Edge[];
 
   // Placement on the hex board, x coordinate system.
   private xCoord: number = 0;
@@ -117,7 +115,7 @@ export default class Node<T> {
   // comparator for total ordering in the Node class
   // In this project it is being used in the Priority Queue implementations
   // of the Algorithms.
-  comparator: (a: T, b: T) => number;
+  comparator: (a: string, b: string) => number;
 
   /**
    * Constructs a given Node with the values as given to the constructor.
@@ -132,7 +130,7 @@ export default class Node<T> {
    * @param x x coordinate of the node
    * @param y y coordinate of the node
    */
-  constructor(data: T, comparator: (a: T, b: T) => number, x: number = 0, y: number = 0) {
+  constructor(data: string, comparator: (a: string, b: string) => number, x: number = 0, y: number = 0) {
     this.data = data;
     this.comparator = comparator;
     this.adjNodes = [];
@@ -145,7 +143,7 @@ export default class Node<T> {
    *
    * @returns The data wrapped around by the Node
    */
-  getData(): T {
+  getData(): string{
     return this.data;
   }
 
@@ -154,7 +152,7 @@ export default class Node<T> {
    * @returns
    * An array of edges which contains the neighbouring nodes of this node.
    */
-  getAdjNodes(): Edge<T>[] {
+  getAdjNodes(): Edge[] {
     return this.adjNodes;
   }
 
@@ -167,7 +165,7 @@ export default class Node<T> {
    * @param cost The cost of travelling form this not to the node to be added
    * @returns nothing
    */
-  addAdjNode(node: Node<T>, cost: number): void {
+  addAdjNode(node: Vertex, cost: number): void {
     if (this.adjNodes.every(edge =>
       edge.dest.getData() !== node.getData()
     ))// first assert that NO edge present has the same data as the new candidate node.
@@ -182,7 +180,7 @@ export default class Node<T> {
    * @param cost the new cost.
    * @returns true if it was successfully updated, else false.
    */
-  updateCostTo(node: Node<T>, cost: number): boolean {
+  updateCostTo(node: Vertex, cost: number): boolean {
 
     // first get the node to update.
     let edgeToUpdate = this.adjNodes.find(edge => {
@@ -214,7 +212,7 @@ export default class Node<T> {
    * doesn't exist then
    * null is returned
    */
-  rmAdjNode(data: T): Node<T> | null {
+  rmAdjNode(data: string): Vertex | null {
     const index = this
       .adjNodes
       .findIndex(edge => this.comparator(edge.dest.data, data) === 0);
@@ -259,7 +257,7 @@ export default class Node<T> {
    *
    * @returns A random neighbour from the list of neighbours
    */
-  getRandomNeighbour(): Node<T> {
+  getRandomNeighbour(): Vertex {
     while (true) {
       let neighbour = this.getAdjNodes()[Math.floor(Math.random() * this.getAdjNodes().length)].dest;
       if (neighbour.getData() !== this.data || this.adjNodes.length === 1)
