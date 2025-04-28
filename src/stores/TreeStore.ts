@@ -1,10 +1,14 @@
 import {FileType} from "../components/file/File";
-import {NOTSET} from "../visualise-graphs/ts/Types";
+import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
 import {create} from "zustand";
 import {storeApi, useProvidedStore} from "../providers/StoreProvider";
 import {FileStore} from "../providers/FileExplorer";
+import {NodeProps} from "../visualise-trees/components/GraphNode";
 
-interface TreeStoreProps  {}
+
+interface TreeStoreProps  {
+    nodes :Map<number , NodeProps| NOTSET_t>
+}
 interface TreeStoreActions  {}
 export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {}
 
@@ -19,13 +23,14 @@ export const treeStore =
             [FileType.MD]: NOTSET
         },
         changeActiveFiles: (newActiveFileId, fileType) => set(
-            (state) => ({
+            ({activeFiles}) => ({
                 activeFiles: {
-                    ...state.activeFiles,
+                    ...activeFiles,
                     [fileType]: newActiveFileId
                 }
             })
         ),
+        nodes : new Map()
     }))
 
 

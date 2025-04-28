@@ -12,8 +12,6 @@ import Edge from './Edge';
  * If a logical schema for this class was drawn, then it would look something
  * like this
  *           neighbour <- |===| -> neighbour
- * According to our needs, the total cap has been put to 7 neighbours [including itself]
- * This is not a class level cap, it is a project level cap.
  *
  * This class can also deal with any type of "node", in our project it is
  * a number.

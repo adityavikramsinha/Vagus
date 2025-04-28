@@ -1,19 +1,25 @@
 import React from "react";
-import Node, {NodeProps} from "../Node";
+import GraphNode, {NodeProps} from "../GraphNode";
 import * as m from "motion/react";
 import ElasticBand from "../elastic-band/ElasticBand";
 import * as ApplyForce from "./Forces"
+import useTreeStore from "../../../stores/TreeStore";
+import {NOTSET} from "../../../visualise-graphs/ts/Types";
 
 // TODO, change Node and Edge List to Node and EdgeList in @graphs/ts/Algorithms
-
+let i = 0;
 export const Blackboard = () => {
+
+    const nodes = useTreeStore(state => state.nodes);
+    const mouseX = m.motionValue<number>(0);
+    const mouseY = m.motionValue<number>(0);
     const createNode = (
         id: number,
         x: number,
         y: number,
         mass: number = 2,
-        vx:number = 0,
-        vy:number = 0,
+        vx: number = 0,
+        vy: number = 0,
     ): NodeProps => {
         return {
             id: id,
@@ -35,22 +41,6 @@ export const Blackboard = () => {
 
         };
     }
-    const nodes = [
-        createNode(0, 100, 100),
-        createNode(1, 300, 300, 100),
-        createNode(2, 400, 300),
-        createNode(3, 500, 500, 40),
-        createNode(4, 500, 500),
-        createNode(5, 500, 500, 40),
-        createNode(6, 500, 500),
-        createNode(7, 500, 500),
-        createNode(8, 500, 500, 70),
-        createNode(9, 500, 500),
-        createNode(10, 500, 500, 90),
-        createNode(11, 500, 500),
-        createNode(12, 500, 500, 10),
-    ];
-
     const edges: [number, number][] = [
         [0, 1],
         [1, 2],
@@ -78,20 +68,20 @@ export const Blackboard = () => {
             // and then get the nodes.
             // Finally apply the spring force over the edges
             for (const [src, dest] of edges) {
-                const srcNode = nodes[src];
-                const destNode = nodes[dest];
+                const srcNode = nodes.get(src) as NodeProps;
+                const destNode = nodes.get(dest) as NodeProps;
                 if (!srcNode || !destNode) continue;
                 ApplyForce.springForce(srcNode, destNode, 0.5, restLength);
             }
 
             // Apply repulsive force between all pairs of nodes
-            for (let i = 0; i < nodes.length; i++)
-                for (let j = i + 1; j < nodes.length; j++)
+            for (let i = 0; i < nodes.size; i++)
+                for (let j = i + 1; j < nodes.size; j++)
                     ApplyForce.repulsive(nodes[i], nodes[j], 0.05, 50);
 
             // Apply movement and damping
-            for (const node of nodes) {
-                if (!node.isDragging) {
+            for (const [_, node] of nodes) {
+                if (node !== NOTSET && !node.isDragging) {
                     node.vx *= damping;
                     node.vy *= damping;
                     node.x.set(node.x.get() + node.vx);
@@ -108,24 +98,36 @@ export const Blackboard = () => {
     }, [nodes]);
 
     return (
-        <div className="relative w-full h-full bg-black text-white overflow-hidden">
+        <m.motion.div
+            className="relative w-full h-full bg-black text-white overflow-hidden"
+            onClick={() => {
+                useTreeStore.setState({nodes: new Map(nodes).set(i++, createNode(i, mouseX.get(), mouseY.get()))})
+            }}
+            onMouseMove={(event: React.MouseEvent) => {
+                const rect = event.currentTarget.getBoundingClientRect();
+                mouseX.set(event.clientX - rect.left);
+                mouseY.set(event.clientY - rect.top);
+            }}
+        >
             <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
-                {edges.map(([src, dest], idx) => (
-                    <ElasticBand
-                        key={idx}
-                        x1={nodes[src].x}
-                        y1={nodes[src].y}
-                        x2={nodes[dest].x}
-                        y2={nodes[dest].y}
-                    />
-                ))}
+                {edges.map(([src, dest], idx) => {
+                    if (nodes[src] && nodes[dest]) {
+                        return (
+                            <ElasticBand
+                                key={idx}
+                                x1={nodes[src].x}
+                                y1={nodes[src].y}
+                                x2={nodes[dest].x}
+                                y2={nodes[dest].y}
+                            />
+                        );
+                    }
+                })}
             </svg>
-            {nodes.map((nodeProps, idx) => (
-                    <Node
-                        {...nodeProps}
-                    />
+            {nodes.values().toArray().map(nodeProps => (
+                <GraphNode {...(nodeProps as NodeProps)} />
             ))}
-        </div>
+        </m.motion.div>
     );
 };
 

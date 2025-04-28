@@ -9,7 +9,7 @@ type ElasticBandProps = {
     y2: m.MotionValue<number>,
 };
 
-const BALL_SIZE = 25;
+const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
 
 const ElasticBand: React.FC<ElasticBandProps> = ({x1, x2, y1, y2}) => {

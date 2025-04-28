@@ -1,4 +1,4 @@
-import {Particle} from "../Node";
+import {Particle} from "../GraphNode";
 
 /**
  * Applies basic Coulomb Force at "short ranges" on 2 Particles for a time-step dt = 1.
@@ -12,7 +12,7 @@ export const repulsive = (
     p2: Particle,
     c: number,
     shortRange: number) => {
-
+    if (!p1 || !p2) return;
     const dx = p2.x.get() - p1.x.get();
     const dy = p2.y.get() - p1.y.get();
     const dist = Math.hypot(dx, dy) || 1;
@@ -36,6 +36,7 @@ export const springForce = (
     stiffness: number,
     restLength: number
 ) => {
+    if (!p1 || !p2) return;
     const dx = p2.x.get() - p1.x.get();
     const dy = p2.y.get() - p1.y.get();
     const dist = Math.max(0.1, Math.hypot(dx, dy));

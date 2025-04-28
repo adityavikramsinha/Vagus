@@ -1,7 +1,6 @@
 import React from "react";
 import * as m from "motion/react";
-
-export type Particle = {
+export interface Particle  {
     x: m.MotionValue<number>;
     y: m.MotionValue<number>;
     vx: number;
@@ -10,13 +9,13 @@ export type Particle = {
     isDragging: boolean;
 };
 
-export type NodeProps = {
+export interface NodeProps extends Particle{
     id: number;
     onUpdate: (index: number, x: number, y: number) => void;
     onDragChange: (index: number, dragging: boolean) => void;
-} & Particle;
+}
 
-const Node: React.FC<NodeProps> = ({id, x, y, onUpdate, onDragChange}) => {
+const GraphNode: React.FC<NodeProps> = ({id, x, y, onUpdate, onDragChange}) => {
 
     // Tracks the 'x' & 'y' motion values, and handles the binding of "change" (anything)
     // to both of these props, that way we do not have to think about the cursor position
@@ -28,7 +27,7 @@ const Node: React.FC<NodeProps> = ({id, x, y, onUpdate, onDragChange}) => {
             dragMomentum
             onDragStart={() => onDragChange(id, true)}
             onDragEnd={() => onDragChange(id, false)}
-            className={"w-[25px] h-[25px] bg-amber-200 rounded-[50%] cursor-grabbing absolute"}
+            className={"w-[20px] h-[20px] bg-amber-200 rounded-[50%] cursor-grabbing absolute"}
             style={{x, y}}
             onClick={(event: React.MouseEvent) =>
                 // stop propagation of click to parent,
@@ -40,4 +39,4 @@ const Node: React.FC<NodeProps> = ({id, x, y, onUpdate, onDragChange}) => {
         />
     );
 };
-export default Node;
+export default GraphNode;
