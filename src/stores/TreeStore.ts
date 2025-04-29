@@ -8,7 +8,7 @@ import Edge from "../visualise-graphs/ts/Edge";
 
 
 interface TreeStoreProps  {
-    nodes :Map<number , BobProps| NOTSET_t>,
+    nodes :Map<number , BobProps>,
     edgeList : Map<number , Edge>,
     srcNode : number | NOTSET_t,
     destNode : number | NOTSET_t

@@ -33,7 +33,7 @@ export const repulsive = (
 export const springForce = (
     p1: Particle,
     p2: Particle,
-    stiffness: number,
+    k: number,
     restLength: number
 ) => {
     if (!p1 || !p2) return;
@@ -41,7 +41,7 @@ export const springForce = (
     const dy = p2.y.get() - p1.y.get();
     const dist = Math.max(0.1, Math.hypot(dx, dy));
     const stretch = dist - restLength;
-    const [Fx, Fy] = [dx, dy].map(dl => (dl / dist) * stretch * stiffness);
+    const [Fx, Fy] = [dx, dy].map(dl => (dl / dist) * stretch * k);
     [p1, p2].forEach((p, i) => {
         if (!p.isDragging) {
             const sign = i === 0 ? 1 : -1;

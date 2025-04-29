@@ -29,7 +29,7 @@ export const Blackboard = () => {
     const mouseX = m.motionValue<number>(0);
     const mouseY = m.motionValue<number>(0);
     m.useAnimationFrame(() => {
-        const damping = 0.25;  // Damping factor
+        const damping =0.5;  // Damping factor
         const restLength = 100;  // Rest length of spring
 
         // Go over all pairs
@@ -40,7 +40,7 @@ export const Blackboard = () => {
             const srcNode = nodes.get(src) as BobProps;
             const destNode = nodes.get(dest) as BobProps;
             if (!srcNode || !destNode) continue;
-            ApplyForce.springForce(srcNode, destNode, 0.5, restLength);
+            ApplyForce.springForce(srcNode, destNode, 1, restLength);
         }
 
         // Apply repulsive force between all pairs of nodes
@@ -50,7 +50,7 @@ export const Blackboard = () => {
 
         // Apply movement and damping
         for (const [_, node] of nodes) {
-            if (node !== NOTSET && !node.isDragging) {
+            if (!node.isDragging) {
                 node.vx *= damping;
                 node.vy *= damping;
                 node.x.set(node.x.get() + node.vx);
@@ -76,7 +76,7 @@ export const Blackboard = () => {
                 {edges.map(([src, dest], idx) => {
                     const srcNode = nodes.get(src);
                     const destNode = nodes.get(dest);
-                    if (srcNode && destNode && srcNode !== NOTSET && destNode !== NOTSET) {
+                    if (srcNode && destNode) {
                         return (
                             <ElasticBand
                                 key={idx}
