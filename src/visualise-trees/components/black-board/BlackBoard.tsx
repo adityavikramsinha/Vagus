@@ -74,14 +74,16 @@ export const Blackboard = () => {
         >
             <svg className="absolute top-0 left-0 w-full h-full pointer-events-none">
                 {edges.map(([src, dest], idx) => {
-                    if (nodes[src] && nodes[dest]) {
+                    const srcNode = nodes.get(src);
+                    const destNode = nodes.get(dest);
+                    if (srcNode && destNode && srcNode !== NOTSET && destNode !== NOTSET) {
                         return (
                             <ElasticBand
                                 key={idx}
-                                x1={nodes[src].x}
-                                y1={nodes[src].y}
-                                x2={nodes[dest].x}
-                                y2={nodes[dest].y}
+                                x1={srcNode.x}
+                                y1={srcNode.y}
+                                x2={destNode.x}
+                                y2={destNode.y}
                             />
                         );
                     }
