@@ -15,7 +15,7 @@ export const Blackboard = () => {
     const mouseX = m.motionValue<number>(0);
     const mouseY = m.motionValue<number>(0);
     m.useAnimationFrame(() => {
-        const damping =0.5;  // Damping factor
+        const damping = 0.5;  // Damping factor
         const restLength = 150;  // Rest length of spring
 
         // Go over all pairs
@@ -24,7 +24,7 @@ export const Blackboard = () => {
         // Finally apply the spring force over the edges
         for (const [src, edgeList] of edges) {
             const srcNode = nodes.get(src) as BobProps;
-            edgeList.forEach(edge =>{
+            edgeList.forEach(edge => {
                 const destNode = nodes.get(parseInt(edge.dest.getData())) as BobProps;
                 if (srcNode && destNode)
                     ApplyForce.springForce(srcNode, destNode, 1, restLength);
@@ -55,7 +55,7 @@ export const Blackboard = () => {
     return (
         <m.motion.div
             className={cn("relative w-full h-full bg-black text-white overflow-hidden", {
-                "cursor-crosshair" : isAddingEdge
+                "cursor-crosshair": isAddingEdge
             })}
             onClick={() => handleBlackBoardClick(nodes, createBob(++i, mouseX.get(), mouseY.get()))}
             onMouseMove={(event: React.MouseEvent) => {
@@ -74,17 +74,15 @@ export const Blackboard = () => {
                         return (
                             <ElasticBand
                                 key={`${src}-${edge.dest.getData()}-${i}`}
-                                x1={srcNode.x}
-                                y1={srcNode.y}
-                                x2={destNode.x}
-                                y2={destNode.y}
+                                srcBob={nodes.get(src)}
+                                destBob={destNode}
                             />
                         );
                     });
                 })}
             </svg>
             {nodes.values().toArray().map(nodeProps => (
-                <Bob key ={nodeProps.id} {...(nodeProps as BobProps)} />
+                <Bob key={nodeProps.id} {...(nodeProps as BobProps)} />
             ))}
         </m.motion.div>
     );

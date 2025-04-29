@@ -16,20 +16,21 @@ const handleBobClick = (event: React.MouseEvent, id: number, isDragging: boolean
 
         // we have to perform a clean-up function so that after an edge has
         // been set up, we can add another edge with a new src and destination
-        const srcNode = useTreeStore.getState().srcNodeId ;
-        if(srcNode === NOTSET)
-            useTreeStore.setState({srcNodeId : id});
-        else{
+        const srcNode = useTreeStore.getState().srcNodeId;
+        if (srcNode === NOTSET)
+            useTreeStore.setState({srcNodeId: id});
+        // how does a self edge make sense? DO NOT, allow it.
+        else if (srcNode !== id) {
             const updatedEdgeList = new Map(useTreeStore.getState().edgeList);
-            const destNode = new Vertex(id.toString() , (a,b)=>parseInt(a)-parseInt(b));
-            if(updatedEdgeList.get(srcNode) ===undefined) {
+            const destNode = new Vertex(id.toString(), (a, b) => parseInt(a) - parseInt(b));
+            if (updatedEdgeList.get(srcNode) === undefined) {
                 updatedEdgeList.set(srcNode, new Set());
             }
             const nodeEdges = updatedEdgeList.get(srcNode);
             nodeEdges.add(new Edge(destNode, 1));
-            useTreeStore.setState({edgeList : updatedEdgeList});
+            useTreeStore.setState({edgeList: updatedEdgeList});
             // Cleanup the srcNode
-            useTreeStore.setState({srcNodeId : NOTSET});
+            useTreeStore.setState({srcNodeId: NOTSET});
         }
     }
 
