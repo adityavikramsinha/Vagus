@@ -1,19 +1,19 @@
 import {FileType} from "../components/file/File";
-import {NOTSET} from "../visualise-graphs/ts/Types";
+import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
 import {create} from "zustand";
 import {storeApi, useProvidedStore} from "../providers/StoreProvider";
 import {FileStore} from "../providers/FileExplorer";
-import {SpringyNode} from "../visualise-trees/components/Node";
+import {BobProps} from "../visualise-trees/components/bob/Bob";
+import Edge from "../visualise-graphs/ts/Edge";
 
-interface TreeStoreProps {
-    nodes: SpringyNode []
-}
 
-interface TreeStoreActions {
+interface TreeStoreProps  {
+    nodes :Map<number , BobProps>,
+    edgeList : Map<number, Set<Edge>>,
+    srcNodeId : number | NOTSET_t,
 }
-
-export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {
-}
+interface TreeStoreActions  {}
+export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {}
 
 export const treeStore =
     create<TreeStore>()((set) => ({
@@ -26,15 +26,16 @@ export const treeStore =
             [FileType.MD]: NOTSET
         },
         changeActiveFiles: (newActiveFileId, fileType) => set(
-            (state) => ({
+            ({activeFiles}) => ({
                 activeFiles: {
-                    ...state.activeFiles,
+                    ...activeFiles,
                     [fileType]: newActiveFileId
                 }
             })
         ),
-
-        nodes: []
+        nodes : new Map(),
+        edgeList : new Map(),
+        srcNodeId : NOTSET,
     }))
 
 
@@ -42,8 +43,8 @@ const useTreeStore = <U>(selector: (state: TreeStore) => U): U => useProvidedSto
 
 useTreeStore.getState = () => storeApi<TreeStore>().getState();
 useTreeStore.setState = (partial: TreeStore
-                             | Partial<TreeStore>
-                             | ((state: TreeStore) => TreeStore | Partial<TreeStore>),
+                              | Partial<TreeStore>
+                              | ((state: TreeStore) => TreeStore | Partial<TreeStore>),
                          replace ?: false
 ) => storeApi<TreeStore>().setState(partial, replace)
 

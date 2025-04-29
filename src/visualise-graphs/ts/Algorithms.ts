@@ -3,7 +3,6 @@ import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 import {AlgoType, NOTSET, NOTSET_t} from "./Types";
 import BackendStateManager from "../api/BackendStateManager";
 import {Queue} from "queue-typescript";
-import Node from "./Node";
 import {match} from "ts-pattern";
 
 /**
@@ -13,14 +12,14 @@ import {match} from "ts-pattern";
  *
  * @author aditya , <adityavikramsinha19@gmail.com>
  */
-export default class Algorithms<T> {
+export default class Algorithms {
 
     // the graph which the algorithms
     // get to work with
-    graph: Graph<T>;
+    graph: Graph;
 
     // comparator
-    comparator: (a: T, b: T) => number;
+    comparator: (a: string, b: string) => number;
 
     // Epsilon to weight the aStar algorithm.
     public static EPS: number;
@@ -33,7 +32,7 @@ export default class Algorithms<T> {
      * @param _assignGraph the graph on which the algorithms
      * will work
      */
-    constructor(_assignGraph: Graph<T>) {
+    constructor(_assignGraph: Graph) {
         this.graph = _assignGraph;
         this.comparator = this.graph.comparator;
         Algorithms.EPS = 1e-5;
@@ -48,17 +47,17 @@ export default class Algorithms<T> {
      * @returns an array containing the path | null [path is given if it is found, else null] and a Set of
      * visited nodes inorder while trying to find the path.
      */
-    bfs(start: T, end: T): [T[] | NOTSET_t, Set<T>] {
+    bfs(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
 
         // first initialise all the variables
         // visited is the nodes that are visited in the process
-        // prev is to keep track of the path
+        // prev is to keep track of the
         // path is the actual path
         // Q is a queue which performs the FIFO operation
-        const visited: Set<T> = new Set();
-        const prev: Map<T, T> = new Map();
-        const path: T[] = [];
-        const Q = new Queue<T>();
+        const visited: Set<string> = new Set();
+        const prev: Map<string, string> = new Map();
+        const path: string[] = [];
+        const Q = new Queue<string>();
 
         // Enqueue the first one
         Q.enqueue(start);
@@ -68,7 +67,7 @@ export default class Algorithms<T> {
         while (Q.length !== 0) {
 
             // We first get the present node instance from the graph.
-            let node: Node<T> = this.graph.nodes().get(Q.dequeue());
+            let node= this.graph.nodes().get(Q.dequeue());
 
             // then we add that node to visited.
             visited.add(node.getData());
@@ -129,14 +128,14 @@ export default class Algorithms<T> {
      * @param end ending id of the path
      * @returns a path | null [path if found, else null] and a inorder Set of visited nodes.
      */
-    dfs(start: T, end: T): [T[] | NOTSET_t, Set<T>] {
+    dfs(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
 
         // path is for the path to be returned
         // visited is for the Set of visited nodes in order
         // prev is to construct a path.
-        const path: T[] = [];
-        const visited: Set<T> = new Set();
-        const prev: Map<T, T> = new Map();
+        const path: string[] = [];
+        const visited: Set<string> = new Set();
+        const prev: Map<string, string> = new Map();
 
         /**
          * Internal function which recurses again and again,
@@ -147,7 +146,7 @@ export default class Algorithms<T> {
          * @param at the present node id for iteration
          * @param parent
          */
-        const internalDfs = (at: T , parent :T ): void => {
+        const internalDfs = (at: string , parent :string ): void => {
 
             // First check if visited has this or not
             // because if it does then it means that
@@ -201,13 +200,13 @@ export default class Algorithms<T> {
      * @param end the id of the end node
      * @returns a path | null [path if found, else] and visited inorder Set.
      */
-    dijkstras(start: T, end: T): [T[] | NOTSET_t, Set<T>] {
+    dijkstras(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
 
         // first get everything from the internal Dijkstra function
         const [dist, prev, visited] = this.internalDijkstras(start, end);
 
         // the rest is just finding the path to use.
-        let path: T[] = [];
+        let path: string[] = [];
 
         // if distance is Infinity then,
         // we know path is not found.
@@ -218,7 +217,7 @@ export default class Algorithms<T> {
         // if it not null,
         // we know there must be a path that exists
         // so reconstruct it.
-        for (let at: T = end; at !== undefined; at = prev.get(at)) path.unshift(at);
+        for (let at: string = end; at !== undefined; at = prev.get(at)) path.unshift(at);
 
         // return reconstructed path.
         return [path, visited];
@@ -232,7 +231,7 @@ export default class Algorithms<T> {
      * @param end the ending node ID
      * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
      */
-    aStar(start: T, end: T): [T[] | NOTSET_t, Set<T>] {
+    aStar(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
 
         // first deconstruct the array returned from a-start
         // dist is the distance from start [S]-> every node [A] which is reachable
@@ -241,7 +240,7 @@ export default class Algorithms<T> {
         const [dist, prev, visited] = this.internalAStar(start, end);
 
         // this is just to reconstruct the path for a*;
-        let path: T[] = [];
+        let path: string[] = [];
 
         // if distance is infinity,
         // we automatically understand no path is possible
@@ -251,7 +250,7 @@ export default class Algorithms<T> {
 
         // reconstruct path
         // after that just return
-        for (let at: T = end; at !== undefined; at = prev.get(at))
+        for (let at: string = end; at !== undefined; at = prev.get(at))
             path.unshift(at);
 
         // we are sure path exists
@@ -267,7 +266,7 @@ export default class Algorithms<T> {
      * @param end ending ID
      * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
      */
-    bellmanFord(start: T, end: T): [T[] | NOTSET_t, Set<T>] {
+    bellmanFord(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
 
         // First get all the data from internal bellman ford
         // we get dist to understand if last node [end] was relaxed or not
@@ -276,7 +275,7 @@ export default class Algorithms<T> {
         const [dist, prev, visited] = this.internalBellmanFord(start);
 
         // path array
-        let path: T[] = [];
+        let path: string[] = [];
 
         // checking for if the last node [end] was relaxed or not
         if (dist.get(end) === Infinity)
@@ -299,19 +298,19 @@ export default class Algorithms<T> {
      * a Map of previous nodes to construct a path and,
      * a Set of visited nodes.
      */
-    internalBellmanFord(start: T): [Map<T, number>, Map<T, T>, Set<T>] {
+    internalBellmanFord(start: string): [Map<string, number>, Map<string, string>, Set<string>] {
 
         // dist is for the possibility of relaxation
         // this also signifies if a part from the start -> end
         // exists since if end is not relaxed [i.e. end remains Infinity]
         // it means it is unreachable
-        let dist: Map<T, number> = new Map();
+        let dist: Map<string, number> = new Map();
 
 
         // Set of visited nodes inorder
-        let visited: Set<T> = new Set();
+        let visited: Set<string> = new Set();
         // Map to help in path reconstruction
-        let prev: Map<T, T> = new Map();
+        let prev: Map<string, string> = new Map();
 
         // Set all the dist to Infinity
         // minus the start node
@@ -379,10 +378,10 @@ export default class Algorithms<T> {
      * from the Start till some point X and second is from the end till the same point X where
      * both of these algorithms meet.
      */
-    static biDirectional(start: number , end: number ): [number[] | NOTSET_t, Set<number>, Set<number>] {
+    static biDirectional(start: string , end:string): [string[] | NOTSET_t, Set<string>, Set<string>] {
 
         // get the path from start
-        let algo: Algorithms<number> = new Algorithms(BackendStateManager.graph());
+        let algo: Algorithms= new Algorithms(BackendStateManager.graph());
         const pathFromStart = algo.dijkstras(start, end)[0];
 
         // if it is null , we automatically know
@@ -400,7 +399,7 @@ export default class Algorithms<T> {
         // else, we splice the path
         // at mid-point >> 1
         // also we can 100% confirm that it is not NOT_SET
-        let spliceNode :number = pathFromStart[(pathFromStart as number[]).length >> 1];
+        let spliceNode :string= pathFromStart[(pathFromStart as string[]).length >> 1];
 
         // we get from this splicepoint a visited from start
         // and a visited from end
@@ -420,7 +419,7 @@ export default class Algorithms<T> {
      * @param end ending node ID
      * @returns a path | null [path if found, else null] and a Set of visited nodes inorder.
      */
-    bestFirstSearch(start: T, end: T): [T[] | NOTSET_t, Set<T>] {
+    bestFirstSearch(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
 
         // first get all the internal information from the implementation
         // prev is for path deconstruction and ,
@@ -434,7 +433,7 @@ export default class Algorithms<T> {
             return [NOTSET, visited];
 
         // path array
-        let path: T[] = [];
+        let path: string[] = [];
 
         // reconstruct path
         for (let at = end; at !== undefined; at = prev.get(at))
@@ -451,7 +450,7 @@ export default class Algorithms<T> {
      * @param end ending node id
      * @returns a Map for path reconstruction and a Set of visited nodes inorder
      */
-    private internalBestFirstSearch(start: T, end: T): [Map<T, T>, Set<T>] {
+    private internalBestFirstSearch(start: string, end: string): [Map<string, string>, Set<string>] {
 
         // creating a type
         // for priority queue
@@ -459,7 +458,7 @@ export default class Algorithms<T> {
         type Priority = {
 
             // name of the node or its ID
-            label: T,
+            label: string,
 
             // min heuristic cost to end node [end]
             minHeuristic: number
@@ -469,11 +468,11 @@ export default class Algorithms<T> {
         let PQ = new MinPriorityQueue<Priority>((promisingNode) => promisingNode.minHeuristic);
 
         // prev is to reconstruct path
-        let prev: Map<T, T> = new Map();
+        let prev: Map<string, string> = new Map();
 
         // visited is for remembering which nodes
         // have been visited
-        let visited: Set<T> = new Set();
+        let visited: Set<string> = new Set();
 
         // start and end nodes have been given values
         let dest = this.graph.nodes().get(start), endNode = this.graph.nodes().get(end);
@@ -535,14 +534,14 @@ export default class Algorithms<T> {
      * @param end ending node ID
      * @returns a distance map, a map to reconstruct the path and a set of visited nodes inorder
      */
-    private internalAStar(start: T, end: T): [Map<T, number>, Map<T, T>, Set<T>] {
+    private internalAStar(start: string, end: string): [Map<string, number>, Map<string, string>, Set<string>] {
 
         // created type to have
         // in the Priority Queue
         type Priority = {
 
             // UID of node
-            label: T,
+            label: string,
 
             // min distance from [S]
             minDist: number,
@@ -557,8 +556,8 @@ export default class Algorithms<T> {
         // the visited set is for visualisation
         // and to make decisions about whether a node should be opened or not
         const PQ = new MinPriorityQueue<Priority>((promisingNode) => promisingNode.minHeuristic);
-        const dist: Map<T, number> = new Map(), prev: Map<T, T> = new Map();
-        const visited: Set<T> = new Set();
+        const dist: Map<string, number> = new Map(), prev: Map<string, string> = new Map();
+        const visited: Set<string> = new Set();
 
         // set the distances to infinity
         this.graph.nodes().forEach((node) => {
@@ -641,12 +640,12 @@ export default class Algorithms<T> {
      * @param end the ending node ID
      * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes and, a Set for visited nodes inorder.
      */
-    private internalDijkstras(start: T, end: T): [Map<T, number>, Map<T, T>, Set<T>] {
+    private internalDijkstras(start: string, end: string): [Map<string, number>, Map<string, string>, Set<string>] {
 
         // Creating a type to hold the important
         // properties for the Priority Queue.
         type Priority = {
-            label: T,
+            label: string,
             minDist: number;
         }
 
@@ -656,10 +655,10 @@ export default class Algorithms<T> {
 
         // dist map for shortest distance between
         // a node [A] and the Start node [S]
-        let dist: Map<T, number> = new Map(), prev: Map<T, T> = new Map();
+        let dist: Map<string, number> = new Map(), prev: Map<string, string> = new Map();
 
         // Set of all visited nodes
-        let visited: Set<T> = new Set();
+        let visited: Set<string> = new Set();
 
         // First we set the value of distances from node [S]
         // to any node [A] to infinity
@@ -757,10 +756,10 @@ export default class Algorithms<T> {
      * the path contains the path from start->end for currentState and visitedInOrder contains
      * the nodes that were visited [inorder] to reach to that path
      */
-    static runWithoutBombNode(algoType : AlgoType, startNodeId:number, endNodeId:number): { path: number[] | NOTSET_t, visited: Set<number> } {
+    static runWithoutBombNode(algoType : AlgoType, startNodeId:string, endNodeId:string): { path: string[] | NOTSET_t, visited: Set<string> } {
 
         // getting a new algorithm instance to run the functions from
-        let algo: Algorithms<number> = new Algorithms<number>(BackendStateManager.graph());
+        let algo: Algorithms = new Algorithms(BackendStateManager.graph());
 
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
@@ -785,10 +784,10 @@ export default class Algorithms<T> {
      */
     static runWithBombNode(
         algoType: AlgoType,
-        startNodeId: number,
-        endNodeId: number,
-        bombNodeId: number
-    ): { path: number[] | NOTSET_t, visitedP1: Set<number>, visitedP2: Set<number> } {
+        startNodeId: string,
+        endNodeId: string,
+        bombNodeId: string
+    ): { path: string[] | NOTSET_t, visitedP1: Set<string>, visitedP2: Set<string> } {
         // getting an algorithm instance for ease of running
         let algo = new Algorithms(BackendStateManager.graph());
 
@@ -799,7 +798,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.aStar(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -808,7 +807,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.bfs(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -817,7 +816,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.bellmanFord(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -826,7 +825,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.dijkstras(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -835,7 +834,7 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.dfs(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
@@ -844,13 +843,13 @@ export default class Algorithms<T> {
                 const [pathP2, visitedP2] = algo.bestFirstSearch(bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as number[]).concat((pathP2 as number[]).slice(1))
+                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
                 return { path, visitedP1, visitedP2 };
             })
             .otherwise(() => {
                 console.error("Internal error, the algorithm selected does not match with the algorithms possible");
-                return { path: NOTSET as NOTSET_t, visitedP1: new Set<number>(), visitedP2: new Set<number>() };
+                return { path: NOTSET as NOTSET_t, visitedP1: new Set<string>(), visitedP2: new Set<string>() };
             });
     }
 }

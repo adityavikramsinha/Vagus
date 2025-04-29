@@ -4,7 +4,7 @@ import BackendStateManager from "./BackendStateManager";
 import Syncer from "./Syncer";
 
 export default class Animator {
-    static async animatePathNodes(path: number [] | NOTSET_t) {
+    static async animatePathNodes(path: string[] | NOTSET_t) {
         if (path === NOTSET) return;
         const store = useGraphStore.getState();
         const internalSet = store.pathNodes;
@@ -20,7 +20,7 @@ export default class Animator {
         await Syncer.supervise(() => useGraphStore.setState({pathNodes: new Set(internalSet)}));
     }
 
-    static async animateVisitedNodes(visited: Map<number, NodeType.START_NODE | NodeType.BOMB_NODE>) {
+    static async animateVisitedNodes(visited: Map<string, NodeType.START_NODE | NodeType.BOMB_NODE>) {
         const store = useGraphStore.getState();
         const internalSet = store.visitedNodes;
         let i = 0;
@@ -44,9 +44,9 @@ export default class Animator {
 
     // return if there is no neighbour
     // return if there is a start node has come
-    static async animateRandomWalk(nodeId: number | NOTSET_t): Promise<void> {
+    static async animateRandomWalk(nodeId: string| NOTSET_t): Promise<void> {
         if (useGraphStore.getState().endNodeId === nodeId ||
-            BackendStateManager.graph().nodes().get((nodeId as number)).getAdjNodes().length === 1) {
+            BackendStateManager.graph().nodes().get((nodeId as string)).getAdjNodes().length === 1) {
             if (useGraphStore.getState().endNodeId === nodeId) {
                 useGraphStore.setState({randomPathId: nodeId});
                 useGraphStore.getState().pathNodes.add(nodeId);
@@ -58,7 +58,7 @@ export default class Animator {
             useGraphStore.getState().pathNodes.add(nodeId);
             await new Promise(res => setTimeout(res, 250));
             await this.animateRandomWalk(
-                BackendStateManager.graph().nodes().get((nodeId as number)).getRandomNeighbour().getData());
+                BackendStateManager.graph().nodes().get((nodeId as string)).getRandomNeighbour().getData());
         })
     }
 }

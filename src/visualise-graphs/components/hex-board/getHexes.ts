@@ -21,7 +21,7 @@ const getHexes = (rows: number, cols: number, HEX_WIDTH: number, HEX_HEIGHT: num
         let doubledCoordinates = isOddCol ? 1 : 0;
 
         for (let row = 0; row < rows; row++, doubledCoordinates += 2, y += HEX_HEIGHT) {
-            const id = Pipe.pairToUUID(doubledCoordinates, col);
+            const id = Pipe.pairToUUID(doubledCoordinates, col).toString();
             hexes.push({ x, y, id });
         }
     }

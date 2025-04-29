@@ -20,24 +20,24 @@ export enum NodeType {
 }
 
 interface GraphStoreProps {
-    startNodeId: number | NOTSET_t,
-    endNodeId: number | NOTSET_t,
-    bombNodeId: number | NOTSET_t,
+    startNodeId: string | NOTSET_t,
+    endNodeId: string | NOTSET_t,
+    bombNodeId: string| NOTSET_t,
     hexes: HexProps [],
     hexBoardDimensions: { width: number, height: number },
     hexDimensions: { HEX_WIDTH: number, HEX_HEIGHT: number },
-    hexBoard: Record<number | NOTSET_t, NodeType | NOTSET_t>,
+    hexBoard: Record<string| NOTSET_t, NodeType | NOTSET_t>,
     block: boolean,
     // visited contains a map of ids, and the node they were visited from, i.e.
     // from where the path will start.
-    visitedNodes: Map<number | NOTSET_t, NodeType.START_NODE | NodeType.BOMB_NODE>,
-    pathNodes: Set<number | NOTSET_t>,
-    randomPathId: number | NOTSET_t,
+    visitedNodes: Map<string| NOTSET_t, NodeType.START_NODE | NodeType.BOMB_NODE>,
+    pathNodes: Set<string| NOTSET_t>,
+    randomPathId: string| NOTSET_t,
     executing: boolean,
 }
 
 interface GraphStoreActions  {
-    changeNode(nodeType: NodeType, actionType: NodeAction, id: number | NOTSET_t): void,
+    changeNode(nodeType: NodeType, actionType: NodeAction, id: string| NOTSET_t): void,
     setHexBoardDimensions: (dimension: { width: number, height: number }) => void,
 }
 

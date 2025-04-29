@@ -54,8 +54,8 @@ const HexBoard: React.FC = () => {
             const [endRow, endCol] = getDoubledCoordinatesPair(endPosition);
 
             // get the Ids from the row & col.
-            const startId = Pipe.pairToUUID(startRow, startCol);
-            const endId = Pipe.pairToUUID(endRow, endCol);
+            const startId = Pipe.pairToUUID(startRow, startCol).toString();
+            const endId = Pipe.pairToUUID(endRow, endCol).toString();
             changeNode(NodeType.START_NODE, NodeAction.SET, startId);
             changeNode(NodeType.END_NODE, NodeAction.SET, endId);
             setHexBoardDimensions({width, height});

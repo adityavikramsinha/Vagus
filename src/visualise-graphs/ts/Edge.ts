@@ -1,4 +1,4 @@
-import Node from "./Node";
+import Vertex from "./Vertex";
 
 /**
  * This class is the backbone of the graph architecture.
@@ -6,13 +6,13 @@ import Node from "./Node";
  *
  * The logical representation of this class is :
  * src -> cost -> dest.
- * 
+ *
  * @author aditya , <adityavikramsinha19@gmail.com>
  */
-export default class Edge<T> {
+export default class Edge {
 
   // the dest node
-  dest: Node<T>;
+  dest: Vertex;
 
   // the cost of traversal
   cost: number;
@@ -23,7 +23,7 @@ export default class Edge<T> {
    * @param dest the destination node to make a connection to
    * @param cost the cost of movement from the source node to the destination node.
    */
-  constructor(dest: Node<T>, cost: number) {
+  constructor(dest: Vertex, cost: number) {
     this.dest = dest;
     this.cost = cost;
   }
@@ -44,7 +44,7 @@ export default class Edge<T> {
    *
    * @param _newDest New destination for movement to
    */
-  changeDest(_newDest: Node<T>): void {
+  changeDest(_newDest: Vertex): void {
     this.dest = _newDest;
   }
 

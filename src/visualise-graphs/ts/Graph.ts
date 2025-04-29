@@ -1,4 +1,4 @@
-import Node from "./Node";
+import Vertex from "./Vertex";
 
 /**
  * Utility graph class with functions to help in maintaining state and making the algorithms work.
@@ -10,16 +10,16 @@ import Node from "./Node";
  *
  * @author aditya, <adityavikramsinha19@gmail.com>
  */
-export default class Graph<T> {
+export default class Graph {
 
     // freeze guard
-    private frozen= false ;
+    private frozen = false;
 
     // A Map which represents the Graph internally
-    Nodes: Map<T, Node<T>> = new Map();
+    Nodes: Map<string, Vertex> = new Map();
 
     // Comparator for ordering of the nodes in the Graph.
-    comparator: (a: T, b: T) => number;
+    comparator: (a: string, b: string) => number;
 
     // Implementation of a Cyclic Graph.
     isCyclic: boolean;
@@ -34,7 +34,7 @@ export default class Graph<T> {
      *
      * @param comparator the comparator which the class should be using for ordering.
      */
-    constructor(comparator: (a: T, b: T) => number) {
+    constructor(comparator: (a: string, b: string) => number) {
         this.comparator = comparator;
         this.isUndirected = false;
     }
@@ -42,7 +42,7 @@ export default class Graph<T> {
     /**
      * @returns back a map of nodes (id , real object) present in the graph.
      */
-    nodes(): Map<T, Node<T>> {
+    nodes(): Map<string, Vertex> {
         return this.Nodes;
     }
 
@@ -53,7 +53,7 @@ export default class Graph<T> {
      * @param x the x coordinate
      * @param y the y coordinate
      */
-    setNodeCoords(data: T, {x, y}: { x: number, y: number }): void {
+    setNodeCoords(data: string, {x, y}: { x: number, y: number }): void {
         this.assertMutable();
         this.nodes().get(data).setCoords(x, y);
     }
@@ -64,7 +64,7 @@ export default class Graph<T> {
      * @param data the node to search for
      * @returns true if a node is present in the graph , else false .
      */
-    nodeExists(data: T): boolean {
+    nodeExists(data: string): boolean {
         return this.nodes().get(data) !== undefined;
     }
 
@@ -77,7 +77,7 @@ export default class Graph<T> {
      * @param destination the ending point of the edge
      * @returns true if an edge exists, else false.
      */
-    edgeExists(source: T, destination: T): boolean {
+    edgeExists(source: string, destination: string): boolean {
         const src = this.nodes().get(source);
 
         if (src === undefined)
@@ -95,12 +95,12 @@ export default class Graph<T> {
      * @param data the node data to add.
      * @returns the added node or, just the node which exists with the same ID.
      */
-    addNode(data: T): Node<T> {
+    addNode(data: string): Vertex {
         this.assertMutable();
         let node = this.nodes().get(data);
         if (node !== undefined)
             return node;
-        node = new Node(data, this.comparator);
+        node = new Vertex(data, this.comparator);
         this.nodes().set(data, node);
         return node;
     }
@@ -113,7 +113,7 @@ export default class Graph<T> {
      * @param data the data or id of the node to be removed .
      * @returns Null if the node does not exist. If it does, then the node is returned.
      */
-    rmNode(data: T): Node<T> | null {
+    rmNode(data: string): Vertex | null {
         this.assertMutable();
         const nodeToRm = this.nodes().get(data);
         if (!nodeToRm) return null;
@@ -128,7 +128,7 @@ export default class Graph<T> {
      * Ensures that no modifications can be made to the graph once it has been frozen.
      * @private
      */
-    private assertMutable () {
+    private assertMutable() {
         if (this.frozen)
             throw new Error("The graph has been frozen, no operations that modify the graph can be done")
     }
@@ -144,7 +144,7 @@ export default class Graph<T> {
      * @param destination the node to add the connection to
      * @param cost the cost of the connection between them.
      */
-    addEdge(source: T, destination: T, cost: number): void {
+    addEdge(source: string, destination: string, cost: number): void {
         this.assertMutable();
         let src = this.nodes().get(source);
         let dest = this.nodes().get(destination);
@@ -163,7 +163,7 @@ export default class Graph<T> {
      * @param source the node id from which the connection starts
      * @param destination the node id at which the connection ends
      */
-    rmEdge(source: T, destination: T): void {
+    rmEdge(source: string, destination: string): void {
         this.assertMutable();
         const src = this.nodes().get(source);
         const dest = this.nodes().get(destination);
@@ -183,7 +183,7 @@ export default class Graph<T> {
      * @param whatType is the type of distance required, m for manhattan and e for Euclidean
      * @returns the value of this function.
      */
-    distBw(_this: Node<T>, _that: Node<T>, whatType: string = 'e'): number {
+    distBw(_this: Vertex, _that: Vertex, whatType: string = 'e'): number {
         if (whatType === 'e')
             return Math.sqrt(Math.pow(_that.x() - _this.x(), 2) + Math.pow(_that.y() - _this.y(), 2));
         else
@@ -198,15 +198,6 @@ export default class Graph<T> {
     }
 
     /**
-     * The freeze() method freezes a graph. A frozen graph can no longer be modified in any way.
-     * @param graph the graph to be frozen
-     * @see freeze
-     */
-    static freeze<T>(graph: Graph<T>): void {
-        graph.freeze() ;
-    }
-
-    /**
      * Takes an initial Graph (_initGraph) and (_presentGraph), then, for a given node in the
      * _presentGraph it reverts the nodes state back the nodes state in the _initGraph.
      * This means that the properties of the node in _initGraph and _presentGraph
@@ -218,10 +209,10 @@ export default class Graph<T> {
      * @param _initGraph the _initGraph whose node state needs to be copied
      * @param _presentGraph the present graph in which the changes need to be made.
      */
-    static revertNode<T>(data: T, _initGraph: Graph<T>, _presentGraph: Graph<T>): void {
-        let initialNode: Node<T> = _initGraph.nodes().get(data);
+    static revertNode(data: string, _initGraph: Graph, _presentGraph: Graph): void {
+        let initialNode = _initGraph.nodes().get(data);
         _presentGraph.addNode(data);
-        let presentNode: Node<T> = _presentGraph.nodes().get(data);
+        let presentNode = _presentGraph.nodes().get(data);
 
         initialNode.getAdjNodes().forEach(edge => {
             let presentEdgeDest = _presentGraph.nodes().get(edge.dest.getData());
@@ -240,8 +231,8 @@ export default class Graph<T> {
      * @param data the node whose incoming edges need to be updated to that cost
      * @param cost the cost to update the edges to.
      */
-    updateCostOfIncoming(data: T, cost: number): void {
-        let node: Node<T> = this.nodes().get(data);
+    updateCostOfIncoming(data: string, cost: number): void {
+        let node: Vertex = this.nodes().get(data);
         if (node === undefined) return;
         node.getAdjNodes().forEach((edge) => {
             if (edge.dest.getData() !== node.getData()) {
@@ -258,7 +249,7 @@ export default class Graph<T> {
      * @param _present the present graph to which the state needs to be copied
      * @param cost the cost of edges.
      */
-    static copy<T>(_initial: Graph<T>, _present: Graph<T>, cost: number): void {
+    static copy(_initial: Graph, _present: Graph, cost: number): void {
 
         //first reset all active connections
         _initial.nodes().forEach((initNode) => {
