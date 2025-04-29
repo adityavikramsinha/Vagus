@@ -17,8 +17,6 @@ export interface BobProps extends Particle {
     onDragChange: (index: number, dragging: boolean) => void;
 }
 const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange}) => {
-
-
     const [isDragging , setIsDragging] = React.useState(false);
     // Tracks the 'x' & 'y' motion values, and handles the binding of "change" (anything)
     // to both of these props, that way we do not have to think about the cursor position

@@ -9,9 +9,8 @@ import Edge from "../visualise-graphs/ts/Edge";
 
 interface TreeStoreProps  {
     nodes :Map<number , BobProps>,
-    edgeList : Map<number , Edge>,
-    srcNode : number | NOTSET_t,
-    destNode : number | NOTSET_t
+    edgeList : Map<number, Set<Edge>>,
+    srcNodeId : number | NOTSET_t,
 }
 interface TreeStoreActions  {}
 export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {}
@@ -36,8 +35,7 @@ export const treeStore =
         ),
         nodes : new Map(),
         edgeList : new Map(),
-        srcNode : NOTSET,
-        destNode : NOTSET,
+        srcNodeId : NOTSET,
     }))
 
 
