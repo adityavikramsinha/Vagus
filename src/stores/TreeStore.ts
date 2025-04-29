@@ -3,11 +3,15 @@ import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
 import {create} from "zustand";
 import {storeApi, useProvidedStore} from "../providers/StoreProvider";
 import {FileStore} from "../providers/FileExplorer";
-import {NodeProps} from "../visualise-trees/components/GraphNode";
+import {BobProps} from "../visualise-trees/components/bob/Bob";
+import Edge from "../visualise-graphs/ts/Edge";
 
 
 interface TreeStoreProps  {
-    nodes :Map<number , NodeProps| NOTSET_t>
+    nodes :Map<number , BobProps| NOTSET_t>,
+    edgeList : Map<number , Edge>,
+    srcNode : number | NOTSET_t,
+    destNode : number | NOTSET_t
 }
 interface TreeStoreActions  {}
 export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {}
@@ -30,7 +34,10 @@ export const treeStore =
                 }
             })
         ),
-        nodes : new Map()
+        nodes : new Map(),
+        edgeList : new Map(),
+        srcNode : NOTSET,
+        destNode : NOTSET,
     }))
 
 

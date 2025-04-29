@@ -1,4 +1,4 @@
-import {Particle} from "../GraphNode";
+import {Particle} from "../bob/Bob";
 
 /**
  * Applies basic Coulomb Force at "short ranges" on 2 Particles for a time-step dt = 1.

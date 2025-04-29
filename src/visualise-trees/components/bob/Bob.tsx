@@ -1,5 +1,7 @@
 import React from "react";
 import * as m from "motion/react";
+import useTreeStore from "../../../stores/TreeStore";
+import {NOTSET} from "../../../visualise-graphs/ts/Types";
 export interface Particle  {
     x: m.MotionValue<number>;
     y: m.MotionValue<number>;
@@ -9,13 +11,13 @@ export interface Particle  {
     isDragging: boolean;
 };
 
-export interface NodeProps extends Particle{
+export interface BobProps extends Particle{
     id: number;
     onUpdate: (index: number, x: number, y: number) => void;
     onDragChange: (index: number, dragging: boolean) => void;
 }
 
-const GraphNode: React.FC<NodeProps> = ({id, x, y, onUpdate, onDragChange}) => {
+const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange}) => {
 
     // Tracks the 'x' & 'y' motion values, and handles the binding of "change" (anything)
     // to both of these props, that way we do not have to think about the cursor position
@@ -29,14 +31,20 @@ const GraphNode: React.FC<NodeProps> = ({id, x, y, onUpdate, onDragChange}) => {
             onDragEnd={() => onDragChange(id, false)}
             className={"w-[20px] h-[20px] bg-amber-200 rounded-[50%] cursor-grabbing absolute"}
             style={{x, y}}
-            onClick={(event: React.MouseEvent) =>
+            onClick={(event: React.MouseEvent) =>{
                 // stop propagation of click to parent,
                 // since the parent really has nothing to do with this click.
                 event.stopPropagation()
                 // There is little information about this on MDN, but in a way t
                 // this is preventing bubble up of the event.
-            }
+                useTreeStore.getState().srcNode === NOTSET ?
+                    useTreeStore.setState({srcNode : id})
+                    : useTreeStore.setState({destNode : id});
+
+                console.log(useTreeStore.getState().srcNode)
+                console.log(useTreeStore.getState().destNode)
+            }}
         />
     );
 };
-export default GraphNode;
+export default Bob;
