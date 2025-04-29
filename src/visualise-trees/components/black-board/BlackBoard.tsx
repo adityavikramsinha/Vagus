@@ -2,7 +2,7 @@ import React from "react";
 import Bob, {BobProps} from "../bob/Bob";
 import * as m from "motion/react";
 import ElasticBand from "../elastic-band/ElasticBand";
-import * as ApplyForce from "./Forces"
+import * as ApplyForce from "./Forces";
 import useTreeStore from "../../../stores/TreeStore";
 import handleBlackBoardClick from "./handleBlackBoardClick";
 import createBob from "../bob/createBob";
