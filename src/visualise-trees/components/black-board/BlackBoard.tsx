@@ -6,6 +6,7 @@ import * as ApplyForce from "./Forces"
 import useTreeStore from "../../../stores/TreeStore";
 import handleBlackBoardClick from "./handleBlackBoardClick";
 import createBob from "../bob/createBob";
+import cn from "../../../cn";
 
 let i = 0;
 export const Blackboard = () => {
@@ -15,7 +16,7 @@ export const Blackboard = () => {
     const mouseY = m.motionValue<number>(0);
     m.useAnimationFrame(() => {
         const damping =0.5;  // Damping factor
-        const restLength = 100;  // Rest length of spring
+        const restLength = 150;  // Rest length of spring
 
         // Go over all pairs
         // of connected nodes via their edges
@@ -31,10 +32,12 @@ export const Blackboard = () => {
 
         }
 
+        // TODO, the repulsive force is not working
+        //  since node overlap is happening if the edges are subset identical.
         // Apply repulsive force between all pairs of nodes
         for (let i = 0; i < nodes.size; i++)
             for (let j = i + 1; j < nodes.size; j++)
-                ApplyForce.repulsive(nodes[i], nodes[j], 0.05, 50);
+                ApplyForce.repulsive(nodes[i], nodes[j], 0.5, 50);
 
         // Apply movement and damping
         for (const [_, node] of nodes) {
@@ -47,9 +50,13 @@ export const Blackboard = () => {
         }
     })
 
+    const isAddingEdge = useTreeStore(state => state.activeFiles.io === 'io-2');
+
     return (
         <m.motion.div
-            className="relative w-full h-full bg-black text-white overflow-hidden"
+            className={cn("relative w-full h-full bg-black text-white overflow-hidden", {
+                "cursor-crosshair" : isAddingEdge
+            })}
             onClick={() => handleBlackBoardClick(nodes, createBob(++i, mouseX.get(), mouseY.get()))}
             onMouseMove={(event: React.MouseEvent) => {
                 const rect = event.currentTarget.getBoundingClientRect();
