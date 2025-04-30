@@ -6,7 +6,6 @@ import * as ApplyForce from "./Forces";
 import useTreeStore from "../../../stores/TreeStore";
 import handleBlackBoardClick from "./handleBlackBoardClick";
 import createBob from "../bob/createBob";
-import cn from "../../../cn";
 
 export const Blackboard = () => {
     const edges = useTreeStore(state => state.edgeList);
@@ -44,14 +43,9 @@ export const Blackboard = () => {
             if (!node.isDragging) ApplyForce.damping(node, damping)
 
     })
-
-    const isAddingEdge = useTreeStore(state => state.activeFiles.io === 'io-2');
-
     return (
         <m.motion.div
-            className={cn("relative w-full h-full bg-black text-white overflow-hidden", {
-                "cursor-crosshair": isAddingEdge
-            })}
+            className="relative w-full h-full bg-black text-white overflow-hidden"
             onClick={() => handleBlackBoardClick(nodes, createBob(mouseX.get(), mouseY.get()))}
             onMouseMove={(event: React.MouseEvent) => {
                 const rect = event.currentTarget.getBoundingClientRect();
