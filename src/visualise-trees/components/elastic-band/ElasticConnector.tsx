@@ -1,9 +1,7 @@
 import * as m from "motion/react";
 import React from "react";
 import reConstructPath from "./reConstructPath";
-import {BobProps} from "../bob/Bob";
 import handleEdgeClick from "./handleEdgeClick";
-import Edge from "../../../visualise-graphs/ts/Edge";
 import {
     Dialog,
     DialogClose,
@@ -13,10 +11,12 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger
-} from "../../../components/DialogBox";
-import Button from "../../../visualise-graphs/components/action-buttons/Button";
+} from "@/components/DialogBox";
 import EdgeCostEditor from "./EdgeCostEditor";
-import useTreeStore from "../../../stores/TreeStore";
+import useTreeStore from "@/stores/TreeStore";
+import Button from "@graph/components/action-buttons/Button";
+import Edge from "@graph/ts/Edge";
+import {BobProps} from "@tree/components/bob/Bob";
 
 type ElasticConnectorProps = {
     srcBob: BobProps,
@@ -42,7 +42,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
 
     /**
      * A Bézier curve between two points is given by the following formula :
-     * B(t) = (1-t)^2. P_0  + 2(1-t).t.P_1 + t^2.T_2
+     * B(t) = (1-t)^2. P_0  + 2(1-t).t.P_1 + t^2.P_2
      * We find the midpoint by putting parameter t = 0.5,
      * The below two functions for the tooltip[x,y] use this formula and transform IRL.
      */

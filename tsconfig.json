@@ -21,7 +21,8 @@
         "incremental": true,
         "paths": {
             "@/*": ["./src/*"],
-            "@graph/*": ["./src/visualise-graphs/*"]
+            "@graph/*": ["./src/visualise-graphs/*"],
+            "@tree/*" : ["./src/visualise-trees/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
