@@ -92,23 +92,23 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
                             }
                         }}
                     />
-                    <m.motion.foreignObject
-                        width={20}
-                        height={25}
+                    <m.motion.g
                         style={{
                             x: m.useTransform(tooltipX, x => x - 4.5),
                             y: m.useTransform(tooltipY, y => y - 4.5),
-                            rotate: angleDeg, // Rotate the whole foreignObject
+                            rotate: angleDeg, // Rotate the entire group
                         }}
                         pointerEvents="none"
                     >
-                        <div
-                            className="bg-black text-[#fff] text-xs rounded px-2 py-1 whitespace-nowrap flex justify-center items-center"
-                            data-xmlns="http://www.w3.org/1999/xhtml"
-                        >
-                            {edgeCost}
-                        </div>
-                    </m.motion.foreignObject>
+                        <foreignObject width={20} height={25}>
+                            <div
+                                className="bg-black text-[#fff] text-xs rounded px-2 py-1 whitespace-nowrap flex justify-center items-center"
+                                data-xmlns="http://www.w3.org/1999/xhtml"
+                            >
+                                {edgeCost}
+                            </div>
+                        </foreignObject>
+                    </m.motion.g>
                 </m.motion.g>
             </DialogTrigger>
             <DialogContent className="stop-dialog-content">
