@@ -81,7 +81,7 @@ export const Blackboard = () => {
                     });
                 })}
             </svg>
-            {nodes.values().toArray().map(nodeProps => (
+            {[...nodes.values()].map(nodeProps => (
                 <Bob key={nodeProps.id} {...(nodeProps as BobProps)} />
             ))}
         </m.motion.div>
