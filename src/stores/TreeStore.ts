@@ -8,9 +8,9 @@ import Edge from "../visualise-graphs/ts/Edge";
 
 
 interface TreeStoreProps  {
-    nodes :Map<number , BobProps>,
-    edgeList : Map<number, Set<Edge>>,
-    srcNodeId : number | NOTSET_t,
+    nodes :Map<string, BobProps>,
+    edgeList : Map<string, Set<Edge>>,
+    srcNodeId : string| NOTSET_t,
 }
 interface TreeStoreActions  {}
 export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {}

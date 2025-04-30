@@ -8,7 +8,6 @@ import handleBlackBoardClick from "./handleBlackBoardClick";
 import createBob from "../bob/createBob";
 import cn from "../../../cn";
 
-let i = 0;
 export const Blackboard = () => {
     const edges = useTreeStore(state => state.edgeList);
     const nodes = useTreeStore(state => state.nodes);
@@ -25,29 +24,25 @@ export const Blackboard = () => {
         for (const [src, edgeList] of edges) {
             const srcNode = nodes.get(src) as BobProps;
             edgeList.forEach(edge => {
-                const destNode = nodes.get(parseInt(edge.dest.getData())) as BobProps;
+                const destNode = nodes.get(edge.dest.getData()) as BobProps;
                 if (srcNode && destNode)
                     ApplyForce.springForce(srcNode, destNode, 1, restLength);
             })
 
         }
 
-        // TODO, the repulsive force is not working
-        //  since node overlap is happening if the edges are subset identical.
-        // Apply repulsive force between all pairs of nodes
-        for (let i = 0; i < nodes.size; i++)
-            for (let j = i + 1; j < nodes.size; j++)
-                ApplyForce.repulsive(nodes[i], nodes[j], 0.5, 50);
+        // Apply pairwise repulsive force (n^2)
+        nodes.forEach(bobA => {
+            nodes.forEach(bobB => {
+                if (bobA.id !== bobB.id)
+                    ApplyForce.repulsive(bobA, bobB, 0.5, 25)
+            })
+        })
 
-        // Apply movement and damping
-        for (const [_, node] of nodes) {
-            if (!node.isDragging) {
-                node.vx *= damping;
-                node.vy *= damping;
-                node.x.set(node.x.get() + node.vx);
-                node.y.set(node.y.get() + node.vy);
-            }
-        }
+        // Apply movement and damping to all nodes.
+        for (const node of nodes.values())
+            if (!node.isDragging) ApplyForce.damping(node, damping)
+
     })
 
     const isAddingEdge = useTreeStore(state => state.activeFiles.io === 'io-2');
@@ -57,7 +52,7 @@ export const Blackboard = () => {
             className={cn("relative w-full h-full bg-black text-white overflow-hidden", {
                 "cursor-crosshair": isAddingEdge
             })}
-            onClick={() => handleBlackBoardClick(nodes, createBob(++i, mouseX.get(), mouseY.get()))}
+            onClick={() => handleBlackBoardClick(nodes, createBob(mouseX.get(), mouseY.get()))}
             onMouseMove={(event: React.MouseEvent) => {
                 const rect = event.currentTarget.getBoundingClientRect();
                 mouseX.set(event.clientX - rect.left);
@@ -69,12 +64,12 @@ export const Blackboard = () => {
                     const srcNode = nodes.get(src);
                     if (!srcNode || edgeSet.size === 0) return [];
                     return [...edgeSet.values()].map((edge, i) => {
-                        const destNode = nodes.get(parseInt(edge.dest.getData()));
+                        const destNode = nodes.get(edge.dest.getData());
                         if (!destNode) return null;
                         return (
                             <ElasticBand
                                 key={`${src}-${edge.dest.getData()}-${i}`}
-                                srcBob={nodes.get(src)}
+                                srcBob={srcNode}
                                 destBob={destNode}
                             />
                         );

@@ -2,7 +2,7 @@ import {BobProps} from "../bob/Bob";
 import useTreeStore from "../../../stores/TreeStore";
 
 const handleBlackBoardClick = (
-    nodes : Map<number, BobProps>,
+    nodes : Map<string, BobProps>,
     addBob : BobProps
 ) => {
     if (useTreeStore.getState().activeFiles.io === "io-1"){

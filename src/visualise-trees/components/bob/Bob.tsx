@@ -1,7 +1,6 @@
 import React from "react";
 import * as m from "motion/react";
 import handleBobClick from "./handleBobClick";
-import cn from "../../../cn";
 import useTreeStore from "../../../stores/TreeStore";
 
 export interface Particle {
@@ -13,9 +12,9 @@ export interface Particle {
     isDragging: boolean;
 }
 export interface BobProps extends Particle {
-    id: number;
-    onUpdate: (index: number, x: number, y: number) => void;
-    onDragChange: (index: number, dragging: boolean) => void;
+    id: string;
+    onUpdate: (index: string, x: number, y: number) => void;
+    onDragChange: (index: string, dragging: boolean) => void;
 }
 const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange}) => {
     const [isDragging , setIsDragging] = React.useState(false);

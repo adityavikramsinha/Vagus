@@ -4,7 +4,7 @@ import {NOTSET} from "../../../visualise-graphs/ts/Types";
 import Edge from "../../../visualise-graphs/ts/Edge";
 import Vertex from "../../../visualise-graphs/ts/Vertex";
 
-const handleBobClick = (event: React.MouseEvent, id: number, isDragging: boolean) => {
+const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean) => {
     // stop propagation of click to parent,
     // since the parent really has nothing to do with this click.
     event.stopPropagation()

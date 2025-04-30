@@ -2,6 +2,7 @@ import * as m from "motion/react";
 import React from "react";
 import reConstructPath from "./reConstructPath";
 import {BobProps} from "../bob/Bob";
+import handleEdgeClick from "./handleEdgeClick";
 type ElasticBandProps = {
     srcBob: BobProps,
     destBob: BobProps
@@ -28,7 +29,7 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob}) => {
                 strokeWidth={3}
                 fill="none"
                 pointerEvents="all"
-                onClick={() => alert("Edge clicked")}
+                onClick={() => handleEdgeClick(srcBob.id, destBob.id)}
             />
         </g>
     );

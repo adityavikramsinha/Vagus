@@ -26,6 +26,8 @@ const Navbar: FC = () => {
                     <Folder name="addableNodes">
                         <File type={FileType.IO} id={'io-1'} name="nodeActions.io" Icon={<IOFileIcon/>}/>
                         <File type={FileType.IO} id={'io-2'} name={"addEdge.io"} Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id={'io-3'} name={"removeEdge.io"} Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id={'io-4'} name={"addWeightedEdge.io"} Icon={<IOFileIcon/>}/>
                     </Folder>
                 </Folder>
             </div>

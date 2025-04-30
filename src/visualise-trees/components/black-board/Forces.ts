@@ -29,7 +29,14 @@ export const repulsive = (
     }
 };
 
-
+/**
+ * Applies a linear spring force WITHOUT any damping, so it is a pure
+ * 2nd-degree linear differential equation
+ * @param p1 Particle
+ * @param p2 Particle
+ * @param k stiffness
+ * @param restLength relaxed length
+ */
 export const springForce = (
     p1: Particle,
     p2: Particle,
@@ -49,4 +56,16 @@ export const springForce = (
             p.vy += sign * Fy / p.mass;
         }
     })
+}
+
+/**
+ * Applies a damping force which is proportional to velocity of the particle and
+ * "scales it", so for a damping the prop constant <1 orelse it won"t converge
+ * @param p the particle
+ * @param b the prop constant.
+ */
+export const damping =(p: Particle ,b: number) => {
+    [p.vx , p.vy] = [p.vx, p.vy].map(vl => vl * b);
+    p.x.set(p.x.get() + p.vx);
+    p.y.set(p.y.get() + p.vy);
 }
