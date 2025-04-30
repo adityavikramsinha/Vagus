@@ -71,6 +71,7 @@ export const Blackboard = () => {
                                 key={`${src}-${edge.dest.getData()}-${i}`}
                                 srcBob={srcNode}
                                 destBob={destNode}
+                                edge={edge}
                             />
                         );
                     });
