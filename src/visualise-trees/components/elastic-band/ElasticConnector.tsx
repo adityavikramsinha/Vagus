@@ -18,7 +18,7 @@ import Button from "../../../visualise-graphs/components/action-buttons/Button";
 import EdgeCostEditor from "./EdgeCostEditor";
 import useTreeStore from "../../../stores/TreeStore";
 
-type ElasticBandProps = {
+type ElasticConnectorProps = {
     srcBob: BobProps,
     destBob: BobProps,
     edge: Edge
@@ -26,7 +26,7 @@ type ElasticBandProps = {
 
 const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
-const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
+const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edge}) => {
     const [edgeCost, setEdgeCost] = React.useState(edge.cost);
     const [singleClick, setSingleClick] = React.useState(false);
     // True Center position
@@ -37,7 +37,7 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
     const springCenterY = m.useSpring(centerY, {stiffness: 1000, damping: 200});
     const d = m.useTransform<number, string>(
         [srcBob.x, srcBob.y, destBob.x, destBob.y, springCenterX, springCenterY],
-        ([x1v, y1v, x2v, y2v, cx, cy]) => reConstructPath([x1v, y1v, x2v, y2v], cx, cy, RADIUS, 15, 15)
+        ([x1v, y1v, x2v, y2v, cx, cy]) => reConstructPath([x1v, y1v, x2v, y2v], cx, cy, RADIUS, 10, 10)
     );
 
     /**
@@ -144,4 +144,4 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
         </Dialog>
     );
 };
-export default ElasticBand;
+export default ElasticConnector;

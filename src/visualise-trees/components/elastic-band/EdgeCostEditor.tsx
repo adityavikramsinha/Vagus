@@ -1,5 +1,10 @@
 import Button from "../../../visualise-graphs/components/action-buttons/Button";
 
+/**
+ * -___+ Value Editor for the Edge Cost.
+ * @param edgeCost
+ * @param onChange function to perform when the Edge cost is changed via + or -
+ */
 const EdgeCostEditor = ({
                             edgeCost,
                             onChange,

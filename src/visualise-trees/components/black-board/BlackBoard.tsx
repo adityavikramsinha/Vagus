@@ -1,7 +1,7 @@
 import React from "react";
 import Bob, {BobProps} from "../bob/Bob";
 import * as m from "motion/react";
-import ElasticBand from "../elastic-band/ElasticBand";
+import ElasticConnector from "../elastic-band/ElasticConnector";
 import * as ApplyForce from "./Forces";
 import useTreeStore from "../../../stores/TreeStore";
 import handleBlackBoardClick from "./handleBlackBoardClick";
@@ -61,7 +61,7 @@ export const Blackboard = () => {
                         const destNode = nodes.get(edge.dest.getData());
                         if (!destNode) return null;
                         return (
-                            <ElasticBand
+                            <ElasticConnector
                                 key={`${src}-${edge.dest.getData()}-${i}`}
                                 srcBob={srcNode}
                                 destBob={destNode}
