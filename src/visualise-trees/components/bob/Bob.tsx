@@ -35,7 +35,7 @@ const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange}) => {
                 onDragChange(id, false)
                 setIsDragging(false);
             }}
-            className="w-[20px] h-[20px] bg-amber-200 rounded-[50%] cursor-grab absolute"
+            className="w-[20px] h-[20px] bg-[#ddff84] rounded-[50%] cursor-grab absolute"
             style={{x, y}}
             animate={
                 isFocused?

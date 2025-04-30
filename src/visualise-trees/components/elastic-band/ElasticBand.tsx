@@ -8,12 +8,14 @@ import Edge from "../../../visualise-graphs/ts/Edge";
 type ElasticBandProps = {
     srcBob: BobProps,
     destBob: BobProps,
-    edge : Edge
+    edge: Edge
 };
 
 const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
 const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
+    const [edgeCost , setEdgeCost] = React.useState(edge.cost);
+
     // True Center position
     const centerX = m.useTransform<number, number>([srcBob.x, destBob.x], ([x1v, x2v]) => (x1v + x2v) / 2 + RADIUS);
     const centerY = m.useTransform<number, number>([srcBob.y, destBob.y], ([y1v, y2v]) => (y1v + y2v) / 2 + RADIUS);
@@ -40,6 +42,12 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
         ([y1, cy, y2]) => (0.25 * y1 + 0.5 * cy + 0.25 * y2)
     );
 
+    /**
+     * Need to align the text (showing edgeCost) in the angle from src->dest
+     * And we find that out via finding the tan_2 from src->dest.
+     * Note, the edge actually faces FROM src -> dest, so it is written
+     * Like that.
+     */
     const angleDeg = m.useTransform<number, number>(
         [srcBob.x, srcBob.y, destBob.x, destBob.y],
         ([x1, y1, x2, y2]) => {
@@ -55,8 +63,8 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
             <m.motion.path
                 className="hover:cursor-pointer"
                 d={d}
-                stroke="gray"
-                strokeWidth={3}
+                stroke="#a684ff"
+                strokeWidth={2}
                 fill="none"
                 pointerEvents="all"
                 onClick={() => handleEdgeClick(srcBob.id, destBob.id)}
@@ -64,7 +72,7 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
             />
             <m.motion.foreignObject
                 width={20}
-                height={20}
+                height={25}
                 style={{
                     x: m.useTransform(tooltipX, x => x - 4.5),
                     y: m.useTransform(tooltipY, y => y - 4.5),
@@ -72,8 +80,19 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
                 }}
                 pointerEvents="none"
             >
-                <div className="bg-black text-white text-xs rounded px-2 py-1 whitespace-nowrap flex justify-center items-center">
-                    {edge.cost}
+                <div className="
+                bg-black
+                text-[#fff]
+                text-xs
+                rounded
+                px-2
+                py-1
+                whitespace-nowrap
+                flex
+                justify-center
+                items-center
+                ">
+                    {edgeCost}
                 </div>
             </m.motion.foreignObject>
         </m.motion.g>
