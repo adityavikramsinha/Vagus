@@ -106,7 +106,7 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
                         textAnchor="middle"
                         dominantBaseline="middle"
                     >
-                        {edgeCost*1000}
+                        {edgeCost}
                     </m.motion.text>
                 </m.motion.g>
             </DialogTrigger>
