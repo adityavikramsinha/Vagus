@@ -23,11 +23,9 @@ const Navbar: FC = () => {
                             [&::-webkit-scrollbar-track]:bg-[var(--color-sb-color-track)]
                             ">
                 <Folder name="graphs">
-                    <Folder name="addableNodes">
+                    <Folder name="actions">
                         <File type={FileType.IO} id={'io-1'} name="nodeActions.io" Icon={<IOFileIcon/>}/>
-                        <File type={FileType.IO} id={'io-2'} name={"addEdge.io"} Icon={<IOFileIcon/>}/>
-                        <File type={FileType.IO} id={'io-3'} name={"removeEdge.io"} Icon={<IOFileIcon/>}/>
-                        <File type={FileType.IO} id={'io-4'} name={"addWeightedEdge.io"} Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id={'io-2'} name={"edgeActions.io"} Icon={<IOFileIcon/>}/>
                     </Folder>
                 </Folder>
             </div>

@@ -30,6 +30,7 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob}) => {
                 fill="none"
                 pointerEvents="all"
                 onClick={() => handleEdgeClick(srcBob.id, destBob.id)}
+                onDoubleClick={()=>handleEdgeClick(srcBob.id , destBob.id , true)}
             />
         </g>
     );
