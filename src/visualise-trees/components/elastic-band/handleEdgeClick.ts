@@ -1,8 +1,8 @@
 import useTreeStore from "../../../stores/TreeStore";
 
-const handleEdgeClick = (srcBobId: string, destBobId: string, doubleClick: boolean = false) => {
+const handleEdgeClick = (srcBobId: string, destBobId: string) => {
     const activeIoFile = useTreeStore.getState().activeFiles.io;
-    if (activeIoFile === 'io-2' && doubleClick) {
+    if (activeIoFile === 'io-2') {
         const edgeSet = useTreeStore.getState().edgeList.get(srcBobId);
         if (edgeSet) {
             const newEdgeSet = new Set(

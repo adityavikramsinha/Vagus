@@ -4,6 +4,19 @@ import reConstructPath from "./reConstructPath";
 import {BobProps} from "../bob/Bob";
 import handleEdgeClick from "./handleEdgeClick";
 import Edge from "../../../visualise-graphs/ts/Edge";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "../../../components/DialogBox";
+import Button from "../../../visualise-graphs/components/action-buttons/Button";
+import EdgeCostEditor from "./EdgeCostEditor";
+import useTreeStore from "../../../stores/TreeStore";
 
 type ElasticBandProps = {
     srcBob: BobProps,
@@ -14,8 +27,8 @@ type ElasticBandProps = {
 const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
 const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
-    const [edgeCost , setEdgeCost] = React.useState(edge.cost);
-
+    const [edgeCost, setEdgeCost] = React.useState(edge.cost);
+    const [singleClick, setSingleClick] = React.useState(false);
     // True Center position
     const centerX = m.useTransform<number, number>([srcBob.x, destBob.x], ([x1v, x2v]) => (x1v + x2v) / 2 + RADIUS);
     const centerY = m.useTransform<number, number>([srcBob.y, destBob.y], ([y1v, y2v]) => (y1v + y2v) / 2 + RADIUS);
@@ -59,43 +72,76 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
     );
 
     return (
-        <m.motion.g>
-            <m.motion.path
-                className="hover:cursor-pointer"
-                d={d}
-                stroke="#a684ff"
-                strokeWidth={2}
-                fill="none"
-                pointerEvents="all"
-                onClick={() => handleEdgeClick(srcBob.id, destBob.id)}
-                onDoubleClick={() => handleEdgeClick(srcBob.id, destBob.id, true)}
-            />
-            <m.motion.foreignObject
-                width={20}
-                height={25}
-                style={{
-                    x: m.useTransform(tooltipX, x => x - 4.5),
-                    y: m.useTransform(tooltipY, y => y - 4.5),
-                    rotate: angleDeg, // Rotate the whole foreignObject
-                }}
-                pointerEvents="none"
-            >
-                <div className="
-                bg-black
-                text-[#fff]
-                text-xs
-                rounded
-                px-2
-                py-1
-                whitespace-nowrap
-                flex
-                justify-center
-                items-center
-                ">
-                    {edgeCost}
-                </div>
-            </m.motion.foreignObject>
-        </m.motion.g>
+        <Dialog open={singleClick} onOpenChange={(open) => !open && setSingleClick(false)}>
+            <DialogTrigger asChild>
+                <m.motion.g>
+                    <m.motion.path
+                        className="hover:cursor-pointer"
+                        d={d}
+                        stroke="#a684ff"
+                        strokeWidth={2}
+                        fill="none"
+                        pointerEvents="all"
+                        onClick={() => {
+                            if (useTreeStore.getState().activeFiles.io === 'io-2')
+                                setSingleClick(true)
+                        }}
+                        onContextMenu={(e) => {
+                            if (useTreeStore.getState().activeFiles.io === 'io-2') {
+                                e.preventDefault();
+                                handleEdgeClick(srcBob.id, destBob.id)
+                            }
+                        }}
+                    />
+                    <m.motion.foreignObject
+                        width={20}
+                        height={25}
+                        style={{
+                            x: m.useTransform(tooltipX, x => x - 4.5),
+                            y: m.useTransform(tooltipY, y => y - 4.5),
+                            rotate: angleDeg, // Rotate the whole foreignObject
+                        }}
+                        pointerEvents="none"
+                    >
+                        <div
+                            className="bg-black text-[#fff] text-xs rounded px-2 py-1 whitespace-nowrap flex justify-center items-center">
+                            {edgeCost}
+                        </div>
+                    </m.motion.foreignObject>
+                </m.motion.g>
+            </DialogTrigger>
+            <DialogContent className="stop-dialog-content">
+                <DialogHeader className="stop-dialog-header">
+                    <DialogTitle className="text-[#fff] underline">Edge Details</DialogTitle>
+                    <DialogDescription className="stop-dialog-description">
+                        <div className="text-white rounded-md py-4 shadow-md space-y-3 w-fit">
+                            <div className="text-sm">
+                                <span className="font-semibold text-zinc-300">Source ID:</span> {srcBob.id}
+                            </div>
+                            <div className="text-sm">
+                                <span className="font-semibold text-zinc-300">Destination ID:</span> {destBob.id}
+                            </div>
+                            <div className="pt-2 border-t border-zinc-700">
+                                <div className="flex">
+                                    <div className="flex items-center text-sm font-semibold text-zinc-300">Edge Cost:
+                                    </div>
+                                    <EdgeCostEditor edgeCost={edgeCost} onChange={setEdgeCost}/>
+                                </div>
+                            </div>
+                        </div>
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="stop-dialog-footer">
+                    <DialogClose asChild>
+                        <Button className="stop-dialog-cancel-button" onClick={() => {
+                            edge.cost = edgeCost;
+                        }}>
+                            Update
+                        </Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 };
 export default ElasticBand;
