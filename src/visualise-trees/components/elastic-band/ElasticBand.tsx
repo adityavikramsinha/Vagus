@@ -96,10 +96,10 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
                     <m.motion.foreignObject
                         width={20}
                         height={25}
-                        x={m.useTransform(tooltipX, x => x - 4.5)}
-                        y={m.useTransform(tooltipY, y => y - 4.5)}
-                        style ={{
-                            rotate: angleDeg
+                        style={{
+                            x: m.useTransform(tooltipX, x => x - 4.5),
+                            y: m.useTransform(tooltipY, y => y - 4.5),
+                            rotate: angleDeg, // Rotate the whole foreignObject
                         }}
                         pointerEvents="none"
                     >
@@ -142,7 +142,6 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    )
-        ;
+    );
 };
 export default ElasticBand;
