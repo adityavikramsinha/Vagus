@@ -70,7 +70,6 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
             return (angleRad * 180) / Math.PI; // convert to degrees
         }
     );
-
     return (
         <Dialog open={singleClick} onOpenChange={(open) => !open && setSingleClick(false)}>
             <DialogTrigger asChild>
@@ -104,7 +103,9 @@ const ElasticBand: React.FC<ElasticBandProps> = ({srcBob, destBob, edge}) => {
                         pointerEvents="none"
                     >
                         <div
-                            className="bg-black text-[#fff] text-xs rounded px-2 py-1 whitespace-nowrap flex justify-center items-center">
+                            className="bg-black text-[#fff] text-xs rounded px-2 py-1 whitespace-nowrap flex justify-center items-center"
+                            data-xmlns="http://www.w3.org/1999/xhtml"
+                        >
                             {edgeCost}
                         </div>
                     </m.motion.foreignObject>
