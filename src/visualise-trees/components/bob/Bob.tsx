@@ -38,15 +38,25 @@ const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange}) => {
             className="w-[20px] h-[20px] bg-[#ddff84] rounded-[50%] cursor-grab absolute"
             style={{x, y}}
             animate={
-                isFocused?
-                    {
-                        scale: [1.2, 0.9],
+                isFocused
+                    ? {
+                        scale: [1, 1.3, 1],
+                        boxShadow: [
+                            "0 0 0px rgba(221, 255, 132, 0)",
+                            "0 0 10px rgba(221, 255, 132, 1)",
+                            "0 0 0px rgba(221, 255, 132, 0)",
+                        ],
                         transition: {
-                            duration: 1,
+                            duration: 1.2,
                             repeat: Infinity,
-                            easing: "ease-in-out",
+                            repeatType: "loop",
+                            ease: "easeInOut",
                         },
-                    }: {scale : 1}
+                    }
+                    : {
+                        scale: 1,
+                        boxShadow: "0 0 0 rgba(0,0,0,0)",
+                    }
             }
             onClick={event => handleBobClick(event, id, isDragging)}
         />
