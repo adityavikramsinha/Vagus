@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-    --color-white: #b7b7b7;
+    --color-white: rgba(255, 255, 255, 0.8);
     --color-cmd-bg: #0c0b0b;
     --color-cmd-border: #1a1a1a;
     --color-moz-sb-color: rgba(255, 255, 255, 0.05);

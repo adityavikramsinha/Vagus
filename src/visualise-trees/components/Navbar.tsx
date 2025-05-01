@@ -2,15 +2,19 @@ import * as React from "react";
 import {FC} from "react";
 
 
-import {IOFileIcon, TsFileIcon} from "../../components/file/FileIcons";
+import {IOFileIcon} from "../../components/file/FileIcons";
 import Folder from "../../components/folder/Folder";
 import File, {FileType} from "../../components/file/File";
+import StartButton from "./action-buttons/StartButton";
 
 const Navbar: FC = () => {
     return (
         <div className="w-[30vw] border-r border-r-cmd-border bg-cmd-bg h-full text-white select-none">
             <div className="h-1/10 font-medium flex items-center justify-between pr-4 pl-4">
                 <div className="text-2xl">Vagus</div>
+                <div className="flex flex-nowrap gap-2.5">
+                    <StartButton/>
+                </div>
             </div>
             <div className="
                             pt-[5px]

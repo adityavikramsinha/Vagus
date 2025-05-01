@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@graph/components/action-buttons/Button";
+import Button from "../../../components/Button";
 import Syncer from "@graph/api/Syncer";
 import useGraphStore from "../../../stores/GraphStore";
 import cn from "../../../cn";

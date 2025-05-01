@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@graph/components/action-buttons/Button";
+import Button from "../../../components/Button";
 import useGraphStore from "../../../stores/GraphStore";
 
 

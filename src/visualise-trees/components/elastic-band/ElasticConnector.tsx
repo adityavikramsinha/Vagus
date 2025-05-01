@@ -14,7 +14,7 @@ import {
 } from "@/components/DialogBox";
 import EdgeCostEditor from "./EdgeCostEditor";
 import useTreeStore from "@/stores/TreeStore";
-import Button from "@graph/components/action-buttons/Button";
+import Button from "../../../components/Button";
 import Edge from "@graph/ts/Edge";
 import {BobProps} from "@tree/components/bob/Bob";
 import Toggle from "@/components/toggle/Toggle";

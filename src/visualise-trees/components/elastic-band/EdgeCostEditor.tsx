@@ -1,4 +1,4 @@
-import Button from "../../../visualise-graphs/components/action-buttons/Button";
+import Button from "../../../components/Button";
 
 /**
  * -___+ Value Editor for the Edge Cost.

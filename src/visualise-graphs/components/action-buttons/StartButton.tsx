@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@graph/components/action-buttons/Button";
+import Button from "../../../components/Button";
 import useGraphStore from "../../../stores/GraphStore";
 import {match} from "ts-pattern";
 import {
@@ -15,7 +15,7 @@ import {
 import * as StartButtonActions from "@graph/components/action-buttons/startButtonActions";
 
 
-const StartButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
+const StartButtonIcon = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
             <g clipPath="url(#clip0_80_24)">
