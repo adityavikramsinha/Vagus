@@ -93,7 +93,10 @@ const StartButton = () => {
                 </DialogHeader>
                 <DialogFooter className="stop-dialog-footer">
                     <DialogClose asChild>
-                        <Button className="stop-dialog-cancel-button">
+                        <Button  className="
+                            flex items-center justify-center font-medium p-1 rounded-[5px]
+                            bg-red-400 text-inherit cursor-pointer border-none transition-all
+                            duration-200 hover:shadow-[0_0_0_2px_#ff6467]">
                             Cancel
                         </Button>
                     </DialogClose>

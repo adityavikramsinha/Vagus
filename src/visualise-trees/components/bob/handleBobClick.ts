@@ -27,7 +27,7 @@ const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean
                 updatedEdgeList.set(srcNode, new Set());
             }
             const nodeEdges = updatedEdgeList.get(srcNode);
-            nodeEdges.add(new Edge(destNode, 1));
+            nodeEdges.add(new Edge(destNode, 0));
             useTreeStore.setState({edgeList: updatedEdgeList});
             // Cleanup the srcNode
             useTreeStore.setState({srcNodeId: NOTSET});

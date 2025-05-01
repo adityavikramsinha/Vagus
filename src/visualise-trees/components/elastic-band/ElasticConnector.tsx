@@ -17,6 +17,8 @@ import useTreeStore from "@/stores/TreeStore";
 import Button from "@graph/components/action-buttons/Button";
 import Edge from "@graph/ts/Edge";
 import {BobProps} from "@tree/components/bob/Bob";
+import Toggle from "@/components/toggle/Toggle";
+import {ClosedEye, OpenEye} from "@/components/toggle/VisiblityIcon";
 
 type ElasticConnectorProps = {
     srcBob: BobProps,
@@ -28,6 +30,8 @@ const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
 const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edge}) => {
     const [edgeCost, setEdgeCost] = React.useState(edge.cost);
+    // Edge Visibility.
+    const [edgeCostVisible, setEdgeCostVisible] = React.useState(true);
     const [singleClick, setSingleClick] = React.useState(false);
     // True Center position
     const centerX = m.useTransform<number, number>([srcBob.x, destBob.x], ([x1v, x2v]) => (x1v + x2v) / 2 + RADIUS);
@@ -51,7 +55,6 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
     // The following useTransform hooks compute the X and Y positions of the tooltip
     // by applying this formula to the source (P0), control (P1), and destination (P2) points.
     // see and read : https://javascript.info/bezier-curve
-
     const tooltipX = m.useTransform<number, number>(
         [srcBob.x, springCenterX, destBob.x],
         ([x1, cx, x2]) => (0.25 * x1 + 0.5 * cx + 0.25 * x2)
@@ -66,7 +69,6 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
     // And we find that out via finding the tan_2 from src->dest.
     // Note, the edge actually faces FROM src -> dest, so it is written
     // Like that.
-
     const angleDeg = m.useTransform<number, number>(
         [srcBob.x, srcBob.y, destBob.x, destBob.y],
         ([x1, y1, x2, y2]) => {
@@ -76,6 +78,9 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
             return (angleRad * 180) / Math.PI; // convert to degrees
         }
     );
+    const x = m.useTransform(tooltipX, (x) => x + 4.5)
+    const y = m.useTransform(tooltipY, (y) => y + 5)
+
     return (
         <Dialog open={singleClick} onOpenChange={(open) => !open && setSingleClick(false)}>
             <DialogTrigger asChild>
@@ -98,13 +103,13 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                             }
                         }}
                     />
-                    <m.motion.text
+                    {edgeCostVisible ? <m.motion.text
                         style={{
                             paintOrder: "stroke",
                             stroke: "black",
                             strokeWidth: 10,
-                            x: m.useTransform(tooltipX, (x) => x + 4.5),
-                            y: m.useTransform(tooltipY, (y) => y + 5),
+                            x: x,
+                            y: y,
                             rotate: angleDeg,
                             transformOrigin: "center",
                         }}
@@ -112,8 +117,8 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                         textAnchor="middle"
                         dominantBaseline="middle"
                     >
-                        {edgeCost}
-                    </m.motion.text>
+                        {edge.cost}
+                    </m.motion.text> : <></>}
                 </m.motion.g>
             </DialogTrigger>
             <DialogContent className="stop-dialog-content">
@@ -128,10 +133,17 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                                 <span className="font-semibold text-zinc-300">Destination ID:</span> {destBob.id}
                             </div>
                             <div className="pt-2 border-t border-zinc-700">
-                                <div className="flex">
-                                    <div className="flex items-center text-sm font-semibold text-zinc-300">Edge Cost:
+                                <div className="flex justify-between items-center">
+                                    <div className="flex">
+                                        <span className="flex items-center text-sm font-semibold text-zinc-300">Edge
+                                            Cost:</span>
+                                        <EdgeCostEditor edgeCost={edgeCost} onChange={setEdgeCost}/>
                                     </div>
-                                    <EdgeCostEditor edgeCost={edgeCost} onChange={setEdgeCost}/>
+                                    <Toggle pressed={edgeCostVisible}
+                                            onPressedChange={setEdgeCostVisible}
+                                    >
+                                        {edgeCostVisible ? <OpenEye/> : <ClosedEye/>}
+                                    </Toggle>
                                 </div>
                             </div>
                         </div>
@@ -139,10 +151,23 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                 </DialogHeader>
                 <DialogFooter className="stop-dialog-footer">
                     <DialogClose asChild>
-                        <Button className="stop-dialog-cancel-button" onClick={() => {
-                            edge.cost = edgeCost;
-                        }}>
-                            Update
+                        <Button
+                            className="
+                            flex items-center justify-center font-medium p-1 rounded-[5px]
+                            bg-red-400 text-inherit cursor-pointer border-none transition-all
+                            duration-200 hover:shadow-[0_0_0_2px_#ff6467]"
+                            onClick={() => setEdgeCost(edge.cost)}>
+                            Cancel
+                        </Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                        <Button
+                            className="
+                            flex items-center justify-center font-medium p-1 rounded-[5px]
+                            bg-green-300 text-inherit cursor-pointer border-none transition-all
+                            duration-200 hover:shadow-[0_0_0_2px_#86efac]"
+                            onClick={() => edge.cost = edgeCost}>
+                            Done
                         </Button>
                     </DialogClose>
                 </DialogFooter>
@@ -151,3 +176,21 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
     );
 };
 export default ElasticConnector;
+
+/**
+ * .stop-dialog-cancel-button{
+ *     color: inherit;
+ *     justify-content: center;
+ *     font-weight: bold;
+ *     align-items: center;
+ *     padding: 0.5rem;
+ *     border-radius: 5px;
+ *     background: white;
+ *     border: none;
+ *     cursor : pointer;
+ *     transition: box-shadow 0.25s, background 0.25s
+ * }
+ * .stop-dialog-cancel-button:hover{
+ *     box-shadow: 0 0 0 3px white;
+ * }
+ */
