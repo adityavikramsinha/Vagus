@@ -20,14 +20,12 @@ export const Blackboard = () => {
         // of connected nodes via their edges
         // and then get the nodes.
         // Finally apply the spring force over the edges
-        for (const [src, edgeList] of edges) {
+        for (const [src, edgeSet] of edges) {
             const srcNode = nodes.get(src) as BobProps;
-            edgeList.forEach(edge => {
+            edgeSet.forEach(edge => {
                 const destNode = nodes.get(edge.dest.getData()) as BobProps;
-                if (srcNode && destNode)
-                    ApplyForce.springForce(srcNode, destNode, 1, restLength);
+                if (srcNode && destNode) ApplyForce.springForce(srcNode, destNode, 1, restLength);
             })
-
         }
 
         // Apply pairwise repulsive force (n^2)
@@ -72,7 +70,7 @@ export const Blackboard = () => {
                 })}
             </svg>
             {[...nodes.values()].map(nodeProps => (
-                <Bob key={nodeProps.id} {...(nodeProps as BobProps)} />
+                <Bob key={nodeProps.id} {...nodeProps} />
             ))}
         </m.motion.div>
     );
