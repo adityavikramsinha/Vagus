@@ -2,7 +2,6 @@ import React from "react";
 import Button from "../../../components/Button";
 import Syncer from "@graph/api/Syncer";
 import useGraphStore from "../../../stores/GraphStore";
-import cn from "../../../cn";
 
 const PrevButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     return (
@@ -18,7 +17,7 @@ const PrevButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
 
 const PrevButton = () => {
     return (
-        <Button disabled={useGraphStore(state => state.block)} id="prev-button"
+        <Button className="hover:bg-cmd-border" disabled={useGraphStore(state => state.block)} id="prev-button"
                 onClick={Syncer.cleanHexBoard}>
             <PrevButtonIcon/>
         </Button>

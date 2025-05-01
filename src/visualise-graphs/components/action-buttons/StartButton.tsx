@@ -41,7 +41,7 @@ const StartButton = () => {
     return (
         <Dialog open={error.encountered} onOpenChange={(open) => !open && setError({encountered: false})}>
             <DialogTrigger asChild>
-                <Button disabled={useGraphStore(state => state.block)} id="start-button"
+                <Button className="hover:bg-cmd-border" disabled={useGraphStore(state => state.block)} id="start-button"
                         onClick={() => {
                             const algoFile = useGraphStore.getState().activeFiles.ts;
                             const err = StartButtonActions.startButtonClick(algoFile)
@@ -93,7 +93,7 @@ const StartButton = () => {
                 </DialogHeader>
                 <DialogFooter className="stop-dialog-footer">
                     <DialogClose asChild>
-                        <Button  className="
+                        <Button className="
                             flex items-center justify-center font-medium p-1 rounded-[5px]
                             bg-red-400 text-inherit cursor-pointer border-none transition-all
                             duration-200 hover:shadow-[0_0_0_2px_#ff6467]">

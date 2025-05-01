@@ -21,7 +21,7 @@ const StartButtonIcon = () => {
 
 const StartButton = () => {
     return (
-        <Button onClick={()=> handleStartButtonClick()}>
+        <Button className="hover:bg-cmd-border" onClick={() => handleStartButtonClick()}>
             <StartButtonIcon/>
         </Button>
     )

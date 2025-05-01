@@ -1,7 +1,7 @@
 import * as m from "motion/react";
 import React from "react";
 import reConstructPath from "./reConstructPath";
-import handleEdgeClick from "./handleEdgeClick";
+import deleteEdgeAndElasticConnector from "./deleteEdgeAndElasticConnector";
 import {
     Dialog,
     DialogClose,
@@ -19,6 +19,7 @@ import Edge from "@graph/ts/Edge";
 import {BobProps} from "@tree/components/bob/Bob";
 import Toggle from "@/components/toggle/Toggle";
 import {ClosedEye, OpenEye} from "@/components/toggle/VisiblityIcon";
+import BackendStateManager from "../../api/BackendStateManager";
 
 type ElasticConnectorProps = {
     srcBob: BobProps,
@@ -150,7 +151,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                             flex items-center justify-center font-medium p-1 rounded-[5px]
                             bg-red-400 text-inherit cursor-pointer border-none transition-all
                             duration-200 hover:shadow-[0_0_0_2px_#ff6467]"
-                            onClick={() => handleEdgeClick(srcBob.id, destBob.id)}>
+                            onClick={() => deleteEdgeAndElasticConnector(srcBob.id, destBob.id)}>
                             Delete
                         </Button>
                     </DialogClose>
@@ -160,7 +161,10 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                             flex items-center justify-center font-medium p-1 rounded-[5px]
                             bg-green-300 text-inherit cursor-pointer border-none transition-all
                             duration-200 hover:shadow-[0_0_0_2px_#86efac]"
-                            onClick={() => edge.cost = edgeCost}>
+                            onClick={() => {
+                                edge.cost = edgeCost;
+                                BackendStateManager.graph.updateEdgeCost(srcBob.id, destBob.id, edgeCost);
+                            }}>
                             Done
                         </Button>
                     </DialogClose>

@@ -1,11 +1,12 @@
 import useTreeStore from "../../../stores/TreeStore";
+import BackendStateManager from "../../api/BackendStateManager";
 
 /**
- * Handle the Right Click on an Elastic Connector'. This will remove the edge.
+ * Handle the Deletion of the Edge as well as the Elastic Connector.
  * @param srcBobId
  * @param destBobId
  */
-const handleEdgeClick = (srcBobId: string, destBobId: string) => {
+const deleteEdgeAndElasticConnector = (srcBobId: string, destBobId: string) => {
     const edgeSet = useTreeStore.getState().edgeList.get(srcBobId);
     if (edgeSet) {
         const newEdgeSet = new Set(
@@ -13,8 +14,9 @@ const handleEdgeClick = (srcBobId: string, destBobId: string) => {
         );
         const newEdgeList = new Map(useTreeStore.getState().edgeList);
         newEdgeList.set(srcBobId, newEdgeSet);
+        BackendStateManager.graph.rmEdge(srcBobId, destBobId);
         useTreeStore.setState({edgeList: newEdgeList})
     }
 }
 
-export default handleEdgeClick;
+export default deleteEdgeAndElasticConnector;

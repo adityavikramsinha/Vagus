@@ -9,13 +9,11 @@ const Button: React.FC<ButtonProps> = ({disabled = false, children, style, class
             disabled={disabled}
             style={style}
             className={cn(
-                "inline-block align-middle border-none bg-transparent rounded-[5px]",
-                "duration-500 ease-in-out hover:bg-cmd-border p-0.5 transition-colors",
+                "inline-block align-middle border-none bg-transparent rounded-[5px] duration-500 ease-in-out p-0.5 transition-colors",
                 disabled ? "pointer-events-none grayscale-[50%]" : "hover:cursor-pointer",
                 className
             )}
             onClick={onClick} id={id}
-
         >
             {children}
         </button>

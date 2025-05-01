@@ -1,4 +1,5 @@
 import Vertex from "./Vertex";
+import {extractInfoFromServerReferenceId} from "next/dist/shared/lib/server-reference-info";
 
 /**
  * Utility graph class with functions to help in maintaining state and making the algorithms work.
@@ -93,14 +94,16 @@ export default class Graph {
     /**
      * Adds a Node object to the graph if it is not already present.
      * @param data the node data to add.
+     * @param x optional x coordinate
+     * @param y optional y coordinate
      * @returns the added node or, just the node which exists with the same ID.
      */
-    addNode(data: string): Vertex {
+    addNode(data: string, x:number =0  , y:number= 0): Vertex {
         this.assertMutable();
         let node = this.nodes().get(data);
         if (node !== undefined)
             return node;
-        node = new Vertex(data, this.comparator);
+        node = new Vertex(data, this.comparator, x,y);
         this.nodes().set(data, node);
         return node;
     }
@@ -223,23 +226,19 @@ export default class Graph {
             }
         })
     }
-
     /**
-     * Updates the cost of all incoming edges (where the node is the end point) to a certain given cost.
-     * This function only runs if a given node is present in the graph .
-     *
-     * @param data the node whose incoming edges need to be updated to that cost
-     * @param cost the cost to update the edges to.
+     * Update cost of edge from Source to Destination to the given value.
+     * This is a O(E) cost, since it will have to go over ALL the edges and
+     * find the edge with the actual Destination.
+     * @param srcId
+     * @param destId
+     * @param cost
      */
-    updateCostOfIncoming(data: string, cost: number): void {
-        let node: Vertex = this.nodes().get(data);
+    updateEdgeCost(srcId : string, destId : string, cost : number) {
+        let node = this.nodes().get(srcId);
         if (node === undefined) return;
-        node.getAdjNodes().forEach((edge) => {
-            if (edge.dest.getData() !== node.getData()) {
-                edge.dest.updateCostTo(node, cost);
-            }
-        });
-
+        const targetEdge =node.getAdjNodes().find(edge => edge.dest.getData() === destId);
+        targetEdge.cost = cost;
     }
 
     /**

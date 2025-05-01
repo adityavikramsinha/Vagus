@@ -3,6 +3,7 @@ import useTreeStore from "../../../stores/TreeStore";
 import {NOTSET} from "../../../visualise-graphs/ts/Types";
 import Edge from "../../../visualise-graphs/ts/Edge";
 import Vertex from "../../../visualise-graphs/ts/Vertex";
+import BackendStateManager from "../../api/BackendStateManager";
 
 const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean) => {
     // stop propagation of click to parent,
@@ -28,6 +29,7 @@ const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean
             }
             const nodeEdges = updatedEdgeList.get(srcNode);
             nodeEdges.add(new Edge(destNode, 0));
+            BackendStateManager.graph.addEdge(srcNode, id, 0);
             useTreeStore.setState({edgeList: updatedEdgeList});
             // Cleanup the srcNode
             useTreeStore.setState({srcNodeId: NOTSET});
@@ -37,7 +39,8 @@ const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean
     // This is for deleting the Vertex that is currently being clicked, io-1 is the nodeActions file.
     if (!isDragging && useTreeStore.getState().activeFiles.io === 'io-1') {
         const updatedNodes = useTreeStore.getState().nodes;
-        updatedNodes.delete(id)
+        updatedNodes.delete(id);
+        BackendStateManager.graph.rmNode(id);
         useTreeStore.setState({nodes: new Map(updatedNodes)});
     }
 }
