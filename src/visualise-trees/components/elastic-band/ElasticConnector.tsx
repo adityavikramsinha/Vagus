@@ -176,21 +176,3 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
     );
 };
 export default ElasticConnector;
-
-/**
- * .stop-dialog-cancel-button{
- *     color: inherit;
- *     justify-content: center;
- *     font-weight: bold;
- *     align-items: center;
- *     padding: 0.5rem;
- *     border-radius: 5px;
- *     background: white;
- *     border: none;
- *     cursor : pointer;
- *     transition: box-shadow 0.25s, background 0.25s
- * }
- * .stop-dialog-cancel-button:hover{
- *     box-shadow: 0 0 0 3px white;
- * }
- */
