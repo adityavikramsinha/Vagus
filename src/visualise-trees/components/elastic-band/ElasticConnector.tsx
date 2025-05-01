@@ -40,12 +40,18 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
         ([x1v, y1v, x2v, y2v, cx, cy]) => reConstructPath([x1v, y1v, x2v, y2v], cx, cy, RADIUS, 10, 10)
     );
 
-    /**
-     * A Bézier curve between two points is given by the following formula :
-     * B(t) = (1-t)^2. P_0  + 2(1-t).t.P_1 + t^2.P_2
-     * We find the midpoint by putting parameter t = 0.5,
-     * The below two functions for the tooltip[x,y] use this formula and transform IRL.
-     */
+    // Computes the midpoint of a quadratic Bézier curve for tooltip positioning.
+    //
+    // A quadratic Bézier curve between three points (P0, P1, P2) is defined as:
+    //     B(t) = (1 - t)^2 * P0 + 2 * (1 - t) * t * P1 + t^2 * P2
+    //
+    // To find the midpoint (at t = 0.5), the formula simplifies to:
+    //     B(0.5) = 0.25 * P0 + 0.5 * P1 + 0.25 * P2
+    //
+    // The following useTransform hooks compute the X and Y positions of the tooltip
+    // by applying this formula to the source (P0), control (P1), and destination (P2) points.
+    // see and read : https://javascript.info/bezier-curve
+
     const tooltipX = m.useTransform<number, number>(
         [srcBob.x, springCenterX, destBob.x],
         ([x1, cx, x2]) => (0.25 * x1 + 0.5 * cx + 0.25 * x2)
@@ -55,12 +61,12 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
         ([y1, cy, y2]) => (0.25 * y1 + 0.5 * cy + 0.25 * y2)
     );
 
-    /**
-     * Need to align the text (showing edgeCost) in the angle from src->dest
-     * And we find that out via finding the tan_2 from src->dest.
-     * Note, the edge actually faces FROM src -> dest, so it is written
-     * Like that.
-     */
+
+    // Need to align the text (showing edgeCost) in the angle from src->dest
+    // And we find that out via finding the tan_2 from src->dest.
+    // Note, the edge actually faces FROM src -> dest, so it is written
+    // Like that.
+
     const angleDeg = m.useTransform<number, number>(
         [srcBob.x, srcBob.y, destBob.x, destBob.y],
         ([x1, y1, x2, y2]) => {
