@@ -12,8 +12,8 @@
  */
 const getPathPoints = (
     vals: [number, number, number, number],
-    cx : number ,
-    cy : number,
+    cx: number,
+    cy: number,
     RADIUS: number,
     arrowLength: number,
     arrowWidth: number,

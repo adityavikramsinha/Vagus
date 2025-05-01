@@ -35,7 +35,6 @@ const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean
             useTreeStore.setState({srcNodeId: NOTSET});
         }
     }
-
     // This is for deleting the Vertex that is currently being clicked, io-1 is the nodeActions file.
     if (!isDragging && useTreeStore.getState().activeFiles.io === 'io-1') {
         const updatedNodes = useTreeStore.getState().nodes;
