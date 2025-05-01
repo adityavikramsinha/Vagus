@@ -1,6 +1,6 @@
 import * as m from "motion/react";
 import React from "react";
-import reConstructPath from "./reConstructPath";
+import reConstructPath from "./getPathPoints";
 import deleteEdgeAndElasticConnector from "./deleteEdgeAndElasticConnector";
 import {
     Dialog,
@@ -20,6 +20,7 @@ import {BobProps} from "@tree/components/bob/Bob";
 import Toggle from "@/components/toggle/Toggle";
 import {ClosedEye, OpenEye} from "@/components/toggle/VisiblityIcon";
 import BackendStateManager from "../../api/BackendStateManager";
+import getBendDirection from "./getBendDirection";
 
 type ElasticConnectorProps = {
     srcBob: BobProps,
@@ -30,6 +31,7 @@ type ElasticConnectorProps = {
 const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
 const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edge}) => {
+    const bendDirection = getBendDirection(srcBob.id, destBob.id);
     const [edgeCost, setEdgeCost] = React.useState(edge.cost);
     // Edge Visibility.
     const [edgeCostVisible, setEdgeCostVisible] = React.useState(true);
@@ -42,7 +44,26 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
     const springCenterY = m.useSpring(centerY, {stiffness: 1000, damping: 200});
     const d = m.useTransform<number, string>(
         [srcBob.x, srcBob.y, destBob.x, destBob.y, springCenterX, springCenterY],
-        ([x1v, y1v, x2v, y2v, cx, cy]) => reConstructPath([x1v, y1v, x2v, y2v], cx, cy, RADIUS, 10, 10)
+        ([x1v, y1v, x2v, y2v, cxv, cyv]) => {
+            const {x1, y1, x2, y2, cx, cy, ax1, ay1, ax2, ay2} = reConstructPath(
+                [x1v, y1v, x2v, y2v],
+                cxv,
+                cyv,
+                RADIUS,
+                10,
+                10,
+                bendDirection
+            );
+
+            return `
+      M ${x1} ${y1}
+      Q ${cx} ${cy} ${x2} ${y2}
+      M ${x2} ${y2}
+      L ${ax1} ${ay1}
+      M ${x2} ${y2}
+      L ${ax2} ${ay2}
+    `;
+        }
     );
 
     // Computes the midpoint of a quadratic Bézier curve for tooltip positioning.
@@ -56,15 +77,26 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
     // The following useTransform hooks compute the X and Y positions of the tooltip
     // by applying this formula to the source (P0), control (P1), and destination (P2) points.
     // see and read : https://javascript.info/bezier-curve
+    // Assuming bendDirection and bendAmount are normal numbers (not motion values)
+    // and bendAmount = 20 for example.
+
     const tooltipX = m.useTransform<number, number>(
-        [srcBob.x, springCenterX, destBob.x],
-        ([x1, cx, x2]) => (0.25 * x1 + 0.5 * cx + 0.25 * x2)
-    );
-    const tooltipY = m.useTransform<number, number>(
-        [srcBob.y, springCenterY, destBob.y],
-        ([y1, cy, y2]) => (0.25 * y1 + 0.5 * cy + 0.25 * y2)
+        [srcBob.x, srcBob.y, destBob.x, destBob.y, springCenterX, springCenterY],
+        ([x1, y1, x2, y2, cxv, cyv]) => {
+            const {x1: newX1, x2: newX2, cx} =
+                reConstructPath([x1, y1, x2, y2], cxv, cyv, RADIUS, 10, 10, bendDirection);
+            return 0.25 * newX1 + 0.5 * cx + 0.25 * newX2;
+        }
     );
 
+    const tooltipY = m.useTransform<number, number>(
+        [srcBob.x, srcBob.y, destBob.x, destBob.y, springCenterX, springCenterY],
+        ([x1, y1, x2, y2, cxv, cyv]) => {
+            const {y1: newY1, y2: newY2, cy} =
+                reConstructPath([x1, y1, x2, y2], cxv, cyv, RADIUS, 10, 10, bendDirection);
+            return 0.25 * newY1 + 0.5 * cy + 0.25 * newY2;
+        }
+    );
 
     // Need to align the text (showing edgeCost) in the angle from src->dest
     // And we find that out via finding the tan_2 from src->dest.
@@ -79,9 +111,6 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
             return (angleRad * 180) / Math.PI; // convert to degrees
         }
     );
-    const x = m.useTransform(tooltipX, (x) => x + 4.5)
-    const y = m.useTransform(tooltipY, (y) => y + 5)
-
     return (
         <Dialog open={singleClick} onOpenChange={(open) => !open && setSingleClick(false)}>
             <DialogTrigger asChild>
@@ -103,8 +132,8 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                             paintOrder: "stroke",
                             stroke: "black",
                             strokeWidth: 10,
-                            x: x,
-                            y: y,
+                            x: m.useTransform(tooltipX, x => x),
+                            y: m.useTransform(tooltipY, y => y),
                             rotate: angleDeg,
                             transformOrigin: "center",
                         }}
