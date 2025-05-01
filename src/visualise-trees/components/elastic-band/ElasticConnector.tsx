@@ -96,12 +96,6 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                             if (useTreeStore.getState().activeFiles.io === 'io-2')
                                 setSingleClick(true)
                         }}
-                        onContextMenu={(e) => {
-                            if (useTreeStore.getState().activeFiles.io === 'io-2') {
-                                e.preventDefault();
-                                handleEdgeClick(srcBob.id, destBob.id)
-                            }
-                        }}
                     />
                     {edgeCostVisible ? <m.motion.text
                         style={{
@@ -156,8 +150,8 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                             flex items-center justify-center font-medium p-1 rounded-[5px]
                             bg-red-400 text-inherit cursor-pointer border-none transition-all
                             duration-200 hover:shadow-[0_0_0_2px_#ff6467]"
-                            onClick={() => setEdgeCost(edge.cost)}>
-                            Cancel
+                            onClick={() => handleEdgeClick(srcBob.id, destBob.id)}>
+                            Delete
                         </Button>
                     </DialogClose>
                     <DialogClose asChild>
