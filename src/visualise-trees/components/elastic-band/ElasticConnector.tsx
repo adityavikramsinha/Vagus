@@ -19,7 +19,7 @@ import Edge from "@graph/ts/Edge";
 import {BobProps} from "@tree/components/bob/Bob";
 import Toggle from "@/components/toggle/Toggle";
 import {ClosedEye, OpenEye} from "@/components/toggle/VisiblityIcon";
-import BackendStateManager from "../../api/BackendStateManager";
+import BackendStateManager from "@tree/api/BackendStateManager";
 import getBendDirection from "./getBendDirection";
 
 type ElasticConnectorProps = {
