@@ -14,7 +14,7 @@ import {
 } from "@/components/DialogBox";
 import EdgeCostEditor from "./EdgeCostEditor";
 import useTreeStore from "@/stores/TreeStore";
-import Button from "../../../components/Button";
+import Button from "@/components/Button";
 import {BobProps} from "@tree/components/bob/Bob";
 import Toggle from "@/components/toggle/Toggle";
 import {ClosedEye, OpenEye} from "@/components/toggle/VisiblityIcon";
@@ -31,7 +31,8 @@ const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
 const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cost}) => {
 
-    // see if the edge is in focus based on the source node id.
+    // see if the edge is in focus based on the source node id &&
+    // if we are interested in finding edges.
     const inFocus = useTreeStore(state => state.srcNodeId === srcBob.id && state.activeFiles.io === 'io-2');
     const bendDirection = getBendDirection(srcBob.id, destBob.id);
     const [edgeCost, setEdgeCost] = React.useState(cost);

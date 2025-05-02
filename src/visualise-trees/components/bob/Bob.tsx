@@ -10,13 +10,15 @@ export interface Particle {
     vy: number;
     mass: number;
     isDragging: boolean;
+
 }
 export interface BobProps extends Particle {
     id: string;
     onUpdate: (index: string, x: number, y: number) => void;
     onDragChange: (index: string, dragging: boolean) => void;
+    containerRef : React.RefObject<HTMLDivElement>;
 }
-const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange}) => {
+const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange, containerRef}) => {
     const [isDragging , setIsDragging] = React.useState(false);
     const isFocused = useTreeStore(state => (state.activeFiles.io === 'io-2' && state.srcNodeId === id));
     // Tracks the 'x' & 'y' motion values, and handles the binding of "change" (anything)
@@ -27,6 +29,7 @@ const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange}) => {
         <m.motion.div
             drag
             dragMomentum
+            dragConstraints={containerRef}
             onDragStart={() => {
                 onDragChange(id, true)
                 setIsDragging(true);

@@ -2,9 +2,9 @@ import * as React from "react";
 import {FC} from "react";
 
 
-import {IOFileIcon} from "../../components/file/FileIcons";
-import Folder from "../../components/folder/Folder";
-import File, {FileType} from "../../components/file/File";
+import {IOFileIcon} from "@/components/file/FileIcons";
+import Folder from "@/components/folder/Folder";
+import File, {FileType} from "@/components/file/File";
 import StartButton from "./action-buttons/StartButton";
 
 const Navbar: FC = () => {
@@ -28,8 +28,8 @@ const Navbar: FC = () => {
                             ">
                 <Folder name="graphs">
                     <Folder name="actions">
-                        <File type={FileType.IO} id={'io-1'} name="nodeActions.io" Icon={<IOFileIcon/>}/>
-                        <File type={FileType.IO} id={'io-2'} name={"edgeActions.io"} Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id={'io-1'} name="vertices.io" Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id={'io-2'} name={"edges.io"} Icon={<IOFileIcon/>}/>
                     </Folder>
                 </Folder>
             </div>

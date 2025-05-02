@@ -12,6 +12,8 @@ export const Blackboard = () => {
     const nodes = useTreeStore(state => state.nodes);
     const mouseX = m.motionValue<number>(0);
     const mouseY = m.motionValue<number>(0);
+    const ref = React.useRef<HTMLDivElement>(null);
+    
     m.useAnimationFrame(() => {
         const damping = 0.5;  // Damping factor
         const restLength = 150;  // Rest length of spring
@@ -37,14 +39,15 @@ export const Blackboard = () => {
         })
 
         // Apply movement and damping to all nodes.
-        for (const node of nodes.values())
+        for (const node of nodes.values()) {
             if (!node.isDragging) ApplyForce.damping(node, damping)
-
+        }
     })
     return (
         <m.motion.div
+            ref={ref}
             className="relative w-full h-full bg-black text-white overflow-hidden"
-            onClick={() => handleBlackBoardClick(nodes, createBob(mouseX.get(), mouseY.get()))}
+            onClick={() => handleBlackBoardClick(nodes, createBob(mouseX.get(), mouseY.get(), ref))}
             onMouseMove={(event: React.MouseEvent) => {
                 const rect = event.currentTarget.getBoundingClientRect();
                 mouseX.set(event.clientX - rect.left);
