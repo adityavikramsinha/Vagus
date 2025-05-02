@@ -3,7 +3,15 @@ import useTreeStore from "@/stores/TreeStore";
 import {NOTSET} from "@graph/ts/Types";
 import BackendStateManager from "@tree/api/BackendStateManager";
 
-const handleBobClick = (event: React.MouseEvent, destId: string, isDragging: boolean) => {
+
+/**
+ *
+ * @param event stops bubbling up of click event to parent
+ * @param destId id of the bob that was clicked
+ * @param isDragging is the bob being dragged ?
+ * @param MASS_PER_EDGE mass to add when a new edge is formed
+ */
+const handleBobClick = (event: React.MouseEvent, destId: string, isDragging: boolean, MASS_PER_EDGE:number =2) => {
     // stop propagation of click to parent,
     // since the parent really has nothing to do with this click.
     event.stopPropagation()
@@ -26,6 +34,8 @@ const handleBobClick = (event: React.MouseEvent, destId: string, isDragging: boo
             nodeEdges.set(destId, 0);
             BackendStateManager.graph.addEdge(srcNode, destId, 0);
             useTreeStore.setState({edgeList: updatedEdgeList});
+            useTreeStore.getState().nodes.get(srcNode).mass += MASS_PER_EDGE;
+            useTreeStore.getState().nodes.get(destId).mass += MASS_PER_EDGE;
             // Cleanup the srcNode
             useTreeStore.setState({srcNodeId: NOTSET});
         }
