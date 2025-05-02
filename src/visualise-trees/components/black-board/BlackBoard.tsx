@@ -13,7 +13,7 @@ export const Blackboard = () => {
     const mouseX = m.motionValue<number>(0);
     const mouseY = m.motionValue<number>(0);
     const ref = React.useRef<HTMLDivElement>(null);
-    
+
     m.useAnimationFrame(() => {
         const damping = 0.5;  // Damping factor
         const restLength = 150;  // Rest length of spring
