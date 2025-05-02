@@ -7,13 +7,13 @@ import BackendStateManager from "../../api/BackendStateManager";
  * @param destBobId
  */
 const deleteEdgeAndElasticConnector = (srcBobId: string, destBobId: string) => {
-    const edgeSet = useTreeStore.getState().edgeList.get(srcBobId);
-    if (edgeSet) {
-        const newEdgeSet = new Set(
-            [...edgeSet].filter(edge => edge.dest.getData() !== destBobId)
+    const edgeMap = useTreeStore.getState().edgeList.get(srcBobId);
+    if (edgeMap) {
+        const newEdgeMap = new Map(
+            [...edgeMap].filter(([destId, _]) => destId!== destBobId)
         );
         const newEdgeList = new Map(useTreeStore.getState().edgeList);
-        newEdgeList.set(srcBobId, newEdgeSet);
+        newEdgeList.set(srcBobId, newEdgeMap);
         BackendStateManager.graph.rmEdge(srcBobId, destBobId);
         useTreeStore.setState({edgeList: newEdgeList})
     }

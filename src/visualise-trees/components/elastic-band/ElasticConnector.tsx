@@ -25,14 +25,14 @@ import getBendDirection from "./getBendDirection";
 type ElasticConnectorProps = {
     srcBob: BobProps,
     destBob: BobProps,
-    edge: Edge
+    cost: number
 };
 
 const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
-const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edge}) => {
+const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cost}) => {
     const bendDirection = getBendDirection(srcBob.id, destBob.id);
-    const [edgeCost, setEdgeCost] = React.useState(edge.cost);
+    const [edgeCost, setEdgeCost] = React.useState(cost);
     // Edge Visibility.
     const [edgeCostVisible, setEdgeCostVisible] = React.useState(true);
     const [singleClick, setSingleClick] = React.useState(false);
@@ -141,7 +141,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                         textAnchor="middle"
                         dominantBaseline="middle"
                     >
-                        {edge.cost}
+                        {edgeCost}
                     </m.motion.text> : <></>}
                 </m.motion.g>
             </DialogTrigger>
@@ -191,8 +191,8 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, edg
                             bg-green-300 text-inherit cursor-pointer border-none transition-all
                             duration-200 hover:shadow-[0_0_0_2px_#86efac]"
                             onClick={() => {
-                                edge.cost = edgeCost;
-                                BackendStateManager.graph.updateEdgeCost(srcBob.id, destBob.id, edgeCost);
+                                cost = edgeCost;
+                                BackendStateManager.graph.updateEdgeCost(srcBob.id, destBob.id, cost);
                             }}>
                             Done
                         </Button>

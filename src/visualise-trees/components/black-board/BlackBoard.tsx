@@ -20,10 +20,10 @@ export const Blackboard = () => {
         // of connected nodes via their edges
         // and then get the nodes.
         // Finally apply the spring force over the edges
-        for (const [src, edgeSet] of edges) {
+        for (const [src, edgeMap] of edges) {
             const srcNode = nodes.get(src) as BobProps;
-            edgeSet.forEach(edge => {
-                const destNode = nodes.get(edge.dest.getData()) as BobProps;
+            edgeMap.forEach((_, destId) => {
+                const destNode = nodes.get(destId) as BobProps;
                 if (srcNode && destNode) ApplyForce.springForce(srcNode, destNode, 1, restLength);
             })
         }
@@ -55,15 +55,15 @@ export const Blackboard = () => {
                 {[...edges.entries()].flatMap(([src, edgeSet]) => {
                     const srcNode = nodes.get(src);
                     if (!srcNode || edgeSet.size === 0) return [];
-                    return [...edgeSet.values()].map((edge, i) => {
-                        const destNode = nodes.get(edge.dest.getData());
+                    return [...edgeSet.entries()].flatMap(([destId, cost], i) => {
+                        const destNode = nodes.get(destId);
                         if (!destNode) return null;
                         return (
                             <ElasticConnector
-                                key={`${src}-${edge.dest.getData()}-${i}`}
+                                key={`${src}-${destId}-${i}`}
                                 srcBob={srcNode}
                                 destBob={destNode}
-                                edge={edge}
+                                cost={cost}
                             />
                         );
                     });

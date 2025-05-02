@@ -1,11 +1,9 @@
 import React from "react";
 import useTreeStore from "../../../stores/TreeStore";
 import {NOTSET} from "../../../visualise-graphs/ts/Types";
-import Edge from "../../../visualise-graphs/ts/Edge";
-import Vertex from "../../../visualise-graphs/ts/Vertex";
 import BackendStateManager from "../../api/BackendStateManager";
 
-const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean) => {
+const handleBobClick = (event: React.MouseEvent, destId: string, isDragging: boolean) => {
     // stop propagation of click to parent,
     // since the parent really has nothing to do with this click.
     event.stopPropagation()
@@ -19,17 +17,16 @@ const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean
         // been set up, we can add another edge with a new src and destination
         const srcNode = useTreeStore.getState().srcNodeId;
         if (srcNode === NOTSET)
-            useTreeStore.setState({srcNodeId: id});
+            useTreeStore.setState({srcNodeId: destId});
         // how does a self edge make sense? DO NOT, allow it.
-        else if (srcNode !== id) {
-            const updatedEdgeList = new Map(useTreeStore.getState().edgeList);
-            const destNode = new Vertex(id.toString(), (a, b) => parseInt(a) - parseInt(b));
+        else if (srcNode !== destId) {
+            const updatedEdgeList = new Map<string, Map<string, number>>(useTreeStore.getState().edgeList);
             if (updatedEdgeList.get(srcNode) === undefined) {
-                updatedEdgeList.set(srcNode, new Set());
+                updatedEdgeList.set(srcNode, new Map());
             }
             const nodeEdges = updatedEdgeList.get(srcNode);
-            nodeEdges.add(new Edge(destNode, 0));
-            BackendStateManager.graph.addEdge(srcNode, id, 0);
+            nodeEdges.set(destId,0);
+            BackendStateManager.graph.addEdge(srcNode, destId, 0);
             useTreeStore.setState({edgeList: updatedEdgeList});
             // Cleanup the srcNode
             useTreeStore.setState({srcNodeId: NOTSET});
@@ -38,8 +35,8 @@ const handleBobClick = (event: React.MouseEvent, id: string, isDragging: boolean
     // This is for deleting the Vertex that is currently being clicked, io-1 is the nodeActions file.
     if (!isDragging && useTreeStore.getState().activeFiles.io === 'io-1') {
         const updatedNodes = useTreeStore.getState().nodes;
-        updatedNodes.delete(id);
-        BackendStateManager.graph.rmNode(id);
+        updatedNodes.delete(destId);
+        BackendStateManager.graph.rmNode(destId);
         useTreeStore.setState({nodes: new Map(updatedNodes)});
     }
 }

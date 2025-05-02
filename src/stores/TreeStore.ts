@@ -9,7 +9,8 @@ import Edge from "../visualise-graphs/ts/Edge";
 
 interface TreeStoreProps  {
     nodes :Map<string, BobProps>,
-    edgeList : Map<string, Set<Edge>>,
+    // Contains, src => dest edge along w the cost associated with that edge.
+    edgeList : Map<string, Map<string, number>>,
     srcNodeId : string| NOTSET_t,
 }
 interface TreeStoreActions  {}
@@ -34,7 +35,7 @@ export const treeStore =
             })
         ),
         nodes : new Map(),
-        edgeList : new Map(),
+        edgeList : new Map<string, Map<string , number>>(),
         srcNodeId : NOTSET,
     }))
 
