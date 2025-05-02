@@ -30,6 +30,9 @@ type ElasticConnectorProps = {
 const BALL_SIZE = 20;
 const RADIUS = BALL_SIZE / 2;
 const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cost}) => {
+
+    // see if the edge is in focus based on the source node id.
+    const inFocus = useTreeStore(state => state.srcNodeId === srcBob.id && state.activeFiles.io === 'io-2');
     const bendDirection = getBendDirection(srcBob.id, destBob.id);
     const [edgeCost, setEdgeCost] = React.useState(cost);
     // Edge Visibility.
@@ -49,19 +52,19 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
                 cxv,
                 cyv,
                 RADIUS,
-                10,
-                10,
+                10, // arrowLength
+                10, // arrowWidth
                 bendDirection
             );
 
             return `
-      M ${x1} ${y1}
-      Q ${cx} ${cy} ${x2} ${y2}
-      M ${x2} ${y2}
-      L ${ax1} ${ay1}
-      M ${x2} ${y2}
-      L ${ax2} ${ay2}
-    `;
+                  M ${x1} ${y1}
+                  Q ${cx} ${cy} ${x2} ${y2}
+                  M ${x2} ${y2}
+                  L ${ax1} ${ay1}
+                  M ${x2} ${y2}
+                  L ${ax2} ${ay2}
+            `;
         }
     );
 
@@ -101,7 +104,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
     // And we find that out via finding the tan_2 from src->dest.
     // Note, the edge actually faces FROM src -> dest, so it is written
     // Like that.
-    const angleDeg = m.useTransform<number, number>(
+    const rotate = m.useTransform<number, number>(
         [srcBob.x, srcBob.y, destBob.x, destBob.y],
         ([x1, y1, x2, y2]) => {
             const dx = x1 - x2;
@@ -110,6 +113,10 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
             return (angleRad * 180) / Math.PI; // convert to degrees
         }
     );
+
+    // triadic #84FFA6
+    const x = m.useTransform(tooltipX, x => x)
+    const y = m.useTransform(tooltipY, y => y)
     return (
         <Dialog open={singleClick} onOpenChange={(open) => !open && setSingleClick(false)}>
             <DialogTrigger asChild>
@@ -117,7 +124,13 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
                     <m.motion.path
                         className="hover:cursor-pointer"
                         d={d}
-                        stroke="#a684ff"
+                        animate={{
+                            stroke: inFocus ? '#84FFA6' : '#a684ff',
+                        }}
+                        transition={{
+                            duration: 0.4,
+                            ease: "backInOut",
+                        }}
                         strokeWidth={2}
                         fill="none"
                         pointerEvents="all"
@@ -131,9 +144,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
                             paintOrder: "stroke",
                             stroke: "black",
                             strokeWidth: 10,
-                            x: m.useTransform(tooltipX, x => x),
-                            y: m.useTransform(tooltipY, y => y),
-                            rotate: angleDeg,
+                            x, y, rotate,
                             transformOrigin: "center",
                         }}
                         className="fill-[#fff] text-xs pointer-events-none select-none bg-black"
