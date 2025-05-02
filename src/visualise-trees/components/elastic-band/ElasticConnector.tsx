@@ -1,6 +1,6 @@
 import * as m from "motion/react";
 import React from "react";
-import reConstructPath from "./getPathPoints";
+import getPathPoints from "./getPathPoints";
 import deleteEdgeAndElasticConnector from "./deleteEdgeAndElasticConnector";
 import {
     Dialog,
@@ -15,7 +15,6 @@ import {
 import EdgeCostEditor from "./EdgeCostEditor";
 import useTreeStore from "@/stores/TreeStore";
 import Button from "../../../components/Button";
-import Edge from "@graph/ts/Edge";
 import {BobProps} from "@tree/components/bob/Bob";
 import Toggle from "@/components/toggle/Toggle";
 import {ClosedEye, OpenEye} from "@/components/toggle/VisiblityIcon";
@@ -45,7 +44,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
     const d = m.useTransform<number, string>(
         [srcBob.x, srcBob.y, destBob.x, destBob.y, springCenterX, springCenterY],
         ([x1v, y1v, x2v, y2v, cxv, cyv]) => {
-            const {x1, y1, x2, y2, cx, cy, ax1, ay1, ax2, ay2} = reConstructPath(
+            const {x1, y1, x2, y2, cx, cy, ax1, ay1, ax2, ay2} = getPathPoints(
                 [x1v, y1v, x2v, y2v],
                 cxv,
                 cyv,
@@ -84,7 +83,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
         [srcBob.x, srcBob.y, destBob.x, destBob.y, springCenterX, springCenterY],
         ([x1, y1, x2, y2, cxv, cyv]) => {
             const {x1: newX1, x2: newX2, cx} =
-                reConstructPath([x1, y1, x2, y2], cxv, cyv, RADIUS, 10, 10, bendDirection);
+                getPathPoints([x1, y1, x2, y2], cxv, cyv, RADIUS, 10, 10, bendDirection);
             return 0.25 * newX1 + 0.5 * cx + 0.25 * newX2;
         }
     );
@@ -93,7 +92,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
         [srcBob.x, srcBob.y, destBob.x, destBob.y, springCenterX, springCenterY],
         ([x1, y1, x2, y2, cxv, cyv]) => {
             const {y1: newY1, y2: newY2, cy} =
-                reConstructPath([x1, y1, x2, y2], cxv, cyv, RADIUS, 10, 10, bendDirection);
+                getPathPoints([x1, y1, x2, y2], cxv, cyv, RADIUS, 10, 10, bendDirection);
             return 0.25 * newY1 + 0.5 * cy + 0.25 * newY2;
         }
     );
