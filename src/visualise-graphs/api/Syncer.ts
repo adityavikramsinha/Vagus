@@ -70,8 +70,8 @@ export default class Syncer {
     }
 
     static updateEdge(source: string, dest: string) {
-        const srcNode = BackendStateManager.graph().nodes().get(source);
-        const destNode = BackendStateManager.graph().nodes().get(dest);
+        const srcNode = BackendStateManager.graph().vertices().get(source);
+        const destNode = BackendStateManager.graph().vertices().get(dest);
         srcNode.updateCostTo(destNode, 10);
     }
 

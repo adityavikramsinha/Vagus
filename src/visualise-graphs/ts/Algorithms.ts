@@ -67,9 +67,9 @@ export default class Algorithms {
         while (Q.length !== 0) {
 
             // We first get the present node instance from the graph.
-            let node= this.graph.nodes().get(Q.dequeue());
+            let node= this.graph.vertices().get(Q.dequeue());
 
-            // then we add that node to visited.
+            // then we add that node to visited set.
             visited.add(node.getData());
 
             // if the nodes data is the same as end id,
@@ -92,21 +92,21 @@ export default class Algorithms {
             // this is the reason it is called breadth-first-search
             // we keep opening all the neighbours, gives the search
             // a cyclic effect.
-            node.getAdjNodes().forEach((edge) => {
+            node.getAdjVertices().forEach(edge => {
 
                 // if we have already visited it, we do not need to
                 // because it means that it is already added to the visited section
                 // and was a part of the queue.
                 if (!visited.has(edge.dest.getData())) {
 
-                    // added it to visited.
+                    // added it to visited set.
                     visited.add(edge.dest.getData());
 
                     // set prev
                     prev.set(edge.dest.getData(), node.getData());
 
                     // add it to the queue since this means that
-                    // we have to open this node again smtime later.
+                    // we have to open this node again sometime later.
                     Q.enqueue(edge.dest.getData());
                 }
             });
@@ -126,7 +126,7 @@ export default class Algorithms {
      *
      * @param start starting id of the path
      * @param end ending id of the path
-     * @returns a path | null [path if found, else null] and a inorder Set of visited nodes.
+     * @returns a path | null [path if found, else null] and an inorder Set of visited nodes.
      */
     dfs(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
 
@@ -163,7 +163,7 @@ export default class Algorithms {
                 // if not found then keep opening
                 // descendent
                 if (at !== end) {
-                    this.graph.nodes().get(at).getAdjNodes().forEach((edge) => {
+                    this.graph.vertices().get(at).getAdjVertices().forEach(edge => {
                         internalDfs(edge.dest.getData(), at);
                     });
                 }
@@ -214,7 +214,7 @@ export default class Algorithms {
         if (dist.get(end) === Infinity)
             return [NOTSET, visited];
 
-        // if it not null,
+        // if it is not null,
         // we know there must be a path that exists
         // so reconstruct it.
         for (let at: string = end; at !== undefined; at = prev.get(at)) path.unshift(at);
@@ -301,7 +301,7 @@ export default class Algorithms {
     internalBellmanFord(start: string): [Map<string, number>, Map<string, string>, Set<string>] {
 
         // dist is for the possibility of relaxation
-        // this also signifies if a part from the start -> end
+        // this also signifies if a path from the start -> end
         // exists since if end is not relaxed [i.e. end remains Infinity]
         // it means it is unreachable
         let dist: Map<string, number> = new Map();
@@ -314,14 +314,14 @@ export default class Algorithms {
 
         // Set all the dist to Infinity
         // minus the start node
-        this.graph.nodes().forEach((node) => {
+        this.graph.vertices().forEach((node) => {
             node.getData() !== start ? dist.set(node.getData(), Infinity) : dist.set(start, 0);
         });
 
         // then we take the count of the number of vertices
         // since Bellman ford must go from 0...V-1 (at most). It can end before
         // too.
-        const V = this.graph.nodes().size;
+        const V = this.graph.vertices().size;
 
         // this keeps track of number of relaxations in a pass through
         // if the changes goes down to 0, then we know any subsequent pass will yield the same
@@ -333,12 +333,12 @@ export default class Algorithms {
 
             changes = 0
             // each time we go through each node of the graph
-            this.graph.nodes().forEach((node) => {
+            this.graph.vertices().forEach((node) => {
 
                 // and each edge in the graph from this node
                 // we open it up and try to see if
                 // relaxation is possible or not
-                node.getAdjNodes().forEach((edge) => {
+                node.getAdjVertices().forEach(edge => {
 
                     // if visited does not have the node
                     // we simply add it.
@@ -401,7 +401,7 @@ export default class Algorithms {
         // also we can 100% confirm that it is not NOT_SET
         let spliceNode :string= pathFromStart[(pathFromStart as string[]).length >> 1];
 
-        // we get from this splicepoint a visited from start
+        // we get from this splice point a visited from start
         // and a visited from end
         let visitedFromStart = algo.dijkstras(start, spliceNode)[1];
         let visitedFromEnd = algo.dijkstras(end, spliceNode)[1];
@@ -475,7 +475,7 @@ export default class Algorithms {
         let visited: Set<string> = new Set();
 
         // start and end nodes have been given values
-        let dest = this.graph.nodes().get(start), endNode = this.graph.nodes().get(end);
+        let dest = this.graph.vertices().get(start), endNode = this.graph.vertices().get(end);
 
         // we enqueue the starting node
         PQ.enqueue({ label: start, minHeuristic: this.graph.distBw(dest, endNode) });
@@ -493,7 +493,7 @@ export default class Algorithms {
             visited.add(label);
 
             // get ready to explore all the edges going out of it
-            this.graph.nodes().get(label).getAdjNodes().forEach((edge) => {
+            this.graph.vertices().get(label).getAdjVertices().forEach(edge => {
 
                 // getting the data or id of the destination nodes
                 let destData = edge.dest.getData();
@@ -506,13 +506,13 @@ export default class Algorithms {
                     // we get a new heuristic approach
                     let newHeuristic = this.graph.distBw(edge.dest, endNode);
 
-                    // we enqueue and then set the nodees as required
+                    // we enqueue and then set the nodes as required
                     PQ.enqueue({ label: destData, minHeuristic: newHeuristic });
                     prev.set(destData, label);
                 }
             });
 
-            // if the id or lable is end
+            // if the id or label is end
             // then there has to be a path
             // hence we return prev and visited
             if (label === end) return [prev, visited];
@@ -550,7 +550,7 @@ export default class Algorithms {
             minHeuristic: number
         };
 
-        // mmaking the priority queue to
+        // making the priority queue to
         // sort the data in the opening nodes
         // the distance map is for understanding if a path exists or not
         // the visited set is for visualisation
@@ -560,18 +560,18 @@ export default class Algorithms {
         const visited: Set<string> = new Set();
 
         // set the distances to infinity
-        this.graph.nodes().forEach((node) => {
+        this.graph.vertices().forEach((node) => {
             node.getData() !== start ? dist.set(node.getData(), Infinity) : dist.set(start, 0);
         });
 
         // getting the start and end nodes
-        let dest = this.graph.nodes().get(start), endNode = this.graph.nodes().get(end);
+        let dest = this.graph.vertices().get(start), endNode = this.graph.vertices().get(end);
 
         // Enqueue the first item
         // this way, the PQ is always > 0 when starting.
         PQ.enqueue({ label: start, minDist: 0, minHeuristic: this.graph.distBw(dest, endNode) });
 
-        // keep on going while PQ is not exhausted
+        // keeps going while PQ is not exhausted
         while (!PQ.isEmpty()) {
 
             // deconstruct the object
@@ -589,15 +589,15 @@ export default class Algorithms {
             // open all the neighbour nodes
             // same as a bfs search
             // this bfs gives a cyclic kind of effect
-            this.graph.nodes().get(label).getAdjNodes().forEach((edge) => {
+            this.graph.vertices().get(label).getAdjVertices().forEach(edge => {
 
                 // get the data to remove
-                // boilet plate code
+                // boilerplate code
                 let destData = edge.dest.getData();
 
                 // if visited does not have the node
                 // then only do we open it.
-                // else we can already confirm that all of the nodes
+                // else we can already confirm that all the nodes
                 // have either been opened or explored or are going to
                 // be explored.
                 if (!visited.has(destData)) {
@@ -607,9 +607,9 @@ export default class Algorithms {
                     // + edge cost.
                     let newDist = dist.get(label) + edge.cost;
 
-                    // get heuristisc from the previous node
+                    // get heuristics from the previous node
                     // and node to next
-                    let newHeuristic = (this.graph.distBw(this.graph.nodes().get(destData), endNode, 'e')) / 1000000 * newDist;
+                    let newHeuristic = (this.graph.distBw(this.graph.vertices().get(destData), endNode, 'e')) / 1000000 * newDist;
 
                     // now if newDist is < dist present in dist Map
                     // then only do we update everything
@@ -662,7 +662,7 @@ export default class Algorithms {
 
         // First we set the value of distances from node [S]
         // to any node [A] to infinity
-        this.graph.nodes().forEach((node) => {
+        this.graph.vertices().forEach((node) => {
             node.getData() !== start ? dist.set(node.getData(), Infinity) : dist.set(start, 0);
         });
 
@@ -694,13 +694,13 @@ export default class Algorithms {
             // and explore it
             // the ordering is based on their min dist
             // hence a priority queue.
-            this.graph.nodes().get(label).getAdjNodes().forEach((edge) => {
+            this.graph.vertices().get(label).getAdjVertices().forEach(edge => {
 
                 // first get the destination node
                 const dest = edge.dest.getData();
 
                 // if visited does not have destination
-                // then it means that it has not been explorerd
+                // then it means that it has not been explored
                 // hence there is merit in the fact that it might be
                 // helpful to open it.
                 if (!visited.has(dest)) {
@@ -716,7 +716,7 @@ export default class Algorithms {
                     // infinity.
                     if (newDist < dist.get(dest)) {
 
-                        // we reference this node incase it is a part of the
+                        // we reference this node in case it is a part of the
                         // path
                         prev.set(dest, label);
 

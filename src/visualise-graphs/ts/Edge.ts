@@ -39,7 +39,7 @@ export default class Edge {
   }
 
   /**
-   * Updates or changes the destination to which the movment
+   * Updates or changes the destination to which the movement
    * will occur to.
    *
    * @param _newDest New destination for movement to

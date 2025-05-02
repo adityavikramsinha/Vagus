@@ -46,7 +46,7 @@ export default class Animator {
     // return if there is a start node has come
     static async animateRandomWalk(nodeId: string| NOTSET_t): Promise<void> {
         if (useGraphStore.getState().endNodeId === nodeId ||
-            BackendStateManager.graph().nodes().get((nodeId as string)).getAdjNodes().length === 1) {
+            BackendStateManager.graph().vertices().get((nodeId as string)).getAdjVertices().size === 1) {
             if (useGraphStore.getState().endNodeId === nodeId) {
                 useGraphStore.setState({randomPathId: nodeId});
                 useGraphStore.getState().pathNodes.add(nodeId);
@@ -58,7 +58,7 @@ export default class Animator {
             useGraphStore.getState().pathNodes.add(nodeId);
             await new Promise(res => setTimeout(res, 250));
             await this.animateRandomWalk(
-                BackendStateManager.graph().nodes().get((nodeId as string)).getRandomNeighbour().getData());
+                BackendStateManager.graph().vertices().get((nodeId as string)).getRandomNeighbour().getData());
         })
     }
 }

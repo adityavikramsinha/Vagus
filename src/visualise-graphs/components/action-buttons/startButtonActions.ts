@@ -90,8 +90,8 @@ export const startButtonClick = (
         match(nodeType)
             .with(NodeType.WALL_NODE, () => Syncer.removeNode(id))
             .with(NodeType.WEIGHT_NODE, () => {
-                const srcNode = BackendStateManager.graph().nodes().get(id);
-                srcNode.getAdjNodes().forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
+                const srcNode = BackendStateManager.graph().vertices().get(id);
+                srcNode.getAdjVertices().forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
             })
             .otherwise(() => {
             })

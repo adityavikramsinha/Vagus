@@ -1,13 +1,12 @@
 import Vertex from "./Vertex";
-import {extractInfoFromServerReferenceId} from "next/dist/shared/lib/server-reference-info";
 
 /**
  * Utility graph class with functions to help in maintaining state and making the algorithms work.
- * It is a Map of Nodes, each node is connection through the Edges and together get
+ * It is a Map of vertices, each vertex is connection through the Edges and together get
  * to make a Graph.
  *
  * Logical representation of the graph is :
- * node <-> node <-> node
+ * vertex <-> vertex <-> vertex
  *
  * @author aditya, <adityavikramsinha19@gmail.com>
  */
@@ -17,9 +16,9 @@ export default class Graph {
     private frozen = false;
 
     // A Map which represents the Graph internally
-    Nodes: Map<string, Vertex> = new Map();
+    vs: Map<string, Vertex> = new Map();
 
-    // Comparator for ordering of the nodes in the Graph.
+    // Comparator for ordering of the vertices in the Graph.
     comparator: (a: string, b: string) => number;
 
     // Implementation of a Cyclic Graph.
@@ -29,7 +28,7 @@ export default class Graph {
     isUndirected: boolean;
 
     /**
-     * Constructs a new graph with a given comparator to compare the values of two nodes.
+     * Constructs a new graph with a given comparator to compare the values of two vertices.
      * The Map of the graph is null.
      * the graph is set to all default values.
      *
@@ -41,89 +40,84 @@ export default class Graph {
     }
 
     /**
-     * @returns back a map of nodes (id , real object) present in the graph.
+     * @returns back a map of vertices (id , real object) present in the graph.
      */
-    nodes(): Map<string, Vertex> {
-        return this.Nodes;
+    vertices(): Map<string, Vertex> {
+        return this.vs;
     }
 
     /**
-     * Sets the x and y coordinates of a particular node.
+     * Sets the x and y coordinates of a particular vertex.
      *
-     * @param data the node whose coordinates need to be changed .
+     * @param data the vertex whose coordinates need to be changed .
      * @param x the x coordinate
      * @param y the y coordinate
      */
     setNodeCoords(data: string, {x, y}: { x: number, y: number }): void {
         this.assertMutable();
-        this.nodes().get(data).setCoords(x, y);
+        this.vertices().get(data).setCoords(x, y);
     }
 
     /**
-     * Returns if a node is present in the graph.
+     * Returns if a vertex is present in the graph.
      *
-     * @param data the node to search for
-     * @returns true if a node is present in the graph , else false .
+     * @param data the vertex to search for
+     * @returns true if a vertex is present in the graph , else false .
      */
-    nodeExists(data: string): boolean {
-        return this.nodes().get(data) !== undefined;
+    hasVertex(data: string): boolean {
+        return this.vertices().get(data) !== undefined;
     }
 
     /**
-     * Returns if there is an edge between a given source node and a given destination node.
-     * This only works if both nodes
+     * Returns if there is an edge between a given source vertex and a given destination vertex.
+     * This only works if both vertices
      * are in the graph, else it does not work and returns false
      *
      * @param source the starting point of the edge
      * @param destination the ending point of the edge
      * @returns true if an edge exists, else false.
      */
-    edgeExists(source: string, destination: string): boolean {
-        const src = this.nodes().get(source);
+    hasEdge(source: string, destination: string): boolean {
+        const src = this.vertices().get(source);
 
         if (src === undefined)
             return false;
-
-        const at: number = src.getAdjNodes().findIndex(edge => {
-            return edge.dest.getData() === destination;
-        });
-
-        return at >= 0;
+        return src.getAdjVertices().has(destination);
     }
 
     /**
-     * Adds a Node object to the graph if it is not already present.
-     * @param data the node data to add.
+     * Adds a vertex object to the graph if it is not already present.
+     * @param data the vertex data to add.
      * @param x optional x coordinate
      * @param y optional y coordinate
-     * @returns the added node or, just the node which exists with the same ID.
+     * @returns the added vertex or, just the vertex which exists with the same ID.
      */
     addNode(data: string, x:number =0  , y:number= 0): Vertex {
         this.assertMutable();
-        let node = this.nodes().get(data);
-        if (node !== undefined)
-            return node;
-        node = new Vertex(data, this.comparator, x,y);
-        this.nodes().set(data, node);
-        return node;
+        let vertex = this.vertices().get(data);
+        if (vertex !== undefined)
+            return vertex;
+        vertex = new Vertex(data, this.comparator, x,y);
+        this.vertices().set(data, vertex);
+        return vertex;
     }
 
     /**
-     * Removes a node from the graph if it is present.
+     * Removes a vertex from the graph if it is present.
      * This includes removal of any and all connections to and from the
-     * node in the graph.
+     * vertex in the graph.
      *
-     * @param data the data or id of the node to be removed .
-     * @returns Null if the node does not exist. If it does, then the node is returned.
+     * @param data the data or id of the vertex to be removed .
+     * @returns Null if the vertex does not exist. If it does, then the vertex is returned.
      */
     rmNode(data: string): Vertex | null {
         this.assertMutable();
-        const nodeToRm = this.nodes().get(data);
+        const nodeToRm = this.vertices().get(data);
         if (!nodeToRm) return null;
-        this.nodes().forEach((node) => {
-            node.rmAdjNode(nodeToRm.getData());
+        this.vertices().forEach((vertex) => {
+            vertex.rmAdjVertex(nodeToRm.getData());
         })
-        this.nodes().delete(data);
+        this.vertices().delete(data);
         return nodeToRm;
     }
 
@@ -137,52 +131,52 @@ export default class Graph {
     }
 
     /**
-     * Adds an edge between the source and destination nodes.
+     * Adds an edge between the source and destination vertices.
      * There is a given cost which HAS to be specified and thus,
      * depending on if the graph is a directed one or an undirected one,
      * the edge addition with we either both way or only singular
      * way.
      *
-     * @param source the node to add the connection from
-     * @param destination the node to add the connection to
+     * @param source the vertex to add the connection from
+     * @param destination the vertex to add the connection to
      * @param cost the cost of the connection between them.
      */
     addEdge(source: string, destination: string, cost: number): void {
         this.assertMutable();
-        let src = this.nodes().get(source);
-        let dest = this.nodes().get(destination);
-        src.addAdjNode(dest, cost);
-        if (this.isUndirected) dest.addAdjNode(src, cost);
+        let src = this.vertices().get(source);
+        let dest = this.vertices().get(destination);
+        src.addAdjVertex(dest, cost);
+        if (this.isUndirected) dest.addAdjVertex(src, cost);
     }
 
     /**
-     * Removes an edge between a valid source node and a valid destination node.
+     * Removes an edge between a valid source vertex and a valid destination vertex.
      * In case the graph is cyclic, it will remove
-     * an edge from both the destination to source node and from the source node to the destination node.
-     * If the flag is off then it will not remove the edge from the destination node to source node.
-     * This function just requires the node ids to check if the nodes are present.
-     * After that it gets the nodes from the internal storage.
+     * an edge from both the destination to source vertex and from the source vertex to the destination vertex.
+     * If the flag is off then it will not remove the edge from the destination vertex to source vertex.
+     * This function just requires the vertex ids to check if the vertices are present.
+     * After that it gets the vertices from the internal storage.
      *
-     * @param source the node id from which the connection starts
-     * @param destination the node id at which the connection ends
+     * @param source the vertex id from which the connection starts
+     * @param destination the vertex id at which the connection ends
      */
     rmEdge(source: string, destination: string): void {
         this.assertMutable();
-        const src = this.nodes().get(source);
-        const dest = this.nodes().get(destination);
+        const src = this.vertices().get(source);
+        const dest = this.vertices().get(destination);
         if (src && dest) {
-            src.rmAdjNode(destination);
+            src.rmAdjVertex(destination);
             if (this.isUndirected)
-                dest.rmAdjNode(source);
+                dest.rmAdjVertex(source);
         }
     }
 
     /**
-     * Gives the Euclidean distance between two nodes in the graph
+     * Gives the Euclidean distance between two vertices in the graph
      * based on their x and y coordinates on a 2-D plane.
      *
-     * @param _this the start node
-     * @param _that the end node.
+     * @param _this the start vertex
+     * @param _that the end vertex.
      * @param whatType is the type of distance required, m for manhattan and e for Euclidean
      * @returns the value of this function.
      */
@@ -201,28 +195,28 @@ export default class Graph {
     }
 
     /**
-     * Takes an initial Graph (_initGraph) and (_presentGraph), then, for a given node in the
-     * _presentGraph it reverts the nodes state back the nodes state in the _initGraph.
-     * This means that the properties of the node in _initGraph and _presentGraph
+     * Takes an initial Graph (_initGraph) and (_presentGraph), then, for a given vertex in the
+     * _presentGraph it reverts the vertices state back the vertices state in the _initGraph.
+     * This means that the properties of the vertex in _initGraph and _presentGraph
      * should be exactly the same, unless a neighbours of it is not present in the _presentGraph.
-     * It does not make any new nodes except for the one node with a data passed in as parameter.
+     * It does not make any new vertices except for the one vertex with a data passed in as parameter.
      * The cost of the connections also reflect the cost in the _initGraph.
      *
-     * @param data the node whose state needs to be reverted to from the _initGraph.
-     * @param _initGraph the _initGraph whose node state needs to be copied
+     * @param data the vertex whose state needs to be reverted to from the _initGraph.
+     * @param _initGraph the _initGraph whose vertex state needs to be copied
      * @param _presentGraph the present graph in which the changes need to be made.
      */
     static revertNode(data: string, _initGraph: Graph, _presentGraph: Graph): void {
-        let initialNode = _initGraph.nodes().get(data);
+        let initialNode = _initGraph.vertices().get(data);
         _presentGraph.addNode(data);
-        let presentNode = _presentGraph.nodes().get(data);
+        let presentNode = _presentGraph.vertices().get(data);
 
-        initialNode.getAdjNodes().forEach(edge => {
-            let presentEdgeDest = _presentGraph.nodes().get(edge.dest.getData());
+        initialNode.getAdjVertices().forEach(edge => {
+            let presentEdgeDest = _presentGraph.vertices().get(edge.dest.getData());
 
             if (presentEdgeDest !== undefined) {
-                presentNode.addAdjNode(presentEdgeDest, edge.cost);
-                presentEdgeDest.addAdjNode(presentNode, edge.cost);
+                presentNode.addAdjVertex(presentEdgeDest, edge.cost);
+                presentEdgeDest.addAdjVertex(presentNode, edge.cost);
             }
         })
     }
@@ -233,12 +227,15 @@ export default class Graph {
      * @param srcId
      * @param destId
      * @param cost
+     * @return true if updated or false if not updated(either vertex does not exist or edge does not exist or both)
      */
     updateEdgeCost(srcId : string, destId : string, cost : number) {
-        let node = this.nodes().get(srcId);
-        if (node === undefined) return;
-        const targetEdge =node.getAdjNodes().find(edge => edge.dest.getData() === destId);
+        let vertex = this.vertices().get(srcId);
+        if (vertex === undefined) return false;
+        const targetEdge =vertex.getAdjVertices().get(destId);
+        if(targetEdge === undefined) return false;
         targetEdge.cost = cost;
+        return true;
     }
 
     /**
@@ -251,15 +248,15 @@ export default class Graph {
     static copy(_initial: Graph, _present: Graph, cost: number): void {
 
         //first reset all active connections
-        _initial.nodes().forEach((initNode) => {
-            if (!_present.nodes().has(initNode.getData())) {
+        _initial.vertices().forEach((initNode) => {
+            if (!_present.vertices().has(initNode.getData())) {
                 this.revertNode(initNode.getData(), _initial, _present);
             }
         });
 
         //then reset all active costs.
-        _present.nodes().forEach((initNode) => {
-            initNode.getAdjNodes().forEach((edge) => {
+        _present.vertices().forEach((initNode) => {
+            initNode.getAdjVertices().forEach((edge) => {
                 if (edge.dest.getData() !== initNode.getData() && edge.cost > 1)
                     edge.changeCost(cost);
             });
