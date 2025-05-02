@@ -37,6 +37,12 @@ const handleBobClick = (event: React.MouseEvent, destId: string, isDragging: boo
         const updatedNodes = useTreeStore.getState().nodes;
         updatedNodes.delete(destId);
         BackendStateManager.graph.rmNode(destId);
+
+        // We must ensure that if srcNode is being deleted
+        // then it is deleted Properly.
+        if(useTreeStore.getState().srcNodeId === destId) {
+            useTreeStore.setState({srcNodeId : NOTSET});
+        }
         useTreeStore.setState({nodes: new Map(updatedNodes)});
     }
 }
