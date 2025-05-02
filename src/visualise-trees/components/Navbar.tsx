@@ -6,6 +6,8 @@ import {IOFileIcon} from "@/components/file/FileIcons";
 import Folder from "@/components/folder/Folder";
 import File, {FileType} from "@/components/file/File";
 import StartButton from "./action-buttons/StartButton";
+import useTreeStore from "@/stores/TreeStore";
+import {NOTSET} from "@graph/ts/Types";
 
 const Navbar: FC = () => {
     return (
@@ -29,7 +31,8 @@ const Navbar: FC = () => {
                 <Folder name="graphs">
                     <Folder name="actions">
                         <File type={FileType.IO} id={'io-1'} name="vertices.io" Icon={<IOFileIcon/>}/>
-                        <File type={FileType.IO} id={'io-2'} name={"edges.io"} Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id={'io-2'} name={"edges.io"} Icon={<IOFileIcon/>}
+                              onClick={() => useTreeStore.setState({srcNodeId: NOTSET})}/>
                     </Folder>
                 </Folder>
             </div>
