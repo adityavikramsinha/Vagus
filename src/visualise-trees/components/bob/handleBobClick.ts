@@ -1,4 +1,4 @@
-import useTreeStore from "@/stores/TreeStore";
+import useTreeStore, {VertexActions} from "@/stores/TreeStore";
 import {NOTSET} from "@graph/ts/Types";
 import BackendStateManager from "@tree/api/BackendStateManager";
 
@@ -33,25 +33,8 @@ const handleBobClick = (destId: string, MASS_PER_EDGE:number =2) => {
 
     // This is for deleting the Vertex that is currently being clicked, io-1 is the nodeActions file.
     else if (useTreeStore.getState().activeFiles.io === 'io-1') {
-        const updatedNodes = useTreeStore.getState().nodes;
-        updatedNodes.delete(destId);
+        useTreeStore.getState().dispatch({type : VertexActions.DELETE , id : destId})
         BackendStateManager.graph.rmNode(destId);
-
-        // We are removing the node from the node map, but not from srcNodeId,
-        // This is because the file is supposed to handle state's related to it
-        // and since srcNodeId is something that the edges.io File is controlling
-        // we should not interfere with it externally and since this is in a branch
-        // that is not for that file (io-2), it makes it really messy to mutate stuff
-        // linked to that file here.
-
-        // Instead, the proposed actions is that everytime
-        // a file EXCEPT for edges.io is selected, any state related to the edges should
-        // be set to NOTSET and revalidated.
-
-        // This way we are not going to run into that error, and it will also be able
-        // to enhance the UX/DX, since D's or U's won't have to remember the previous
-        // state
-        useTreeStore.setState({nodes: new Map(updatedNodes)});
     }
 }
 

@@ -4,17 +4,33 @@ import {create} from "zustand";
 import {storeApi, useProvidedStore} from "../providers/StoreProvider";
 import {FileStore} from "../providers/FileExplorer";
 import {BobProps} from "../visualise-trees/components/bob/Bob";
-import Edge from "../visualise-graphs/ts/Edge";
+import {match} from "ts-pattern";
 
 
-interface TreeStoreProps  {
-    nodes :Map<string, BobProps>,
-    // Contains, src => dest edge along w the cost associated with that edge.
-    edgeList : Map<string, Map<string, number>>,
-    srcNodeId : string| NOTSET_t,
+export enum VertexActions {
+    DELETE = "del",
+    ADD = "add"
 }
-interface TreeStoreActions  {}
-export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {}
+
+
+interface TreeStoreProps {
+    nodes: Map<string, BobProps>,
+    // Contains, src => dest edge along w the cost associated with that edge.
+    edgeList: Map<string, Map<string, number>>,
+    srcNodeId: string | NOTSET_t,
+}
+
+type UpdateNodesPayload =
+    | { type: VertexActions.ADD, bob: BobProps }
+    | { type: VertexActions.DELETE, id: string }
+
+
+interface TreeStoreActions {
+    dispatch: (update: UpdateNodesPayload) => void;
+}
+
+export interface TreeStore extends TreeStoreProps, TreeStoreActions, FileStore {
+}
 
 export const treeStore =
     create<TreeStore>()((set) => ({
@@ -34,9 +50,25 @@ export const treeStore =
                 }
             })
         ),
-        nodes : new Map(),
-        edgeList : new Map<string, Map<string , number>>(),
-        srcNodeId : NOTSET,
+        nodes: new Map(),
+        edgeList: new Map<string, Map<string, number>>(),
+        srcNodeId: NOTSET,
+        dispatch: (update: UpdateNodesPayload) =>
+            set((state) =>
+                match(update)
+                    .with({type: VertexActions.ADD}, ({bob}) => ({
+                        nodes: new Map(state.nodes).set(bob.id, bob),
+                    }))
+                    .with({ type: VertexActions.DELETE }, ({ id }) => {
+                        const updatedNodes = new Map(state.nodes);
+                        updatedNodes.delete(id);
+                        return {
+                            nodes: updatedNodes,
+                            ...(state.srcNodeId === id && { srcNodeId: NOTSET }),
+                        };
+                    })
+                    .exhaustive()
+            ),
     }))
 
 
@@ -44,8 +76,8 @@ const useTreeStore = <U>(selector: (state: TreeStore) => U): U => useProvidedSto
 
 useTreeStore.getState = () => storeApi<TreeStore>().getState();
 useTreeStore.setState = (partial: TreeStore
-                              | Partial<TreeStore>
-                              | ((state: TreeStore) => TreeStore | Partial<TreeStore>),
+                             | Partial<TreeStore>
+                             | ((state: TreeStore) => TreeStore | Partial<TreeStore>),
                          replace ?: false
 ) => storeApi<TreeStore>().setState(partial, replace)
 

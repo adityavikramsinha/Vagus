@@ -47,7 +47,7 @@ export const Blackboard = () => {
         <m.motion.div
             ref={ref}
             className="relative w-full h-full bg-black text-white overflow-hidden"
-            onClick={() => handleBlackBoardClick(nodes, createBob(mouseX.get(), mouseY.get(), ref))}
+            onClick={() => handleBlackBoardClick(createBob(mouseX.get(), mouseY.get(), ref))}
             onMouseMove={(event: React.MouseEvent) => {
                 const rect = event.currentTarget.getBoundingClientRect();
                 mouseX.set(event.clientX - rect.left);
