@@ -1,26 +1,16 @@
-import React from "react";
 import useTreeStore from "@/stores/TreeStore";
 import {NOTSET} from "@graph/ts/Types";
 import BackendStateManager from "@tree/api/BackendStateManager";
 
 
 /**
- *
- * @param event stops bubbling up of click event to parent
  * @param destId id of the bob that was clicked
- * @param isDragging is the bob being dragged ?
  * @param MASS_PER_EDGE mass to add when a new edge is formed
  */
-const handleBobClick = (event: React.MouseEvent, destId: string, isDragging: boolean, MASS_PER_EDGE:number =2) => {
-    // stop propagation of click to parent,
-    // since the parent really has nothing to do with this click.
-    event.stopPropagation()
-    // There is little information about this on MDN, but in a way t
-    // this is preventing bubble up of the event.
+const handleBobClick = (destId: string, MASS_PER_EDGE:number =2) => {
 
     // This is for adding an edge.
     if (useTreeStore.getState().activeFiles.io === 'io-2') {
-
         // we have to perform a clean-up function so that after an edge has
         // been set up, we can add another edge with a new src and destination
         const srcNode = useTreeStore.getState().srcNodeId;
@@ -42,7 +32,7 @@ const handleBobClick = (event: React.MouseEvent, destId: string, isDragging: boo
     }
 
     // This is for deleting the Vertex that is currently being clicked, io-1 is the nodeActions file.
-    if (!isDragging && useTreeStore.getState().activeFiles.io === 'io-1') {
+    else if (useTreeStore.getState().activeFiles.io === 'io-1') {
         const updatedNodes = useTreeStore.getState().nodes;
         updatedNodes.delete(destId);
         BackendStateManager.graph.rmNode(destId);

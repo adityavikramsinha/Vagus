@@ -61,7 +61,17 @@ const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange, containerRef
                         boxShadow: "0 0 0 rgba(0,0,0,0)",
                     }
             }
-            onClick={event => handleBobClick(event, id, isDragging)}
+            onClick={event => {
+                // stop propagation of click to parent,
+                // since the parent really has nothing to do with this click.
+                event.stopPropagation()
+                // There is little information about this on MDN, but in a way t
+                // this is preventing bubble up of the event.
+
+                // we do not register Drags as clicks, that's just weird
+                if (!isDragging)
+                    handleBobClick(id)
+            }}
         />
     );
 };
