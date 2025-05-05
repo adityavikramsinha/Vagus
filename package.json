@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@datastructures-js/priority-queue": "^6.3.2",
+    "@next/bundle-analyzer": "^15.3.1",
     "@next/eslint-plugin-next": "^15.3.0",
     "@radix-ui/react-dialog": "^1.1.7",
     "@radix-ui/react-toggle": "^1.1.6",
