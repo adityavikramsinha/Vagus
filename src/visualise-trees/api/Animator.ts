@@ -14,7 +14,7 @@ export default class Animator {
                 visitedVertices = updated; // update local reference
                 useTreeStore.setState({ visitedVertices: updated });
 
-                await new Promise(resolve => setTimeout(resolve, 1200));
+                await new Promise(resolve => setTimeout(resolve, 1000));
             });
         }
 

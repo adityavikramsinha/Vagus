@@ -172,7 +172,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
                             fill="none"
                             initial={{ pathLength: 0 }}
                             animate={{ pathLength: 1 }}
-                            transition={{ delay:1.2, duration: 1.2, ease: "easeInOut" }}
+                            transition={{ delay:1, duration: 1, ease: "easeInOut" }}
                             pointerEvents="none"
                         />
                     )}

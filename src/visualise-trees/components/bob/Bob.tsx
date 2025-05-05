@@ -66,7 +66,7 @@ const Bob: React.FC<BobProps> = ({
                         "0 0 10px rgba(255, 166, 132, 1)",
                     ],
                     transition: {
-                        duration: 1.2,
+                        duration: 1,
                         repeat: Infinity,
                         repeatType: "loop",
                         ease: "easeInOut",
@@ -77,12 +77,12 @@ const Bob: React.FC<BobProps> = ({
                     scale: [1, 1.5, 1],
                     transition: {
                         scale: {
-                            delay:2,
-                            duration: 1.2,
+                            delay:1.2,
+                            duration: 1,
                             ease: "easeInOut"
                         },
                         backgroundColor : {
-                            delay:1.2,
+                            delay:1,
                             ease: "easeInOut"
                         }
                     }

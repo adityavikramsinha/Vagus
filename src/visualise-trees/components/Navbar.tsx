@@ -8,6 +8,7 @@ import File, {FileType} from "@/components/file/File";
 import StartButton from "./action-buttons/StartButton";
 import useTreeStore from "@/stores/TreeStore";
 import {NOTSET} from "@graph/ts/Types";
+import StopButton from "./action-buttons/StopButton";
 
 const Navbar: FC = () => {
     return (
@@ -15,6 +16,9 @@ const Navbar: FC = () => {
             <div className="h-1/10 font-medium flex items-center justify-between pr-4 pl-4">
                 <div className="text-2xl">Vagus</div>
                 <div className="flex flex-nowrap gap-2.5">
+                    <StopButton onClick={()=>{
+                        useTreeStore.setState({executing : false , block : false, visitedVertices : new Map()})
+                    }}/>
                     <StartButton/>
                 </div>
             </div>
