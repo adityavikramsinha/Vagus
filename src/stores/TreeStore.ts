@@ -19,7 +19,9 @@ interface TreeStoreProps {
     edgeList: Map<string, Map<string, number>>,
     srcNodeId: string | NOTSET_t,
     startNodeId: string | NOTSET_t,
-    endNodeId: string | NOTSET_t
+    endNodeId: string | NOTSET_t,
+    block : boolean,
+    executing : boolean
 }
 
 type UpdateNodesPayload =
@@ -76,6 +78,8 @@ export const treeStore =
 
         startNodeId: NOTSET,
         endNodeId: NOTSET,
+        block : false,
+        executing : false
     }))
 
 

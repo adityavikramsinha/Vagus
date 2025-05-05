@@ -6,12 +6,14 @@ import * as ApplyForce from "./Forces";
 import useTreeStore from "../../../stores/TreeStore";
 import handleBlackBoardClick from "./handleBlackBoardClick";
 import createBob from "../bob/createBob";
+import cn from "../../../cn";
 
 export const Blackboard = () => {
     const edges = useTreeStore(state => state.edgeList);
     const nodes = useTreeStore(state => state.nodes);
     const mouseX = m.motionValue<number>(0);
     const mouseY = m.motionValue<number>(0);
+    const isBlocked = useTreeStore(state=> state.block);
     const ref = React.useRef<HTMLDivElement>(null);
     m.useAnimationFrame(() => {
         const damping = 0.5;  // Damping factor
@@ -66,7 +68,9 @@ export const Blackboard = () => {
     return (
         <m.motion.div
             ref={ref}
-            className="relative w-full h-full bg-black text-white overflow-hidden"
+            className={cn("relative w-full h-full bg-black text-white overflow-hidden", {
+                "pointer-events-none" : isBlocked
+            })}
             onClick={() => handleBlackBoardClick(
                 createBob(mouseX.get(), mouseY.get(), ref))}
             onMouseMove={(event: React.MouseEvent) => {

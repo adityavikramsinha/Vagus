@@ -126,7 +126,6 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
             return (angleRad * 180) / Math.PI; // convert to degrees
         }
     );
-
     // triadic #84FFA6
     const x = m.useTransform(tooltipX, x => x)
     const y = m.useTransform(tooltipY, y => y)
@@ -149,7 +148,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
                         fill="none"
                         pointerEvents="all"
                         onClick={() => {
-                            if (useTreeStore.getState().activeFiles.io === 'io-2')
+                            if (useTreeStore.getState().activeFiles.io === 'io-2' && !useTreeStore.getState().block)
                                 setSingleClick(true)
                         }}
                     />
@@ -177,10 +176,12 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
                         <div
                             className="text-white rounded-md py-4 shadow-md space-y-3 w-fit">
                             <div className="text-sm">
-                                <span className="font-semibold text-zinc-300">Source ID:</span> {srcBob.id}
+                                <span
+                                    className="font-semibold text-zinc-300">Source ID:</span> {srcBob.id}
                             </div>
                             <div className="text-sm">
-                                <span className="font-semibold text-zinc-300">Destination ID:</span> {destBob.id}
+                                <span
+                                    className="font-semibold text-zinc-300">Destination ID:</span> {destBob.id}
                             </div>
                             <div className="pt-2 border-t border-zinc-700">
                                 <div

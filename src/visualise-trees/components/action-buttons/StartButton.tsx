@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "@/components/Button";
 import handleStartButtonClick from "./handleStartButtonClick";
+import useTreeStore from "../../../stores/TreeStore";
 
 const StartButtonIcon = () => {
     return (
@@ -20,8 +21,10 @@ const StartButtonIcon = () => {
 }
 
 const StartButton = () => {
+
     return (
-        <Button className="hover:bg-cmd-border" onClick={() => handleStartButtonClick()}>
+        <Button disabled={useTreeStore(state => state.block)}
+                className="hover:bg-cmd-border" onClick={() => handleStartButtonClick()}>
             <StartButtonIcon/>
         </Button>
     )
