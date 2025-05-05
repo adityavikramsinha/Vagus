@@ -12,19 +12,30 @@ export interface Particle {
     isDragging: boolean;
 
 }
+
 export interface BobProps extends Particle {
     id: string;
     onUpdate: (index: string, x: number, y: number) => void;
     onDragChange: (index: string, dragging: boolean) => void;
-    containerRef : React.RefObject<HTMLDivElement>;
+    containerRef: React.RefObject<HTMLDivElement>;
 }
-const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange, containerRef}) => {
-    const [isDragging , setIsDragging] = React.useState(false);
-    const isFocused = useTreeStore(state => (state.activeFiles.io === 'io-2' && state.srcNodeId === id));
+
+const Bob: React.FC<BobProps> = ({
+                                     id, x, y, onUpdate, onDragChange,
+                                     containerRef
+                                 }) => {
+    const [isDragging, setIsDragging] = React.useState(false);
+    const isFocused = useTreeStore(
+        state => (state.activeFiles.io === 'io-2' && state.srcNodeId === id));
     // Tracks the 'x' & 'y' motion values, and handles the binding of "change" (anything)
     // to both of these props, that way we do not have to think about the cursor position
-    m.useMotionValueEvent(x, "change", (latestX) => onUpdate(id, latestX, y.get()));
-    m.useMotionValueEvent(y, "change", (latestY) => onUpdate(id, x.get(), latestY));
+    const isStartVertex = useTreeStore(state => state.startNodeId === id);
+    const isEndVertex = useTreeStore(state => state.endNodeId === id);
+
+    m.useMotionValueEvent(x, "change",
+        (latestX) => onUpdate(id, latestX, y.get()));
+    m.useMotionValueEvent(y, "change",
+        (latestY) => onUpdate(id, x.get(), latestY));
     return (
         <m.motion.div
             drag
@@ -38,7 +49,7 @@ const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange, containerRef
                 onDragChange(id, false)
                 setIsDragging(false);
             }}
-            className="w-[20px] h-[20px] bg-[#FFA684] rounded-[50%] cursor-grab absolute"
+            className="w-[20px] h-[20px] bg-[#FFA684] rounded-[50%] cursor-grab absolute flex justify-center items-center"
             style={{x, y}}
             animate={
                 isFocused
@@ -72,7 +83,26 @@ const Bob: React.FC<BobProps> = ({id, x, y, onUpdate, onDragChange, containerRef
                 if (!isDragging)
                     handleBobClick(id)
             }}
-        />
+        >
+
+            {/* Conditionally render "S" or "E" inside the SVG */}
+            <svg width="20" height="20" className="absolute top-0 left-0 ">
+                {isStartVertex && (
+                    <text x="50%" y="50%" textAnchor="middle" stroke="#1a1a1a"
+                          strokeWidth="1px" dy=".3em"
+                          fontSize="12">
+                        S
+                    </text>
+                )}
+                {isEndVertex && (
+                    <text x="50%" y="50%" textAnchor="middle" stroke="#1a1a1a"
+                          strokeWidth="1px" dy=".3em"
+                          fontSize="12">
+                        E
+                    </text>
+                )}
+            </svg>
+        </m.motion.div>
     );
 };
 export default Bob;

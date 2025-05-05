@@ -30,9 +30,11 @@ const Navbar: FC = () => {
                             ">
                 <Folder name="graphs">
                     <Folder name="actions">
-                        <File type={FileType.IO} id={'io-1'} name="vertices.io" Icon={<IOFileIcon/>}/>
-                        <File type={FileType.IO} id={'io-2'} name={"edges.io"} Icon={<IOFileIcon/>}
+                        <File type={FileType.IO} id='io-1' name="vertices.io" Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id='io-2' name="edges.io" Icon={<IOFileIcon/>}
                               onClick={() => useTreeStore.setState({srcNodeId: NOTSET})}/>
+                        <File type={FileType.IO} id='io-3' name="assignStartVertex.io" Icon={<IOFileIcon/>}/>
+                        <File type={FileType.IO} id='io-4' name="assignEndVertex.io" Icon={<IOFileIcon/>}/>
                     </Folder>
                 </Folder>
             </div>

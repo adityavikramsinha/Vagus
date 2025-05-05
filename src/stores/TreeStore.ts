@@ -18,6 +18,8 @@ interface TreeStoreProps {
     // Contains, src => dest edge along w the cost associated with that edge.
     edgeList: Map<string, Map<string, number>>,
     srcNodeId: string | NOTSET_t,
+    startNodeId: string | NOTSET_t,
+    endNodeId: string | NOTSET_t
 }
 
 type UpdateNodesPayload =
@@ -59,16 +61,21 @@ export const treeStore =
                     .with({type: VertexActions.ADD}, ({bob}) => ({
                         nodes: new Map(state.nodes).set(bob.id, bob),
                     }))
-                    .with({ type: VertexActions.DELETE }, ({ id }) => {
+                    .with({type: VertexActions.DELETE}, ({id}) => {
                         const updatedNodes = new Map(state.nodes);
                         updatedNodes.delete(id);
                         return {
                             nodes: updatedNodes,
-                            ...(state.srcNodeId === id && { srcNodeId: NOTSET }),
+                            ...(state.srcNodeId === id && {srcNodeId: NOTSET}),
+                            ...(state.startNodeId === id && {startNodeId: NOTSET}),
+                            ...(state.endNodeId === id && {endNodeId: NOTSET})
                         };
                     })
                     .exhaustive()
             ),
+
+        startNodeId: NOTSET,
+        endNodeId: NOTSET,
     }))
 
 

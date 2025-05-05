@@ -32,11 +32,11 @@ const handleBobClick = (destId: string, MASS_PER_EDGE: number = 2) => {
             }
         })
         .with("io-1", () => {
-            if (useTreeStore.getState().activeFiles.io === 'io-1') {
-                useTreeStore.getState().dispatch({type: VertexActions.DELETE, id: destId})
-                BackendStateManager.graph.rmNode(destId);
-            }
+            useTreeStore.getState().dispatch({type: VertexActions.DELETE, id: destId})
+            BackendStateManager.graph.rmNode(destId);
         })
+        .with("io-3", () => useTreeStore.setState({startNodeId: destId}))
+        .with("io-4", () => useTreeStore.setState({endNodeId: destId}))
         .otherwise(() => undefined)
 }
 
