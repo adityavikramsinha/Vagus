@@ -37,6 +37,7 @@
     "@types/react-dom": "^19.1.2",
     "eslint": "^9.24.0",
     "eslint-config-next": "15.2.4",
+    "react-scan": "^0.3.3",
     "typescript": "^5.8.3"
   }
 }
