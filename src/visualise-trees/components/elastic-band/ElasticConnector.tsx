@@ -213,4 +213,4 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({srcBob, destBob, cos
         </Dialog>
     );
 };
-export default ElasticConnector;
+export default React.memo(ElasticConnector);

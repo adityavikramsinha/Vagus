@@ -105,4 +105,4 @@ const Bob: React.FC<BobProps> = ({
         </m.motion.div>
     );
 };
-export default Bob;
+export default React.memo(Bob);
