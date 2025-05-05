@@ -149,7 +149,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
                         className="hover:cursor-pointer"
                         d={d}
                         animate={{
-                            stroke: isVisited ? "rgba(255,255,255,0.2)" :inFocus ? '#84FFA6' : '#a684ff'
+                            stroke: inFocus ? '#84FFA6' : '#a684ff'
                         }}
                         transition={{
                             duration: 0.4,
