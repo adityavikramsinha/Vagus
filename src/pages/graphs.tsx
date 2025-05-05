@@ -1,5 +1,5 @@
 import {StrictMode} from "react";
-import GraphVisualiser from "@graph/components/GraphVisualiser";
+import PathVisualiser from "@graph/components/GraphVisualiser";
 import Head from "next/head";
 import {JetBrains_Mono} from "next/font/google";
 
@@ -24,7 +24,7 @@ function PathsPage() {
             )}
         </Head>
         <div id="root" className={jetBrainsMono.className}>
-            <GraphVisualiser/>
+            <PathVisualiser/>
         </div>
     </StrictMode>
 }

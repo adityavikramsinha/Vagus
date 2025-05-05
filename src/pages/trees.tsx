@@ -1,7 +1,7 @@
 import {StrictMode} from "react";
 import Head from "next/head";
 import {JetBrains_Mono} from "next/font/google";
-import TreeVisualiserApp from "../visualise-trees/components/TreeVisualiser";
+import GraphVisualiser from "../visualise-trees/components/TreeVisualiser";
 
 const jetBrainsMono = JetBrains_Mono({
     subsets: ['latin'],
@@ -24,7 +24,7 @@ function GraphsPage() {
             )}
         </Head>
         <div id="root" className={jetBrainsMono.className}>
-            <TreeVisualiserApp/>
+            <GraphVisualiser/>
         </div>
     </StrictMode>
 }
