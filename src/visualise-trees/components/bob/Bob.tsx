@@ -82,7 +82,7 @@ const Bob: React.FC<BobProps> = ({
                             ease: "easeInOut"
                         },
                         backgroundColor : {
-                            delay:2,
+                            delay:1.5,
                             ease: "easeInOut"
                         }
                     }

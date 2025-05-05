@@ -10,18 +10,10 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 function PathsPage() {
-
-    const isDev = process.env.NODE_ENV === "development";
     return <StrictMode>
         <Head>
             <link rel="icon" href="/images/icon.svg"/>
             <title>Vagus — A Path Visualiser</title>
-            {isDev && (
-                <script
-                    crossOrigin="anonymous"
-                    src="//unpkg.com/react-scan/dist/auto.global.js"
-                />
-            )}
         </Head>
         <div id="root" className={jetBrainsMono.className}>
             <PathVisualiser/>

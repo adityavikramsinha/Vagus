@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "../../../components/Button";
-import useGraphStore from "../../../stores/GraphStore";
+import Button from "@/components/Button";
+import useGraphStore from "@/stores/GraphStore";
 
 
 const ClearButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
