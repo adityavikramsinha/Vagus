@@ -19,24 +19,35 @@ const handleBobClick = (destId: string, MASS_PER_EDGE: number = 2) => {
                 useTreeStore.setState({srcNodeId: destId});
             // how does a self edge make sense? DO NOT, allow it.
             else if (srcNode !== destId) {
-                const updatedEdgeList = new Map<string, Map<string, number>>(useTreeStore.getState().edgeList);
-                if (updatedEdgeList.get(srcNode) === undefined) updatedEdgeList.set(srcNode, new Map())
+                const updatedEdgeList = new Map<string, Map<string, number>>(
+                    useTreeStore.getState().edgeList);
+                if (updatedEdgeList.get(
+                    srcNode) === undefined) updatedEdgeList.set(srcNode,
+                    new Map())
                 const nodeEdges = updatedEdgeList.get(srcNode);
                 nodeEdges.set(destId, 0);
                 BackendStateManager.graph.addEdge(srcNode, destId, 0);
                 useTreeStore.setState({edgeList: updatedEdgeList});
-                useTreeStore.getState().nodes.get(srcNode).mass += MASS_PER_EDGE;
+                useTreeStore.getState().nodes
+                            .get(srcNode).mass += MASS_PER_EDGE;
                 useTreeStore.getState().nodes.get(destId).mass += MASS_PER_EDGE;
                 // Cleanup the srcNode
                 useTreeStore.setState({srcNodeId: NOTSET});
             }
         })
         .with("io-1", () => {
-            useTreeStore.getState().dispatch({type: VertexActions.DELETE, id: destId})
+            useTreeStore.getState()
+                        .dispatch({type: VertexActions.DELETE, id: destId})
             BackendStateManager.graph.rmNode(destId);
         })
-        .with("io-3", () => useTreeStore.setState({startNodeId: destId}))
-        .with("io-4", () => useTreeStore.setState({endNodeId: destId}))
+        .with("io-3", () => {
+            if (useTreeStore.getState().endNodeId !== destId)
+                useTreeStore.setState({startNodeId: destId})
+        })
+        .with("io-4", () => {
+            if (useTreeStore.getState().startNodeId !== destId)
+                useTreeStore.setState({endNodeId: destId})
+        })
         .otherwise(() => undefined)
 }
 
