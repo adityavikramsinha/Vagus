@@ -16,7 +16,6 @@ function PathsPage() {
         <Head>
             <link rel="icon" href="/images/icon.svg"/>
             <title>Vagus — A Path Visualiser</title>
-
             {isDev && (
                 <script
                     crossOrigin="anonymous"
