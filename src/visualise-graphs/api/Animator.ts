@@ -29,7 +29,6 @@ export default class Animator {
                 useGraphStore.setState({visitedNodes: new Map(internalSet)});
                 await new Promise(res => setTimeout(res, 2)); // Delay for smooth animation
             })
-
         }
         // for the last one.
         await Syncer.supervise(() => {

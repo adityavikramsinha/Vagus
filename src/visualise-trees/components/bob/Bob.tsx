@@ -31,7 +31,7 @@ const Bob: React.FC<BobProps> = ({
     // to both of these props, that way we do not have to think about the cursor position
     const isStartVertex = useTreeStore(state => state.startNodeId === id);
     const isEndVertex = useTreeStore(state => state.endNodeId === id);
-
+    const isVisited = useTreeStore(state => state.visitedVertices.has(id));
     m.useMotionValueEvent(x, "change",
         (latestX) => onUpdate(id, latestX, y.get()));
     m.useMotionValueEvent(y, "change",
@@ -50,27 +50,47 @@ const Bob: React.FC<BobProps> = ({
                 setIsDragging(false);
             }}
             className="w-[20px] h-[20px] bg-[#FFA684] rounded-[50%] cursor-grab absolute flex justify-center items-center"
-            style={{x, y}}
-            animate={
-                isFocused
-                    ? {
-                        scale: [1, 1.2, 1],
-                        boxShadow: [
-                            "0 0 10px rgba(255, 166, 132, 1)",
-                            "0 0 10px rgba(255, 166, 132, 1)",
-                            "0 0 10px rgba(255, 166, 132, 1)",
-                        ],
-                        transition: {
+            style={{ x, y}}
+            variants={{
+                "visible": {
+                    scale: 1,
+                    boxShadow: "0 0 0 rgba(0,0,0,0)",
+                    backgroundColor : "#FFA684"
+                },
+                "inFocus": {
+                    scale: [1, 1.2, 1],
+                    backgroundColor : "#FFA684",
+                    boxShadow: [
+                        "0 0 10px rgba(255, 166, 132, 1)",
+                        "0 0 10px rgba(255, 166, 132, 1)",
+                        "0 0 10px rgba(255, 166, 132, 1)",
+                    ],
+                    transition: {
+                        duration: 1.2,
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        ease: "easeInOut",
+                    }
+                },
+                "visited": {
+                    backgroundColor : "#84DDFF",
+                    scale: [1, 1.5, 1],
+                    transition: {
+                        scale: {
+                            delay:2,
                             duration: 1.2,
-                            repeat: Infinity,
-                            repeatType: "loop",
-                            ease: "easeInOut",
+                            ease: "easeInOut"
                         },
+                        backgroundColor : {
+                            delay:1.2,
+                            ease: "easeInOut"
+                        }
                     }
-                    : {
-                        scale: 1,
-                        boxShadow: "0 0 0 rgba(0,0,0,0)",
-                    }
+                }
+            }}
+            animate={
+                isVisited ? "visited" :
+                    isFocused ? "inFocus" : "visible"
             }
             onClick={event => {
                 // stop propagation of click to parent,

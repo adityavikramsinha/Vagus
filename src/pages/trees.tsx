@@ -16,7 +16,7 @@ function GraphsPage() {
         <Head>
             <link rel="icon" href="/images/icon.svg"/>
             <title>Vagus — A Tree Visualiser</title>
-            {isDev && (
+            {false && (
                 <script
                     crossOrigin="anonymous"
                     src="//unpkg.com/react-scan/dist/auto.global.js"

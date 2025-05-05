@@ -38,6 +38,17 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
     const inFocus = useTreeStore(
         state => state.srcNodeId === srcBob.id && state.activeFiles.io === 'io-2');
 
+    const isVisited = useTreeStore(state => {
+        const visited = state.visitedVertices;
+        const srcOrder = visited.get(srcBob.id);
+        const destOrder = visited.get(destBob.id);
+
+        return (
+            typeof srcOrder === 'number' &&
+            typeof destOrder === 'number' &&
+            srcOrder < destOrder
+        );
+    });
     // See if the edge is BiDirection for bending.
     const isBiDirectional = useTreeStore(state =>
         state.edgeList.get(srcBob.id)?.has(destBob.id) &&
@@ -138,7 +149,7 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
                         className="hover:cursor-pointer"
                         d={d}
                         animate={{
-                            stroke: inFocus ? '#84FFA6' : '#a684ff',
+                            stroke: isVisited ? "rgba(255,255,255,0.2)" :inFocus ? '#84FFA6' : '#a684ff'
                         }}
                         transition={{
                             duration: 0.4,
@@ -148,10 +159,23 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
                         fill="none"
                         pointerEvents="all"
                         onClick={() => {
-                            if (useTreeStore.getState().activeFiles.io === 'io-2' && !useTreeStore.getState().block)
+                            if (useTreeStore.getState().activeFiles.io === 'io-2' &&
+                                !useTreeStore.getState().block)
                                 setSingleClick(true)
                         }}
                     />
+                    {isVisited && (
+                        <m.motion.path
+                            d={d}
+                            stroke="#FFE27D"
+                            strokeWidth={2.5} // slightly wider to appear on top
+                            fill="none"
+                            initial={{ pathLength: 0 }}
+                            animate={{ pathLength: 1 }}
+                            transition={{ delay:1.2, duration: 1.2, ease: "easeInOut" }}
+                            pointerEvents="none"
+                        />
+                    )}
                     {edgeCostVisible ? <m.motion.text
                         style={{
                             paintOrder: "stroke",
