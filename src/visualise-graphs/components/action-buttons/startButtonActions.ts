@@ -73,8 +73,8 @@ export enum Exception {
 export const startButtonClick = (
     algoFile: string | NOTSET_t
 ): Exception => {
-    const startNodeId = useGraphStore.getState().startNodeId;
-    const endNodeId = useGraphStore.getState().endNodeId;
+    const startNodeId = useGraphStore.getState().startId;
+    const endNodeId = useGraphStore.getState().endId;
     const bombNodeId = useGraphStore.getState().bombNodeId;
 
     // check conditions.
@@ -109,7 +109,7 @@ export const startButtonClick = (
             // Notify the Syncer to be ready to sync state via running blocks of code
             // that watch for the 'executing' state.
             useGraphStore.setState({executing : true});
-            await Animator.animateRandomWalk(useGraphStore.getState().startNodeId);
+            await Animator.animateRandomWalk(useGraphStore.getState().startId);
             useGraphStore.setState({block: false});
             useGraphStore.setState({randomPathId: NOTSET});
             useGraphStore.setState({executing : false});

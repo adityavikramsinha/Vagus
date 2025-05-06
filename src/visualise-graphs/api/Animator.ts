@@ -39,9 +39,9 @@ export default class Animator {
     // return if there is no neighbour
     // return if there is a start node has come
     static async animateRandomWalk(nodeId: string | NOTSET_t): Promise<void> {
-        if (useGraphStore.getState().endNodeId === nodeId ||
+        if (useGraphStore.getState().endId === nodeId ||
             BackendStateManager.graph().vertices().get((nodeId as string)).getAdjVertices().size === 1) {
-            if (useGraphStore.getState().endNodeId === nodeId) {
+            if (useGraphStore.getState().endId === nodeId) {
                 useGraphStore.setState({randomPathId: nodeId});
                 useGraphStore.getState().pathNodes.add(nodeId);
             }

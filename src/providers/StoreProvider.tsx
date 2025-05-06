@@ -1,9 +1,10 @@
 import React, { createContext, useContext } from "react";
 import { StoreApi, useStore } from "zustand";
 import {FileStore} from "./FileExplorer";
+import {ActionStore} from "./ActionButtons";
 
 
-export interface BaseStore extends FileStore {}
+export interface BaseStore extends FileStore, ActionStore {}
 
 // Provides the context for the Store for a Store that MUST extend BaseStore.
 export const StoreCtx = createContext<StoreApi<BaseStore> | null>(null);

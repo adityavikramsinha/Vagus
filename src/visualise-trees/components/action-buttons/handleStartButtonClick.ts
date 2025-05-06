@@ -8,8 +8,8 @@ import {AlgoType, NOTSET} from "@graph/ts/Types";
 const handleStartButtonClick = () => {
     useTreeStore.setState({block: true, executing: true});
     const activeTsFile = useTreeStore.getState().activeFiles.ts;
-    const startId = useTreeStore.getState().startNodeId;
-    const endId = useTreeStore.getState().endNodeId;
+    const startId = useTreeStore.getState().startId;
+    const endId = useTreeStore.getState().endId;
     if (startId === NOTSET || endId === NOTSET)
         return;
     match(activeTsFile)

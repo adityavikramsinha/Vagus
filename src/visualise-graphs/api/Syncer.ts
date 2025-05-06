@@ -91,8 +91,8 @@ export default class Syncer {
                 [NOTSET]: NodeType.START_NODE
             }
         })
-        let prevStartNode = useGraphStore.getState().startNodeId;
-        let prevEndNode = useGraphStore.getState().endNodeId
+        let prevStartNode = useGraphStore.getState().startId;
+        let prevEndNode = useGraphStore.getState().endId;
         let bombNode = useGraphStore.getState().bombNodeId;
         Syncer.syncInitialGraph();
         useGraphStore.getState().hexBoard[prevStartNode] = NodeType.START_NODE;
