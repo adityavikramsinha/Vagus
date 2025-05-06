@@ -4,7 +4,7 @@ import {FC} from "react";
 import File, {FileType} from "@/components/file/File";
 import PrevButton from "@graph/components/action-buttons/PrevButton";
 import StopButton from "@/components/action-buttons/StopButton";
-import StartButton from "@graph/components/action-buttons/StartButton";
+import StartButton from "../../components/action-buttons/StartButton";
 import Folder from "@/components/folder/Folder";
 
 import {
@@ -23,6 +23,7 @@ import {
 import Syncer from "@graph/api/Syncer";
 import handleBatFileClick from "../../components/file/handleBatFileClick";
 import {MazeType} from "../ts/Types";
+import {handleStartButtonClick} from "./action-buttons/startButtonActions";
 
 const Navbar: FC = () => {
     return (
@@ -32,7 +33,7 @@ const Navbar: FC = () => {
                 <div className="flex flex-nowrap gap-2.5">
                     <PrevButton/>
                     <StopButton onClick={Syncer.clearHexBoard}/>
-                    <StartButton/>
+                    <StartButton onClick={() =>handleStartButtonClick()}/>
                 </div>
             </div>
             <div className="

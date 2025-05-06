@@ -6,6 +6,7 @@ import {AlgoType, NOTSET, NOTSET_t} from "@graph/ts/Types";
 import {match, P} from "ts-pattern";
 import BackendStateManager from "@graph/api/BackendStateManager";
 import Animator from "@graph/api/Animator";
+import {StartButtonError} from "../../../components/action-buttons/StartButton";
 
 /**
  * Main runner for the algorithm. It assumes nothing, hence it will BLOCK and set EXECUTING (defined in the
@@ -20,16 +21,16 @@ import Animator from "@graph/api/Animator";
  * @param bombNodeId
  */
 const runAlgorithmAnimation = async (
-    type:AlgoType, {startNodeId, endNodeId, bombNodeId}:{
-        startNodeId:string,
-        endNodeId:string,
-        bombNodeId : string| NOTSET_t
-    })=>{
+    type: AlgoType, {startNodeId, endNodeId, bombNodeId}: {
+        startNodeId: string,
+        endNodeId: string,
+        bombNodeId: string | NOTSET_t
+    }) => {
     // BLOCK all operations, (this blocks the three buttons)
-    useGraphStore.setState({block : true});
+    useGraphStore.setState({block: true});
     // Notify the Syncer to be ready to sync state via running blocks of code
     // that watch for the 'executing' state.
-    useGraphStore.setState({executing : true});
+    useGraphStore.setState({executing: true});
     if (bombNodeId === NOTSET) {
         const {path, visited} = Algorithms.runWithoutBombNode(
             type,
@@ -40,8 +41,8 @@ const runAlgorithmAnimation = async (
         await Animator.animatePathNodes(path);
 
         // free resource
-        useGraphStore.setState({block : false});
-        useGraphStore.setState({executing : false});
+        useGraphStore.setState({block: false});
+        useGraphStore.setState({executing: false});
     } else {
         const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
             type,
@@ -54,8 +55,8 @@ const runAlgorithmAnimation = async (
         await Animator.animatePathNodes(path);
 
         // free resource
-        useGraphStore.setState({block : false});
-        useGraphStore.setState({executing : false});
+        useGraphStore.setState({block: false});
+        useGraphStore.setState({executing: false});
     }
 }
 
@@ -70,7 +71,7 @@ export enum Exception {
  * Handle clicking the start button. Returns an {@link Exception} if encountered
  * @param algoFile the current FileType (TS), to see the algorithm to run.
  */
-export const startButtonClick = (
+const performStartButtonJobs = (
     algoFile: string | NOTSET_t
 ): Exception => {
     const startNodeId = useGraphStore.getState().startId;
@@ -81,7 +82,7 @@ export const startButtonClick = (
     if (algoFile === NOTSET) return Exception.ALGORITHM_NOTSET;
     else if (startNodeId === NOTSET) return Exception.START_NODE_NOTSET;
     else if (endNodeId === NOTSET) return Exception.END_NODE_NOTSET;
-    else if(bombNodeId !== NOTSET && algoFile === 'ts-10') return Exception.BI_DIRECTIONAL_EXTRA_ARGS;
+    else if (bombNodeId !== NOTSET && algoFile === 'ts-10') return Exception.BI_DIRECTIONAL_EXTRA_ARGS;
 
     Syncer.syncInitialGraph();
     // I guess we have to now update the graph.
@@ -91,7 +92,8 @@ export const startButtonClick = (
             .with(NodeType.WALL_NODE, () => Syncer.removeNode(id))
             .with(NodeType.WEIGHT_NODE, () => {
                 const srcNode = BackendStateManager.graph().vertices().get(id);
-                srcNode.getAdjVertices().forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
+                srcNode.getAdjVertices()
+                       .forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
             })
             .otherwise(() => {
             })
@@ -99,28 +101,35 @@ export const startButtonClick = (
     Syncer.cleanHexBoard();
 
     match(algoFile)
-        .with(P.union('ts-1', 'ts-7'), async () => await runAlgorithmAnimation(AlgoType.A_STAR_SEARCH, {startNodeId,endNodeId,bombNodeId}))
-        .with(P.union('ts-2', 'ts-6'), async () => await runAlgorithmAnimation(AlgoType.BEST_FIRST_SEARCH,  {startNodeId,endNodeId,bombNodeId}))
-        .with('ts-3', async () => await runAlgorithmAnimation(AlgoType.BREADTH_FIRST_SEARCH, {startNodeId, endNodeId, bombNodeId}))
-        .with('ts-4', async () => await runAlgorithmAnimation(AlgoType.DEPTH_FIRST_SEARCH, {startNodeId, endNodeId, bombNodeId} ))
+        .with(P.union('ts-1', 'ts-7'),
+            async () => await runAlgorithmAnimation(AlgoType.A_STAR_SEARCH,
+                {startNodeId, endNodeId, bombNodeId}))
+        .with(P.union('ts-2', 'ts-6'),
+            async () => await runAlgorithmAnimation(AlgoType.BEST_FIRST_SEARCH,
+                {startNodeId, endNodeId, bombNodeId}))
+        .with('ts-3', async () => await runAlgorithmAnimation(AlgoType.BREADTH_FIRST_SEARCH,
+            {startNodeId, endNodeId, bombNodeId}))
+        .with('ts-4', async () => await runAlgorithmAnimation(AlgoType.DEPTH_FIRST_SEARCH,
+            {startNodeId, endNodeId, bombNodeId}))
         .with('ts-5', async () => {
             // BLOCK all operations, (this blocks the three buttons)
-            useGraphStore.setState({block : true});
+            useGraphStore.setState({block: true});
             // Notify the Syncer to be ready to sync state via running blocks of code
             // that watch for the 'executing' state.
-            useGraphStore.setState({executing : true});
+            useGraphStore.setState({executing: true});
             await Animator.animateRandomWalk(useGraphStore.getState().startId);
             useGraphStore.setState({block: false});
             useGraphStore.setState({randomPathId: NOTSET});
-            useGraphStore.setState({executing : false});
+            useGraphStore.setState({executing: false});
         })
-        .with('ts-8', async () => await runAlgorithmAnimation(AlgoType.DIJKSTRAS_SEARCH, {startNodeId, endNodeId, bombNodeId}))
+        .with('ts-8', async () => await runAlgorithmAnimation(AlgoType.DIJKSTRAS_SEARCH,
+            {startNodeId, endNodeId, bombNodeId}))
         .with('ts-10', async () => {
             // BLOCK all operations, (this blocks the three buttons)
-            useGraphStore.setState({block : true});
+            useGraphStore.setState({block: true});
             // Notify the Syncer to be ready to sync state via running blocks of code
             // that watch for the 'executing' state.
-            useGraphStore.setState({executing : true});
+            useGraphStore.setState({executing: true});
             if (bombNodeId === NOTSET) {
                 const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
                     startNodeId,
@@ -129,13 +138,69 @@ export const startButtonClick = (
                 await Animator.animateVisitedNodes(
                     Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);
-                useGraphStore.setState({block : false});
-                useGraphStore.setState({executing : false});
+                useGraphStore.setState({block: false});
+                useGraphStore.setState({executing: false});
             } else {
-                useGraphStore.setState({block : false});
-                useGraphStore.setState({executing : false});
+                useGraphStore.setState({block: false});
+                useGraphStore.setState({executing: false});
             }
         })
-        .with('ts-9', async () => await runAlgorithmAnimation(AlgoType.BELLMAN_FORD, {startNodeId, endNodeId , bombNodeId}));
+        .with('ts-9', async () => await runAlgorithmAnimation(AlgoType.BELLMAN_FORD,
+            {startNodeId, endNodeId, bombNodeId}));
 
 }
+
+/**
+ * Handles the click of the start button. It performs all jobs that are required to be run
+ * before animations can start (see performStartButtonJobs in this scope)
+ * @returns StartButtonError or null, depending on whether an Error was encountered.
+ */
+export const handleStartButtonClick = (): StartButtonError | null => {
+
+    // First get the active Typescript file for the Algorithm to Run
+    const algoFile = useGraphStore.getState().activeFiles.ts;
+
+    // Get the Error (if any)
+    const err = performStartButtonJobs(algoFile);
+
+    // Return the Eror or null, depending on whatever works.
+    return match(err)
+        .with(Exception.START_NODE_NOTSET, () => ({
+            header: "RTE 0x01",
+            message: `
+Encountered a *Runtime Exception* while trying to execute:
+
+→ Start Node is of type NOTSET.
+
+This exception is thrown by the Runtime Environment because no Start Node has been selected.`
+        }))
+        .with(Exception.END_NODE_NOTSET, () => ({
+            header: "RTE 0x02",
+            message: `
+Encountered a *Runtime Exception* while trying to execute:
+
+→ End Node is NOTSET.
+
+This exception is thrown by the Runtime Environment because no End Node has been selected.`
+        }))
+        .with(Exception.ALGORITHM_NOTSET, () => ({
+            header: "RTE 0x03",
+            message: `
+Encountered a *Runtime Exception* while trying to execute:
+
+→ No Algorithm has been selected.
+
+Please select an algorithm before attempting to run the visualization.`
+        }))
+        .with(Exception.BI_DIRECTIONAL_EXTRA_ARGS, () => ({
+            header: "CTE 0x01",
+            message: `
+Encountered a *Compile Time Error* while trying to compile:
+
+→ Argument mismatch occurred.
+
+A Bi-Directional Search cannot be started with a Bomb Node, Start Node, and End Node.
+You must have only two nodes: (Start Node & End Node).`
+        }))
+        .otherwise(() => null);
+};
