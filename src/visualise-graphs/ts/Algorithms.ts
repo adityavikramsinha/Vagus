@@ -39,6 +39,20 @@ export default class Algorithms {
     }
 
     /**
+     * Private utility function to add an edge to a visited set
+     * @param visitedEdges set of visited edges
+     * @param from the source vertex/node
+     * @param to destination vertex/node
+     * @private
+     */
+    private static addVisitedEdge(visitedEdges: Map<string, Set<string>>, from: string, to: string) {
+        if (!visitedEdges.has(from)) {
+            visitedEdges.set(from, new Set());
+        }
+        visitedEdges.get(from)!.add(to);
+    }
+
+    /**
      * Classic Breadth-first search algorithm which
      * is unweighted.
      *
@@ -47,16 +61,18 @@ export default class Algorithms {
      * @returns an array containing the path | null [path is given if it is found, else null] and a Set of
      * visited nodes inorder while trying to find the path.
      */
-    bfs(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
+    bfs(start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] {
 
         // first initialise all the variables
         // visited is the nodes that are visited in the process
         // prev is to keep track of the
         // path is the actual path
+        // visitedEdges keeps a track of the edges that were visited.
         // Q is a queue which performs the FIFO operation
         const visited: Set<string> = new Set();
         const prev: Map<string, string> = new Map();
         const path: string[] = [];
+        const visitedEdges: Map<string, Set<string>> = new Map();
         const Q = new Queue<string>();
 
         // Enqueue the first one
@@ -83,7 +99,7 @@ export default class Algorithms {
                     path.unshift(at);
 
                 // return path and visited inorder
-                return [path, visited];
+                return [path, visited, visitedEdges];
             }
 
             // if end has not been found
@@ -93,21 +109,22 @@ export default class Algorithms {
             // we keep opening all the neighbours, gives the search
             // a cyclic effect.
             node.getAdjVertices().forEach(edge => {
-
                 // if we have already visited it, we do not need to
                 // because it means that it is already added to the visited section
                 // and was a part of the queue.
-                if (!visited.has(edge.dest.getData())) {
+                const destId = edge.dest.getData();
+                if (!visited.has(destId)) {
 
                     // added it to visited set.
-                    visited.add(edge.dest.getData());
+                    visited.add(destId);
 
                     // set prev
-                    prev.set(edge.dest.getData(), node.getData());
+                    prev.set(destId, node.getData());
 
                     // add it to the queue since this means that
                     // we have to open this node again sometime later.
-                    Q.enqueue(edge.dest.getData());
+                    Q.enqueue(destId);
+                    Algorithms.addVisitedEdge(visitedEdges, node.getData(),destId);
                 }
             });
         }
@@ -117,7 +134,7 @@ export default class Algorithms {
         // neighbour of any node
         // thus, no path should exist
         // hence, we return null and just visited set
-        return [NOTSET, visited];
+        return [NOTSET, visited, visitedEdges];
     }
 
     /**
@@ -146,7 +163,7 @@ export default class Algorithms {
          * @param at the present node id for iteration
          * @param parent
          */
-        const internalDfs = (at: string , parent :string ): void => {
+        const internalDfs = (at: string, parent: string): void => {
 
             // First check if visited has this or not
             // because if it does then it means that
@@ -188,7 +205,7 @@ export default class Algorithms {
         // to check for length
         // if length ge 1, we know that there is a route
         // else not
-        return [(path.length>0 ? path : NOTSET) , visited];
+        return [(path.length > 0 ? path : NOTSET), visited];
     }
 
     /**
@@ -327,9 +344,9 @@ export default class Algorithms {
         // if the changes goes down to 0, then we know any subsequent pass will yield the same
         // results so we can ignore 0...V-1 and do less
         // it's a quirky optimisation.
-        let changes = 1 ;
+        let changes = 1;
 
-        for (let v = 0; v < V - 1 && changes > 0 ; v++) {
+        for (let v = 0; v < V - 1 && changes > 0; v++) {
 
             changes = 0
             // each time we go through each node of the graph
@@ -358,7 +375,7 @@ export default class Algorithms {
                         prev.set(edge.dest.getData(), node.getData());
 
                         // update changes
-                        changes ++;
+                        changes++;
                     }
                 })
             })
@@ -378,15 +395,15 @@ export default class Algorithms {
      * from the Start till some point X and second is from the end till the same point X where
      * both of these algorithms meet.
      */
-    static biDirectional(start: string , end:string): [string[] | NOTSET_t, Set<string>, Set<string>] {
+    static biDirectional(start: string, end: string): [string[] | NOTSET_t, Set<string>, Set<string>] {
 
         // get the path from start
-        let algo: Algorithms= new Algorithms(BackendStateManager.graph());
+        let algo: Algorithms = new Algorithms(BackendStateManager.graph());
         const pathFromStart = algo.dijkstras(start, end)[0];
 
         // if it is null , we automatically know
         // the there is no path possible
-        if (pathFromStart === NOTSET ) {
+        if (pathFromStart === NOTSET) {
 
             // we just get visited from start and visited from end Sets
             let visitedFromStart = algo.dijkstras(start, end)[1];
@@ -399,7 +416,7 @@ export default class Algorithms {
         // else, we splice the path
         // at mid-point >> 1
         // also we can 100% confirm that it is not NOT_SET
-        let spliceNode :string= pathFromStart[(pathFromStart as string[]).length >> 1];
+        let spliceNode: string = pathFromStart[(pathFromStart as string[]).length >> 1];
 
         // we get from this splice point a visited from start
         // and a visited from end
@@ -478,7 +495,7 @@ export default class Algorithms {
         let dest = this.graph.vertices().get(start), endNode = this.graph.vertices().get(end);
 
         // we enqueue the starting node
-        PQ.enqueue({ label: start, minHeuristic: this.graph.distBw(dest, endNode) });
+        PQ.enqueue({label: start, minHeuristic: this.graph.distBw(dest, endNode)});
 
         // while PQ is not empty
         // we keep running till we have
@@ -487,7 +504,7 @@ export default class Algorithms {
         while (!PQ.isEmpty()) {
 
             // get the ID of the node
-            const { label } = PQ.dequeue();
+            const {label} = PQ.dequeue();
 
             // add it to visited since it has been explored now
             visited.add(label);
@@ -507,7 +524,7 @@ export default class Algorithms {
                     let newHeuristic = this.graph.distBw(edge.dest, endNode);
 
                     // we enqueue and then set the nodes as required
-                    PQ.enqueue({ label: destData, minHeuristic: newHeuristic });
+                    PQ.enqueue({label: destData, minHeuristic: newHeuristic});
                     prev.set(destData, label);
                 }
             });
@@ -569,13 +586,13 @@ export default class Algorithms {
 
         // Enqueue the first item
         // this way, the PQ is always > 0 when starting.
-        PQ.enqueue({ label: start, minDist: 0, minHeuristic: this.graph.distBw(dest, endNode) });
+        PQ.enqueue({label: start, minDist: 0, minHeuristic: this.graph.distBw(dest, endNode)});
 
         // keeps going while PQ is not exhausted
         while (!PQ.isEmpty()) {
 
             // deconstruct the object
-            const { label, minDist } = PQ.dequeue();
+            const {label, minDist} = PQ.dequeue();
 
             // add to visited to say that this node has been opened already
             visited.add(label);
@@ -609,7 +626,8 @@ export default class Algorithms {
 
                     // get heuristics from the previous node
                     // and node to next
-                    let newHeuristic = (this.graph.distBw(this.graph.vertices().get(destData), endNode, 'e')) / 1000000 * newDist;
+                    let newHeuristic = (this.graph.distBw(this.graph.vertices().get(destData),
+                        endNode, 'e')) / 1000000 * newDist;
 
                     // now if newDist is < dist present in dist Map
                     // then only do we update everything
@@ -617,7 +635,7 @@ export default class Algorithms {
                     if (newDist < dist.get(destData)) {
                         prev.set(destData, label);
                         dist.set(destData, newDist);
-                        PQ.enqueue({ label: destData, minDist: newDist, minHeuristic: newHeuristic });
+                        PQ.enqueue({label: destData, minDist: newDist, minHeuristic: newHeuristic});
                     }
                 }
             });
@@ -669,7 +687,7 @@ export default class Algorithms {
         // Enqueue the first node,
         // this way we have a length of 1
         // and least distance of 0.
-        PQ.enqueue({ label: start, minDist: 0 });
+        PQ.enqueue({label: start, minDist: 0});
 
         // While it is not empty,
         // nodes should be dequeued from the
@@ -677,7 +695,7 @@ export default class Algorithms {
         while (!PQ.isEmpty()) {
 
             // get the Priority Object and deconstruct it
-            const { label, minDist } = PQ.dequeue();
+            const {label, minDist} = PQ.dequeue();
 
             // add it to visited so that
             // we do not keep opening it.
@@ -724,7 +742,7 @@ export default class Algorithms {
                         dist.set(dest, newDist);
 
                         // enqueue this for opening in terms of minDist.
-                        PQ.enqueue({ label: dest, minDist: newDist });
+                        PQ.enqueue({label: dest, minDist: newDist});
                     }
                 }
             });
@@ -752,27 +770,32 @@ export default class Algorithms {
      * @param algoType the type of algorithm to return.
      * @param startNodeId start node ID
      * @param endNodeId end node ID
+     * @param graph the graph to use in the algorithms.
      * @returns an object containing the path and visitedInOrder properties.
      * the path contains the path from start->end for currentState and visitedInOrder contains
      * the nodes that were visited [inorder] to reach to that path
      */
-    static runWithoutBombNode(algoType : AlgoType, startNodeId:string, endNodeId:string): { path: string[] | NOTSET_t, visited: Set<string> } {
+    static runWithoutBombNode(algoType: AlgoType, startNodeId: string, endNodeId: string, graph = BackendStateManager.graph()): {
+        path: string[] | NOTSET_t,
+        visited: Set<string>,
+        visitedEdges : Map<string,  Set<string>>
+    } {
 
         // getting a new algorithm instance to run the functions from
-        let algo: Algorithms = new Algorithms(BackendStateManager.graph());
+        let algo: Algorithms = new Algorithms(graph);
 
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
-        const [path, visited] = match(algoType)
-            .with(AlgoType.DIJKSTRAS_SEARCH, ()=> algo.dijkstras(startNodeId, endNodeId))
-            .with(AlgoType.A_STAR_SEARCH , ()=> algo.aStar(startNodeId, endNodeId))
-            .with(AlgoType.BREADTH_FIRST_SEARCH, ()=>algo.bfs(startNodeId, endNodeId))
-            .with(AlgoType.DEPTH_FIRST_SEARCH, ()=>algo.dfs(startNodeId, endNodeId))
-            .with(AlgoType.BELLMAN_FORD, ()=>algo.bellmanFord(startNodeId, endNodeId))
-            .with(AlgoType.BEST_FIRST_SEARCH, ()=>algo.bestFirstSearch(startNodeId, endNodeId))
-            .otherwise(()=>[NOTSET, NOTSET]);
+        const [path, visited, visitedEdges] = match(algoType)
+            .with(AlgoType.DIJKSTRAS_SEARCH, () => algo.dijkstras(startNodeId, endNodeId))
+            .with(AlgoType.A_STAR_SEARCH, () => algo.aStar(startNodeId, endNodeId))
+            .with(AlgoType.BREADTH_FIRST_SEARCH, () => algo.bfs(startNodeId, endNodeId))
+            .with(AlgoType.DEPTH_FIRST_SEARCH, () => algo.dfs(startNodeId, endNodeId))
+            .with(AlgoType.BELLMAN_FORD, () => algo.bellmanFord(startNodeId, endNodeId))
+            .with(AlgoType.BEST_FIRST_SEARCH, () => algo.bestFirstSearch(startNodeId, endNodeId))
+            .otherwise(() => [NOTSET, NOTSET]);
         // @ts-ignore
-        return {path, visited}
+        return {path, visited, visitedEdges}
     }
 
     /**
@@ -800,7 +823,7 @@ export default class Algorithms {
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
-                return { path, visitedP1, visitedP2 };
+                return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.BREADTH_FIRST_SEARCH, () => {
                 const [pathP1, visitedP1] = algo.bfs(startNodeId, bombNodeId);
@@ -809,7 +832,7 @@ export default class Algorithms {
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
-                return { path, visitedP1, visitedP2 };
+                return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.BELLMAN_FORD, () => {
                 const [pathP1, visitedP1] = algo.bellmanFord(startNodeId, bombNodeId);
@@ -818,7 +841,7 @@ export default class Algorithms {
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
-                return { path, visitedP1, visitedP2 };
+                return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.DIJKSTRAS_SEARCH, () => {
                 const [pathP1, visitedP1] = algo.dijkstras(startNodeId, bombNodeId);
@@ -827,7 +850,7 @@ export default class Algorithms {
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
-                return { path, visitedP1, visitedP2 };
+                return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.DEPTH_FIRST_SEARCH, () => {
                 const [pathP1, visitedP1] = algo.dfs(startNodeId, bombNodeId);
@@ -836,7 +859,7 @@ export default class Algorithms {
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
-                return { path, visitedP1, visitedP2 };
+                return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.BEST_FIRST_SEARCH, () => {
                 const [pathP1, visitedP1] = algo.bestFirstSearch(startNodeId, bombNodeId);
@@ -845,11 +868,15 @@ export default class Algorithms {
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
                         : NOTSET as NOTSET_t;
-                return { path, visitedP1, visitedP2 };
+                return {path, visitedP1, visitedP2};
             })
             .otherwise(() => {
-                console.error("Internal error, the algorithm selected does not match with the algorithms possible");
-                return { path: NOTSET as NOTSET_t, visitedP1: new Set<string>(), visitedP2: new Set<string>() };
+                console.error(
+                    "Internal error, the algorithm selected does not match with the algorithms possible");
+                return {
+                    path: NOTSET as NOTSET_t, visitedP1: new Set<string>(),
+                    visitedP2: new Set<string>()
+                };
             });
     }
 }

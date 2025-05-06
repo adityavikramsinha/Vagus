@@ -38,17 +38,9 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
     const inFocus = useTreeStore(
         state => state.srcNodeId === srcBob.id && state.activeFiles.io === 'io-2');
 
-    const isVisited = useTreeStore(state => {
-        const visited = state.visitedVertices;
-        const srcOrder = visited.get(srcBob.id);
-        const destOrder = visited.get(destBob.id);
-
-        return (
-            typeof srcOrder === 'number' &&
-            typeof destOrder === 'number' &&
-            srcOrder < destOrder
-        );
-    });
+    const isVisited = useTreeStore(
+        state => state.visitedEdges.get(srcBob.id)?.has(destBob.id) ?? false
+    );
     // See if the edge is BiDirection for bending.
     const isBiDirectional = useTreeStore(state =>
         state.edgeList.get(srcBob.id)?.has(destBob.id) &&
@@ -170,9 +162,9 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
                             stroke="#FFE27D"
                             strokeWidth={2.5} // slightly wider to appear on top
                             fill="none"
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ delay:1, duration: 1, ease: "easeInOut" }}
+                            initial={{pathLength: 0}}
+                            animate={{pathLength: 1}}
+                            transition={{duration: 0.5, ease: "easeInOut"}}
                             pointerEvents="none"
                         />
                     )}

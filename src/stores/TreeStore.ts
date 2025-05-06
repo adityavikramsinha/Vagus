@@ -23,7 +23,8 @@ interface TreeStoreProps {
     block : boolean,
     executing : boolean,
     // id with the order (to identify which is source and which is dest)
-    visitedVertices : Map<string,number>
+    visitedVertices : Set<string>,
+    visitedEdges : Map<string, Set<string>>
 }
 
 type UpdateNodesPayload =
@@ -82,7 +83,8 @@ export const treeStore =
         endNodeId: NOTSET,
         block : false,
         executing : false,
-        visitedVertices : new Map()
+        visitedVertices : new Set(),
+        visitedEdges : new Map()
     }))
 
 

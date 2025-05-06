@@ -77,12 +77,10 @@ const Bob: React.FC<BobProps> = ({
                     scale: [1, 1.5, 1],
                     transition: {
                         scale: {
-                            delay:1.5,
                             duration: 1,
                             ease: "easeInOut"
                         },
                         backgroundColor : {
-                            delay:1.5,
                             ease: "easeInOut"
                         }
                     }
