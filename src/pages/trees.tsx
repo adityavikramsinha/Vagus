@@ -12,7 +12,8 @@ const jetBrainsMono = JetBrains_Mono({
 function GraphsPage() {
     return <StrictMode>
         <Head>
-            <link rel="icon" href="./favicon.svg"/>
+            <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+            <link rel="icon" href="./favicon.png" type="image/png" sizes="32x32" />
             <title>Vagus — A Tree Visualiser</title>
         </Head>
         <div id="root" className={jetBrainsMono.className}>
