@@ -4,7 +4,6 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -40,7 +39,9 @@ const StartButtonIcon = () => {
 
 // Start Button.
 export interface StartButtonError {
-    message: string;
+    type: string;
+    desc: string;
+    fix: string;
     header: string;
 }
 
@@ -66,18 +67,29 @@ const StartButton: React.FC<StartButtonProps> = ({onClick}) => {
             </DialogTrigger>
             <DialogContent className="stop-dialog-content">
                 <DialogHeader className="stop-dialog-header">
-                    <DialogTitle className="stop-dialog-title">{error?.header}</DialogTitle>
-                    <DialogDescription className="stop-dialog-description">
-                        {error?.message}
-                    </DialogDescription>
                 </DialogHeader>
+                <div className="rounded-2xl w-fit text-white animate-in fade-in zoom-in-95 transition-all duration-300">
+                    <div className="flex items-center gap-2 text-sm text-red-400 font-bold uppercase tracking-widest">
+                        <span>{error?.type}</span>
+                        <span className="underline decoration-dotted underline-offset-4">{error?.header}</span>
+                    </div>
+
+                    <div className="text-base text-zinc-100 leading-relaxed">
+                        <span className="text-red-400 font-extrabold text-lg">⟶</span>{' '}
+                        <span className="ml-1">{error?.desc}</span>
+                    </div>
+
+                    <div className="text-sm text-zinc-400 border-t border-zinc-700 pt-4 italic tracking-tight leading-snug">
+                        {error?.fix}
+                    </div>
+                </div>
                 <DialogFooter className="stop-dialog-footer">
                     <DialogClose asChild>
                         <Button className="
                             flex items-center justify-center font-medium p-1 rounded-[5px]
-                            bg-red-400 text-inherit cursor-pointer border-none transition-all
-                            duration-200 hover:shadow-[0_0_0_2px_#ff6467]">
-                            Cancel
+                            bg-green-300 text-inherit cursor-pointer border-none transition-all
+                            duration-200 hover:shadow-[0_0_0_2px_#7bf1a8]">
+                            Done
                         </Button>
                     </DialogClose>
                 </DialogFooter>

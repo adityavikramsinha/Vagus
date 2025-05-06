@@ -185,41 +185,41 @@ const ElasticConnector: React.FC<ElasticConnectorProps> = ({
                 </m.motion.g>
             </DialogTrigger>
             <DialogContent className="stop-dialog-content">
-                <DialogHeader className="stop-dialog-header">
+                <DialogHeader>
                     <DialogTitle className="text-[#fff] underline">Edge
                         Details</DialogTitle>
                     <DialogDescription className="stop-dialog-description">
-                        <div
-                            className="text-white rounded-md py-4 shadow-md space-y-3 w-fit">
-                            <div className="text-sm">
+                    </DialogDescription>
+                </DialogHeader>
+                <div
+                    className="text-white rounded-md py-4 shadow-md space-y-3 w-fit">
+                    <div className="text-sm">
                                 <span
                                     className="font-semibold text-zinc-300">Source ID:</span> {srcBob.id}
-                            </div>
-                            <div className="text-sm">
+                    </div>
+                    <div className="text-sm">
                                 <span
                                     className="font-semibold text-zinc-300">Destination ID:</span> {destBob.id}
-                            </div>
-                            <div className="pt-2 border-t border-zinc-700">
-                                <div
-                                    className="flex justify-between items-center">
-                                    <div className="flex">
+                    </div>
+                    <div className="pt-2 border-t border-zinc-700">
+                        <div
+                            className="flex justify-between items-center">
+                            <div className="flex">
                                         <span
                                             className="flex items-center text-sm font-semibold text-zinc-300">Edge
                                             Cost:</span>
-                                        <EdgeCostEditor edgeCost={edgeCost}
-                                                        onChange={setEdgeCost}/>
-                                    </div>
-                                    <Toggle pressed={edgeCostVisible}
-                                            onPressedChange={setEdgeCostVisible}
-                                    >
-                                        {edgeCostVisible ? <OpenEye/> :
-                                            <ClosedEye/>}
-                                    </Toggle>
-                                </div>
+                                <EdgeCostEditor edgeCost={edgeCost}
+                                                onChange={setEdgeCost}/>
                             </div>
+                            <Toggle pressed={edgeCostVisible}
+                                    onPressedChange={setEdgeCostVisible}
+                            >
+                                {edgeCostVisible ? <OpenEye/> :
+                                    <ClosedEye/>}
+                            </Toggle>
                         </div>
-                    </DialogDescription>
-                </DialogHeader>
+                    </div>
+                </div>
                 <DialogFooter className="stop-dialog-footer">
                     <DialogClose asChild>
                         <Button

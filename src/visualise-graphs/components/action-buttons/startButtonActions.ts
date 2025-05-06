@@ -159,41 +159,30 @@ export const handleStartButtonClick = (): StartButtonError | null => {
     // Return the Error or null, depending on whatever works.
     return match(err)
         .with(Exception.START_NODE_NOTSET, () => ({
-            header: "RTE 0x01",
-            message: `
-Encountered a *Runtime Exception* while trying to execute:
-
-→ Start Node is of type NOTSET.
-
-This exception is thrown by the Runtime Environment because no Start Node has been selected.`
+            header: "RTE0001",
+            type: "Encountered a Runtime Exception while trying to execute",
+            desc: "Start Node is of type NOTSET.",
+            fix: "This exception is thrown by the Runtime Environment because no Start Node has" +
+                " been selected. Try selecting a Hex as a Start Node lmao"
         }))
         .with(Exception.END_NODE_NOTSET, () => ({
-            header: "RTE 0x02",
-            message: `
-Encountered a *Runtime Exception* while trying to execute:
-
-→ End Node is NOTSET.
-
-This exception is thrown by the Runtime Environment because no End Node has been selected.`
+            header: "RTE0002",
+            type: "Encountered a Runtime Exception while trying to execute",
+            desc: "End Node is of type NOTSET.",
+            fix: "This exception is thrown by the Runtime Environment because no End Node has" +
+                " been selected. Try selecting a Hex as an End Node lol"
         }))
         .with(Exception.ALGORITHM_NOTSET, () => ({
-            header: "RTE 0x03",
-            message: `
-Encountered a *Runtime Exception* while trying to execute:
-
-→ No Algorithm has been selected.
-
-Please select an algorithm before attempting to run the visualization.`
+            header: "RTE0003",
+            type: "Encountered a Runtime Exception while trying to execute",
+            desc: "No Algorithm has been selected.",
+            fix: "You have to select an algorithm to visualise BEFORE visualising (ofc)."
         }))
         .with(Exception.BI_DIRECTIONAL_EXTRA_ARGS, () => ({
-            header: "CTE 0x01",
-            message: `
-Encountered a *Compile Time Error* while trying to compile:
-
-→ Argument mismatch occurred.
-
-A Bi-Directional Search cannot be started with a Bomb Node, Start Node, and End Node.
-You must have only two nodes: (Start Node & End Node).`
+            header: "CTE0001",
+            type: "Encountered a Compile Time Error while trying to compile",
+            desc: "Argument mismatch occurred.",
+            fix: "A Bi-Directional Search cannot be started with a Bomb Node, Start Node, and End Node. You must have only two nodes: (Start Node & End Node)."
         }))
-        .otherwise(() => null);
+        .otherwise(() => null)
 };

@@ -57,23 +57,18 @@ export const handleStartButtonClick = () : StartButtonError | null => {
 
     return match(err)
         .with(Exception.START_NODE_NOTSET, () => ({
-            header: "RTE 0x01",
-            message: `
-Encountered a *Runtime Exception* while trying to execute:
-
-→ Start Node is of type NOTSET.
-
-This exception is thrown by the Runtime Environment because no Start Node has been selected.`
+            header: "RTE0001",
+            type: "Encountered a Runtime Exception while trying to execute",
+            desc: "Start Node is of type NOTSET.",
+            fix: "This exception is thrown by the Runtime Environment because no Start Node has been selected."
         }))
         .with(Exception.END_NODE_NOTSET, () => ({
-            header: "RTE 0x02",
-            message: `
-Encountered a *Runtime Exception* while trying to execute:
-
-→ End Node is NOTSET.
-
-This exception is thrown by the Runtime Environment because no End Node has been selected.`
+            header: "RTE0002",
+            type: "Encountered a Runtime Exception while trying to execute",
+            desc: "End Node is of type NOTSET.",
+            fix: "This exception is thrown by the Runtime Environment because no End Node has been selected."
         }))
         .otherwise(() => null);
+
 }
 export default handleStartButtonClick;
