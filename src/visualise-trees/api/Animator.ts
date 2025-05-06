@@ -5,29 +5,28 @@ export default class Animator {
     static async animateVisitedVertices(vertices: Set<string>, edges: Map<string, Set<string>>) {
 
         for (const [nodeId, edgesVisited] of edges) {
-            await Syncer.supervise(async () => {
-                const updatedVisitedVertices = new Set(useTreeStore.getState().visitedVertices);
-                const updatedVisitedEdges = new Map(useTreeStore.getState().visitedEdges)
-                if (!updatedVisitedVertices.has(nodeId))
-                    updatedVisitedVertices.add(nodeId);
+            for (const dest of edgesVisited) {
+                await Syncer.supervise(async () => {
+                    const updatedVisitedVertices = new Set(useTreeStore.getState().visitedVertices);
+                    const updatedVisitedEdges = new Map(useTreeStore.getState().visitedEdges);
 
-                if (!updatedVisitedEdges.has(nodeId))
-                    updatedVisitedEdges.set(nodeId, edgesVisited)
+                    if (!updatedVisitedVertices.has(nodeId))
+                        updatedVisitedVertices.add(nodeId);
 
-                useTreeStore.setState({
-                    visitedVertices: updatedVisitedVertices,
-                    visitedEdges: updatedVisitedEdges
+                    if (!updatedVisitedEdges.has(nodeId))
+                        updatedVisitedEdges.set(nodeId, new Set());
+
+                    updatedVisitedEdges.get(nodeId)!.add(dest);
+                    updatedVisitedVertices.add(dest);
+
+                    useTreeStore.setState({
+                        visitedVertices: updatedVisitedVertices,
+                        visitedEdges: updatedVisitedEdges
+                    });
+
+                    await new Promise(resolve => setTimeout(resolve, 500));
                 });
-
-                await new Promise(resolve => setTimeout(resolve, 500));
-                for (const dest of edgesVisited)
-                    updatedVisitedVertices.add(dest)
-                useTreeStore.setState({
-                    visitedEdges : updatedVisitedEdges
-                })
-
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            });
+            }
         }
 
 

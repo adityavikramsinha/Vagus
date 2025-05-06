@@ -83,7 +83,7 @@ export default class Algorithms {
         while (Q.length !== 0) {
 
             // We first get the present node instance from the graph.
-            let node= this.graph.vertices().get(Q.dequeue());
+            let node = this.graph.vertices().get(Q.dequeue());
 
             // then we add that node to visited set.
             visited.add(node.getData());
@@ -124,7 +124,7 @@ export default class Algorithms {
                     // add it to the queue since this means that
                     // we have to open this node again sometime later.
                     Q.enqueue(destId);
-                    Algorithms.addVisitedEdge(visitedEdges, node.getData(),destId);
+                    Algorithms.addVisitedEdge(visitedEdges, node.getData(), destId);
                 }
             });
         }
@@ -217,10 +217,10 @@ export default class Algorithms {
      * @param end the id of the end node
      * @returns a path | null [path if found, else] and visited inorder Set.
      */
-    dijkstras(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
+    dijkstras(start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] {
 
         // first get everything from the internal Dijkstra function
-        const [dist, prev, visited] = this.internalDijkstras(start, end);
+        const [dist, prev, visited, visitedEdges] = this.internalDijkstras(start, end);
 
         // the rest is just finding the path to use.
         let path: string[] = [];
@@ -229,7 +229,7 @@ export default class Algorithms {
         // we know path is not found.
         // directly return
         if (dist.get(end) === Infinity)
-            return [NOTSET, visited];
+            return [NOTSET, visited, visitedEdges];
 
         // if it is not null,
         // we know there must be a path that exists
@@ -237,7 +237,7 @@ export default class Algorithms {
         for (let at: string = end; at !== undefined; at = prev.get(at)) path.unshift(at);
 
         // return reconstructed path.
-        return [path, visited];
+        return [path, visited, visitedEdges];
     }
 
     /**
@@ -658,12 +658,16 @@ export default class Algorithms {
      * @param end the ending node ID
      * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes and, a Set for visited nodes inorder.
      */
-    private internalDijkstras(start: string, end: string): [Map<string, number>, Map<string, string>, Set<string>] {
+    private internalDijkstras(start: string, end: string):
+        [Map<string, number>, Map<string, string>, Set<string>, Map<string, Set<string>>] {
 
         // Creating a type to hold the important
         // properties for the Priority Queue.
         type Priority = {
-            label: string,
+            info: {
+                label: string,
+                srcLabel: string
+            },
             minDist: number;
         }
 
@@ -678,6 +682,9 @@ export default class Algorithms {
         // Set of all visited nodes
         let visited: Set<string> = new Set();
 
+        // Map of all visited Edges
+        let visitedEdges: Map<string, Set<string>> = new Map();
+
         // First we set the value of distances from node [S]
         // to any node [A] to infinity
         this.graph.vertices().forEach((node) => {
@@ -687,7 +694,11 @@ export default class Algorithms {
         // Enqueue the first node,
         // this way we have a length of 1
         // and least distance of 0.
-        PQ.enqueue({label: start, minDist: 0});
+        PQ.enqueue({
+            info: {
+                label: start, srcLabel: start
+            }, minDist: 0
+        });
 
         // While it is not empty,
         // nodes should be dequeued from the
@@ -695,7 +706,13 @@ export default class Algorithms {
         while (!PQ.isEmpty()) {
 
             // get the Priority Object and deconstruct it
-            const {label, minDist} = PQ.dequeue();
+            const {
+                info: {
+                    label, srcLabel
+                }, minDist
+            } = PQ.dequeue();
+
+            Algorithms.addVisitedEdge(visitedEdges, srcLabel, label);
 
             // add it to visited so that
             // we do not keep opening it.
@@ -706,7 +723,6 @@ export default class Algorithms {
             // since we get a better route.
             if (dist.get(label) < minDist)
                 continue;
-
             // follow the BFS pattern
             // we open every neighbour
             // and explore it
@@ -742,7 +758,12 @@ export default class Algorithms {
                         dist.set(dest, newDist);
 
                         // enqueue this for opening in terms of minDist.
-                        PQ.enqueue({label: dest, minDist: newDist});
+                        PQ.enqueue({
+                            info: {
+                                label: dest,
+                                srcLabel: label
+                            }, minDist: newDist
+                        });
                     }
                 }
             });
@@ -750,7 +771,7 @@ export default class Algorithms {
             // if label is the same as end
             // then we know that, there is a path
             // and return all the items for reconstruction.
-            if (label === end) return [dist, prev, visited];
+            if (label === end) return [dist, prev, visited, visitedEdges];
         }
 
         // at this point, the end dist is Infinity
@@ -758,7 +779,7 @@ export default class Algorithms {
         // hence, we need to go about and just return everything to caller
         // the caller has the ability to understand if
         // the given end dist is Infinity or not.
-        return [dist, prev, visited];
+        return [dist, prev, visited, visitedEdges];
     }
 
     /**
@@ -778,7 +799,7 @@ export default class Algorithms {
     static runWithoutBombNode(algoType: AlgoType, startNodeId: string, endNodeId: string, graph = BackendStateManager.graph()): {
         path: string[] | NOTSET_t,
         visited: Set<string>,
-        visitedEdges : Map<string,  Set<string>>
+        visitedEdges: Map<string, Set<string>>
     } {
 
         // getting a new algorithm instance to run the functions from

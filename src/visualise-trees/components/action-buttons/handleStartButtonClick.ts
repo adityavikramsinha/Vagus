@@ -14,11 +14,17 @@ const handleStartButtonClick = () => {
         return;
     match(activeTsFile)
         .with('ts-1', async () => {
-            const {path, visited, visitedEdges} = Algorithms.runWithoutBombNode(
+            const {visited, visitedEdges} = Algorithms.runWithoutBombNode(
                 AlgoType.BREADTH_FIRST_SEARCH, startId, endId, BackendStateManager.graph)
             await Animator.animateVisitedVertices(visited, visitedEdges)
             useTreeStore.setState({block: false, executing: false});
 
+        })
+        .with('ts-2', async () =>{
+            const {visited, visitedEdges} = Algorithms.runWithoutBombNode(
+                AlgoType.DIJKSTRAS_SEARCH, startId, endId , BackendStateManager.graph)
+            await Animator.animateVisitedVertices(visited, visitedEdges);
+            useTreeStore.setState({block : false , executing : false})
         })
 }
 export default handleStartButtonClick;

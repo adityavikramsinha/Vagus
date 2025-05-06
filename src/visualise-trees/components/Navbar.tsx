@@ -51,6 +51,8 @@ const Navbar: FC = () => {
                         <Folder name="traversal">
                             <File type={FileType.TS} id="ts-1" name="bfs.ts" Icon={<TsFileIcon/>}/>
                         </Folder>
+                        <File type={FileType.TS} id="ts-2" name="dijkstras.ts"
+                              Icon={<TsFileIcon/>}/>
                     </Folder>
                 </Folder>
             </div>
