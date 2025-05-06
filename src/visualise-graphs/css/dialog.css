@@ -152,15 +152,3 @@
     width: 90vw;
     max-width: 400px;
 }
-
-.stop-dialog-title {
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.2;
-}
-
-.stop-dialog-description {
-    color: var(--color-white);
-    font-size: 0.8rem;
-    line-height: 1.2;
-}

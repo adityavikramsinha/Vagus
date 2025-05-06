@@ -20,8 +20,8 @@ export enum NodeType {
 }
 
 interface GraphStoreProps {
-    startNodeId: string | NOTSET_t,
-    endNodeId: string | NOTSET_t,
+    startId: string | NOTSET_t,
+    endId: string | NOTSET_t,
     bombNodeId: string| NOTSET_t,
     hexes: HexProps [],
     hexBoardDimensions: { width: number, height: number },
@@ -46,7 +46,7 @@ export interface GraphStore extends GraphStoreActions, GraphStoreProps, FileStor
 
 export const graphStore =
     create<GraphStore>()((set) => ({
-        startNodeId: NOTSET, endNodeId: NOTSET, bombNodeId: NOTSET,
+        startId: NOTSET, endId: NOTSET, bombNodeId: NOTSET,
         activeFiles: {
             [FileType.TS]: NOTSET,
             [FileType.IO]: NOTSET,
@@ -70,15 +70,15 @@ export const graphStore =
                 const newHexBoard = {...state.hexBoard};
                 return match([nodeType, nodeAction] as const)
                     .with([NodeType.START_NODE, NodeAction.SET], () => {
-                        newHexBoard[state.startNodeId] = NOTSET;
-                        state.startNodeId = id;
-                        newHexBoard[state.startNodeId] = NodeType.START_NODE;
+                        newHexBoard[state.startId] = NOTSET;
+                        state.startId = id;
+                        newHexBoard[state.startId] = NodeType.START_NODE;
                         return {hexBoard: newHexBoard};
                     })
                     .with([NodeType.END_NODE, NodeAction.SET], () => {
-                        newHexBoard[state.endNodeId] = NOTSET;
-                        state.endNodeId = id;
-                        newHexBoard[state.endNodeId] = NodeType.END_NODE;
+                        newHexBoard[state.endId] = NOTSET;
+                        state.endId = id;
+                        newHexBoard[state.endId] = NodeType.END_NODE;
                         return {hexBoard: newHexBoard};
                     })
                     .with([NodeType.BOMB_NODE, NodeAction.SET], () => {

@@ -18,8 +18,8 @@ interface TreeStoreProps {
     // Contains, src => dest edge along w the cost associated with that edge.
     edgeList: Map<string, Map<string, number>>,
     srcNodeId: string | NOTSET_t,
-    startNodeId: string | NOTSET_t,
-    endNodeId: string | NOTSET_t,
+    startId: string | NOTSET_t,
+    endId: string | NOTSET_t,
     block : boolean,
     executing : boolean,
     // id with the order (to identify which is source and which is dest)
@@ -72,15 +72,15 @@ export const treeStore =
                         return {
                             nodes: updatedNodes,
                             ...(state.srcNodeId === id && {srcNodeId: NOTSET}),
-                            ...(state.startNodeId === id && {startNodeId: NOTSET}),
-                            ...(state.endNodeId === id && {endNodeId: NOTSET})
+                            ...(state.startId === id && {startId: NOTSET}),
+                            ...(state.endId === id && {endId: NOTSET})
                         };
                     })
                     .exhaustive()
             ),
 
-        startNodeId: NOTSET,
-        endNodeId: NOTSET,
+        startId: NOTSET,
+        endId: NOTSET,
         block : false,
         executing : false,
         visitedVertices : new Set(),

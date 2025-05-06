@@ -12,7 +12,7 @@ export interface FileStore {
 
 
 const useFileExplorer =<T extends FileStore, U>(selector  : (state : T)=>U):U=>{
-    const store = useContext(StoreCtx) as StoreApi<T> | null ;
+    const store = useContext(StoreCtx) as StoreApi<FileStore> | null ;
     if(store === null)
         throw new Error("cannot useFileExplorer, outside context since it has no data of the files present. Please see that there is a provided context.");
 

@@ -21,8 +21,8 @@ class MazeGenerator {
         for (let i = 0; i < hexes.length; i++) {
             let randomId = Math.floor(Math.random() * hexes.length);
             let hexId = hexes[randomId].id;
-            if (hexId !== useGraphStore.getState().startNodeId &&
-                hexId !== useGraphStore.getState().endNodeId &&
+            if (hexId !== useGraphStore.getState().startId &&
+                hexId !== useGraphStore.getState().endId &&
                 hexId !== useGraphStore.getState().bombNodeId)
                 maze.add(hexes[randomId].id);
         }
@@ -57,8 +57,8 @@ class MazeGenerator {
             let [door1, door2] = getDoors(workableRows);
             for (let row = 0 , doubledCoordinates = (col & 1) ===1 ? 1 : 0; row <workableRows ; ++row , doubledCoordinates +=2) {
                 const id = Pipe.pairToUUID(doubledCoordinates, col).toString();
-                const startNodeId = useGraphStore.getState().startNodeId;
-                const endNodeId = useGraphStore.getState().endNodeId;
+                const startNodeId = useGraphStore.getState().startId;
+                const endNodeId = useGraphStore.getState().endId;
                 const bombNodeId = useGraphStore.getState().bombNodeId;
                 if(door1 !== row &&
                     door2 !== row &&

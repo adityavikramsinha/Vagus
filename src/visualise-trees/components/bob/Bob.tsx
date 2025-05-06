@@ -29,8 +29,8 @@ const Bob: React.FC<BobProps> = ({
         state => (state.activeFiles.io === 'io-2' && state.srcNodeId === id));
     // Tracks the 'x' & 'y' motion values, and handles the binding of "change" (anything)
     // to both of these props, that way we do not have to think about the cursor position
-    const isStartVertex = useTreeStore(state => state.startNodeId === id);
-    const isEndVertex = useTreeStore(state => state.endNodeId === id);
+    const isStartVertex = useTreeStore(state => state.startId === id);
+    const isEndVertex = useTreeStore(state => state.endId === id);
     const isVisited = useTreeStore(state => state.visitedVertices.has(id));
     m.useMotionValueEvent(x, "change",
         (latestX) => onUpdate(id, latestX, y.get()));

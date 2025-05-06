@@ -1,9 +1,9 @@
 import React from "react";
 import Button from "@/components/Button";
-import useGraphStore from "@/stores/GraphStore";
+import useActionStore from "@/providers/ActionStore";
 
 
-const ClearButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
+const ClearButtonIcon = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none"
              className="stop-button-icon">
@@ -14,7 +14,7 @@ const ClearButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
     );
 }
 
-const AbortButtonIcon = (props: React.SVGProps<SVGSVGElement>) => {
+const AbortButtonIcon = () => {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
             <rect x="2.25" y="2.25" width="12.5" height="12.5" rx="3.75" fill="#FF0000" fill-opacity="0.18"
@@ -28,9 +28,9 @@ type StopButtonProps = {
 };
 
 const StopButton = (props: StopButtonProps) => {
-    const isExecuting = useGraphStore(state => state.executing);
+    const isExecuting = useActionStore(state => state.executing);
     return (
-        <Button className="hover:bg-cmd-border" disabled={useGraphStore(state => state.block && !state.executing)}
+        <Button className="hover:bg-cmd-border" disabled={useActionStore(state => state.block && !state.executing)}
                 id="stop-button"
                 onClick={props.onClick}>
             {!isExecuting && <ClearButtonIcon/>}

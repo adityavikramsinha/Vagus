@@ -5,10 +5,11 @@ import {FC} from "react";
 import {IOFileIcon, TsFileIcon} from "@/components/file/FileIcons";
 import Folder from "@/components/folder/Folder";
 import File, {FileType} from "@/components/file/File";
-import StartButton from "./action-buttons/StartButton";
+import StartButton from "@/components/action-buttons/StartButton";
 import useTreeStore from "@/stores/TreeStore";
 import {NOTSET} from "@graph/ts/Types";
-import StopButton from "./action-buttons/StopButton";
+import StopButton from "@/components/action-buttons/StopButton"
+import handleStartButtonClick from "./action-buttons/handleStartButtonClick";
 
 const Navbar: FC = () => {
     return (
@@ -24,7 +25,7 @@ const Navbar: FC = () => {
                                 visitedEdges: new Map()
                             })
                     }}/>
-                    <StartButton/>
+                    <StartButton onClick={() =>handleStartButtonClick()}/>
                 </div>
             </div>
             <div className="

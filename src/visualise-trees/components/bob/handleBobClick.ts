@@ -41,12 +41,12 @@ const handleBobClick = (destId: string, MASS_PER_EDGE: number = 2) => {
             BackendStateManager.graph.rmNode(destId);
         })
         .with("io-3", () => {
-            if (useTreeStore.getState().endNodeId !== destId)
-                useTreeStore.setState({startNodeId: destId})
+            if (useTreeStore.getState().endId !== destId)
+                useTreeStore.setState({startId: destId})
         })
         .with("io-4", () => {
-            if (useTreeStore.getState().startNodeId !== destId)
-                useTreeStore.setState({endNodeId: destId})
+            if (useTreeStore.getState().startId !== destId)
+                useTreeStore.setState({endId: destId})
         })
         .otherwise(() => undefined)
 }
