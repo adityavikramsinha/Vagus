@@ -1,4 +1,4 @@
-import useGraphStore, {NodeType} from "../../../stores/GraphStore";
+import useGraphStore, {NodeType} from "@/stores/GraphStore";
 import Pipe from "@graph/api/Pipe";
 import Syncer from "@graph/api/Syncer";
 import Algorithms from "@graph/ts/Algorithms";
@@ -6,7 +6,7 @@ import {AlgoType, NOTSET, NOTSET_t} from "@graph/ts/Types";
 import {match, P} from "ts-pattern";
 import BackendStateManager from "@graph/api/BackendStateManager";
 import Animator from "@graph/api/Animator";
-import {StartButtonError} from "../../../components/action-buttons/StartButton";
+import {Exception, StartButtonError} from "@/components/action-buttons/StartButton";
 
 /**
  * Main runner for the algorithm. It assumes nothing, hence it will BLOCK and set EXECUTING (defined in the
@@ -58,13 +58,6 @@ const runAlgorithmAnimation = async (
         useGraphStore.setState({block: false});
         useGraphStore.setState({executing: false});
     }
-}
-
-export enum Exception {
-    START_NODE_NOTSET,
-    END_NODE_NOTSET,
-    ALGORITHM_NOTSET,
-    BI_DIRECTIONAL_EXTRA_ARGS
 }
 
 /**
@@ -163,7 +156,7 @@ export const handleStartButtonClick = (): StartButtonError | null => {
     // Get the Error (if any)
     const err = performStartButtonJobs(algoFile);
 
-    // Return the Eror or null, depending on whatever works.
+    // Return the Error or null, depending on whatever works.
     return match(err)
         .with(Exception.START_NODE_NOTSET, () => ({
             header: "RTE 0x01",
