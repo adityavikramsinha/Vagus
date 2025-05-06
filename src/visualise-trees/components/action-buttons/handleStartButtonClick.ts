@@ -32,5 +32,11 @@ const handleStartButtonClick = () => {
             await Animator.animateVisitedVertices(visited, visitedEdges);
             useTreeStore.setState({block : false , executing : false})
         })
+        .with('ts-4', async () =>{
+            const {visited, visitedEdges} = Algorithms.runWithoutBombNode(
+                AlgoType.DEPTH_FIRST_SEARCH, startId, endId , BackendStateManager.graph)
+            await Animator.animateVisitedVertices(visited, visitedEdges);
+            useTreeStore.setState({block : false , executing : false})
+        })
 }
 export default handleStartButtonClick;
