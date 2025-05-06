@@ -53,6 +53,8 @@ const Navbar: FC = () => {
                         </Folder>
                         <File type={FileType.TS} id="ts-2" name="dijkstras.ts"
                               Icon={<TsFileIcon/>}/>
+                        <File type={FileType.TS} id="ts-3" name="bellmanFord.ts"
+                              Icon={<TsFileIcon/>}/>
                     </Folder>
                 </Folder>
             </div>

@@ -26,5 +26,11 @@ const handleStartButtonClick = () => {
             await Animator.animateVisitedVertices(visited, visitedEdges);
             useTreeStore.setState({block : false , executing : false})
         })
+        .with('ts-3', async () =>{
+            const {visited, visitedEdges} = Algorithms.runWithoutBombNode(
+                AlgoType.BELLMAN_FORD, startId, endId , BackendStateManager.graph)
+            await Animator.animateVisitedVertices(visited, visitedEdges);
+            useTreeStore.setState({block : false , executing : false})
+        })
 }
 export default handleStartButtonClick;

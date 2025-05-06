@@ -283,20 +283,20 @@ export default class Algorithms {
      * @param end ending ID
      * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
      */
-    bellmanFord(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
+    bellmanFord(start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] {
 
         // First get all the data from internal bellman ford
         // we get dist to understand if last node [end] was relaxed or not
         // if it was then we can construct a path
         // else we return null since that means there is not a single path
-        const [dist, prev, visited] = this.internalBellmanFord(start);
+        const [dist, prev, visited, visitedEdges] = this.internalBellmanFord(start);
 
         // path array
         let path: string[] = [];
 
         // checking for if the last node [end] was relaxed or not
         if (dist.get(end) === Infinity)
-            return [NOTSET, visited];
+            return [NOTSET, visited, visitedEdges];
 
         // path reconstruction
         for (let at = end; at !== undefined; at = prev.get(at))
@@ -305,7 +305,7 @@ export default class Algorithms {
         // return path
         // which is guaranteed to be the shortest path
         // in the graph from start->end.
-        return [path, visited];
+        return [path, visited, visitedEdges];
     }
 
     /**
@@ -315,7 +315,7 @@ export default class Algorithms {
      * a Map of previous nodes to construct a path and,
      * a Set of visited nodes.
      */
-    internalBellmanFord(start: string): [Map<string, number>, Map<string, string>, Set<string>] {
+    internalBellmanFord(start: string): [Map<string, number>, Map<string, string>, Set<string>, Map<string,  Set<string>>] {
 
         // dist is for the possibility of relaxation
         // this also signifies if a path from the start -> end
@@ -329,6 +329,7 @@ export default class Algorithms {
         // Map to help in path reconstruction
         let prev: Map<string, string> = new Map();
 
+        const visitedEdges : Map<string , Set<string>> = new Map();
         // Set all the dist to Infinity
         // minus the start node
         this.graph.vertices().forEach((node) => {
@@ -376,13 +377,15 @@ export default class Algorithms {
 
                         // update changes
                         changes++;
+
+                        Algorithms.addVisitedEdge(visitedEdges, node.getData(), edge.dest.getData())
                     }
                 })
             })
         }
 
         // return everything that was promised.
-        return [dist, prev, visited];
+        return [dist, prev, visited, visitedEdges];
     }
 
     /**
