@@ -13,6 +13,7 @@ function PathsPage() {
     return <StrictMode>
         <Head>
             <link rel="icon" href="/favicon.svg"/>
+            <link rel="icon" href="/favicon.png"/>
             <title>Vagus — A Path Visualiser</title>
         </Head>
         <div id="root" className={jetBrainsMono.className}>
