@@ -66,8 +66,6 @@ const StartButton: React.FC<StartButtonProps> = ({onClick}) => {
                 </Button>
             </DialogTrigger>
             <DialogContent className="stop-dialog-content">
-                <DialogHeader className="stop-dialog-header">
-                </DialogHeader>
                 <div className="rounded-2xl w-fit text-white animate-in fade-in zoom-in-95 transition-all duration-300">
                     <div className="flex items-center gap-2 text-sm text-red-400 font-bold uppercase tracking-widest">
                         <span>{error?.type}</span>
@@ -83,7 +81,7 @@ const StartButton: React.FC<StartButtonProps> = ({onClick}) => {
                         {error?.fix}
                     </div>
                 </div>
-                <DialogFooter className="stop-dialog-footer">
+                <DialogFooter>
                     <DialogClose asChild>
                         <Button className="
                             flex items-center justify-center font-medium p-1 rounded-[5px]
