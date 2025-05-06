@@ -1,7 +1,5 @@
 import React from 'react';
-import cn from "../../cn";
-import useFileExplorer from "../../providers/FileExplorer";
-import {BaseStore} from "../../providers/StoreProvider";
+import useFileExplorer, {FileStore} from "@/providers/FileExplorer";
 
 export enum FileType {
     TS = "ts",
@@ -31,8 +29,8 @@ export type FileProps = {
  *                specific files.
  */
 const File: React.FC<FileProps> = ({type, id, name, Icon, onClick}) => {
-    const isActiveFile = useFileExplorer((state: BaseStore) => state.activeFiles[type] === id);
-    const changeActiveFiles = useFileExplorer((state: BaseStore) => state.changeActiveFiles);
+    const isActiveFile = useFileExplorer((state: FileStore) => state.activeFiles[type] === id);
+    const changeActiveFiles = useFileExplorer((state: FileStore) => state.changeActiveFiles);
     let styles: React.CSSProperties = {
         background: "rgba(255, 255, 255, 0.05)",
         borderRadius: "4px"

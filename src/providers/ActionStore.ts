@@ -12,14 +12,15 @@ export interface ActionStore {
 }
 
 
-const useActionButton = <T extends ActionStore, U>(selector: (state: T) => U): U => {
+const useActionStore = <T extends ActionStore, U>(selector: (state: T) => U): U => {
     const store = useContext(StoreCtx) as StoreApi<ActionStore> | null;
     if (store === null)
         throw new Error(
-            "cannot useActionButton, outside context since it has no data of the files present.Please see that there is a provided context.");
+            "cannot useActionStore, outside context since it has no data of the files" +
+            " present.Please see that there is a provided context.");
 
     return useStore(store, selector);
 }
 
 
-export default useActionButton;
+export default useActionStore;

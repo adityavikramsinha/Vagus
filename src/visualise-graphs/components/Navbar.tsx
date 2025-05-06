@@ -1,11 +1,11 @@
 import * as React from "react";
 import {FC} from "react";
 
-import File, {FileType} from "../../components/file/File";
+import File, {FileType} from "@/components/file/File";
 import PrevButton from "@graph/components/action-buttons/PrevButton";
-import StopButton from "@graph/components/action-buttons/StopButton";
+import StopButton from "@/components/action-buttons/StopButton";
 import StartButton from "@graph/components/action-buttons/StartButton";
-import Folder from "../../components/folder/Folder";
+import Folder from "@/components/folder/Folder";
 
 import {
     BatFileIcon,

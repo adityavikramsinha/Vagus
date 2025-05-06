@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { StoreApi, useStore } from "zustand";
 import {FileStore} from "./FileExplorer";
-import {ActionStore} from "./ActionButtons";
+import {ActionStore} from "./ActionStore";
 
 
 export interface BaseStore extends FileStore, ActionStore {}

@@ -8,7 +8,7 @@ import File, {FileType} from "@/components/file/File";
 import StartButton from "./action-buttons/StartButton";
 import useTreeStore from "@/stores/TreeStore";
 import {NOTSET} from "@graph/ts/Types";
-import StopButton from "./action-buttons/StopButton";
+import StopButton from "@/components/action-buttons/StopButton"
 
 const Navbar: FC = () => {
     return (
