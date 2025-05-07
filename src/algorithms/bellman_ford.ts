@@ -89,25 +89,25 @@ const internalBellmanFord = (graph : Graph, start: string): [Map<string, number>
 
                 // if visited does not have the node
                 // we simply add it.
-                if (!visited.has(edge.dest.getData()))
-                    visited.add(edge.dest.getData());
+                if (!visited.has(edge.dest))
+                    visited.add(edge.dest);
 
                 // if the current cost < prev cost of traversal
                 // from start to this node
                 // then we try to
                 // update it
-                if (dist.get(node.getData()) + edge.cost < dist.get(edge.dest.getData())) {
+                if (dist.get(node.getData()) + edge.cost < dist.get(edge.dest)) {
 
                     // update its new best distance
-                    dist.set(edge.dest.getData(), dist.get(node.getData()) + edge.cost);
+                    dist.set(edge.dest, dist.get(node.getData()) + edge.cost);
 
                     // set it as a possible path candidate
-                    prev.set(edge.dest.getData(), node.getData());
+                    prev.set(edge.dest, node.getData());
 
                     // update changes
                     changes++;
 
-                    Algorithms.addVisitedEdge(visitedEdges, node.getData(), edge.dest.getData())
+                    Algorithms.addVisitedEdge(visitedEdges, node.getData(), edge.dest)
                 }
             })
         })

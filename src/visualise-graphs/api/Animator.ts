@@ -52,7 +52,7 @@ export default class Animator {
             useGraphStore.getState().pathNodes.add(nodeId);
             await new Promise(res => setTimeout(res, 250));
             await this.animateRandomWalk(
-                BackendStateManager.graph().vertices().get((nodeId as string)).getRandomNeighbour().getData());
+                BackendStateManager.graph().vertices().get((nodeId as string)).getRandomNeighbour());
         })
     }
 }

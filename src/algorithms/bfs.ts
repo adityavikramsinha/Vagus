@@ -64,7 +64,7 @@ const bfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Se
             // if we have already visited it, we do not need to
             // because it means that it is already added to the visited section
             // and was a part of the queue.
-            const destId = edge.dest.getData();
+            const destId = edge.dest;
             if (!visited.has(destId)) {
 
                 // added it to visited set.

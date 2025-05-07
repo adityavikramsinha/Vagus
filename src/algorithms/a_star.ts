@@ -12,7 +12,7 @@ import {MinPriorityQueue} from "@datastructures-js/priority-queue";
  * @param end ending node ID
  * @returns a distance map, a map to reconstruct the path and a set of visited nodes inorder
  */
-const internalAStar = (graph:Graph, start: string, end: string): [Map<string, number>, Map<string, string>, Set<string>]=>{
+const internalAStar = (graph: Graph, start: string, end: string): [Map<string, number>, Map<string, string>, Set<string>] => {
 
     // created type to have
     // in the Priority Queue
@@ -47,7 +47,10 @@ const internalAStar = (graph:Graph, start: string, end: string): [Map<string, nu
 
     // Enqueue the first item
     // this way, the PQ is always > 0 when starting.
-    PQ.enqueue({label: start, minDist: 0, minHeuristic: graph.distBw(dest, endNode)});
+    PQ.enqueue({
+        label: start, minDist: 0,
+        minHeuristic: graph.distBw(dest.coordinates(), endNode.coordinates())
+    });
 
     // keeps going while PQ is not exhausted
     while (!PQ.isEmpty()) {
@@ -71,7 +74,7 @@ const internalAStar = (graph:Graph, start: string, end: string): [Map<string, nu
 
             // get the data to remove
             // boilerplate code
-            let destData = edge.dest.getData();
+            let destData = edge.dest;
 
             // if visited does not have the node
             // then only do we open it.
@@ -87,8 +90,9 @@ const internalAStar = (graph:Graph, start: string, end: string): [Map<string, nu
 
                 // get heuristics from the previous node
                 // and node to next
-                let newHeuristic = (graph.distBw(graph.vertices().get(destData),
-                    endNode, 'e')) / 1000000 * newDist;
+                const destNode = graph.vertices().get(destData);
+                let newHeuristic = (graph.distBw(destNode.coordinates(), endNode.coordinates(),
+                    'e')) / 1000000 * newDist;
 
                 // now if newDist is < dist present in dist Map
                 // then only do we update everything
@@ -121,7 +125,7 @@ const internalAStar = (graph:Graph, start: string, end: string): [Map<string, nu
  * @param end the ending node ID
  * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
  */
-const aStar = (graph:Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>]=>{
+const aStar = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>] => {
 
     // first deconstruct the array returned from a-start
     // dist is the distance from start [S]-> every node [A] which is reachable

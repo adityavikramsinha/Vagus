@@ -134,7 +134,7 @@ export default class Vertex {
         this.data = data;
         this.comparator = comparator;
         this.adjVertices = new Map();
-        this.adjVertices.set(data, new Edge(this, 0));
+        this.adjVertices.set(data, new Edge(data, data, 0));
         this.setX(x);
         this.setY(y);
     }
@@ -168,7 +168,7 @@ export default class Vertex {
     addAdjVertex(v: Vertex, cost: number): void {
         // ensure no edge has the same data as the current one
         if (!this.adjVertices.has(v.getData()))
-            this.adjVertices.set(v.getData(), new Edge(v, cost));
+            this.adjVertices.set(v.getData(), new Edge(this.data, v.getData(), cost));
     }
 
     /**
@@ -223,7 +223,7 @@ export default class Vertex {
     toString(): string {
         let metaData: string = 'data:' + this.data + ',\nNeighbours:[\n';
         this.adjVertices.forEach(edge => {
-            metaData += "    {dest:" + edge.dest.getData() + ", cost:" + edge.cost + "},\n";
+            metaData += "    {dest:" + edge.dest + ", cost:" + edge.cost + "},\n";
         });
         metaData += "]\ncoords:{";
         metaData += "\n     x:" + this.xCoord;
@@ -238,11 +238,11 @@ export default class Vertex {
      *
      * @returns A random neighbour from the list of neighbours
      */
-    getRandomNeighbour(): Vertex {
+    getRandomNeighbour(): string{
         while (true) {
-            let neighbour = Array.from(this.getAdjVertices().values())[Math.floor(Math.random() * this.getAdjVertices().size)].dest;
-            if (neighbour.getData() !== this.data || this.adjVertices.size === 1)
-                return neighbour;
+            let neighbourId = Array.from(this.getAdjVertices().values())[Math.floor(Math.random() * this.getAdjVertices().size)].dest;
+            if (neighbourId !== this.data || this.adjVertices.size === 1)
+                return neighbourId;
         }
     }
 }

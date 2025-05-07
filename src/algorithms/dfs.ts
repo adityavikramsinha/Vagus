@@ -49,8 +49,8 @@ const dfs = (graph:Graph, start: string, end: string): [string[] | NOTSET_t, Set
             if (at !== end) {
                 graph.vertices().get(at).getAdjVertices().forEach(edge => {
                     // add to list of visited Edges
-                    Algorithms.addVisitedEdge(visitedEdges, at, edge.dest.getData())
-                    internalDfs(edge.dest.getData(), at);
+                    Algorithms.addVisitedEdge(visitedEdges, at, edge.dest)
+                    internalDfs(edge.dest, at);
                 });
             }
 

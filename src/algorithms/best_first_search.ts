@@ -71,7 +71,9 @@ const internalBestFirstSearch = (graph: Graph, start: string, end: string): [Map
     let dest = graph.vertices().get(start), endNode = graph.vertices().get(end);
 
     // we enqueue the starting node
-    PQ.enqueue({label: start, minHeuristic: graph.distBw(dest, endNode)});
+    PQ.enqueue({
+        label: start, minHeuristic: graph.distBw(dest.coordinates(), endNode.coordinates())
+    });
 
     // while PQ is not empty
     // we keep running till we have
@@ -89,7 +91,8 @@ const internalBestFirstSearch = (graph: Graph, start: string, end: string): [Map
         graph.vertices().get(label).getAdjVertices().forEach(edge => {
 
             // getting the data or id of the destination nodes
-            let destData = edge.dest.getData();
+            let destData = edge.dest;
+            let dest = graph.vertices().get(destData);
 
             // if visited does not have those nodes
             // it means there is a possibility of a better path
@@ -97,7 +100,7 @@ const internalBestFirstSearch = (graph: Graph, start: string, end: string): [Map
             if (!visited.has(destData)) {
 
                 // we get a new heuristic approach
-                let newHeuristic = graph.distBw(edge.dest, endNode);
+                let newHeuristic = graph.distBw(dest.coordinates(), endNode.coordinates());
 
                 // we enqueue and then set the nodes as required
                 PQ.enqueue({label: destData, minHeuristic: newHeuristic});

@@ -11,8 +11,9 @@ import Vertex from "./Vertex";
  */
 export default class Edge {
 
+  src : string;
   // the dest node
-  dest: Vertex;
+  dest: string;
 
   // the cost of traversal
   cost: number;
@@ -20,12 +21,14 @@ export default class Edge {
   /**
    * Constructs a new Edge with a given destination node and cost from the source node.
    *
+   * @param src the source node to make a connection from
    * @param dest the destination node to make a connection to
    * @param cost the cost of movement from the source node to the destination node.
    */
-  constructor(dest: Vertex, cost: number) {
+  constructor(src:string, dest: string, cost: number) {
     this.dest = dest;
     this.cost = cost;
+    this.src = src;
   }
 
   /**
@@ -39,23 +42,13 @@ export default class Edge {
   }
 
   /**
-   * Updates or changes the destination to which the movement
-   * will occur to.
-   *
-   * @param _newDest New destination for movement to
-   */
-  changeDest(_newDest: Vertex): void {
-    this.dest = _newDest;
-  }
-
-  /**
    * Function returns a string representation of this Edge.
    * The representation looks like :
-   * {dest:xxxx , cost:xxxx}
+   * src-----cost---->dest
    *
    * @returns a string representation of this Edge.
    */
   toString(): string {
-    return '{dest:' + this.dest + ', cost:' + this.cost + '}';
+    return `${this.src}---${this.cost}--->${this.dest}`;
   }
 }

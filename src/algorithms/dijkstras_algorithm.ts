@@ -117,7 +117,7 @@ const internalDijkstras = (graph: Graph, start: string, end: string):
         graph.vertices().get(label).getAdjVertices().forEach(edge => {
 
             // first get the destination node
-            const dest = edge.dest.getData();
+            const dest = edge.dest;
 
             // if visited does not have destination
             // then it means that it has not been explored

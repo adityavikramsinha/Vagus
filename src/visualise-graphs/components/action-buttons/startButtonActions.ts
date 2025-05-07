@@ -87,7 +87,7 @@ const performStartButtonJobs = (
             .with(NodeType.WEIGHT_NODE, () => {
                 const srcNode = BackendStateManager.graph().vertices().get(id);
                 srcNode.getAdjVertices()
-                       .forEach(edge => Syncer.updateEdge(edge.dest.getData(), id));
+                       .forEach(edge => Syncer.updateEdge(edge.dest, id));
             })
             .otherwise(() => {
             })
