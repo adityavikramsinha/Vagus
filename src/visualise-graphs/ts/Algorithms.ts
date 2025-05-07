@@ -1,19 +1,19 @@
 import {AlgoType, NOTSET, NOTSET_t} from "./Types";
 import BackendStateManager from "../api/BackendStateManager";
 import {match} from "ts-pattern";
-import bfs from "./algorithms/bfs"
-import dfs from './algorithms/dfs';
-import dijkstras from "./algorithms/dijkstras_algorithm";
-import bestFirstSearch from "./algorithms/best_first_search";
-import bellmanFord from "./algorithms/bellman_ford";
-import aStar from "./algorithms/a_star";
+import bfs from "../../algorithms/bfs"
+import dfs from '../../algorithms/dfs';
+import dijkstras from "../../algorithms/dijkstras_algorithm";
+import bestFirstSearch from "../../algorithms/best_first_search";
+import bellmanFord from "../../algorithms/bellman_ford";
+import aStar from "../../algorithms/a_star";
 
 /**
  * Main backbone of the whole backend.
  * This class contains the various algorithms which are required to
  * give their outputs to visualise.
  *
- * @author aditya , <adityavikramsinha19@gmail.com>
+ * @author aditya, <adityavikramsinha19@gmail.com>
  */
 export default class Algorithms {
 

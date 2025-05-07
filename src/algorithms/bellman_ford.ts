@@ -1,6 +1,6 @@
-import Graph from "../Graph";
-import {NOTSET, NOTSET_t} from "../Types";
-import Algorithms from "../Algorithms";
+import Graph from "../visualise-graphs/ts/Graph";
+import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import Algorithms from "../visualise-graphs/ts/Algorithms";
 
 /**
  * Classic bellman ford to find negative cycles

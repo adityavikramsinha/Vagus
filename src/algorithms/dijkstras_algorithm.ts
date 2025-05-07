@@ -1,7 +1,7 @@
-import {NOTSET, NOTSET_t} from "../Types";
-import Graph from "../Graph";
+import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import Graph from "../visualise-graphs/ts/Graph";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
-import Algorithms from "../Algorithms";
+import Algorithms from "../visualise-graphs/ts/Algorithms";
 
 /**
  * Classic implementation of Dijkstras algorithm
@@ -168,4 +168,4 @@ const internalDijkstras = (graph: Graph, start: string, end: string):
     return [dist, prev, visited, visitedEdges];
 }
 
-export default dijkstras; 
+export default dijkstras;

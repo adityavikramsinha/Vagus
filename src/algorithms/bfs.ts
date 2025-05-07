@@ -1,7 +1,7 @@
-import {NOTSET, NOTSET_t} from "../Types";
+import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
 import {Queue} from "queue-typescript";
-import Algorithms from "../Algorithms";
-import Graph from "../Graph";
+import Algorithms from "../visualise-graphs/ts/Algorithms";
+import Graph from "../visualise-graphs/ts/Graph";
 
 /**
  * Classic Breadth-first search algorithm which

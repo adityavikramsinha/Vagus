@@ -7,7 +7,7 @@ import {match, P} from "ts-pattern";
 import BackendStateManager from "@graph/api/BackendStateManager";
 import Animator from "@graph/api/Animator";
 import {Exception, StartButtonError} from "@/components/action-buttons/StartButton";
-import biDirectional from "../../ts/algorithms/bi_directional";
+import biDirectional from "../../../algorithms/bi_directional";
 
 /**
  * Main runner for the algorithm. It assumes nothing, hence it will BLOCK and set EXECUTING (defined in the

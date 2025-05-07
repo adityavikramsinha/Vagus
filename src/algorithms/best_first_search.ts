@@ -1,5 +1,5 @@
-import {NOTSET, NOTSET_t} from "../Types";
-import Graph from "../Graph";
+import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import Graph from "../visualise-graphs/ts/Graph";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 
 /**

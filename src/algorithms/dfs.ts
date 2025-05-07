@@ -1,6 +1,6 @@
-import {NOTSET, NOTSET_t} from "../Types";
-import Graph from "../Graph";
-import Algorithms from "../Algorithms";
+import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import Graph from "../visualise-graphs/ts/Graph";
+import Algorithms from "../visualise-graphs/ts/Algorithms";
 
 /**
  * Classic DFS which uses an internal function
