@@ -125,6 +125,7 @@ const performStartButtonJobs = (
             useGraphStore.setState({executing: true});
             if (bombNodeId === NOTSET) {
                 const [path, visitedStart, visitedEnd] = Algorithms.biDirectional(
+                    BackendStateManager.graph(),
                     startNodeId,
                     endNodeId
                 )

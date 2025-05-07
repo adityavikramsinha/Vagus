@@ -5,6 +5,8 @@ import BackendStateManager from "../api/BackendStateManager";
 import {match} from "ts-pattern";
 import bfs from "./algorithms/bfs"
 import dfs from './algorithms/dfs';
+import dijkstras from "./algorithms/dijkstras_algorithm";
+import bestFirstSearch from "./algorithms/best_first_search";
 
 /**
  * Main backbone of the whole backend.
@@ -51,38 +53,6 @@ export default class Algorithms {
             visitedEdges.set(from, new Set());
         }
         visitedEdges.get(from)!.add(to);
-    }
-
-    /**
-     * Classic implementation of Dijkstras algorithm
-     * which opens the nodes using BFS but is weighted.
-     * We can call it a weighted BFS in some context.
-     *
-     * @param start the id of the starting node
-     * @param end the id of the end node
-     * @returns a path | null [path if found, else] and visited inorder Set.
-     */
-    dijkstras(start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] {
-
-        // first get everything from the internal Dijkstra function
-        const [dist, prev, visited, visitedEdges] = this.internalDijkstras(start, end);
-
-        // the rest is just finding the path to use.
-        let path: string[] = [];
-
-        // if distance is Infinity then,
-        // we know path is not found.
-        // directly return
-        if (dist.get(end) === Infinity)
-            return [NOTSET, visited, visitedEdges];
-
-        // if it is not null,
-        // we know there must be a path that exists
-        // so reconstruct it.
-        for (let at: string = end; at !== undefined; at = prev.get(at)) path.unshift(at);
-
-        // return reconstructed path.
-        return [path, visited, visitedEdges];
     }
 
     /**
@@ -239,23 +209,24 @@ export default class Algorithms {
      *
      * @param start the starting node ID
      * @param end target/end node ID
+     * @param graph The Graph to use
      * @returns a path | null [path if present, else null] and two sets, first is of a search
      * from the Start till some point X and second is from the end till the same point X where
      * both of these algorithms meet.
      */
-    static biDirectional(start: string, end: string): [string[] | NOTSET_t, Set<string>, Set<string>] {
+    static biDirectional(graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Set<string>] {
 
         // get the path from start
         let algo: Algorithms = new Algorithms(BackendStateManager.graph());
-        const pathFromStart = algo.dijkstras(start, end)[0];
+        const pathFromStart = dijkstras(graph, start, end)[0];
 
         // if it is null , we automatically know
         // the there is no path possible
         if (pathFromStart === NOTSET) {
 
             // we just get visited from start and visited from end Sets
-            let visitedFromStart = algo.dijkstras(start, end)[1];
-            let visitedFromEnd = algo.dijkstras(end, start)[1];
+            let visitedFromStart = dijkstras(graph, start, end)[1];
+            let visitedFromEnd = dijkstras(graph, end, start)[1];
 
             // we return the path from start [or null] and the two sets as promised.
             return [NOTSET, visitedFromStart, visitedFromEnd];
@@ -268,126 +239,11 @@ export default class Algorithms {
 
         // we get from this splice point a visited from start
         // and a visited from end
-        let visitedFromStart = algo.dijkstras(start, spliceNode)[1];
-        let visitedFromEnd = algo.dijkstras(end, spliceNode)[1];
+        let visitedFromStart = dijkstras(graph, start, spliceNode)[1];
+        let visitedFromEnd = dijkstras(graph, end, spliceNode)[1];
 
         // then we return the whole thing as promised.
         return [pathFromStart, visitedFromStart, visitedFromEnd];
-    }
-
-    /**
-     * A classic greedy algorithm which only uses heuristic approach
-     * it is an unguided and unweighted a-star algorithm
-     * and cannot guarantee best or shortest path in tough situations.
-     *
-     * @param start starting node ID
-     * @param end ending node ID
-     * @returns a path | null [path if found, else null] and a Set of visited nodes inorder.
-     */
-    bestFirstSearch(start: string, end: string): [string[] | NOTSET_t, Set<string>] {
-
-        // first get all the internal information from the implementation
-        // prev is for path deconstruction and ,
-        // visited in order is for
-        // visualisation
-        let [prev, visited] = this.internalBestFirstSearch(start, end);
-
-        // if prev is null then we know that
-        // there is no path
-        if (prev === null)
-            return [NOTSET, visited];
-
-        // path array
-        let path: string[] = [];
-
-        // reconstruct path
-        for (let at = end; at !== undefined; at = prev.get(at))
-            path.unshift(at);
-
-        // return the path since it exists.
-        return [path, visited];
-    }
-
-    /**
-     * Implementation of best first search greedy mechanism
-     *
-     * @param start starting node id
-     * @param end ending node id
-     * @returns a Map for path reconstruction and a Set of visited nodes inorder
-     */
-    private internalBestFirstSearch(start: string, end: string): [Map<string, string>, Set<string>] {
-
-        // creating a type
-        // for priority queue
-        // and other sorting
-        type Priority = {
-
-            // name of the node or its ID
-            label: string,
-
-            // min heuristic cost to end node [end]
-            minHeuristic: number
-        }
-
-        // Getting a priority queue for ordering of nodes.
-        let PQ = new MinPriorityQueue<Priority>((promisingNode) => promisingNode.minHeuristic);
-
-        // prev is to reconstruct path
-        let prev: Map<string, string> = new Map();
-
-        // visited is for remembering which nodes
-        // have been visited
-        let visited: Set<string> = new Set();
-
-        // start and end nodes have been given values
-        let dest = this.graph.vertices().get(start), endNode = this.graph.vertices().get(end);
-
-        // we enqueue the starting node
-        PQ.enqueue({label: start, minHeuristic: this.graph.distBw(dest, endNode)});
-
-        // while PQ is not empty
-        // we keep running till we have
-        // exhausted all the possible
-        // expandable nodes
-        while (!PQ.isEmpty()) {
-
-            // get the ID of the node
-            const {label} = PQ.dequeue();
-
-            // add it to visited since it has been explored now
-            visited.add(label);
-
-            // get ready to explore all the edges going out of it
-            this.graph.vertices().get(label).getAdjVertices().forEach(edge => {
-
-                // getting the data or id of the destination nodes
-                let destData = edge.dest.getData();
-
-                // if visited does not have those nodes
-                // it means there is a possibility of a better path
-                // hence we should enqueue them
-                if (!visited.has(destData)) {
-
-                    // we get a new heuristic approach
-                    let newHeuristic = this.graph.distBw(edge.dest, endNode);
-
-                    // we enqueue and then set the nodes as required
-                    PQ.enqueue({label: destData, minHeuristic: newHeuristic});
-                    prev.set(destData, label);
-                }
-            });
-
-            // if the id or label is end
-            // then there has to be a path
-            // hence we return prev and visited
-            if (label === end) return [prev, visited];
-        }
-
-        // if till here also the function has come
-        // that means end is not reachable
-        // hence we return null and visited
-        // to signify no path
-        return [null, visited];
     }
 
     /**
@@ -500,137 +356,6 @@ export default class Algorithms {
     }
 
     /**
-     * Internal implementation of the dijkstras algorithm.
-     *
-     * @param start the starting node ID
-     * @param end the ending node ID
-     * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes and, a Set for visited nodes inorder.
-     */
-    private internalDijkstras(start: string, end: string):
-        [Map<string, number>, Map<string, string>, Set<string>, Map<string, Set<string>>] {
-
-        // Creating a type to hold the important
-        // properties for the Priority Queue.
-        type Priority = {
-            info: {
-                label: string,
-                srcLabel: string
-            },
-            minDist: number;
-        }
-
-        // Priority Queue for total ordering through the
-        // minDist property.
-        let PQ = new MinPriorityQueue<Priority>((promisingNode) => promisingNode.minDist);
-
-        // dist map for shortest distance between
-        // a node [A] and the Start node [S]
-        let dist: Map<string, number> = new Map(), prev: Map<string, string> = new Map();
-
-        // Set of all visited nodes
-        let visited: Set<string> = new Set();
-
-        // Map of all visited Edges
-        let visitedEdges: Map<string, Set<string>> = new Map();
-
-        // First we set the value of distances from node [S]
-        // to any node [A] to infinity
-        this.graph.vertices().forEach((node) => {
-            node.getData() !== start ? dist.set(node.getData(), Infinity) : dist.set(start, 0);
-        });
-
-        // Enqueue the first node,
-        // this way we have a length of 1
-        // and least distance of 0.
-        PQ.enqueue({
-            info: {
-                label: start, srcLabel: start
-            }, minDist: 0
-        });
-
-        // While it is not empty,
-        // nodes should be dequeued from the
-        // PQ.
-        while (!PQ.isEmpty()) {
-
-            // get the Priority Object and deconstruct it
-            const {
-                info: {
-                    label, srcLabel
-                }, minDist
-            } = PQ.dequeue();
-
-            Algorithms.addVisitedEdge(visitedEdges, srcLabel, label);
-
-            // add it to visited so that
-            // we do not keep opening it.
-            visited.add(label);
-
-            // if the dist > minDist then
-            // we know that we can open it
-            // since we get a better route.
-            if (dist.get(label) < minDist)
-                continue;
-            // follow the BFS pattern
-            // we open every neighbour
-            // and explore it
-            // the ordering is based on their min dist
-            // hence a priority queue.
-            this.graph.vertices().get(label).getAdjVertices().forEach(edge => {
-
-                // first get the destination node
-                const dest = edge.dest.getData();
-
-                // if visited does not have destination
-                // then it means that it has not been explored
-                // hence there is merit in the fact that it might be
-                // helpful to open it.
-                if (!visited.has(dest)) {
-
-                    // new Dist will be the dist till now + the cost of moving from
-                    // the prev node to this node
-                    let newDist = dist.get(label) + edge.cost;
-
-                    // if new Dist < the current dist of the destination
-                    // then we add
-                    // this is bound to hit every node once
-                    // since starting value in distance for every node is
-                    // infinity.
-                    if (newDist < dist.get(dest)) {
-
-                        // we reference this node in case it is a part of the
-                        // path
-                        prev.set(dest, label);
-
-                        // update the distance from [S] to this node [A]
-                        dist.set(dest, newDist);
-
-                        // enqueue this for opening in terms of minDist.
-                        PQ.enqueue({
-                            info: {
-                                label: dest,
-                                srcLabel: label
-                            }, minDist: newDist
-                        });
-                    }
-                }
-            });
-
-            // if label is the same as end
-            // then we know that, there is a path
-            // and return all the items for reconstruction.
-            if (label === end) return [dist, prev, visited, visitedEdges];
-        }
-
-        // at this point, the end dist is Infinity
-        // thus we know that it has not been relaxed
-        // hence, we need to go about and just return everything to caller
-        // the caller has the ability to understand if
-        // the given end dist is Infinity or not.
-        return [dist, prev, visited, visitedEdges];
-    }
-
-    /**
      * Is a helper function on required for this project
      * It helps simplify front end by doing everything internally
      * It returns the relevant algorithm [ @see AlgoType ] for the startNode and endNode from global state
@@ -656,12 +381,12 @@ export default class Algorithms {
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
         const [path, visited, visitedEdges] = match(algoType)
-            .with(AlgoType.DIJKSTRAS_SEARCH, () => algo.dijkstras(startNodeId, endNodeId))
+            .with(AlgoType.DIJKSTRAS_SEARCH, () => dijkstras(graph, startNodeId, endNodeId))
             .with(AlgoType.A_STAR_SEARCH, () => algo.aStar(startNodeId, endNodeId))
             .with(AlgoType.BREADTH_FIRST_SEARCH, () => bfs(graph, startNodeId, endNodeId))
             .with(AlgoType.DEPTH_FIRST_SEARCH, () => dfs(graph, startNodeId, endNodeId))
             .with(AlgoType.BELLMAN_FORD, () => algo.bellmanFord(startNodeId, endNodeId))
-            .with(AlgoType.BEST_FIRST_SEARCH, () => algo.bestFirstSearch(startNodeId, endNodeId))
+            .with(AlgoType.BEST_FIRST_SEARCH, () => bestFirstSearch(graph, startNodeId, endNodeId))
             .otherwise(() => [NOTSET, NOTSET]);
         // @ts-ignore
         return {path, visited, visitedEdges}
@@ -714,8 +439,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.DIJKSTRAS_SEARCH, () => {
-                const [pathP1, visitedP1] = algo.dijkstras(startNodeId, bombNodeId);
-                const [pathP2, visitedP2] = algo.dijkstras(bombNodeId, endNodeId);
+                const [pathP1, visitedP1] = dijkstras(graph, startNodeId, bombNodeId);
+                const [pathP2, visitedP2] = dijkstras(graph, bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
@@ -732,8 +457,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.BEST_FIRST_SEARCH, () => {
-                const [pathP1, visitedP1] = algo.bestFirstSearch(startNodeId, bombNodeId);
-                const [pathP2, visitedP2] = algo.bestFirstSearch(bombNodeId, endNodeId);
+                const [pathP1, visitedP1] = bestFirstSearch(graph, startNodeId, bombNodeId);
+                const [pathP2, visitedP2] = bestFirstSearch(graph, bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
