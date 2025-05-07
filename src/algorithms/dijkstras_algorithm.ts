@@ -2,6 +2,8 @@ import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
 import Graph from "../visualise-graphs/ts/Graph";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
+import Edge from "../visualise-graphs/ts/Edge";
+import {Queue} from "queue-typescript";
 
 /**
  * Classic implementation of Dijkstras algorithm
@@ -13,7 +15,7 @@ import Algorithms from "../visualise-graphs/ts/Algorithms";
  * @param graph the graph to use for the algorithm
  * @returns a path | null [path if found, else] and visited inorder Set.
  */
-const dijkstras = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] => {
+const dijkstras = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Edge[]] => {
 
     // first get everything from the internal Dijkstra function
     const [dist, prev, visited, visitedEdges] = internalDijkstras(graph, start, end);
@@ -45,7 +47,7 @@ const dijkstras = (graph: Graph, start: string, end: string): [string[] | NOTSET
  * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes and, a Set for visited nodes inorder.
  */
 const internalDijkstras = (graph: Graph, start: string, end: string):
-    [Map<string, number>, Map<string, string>, Set<string>, Map<string, Set<string>>] => {
+    [Map<string, number>, Map<string, string>, Set<string>, Edge[]] => {
 
     // Creating a type to hold the important
     // properties for the Priority Queue.
@@ -69,7 +71,7 @@ const internalDijkstras = (graph: Graph, start: string, end: string):
     let visited: Set<string> = new Set();
 
     // Map of all visited Edges
-    let visitedEdges: Map<string, Set<string>> = new Map();
+    let visitedEdges= new Queue<Edge>();
 
     // First we set the value of distances from node [S]
     // to any node [A] to infinity
@@ -157,7 +159,7 @@ const internalDijkstras = (graph: Graph, start: string, end: string):
         // if label is the same as end
         // then we know that, there is a path
         // and return all the items for reconstruction.
-        if (label === end) return [dist, prev, visited, visitedEdges];
+        if (label === end) return [dist, prev, visited, visitedEdges.toArray()];
     }
 
     // at this point, the end dist is Infinity
@@ -165,7 +167,7 @@ const internalDijkstras = (graph: Graph, start: string, end: string):
     // hence, we need to go about and just return everything to caller
     // the caller has the ability to understand if
     // the given end dist is Infinity or not.
-    return [dist, prev, visited, visitedEdges];
+    return [dist, prev, visited, visitedEdges.toArray()];
 }
 
 export default dijkstras;

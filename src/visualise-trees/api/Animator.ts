@@ -1,37 +1,40 @@
 import useTreeStore from "../../stores/TreeStore";
 import Syncer from "./Syncer";
+import Edge from "../../visualise-graphs/ts/Edge";
 
 export default class Animator {
-    static async animateVisitedVertices(vertices: Set<string>, edges: Map<string, Set<string>>) {
+    static async animateVisitedVertices(vertices: Set<string>, edges: Edge[]) {
+        const finalVisitedEdges = new Map<string, Set<string>>();
+        for (const edge of edges) {
+            await Syncer.supervise(async () => {
+                const updatedVisitedVertices = new Set(useTreeStore.getState().visitedVertices);
+                const updatedVisitedEdges = new Map(useTreeStore.getState().visitedEdges);
 
-        for (const [nodeId, edgesVisited] of edges) {
-            for (const dest of edgesVisited) {
-                await Syncer.supervise(async () => {
-                    const updatedVisitedVertices = new Set(useTreeStore.getState().visitedVertices);
-                    const updatedVisitedEdges = new Map(useTreeStore.getState().visitedEdges);
+                if (!updatedVisitedVertices.has(edge.src))
+                    updatedVisitedVertices.add(edge.src);
 
-                    if (!updatedVisitedVertices.has(nodeId))
-                        updatedVisitedVertices.add(nodeId);
+                if (!updatedVisitedEdges.has(edge.src))
+                    updatedVisitedEdges.set(edge.src, new Set());
 
-                    if (!updatedVisitedEdges.has(nodeId))
-                        updatedVisitedEdges.set(nodeId, new Set());
+                if (!finalVisitedEdges.has(edge.src))
+                    finalVisitedEdges.set(edge.src, new Set());
 
-                    updatedVisitedEdges.get(nodeId)!.add(dest);
-                    updatedVisitedVertices.add(dest);
+                updatedVisitedEdges.get(edge.src)!.add(edge.dest);
+                finalVisitedEdges.get(edge.src)!.add(edge.dest);
+                updatedVisitedVertices.add(edge.dest);
 
-                    useTreeStore.setState({
-                        visitedVertices: updatedVisitedVertices,
-                        visitedEdges: updatedVisitedEdges
-                    });
-
-                    await new Promise(resolve => setTimeout(resolve, 500));
+                useTreeStore.setState({
+                    visitedVertices: updatedVisitedVertices,
+                    visitedEdges: updatedVisitedEdges
                 });
-            }
+
+                await new Promise(resolve => setTimeout(resolve, 500));
+            });
         }
 
 
         await Syncer.supervise(() => {
-            useTreeStore.setState({visitedVertices: vertices, visitedEdges: edges});
+            useTreeStore.setState({visitedVertices: vertices, visitedEdges: finalVisitedEdges});
         });
     }
 }

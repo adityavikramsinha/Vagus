@@ -1,6 +1,8 @@
 import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
 import Graph from "../visualise-graphs/ts/Graph";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
+import Edge from "../visualise-graphs/ts/Edge";
+import {Queue} from "queue-typescript";
 
 /**
  * Classic DFS which uses an internal function
@@ -11,7 +13,7 @@ import Algorithms from "../visualise-graphs/ts/Algorithms";
  * @param graph Graph to use.
  * @returns a path | null [path if found, else null] and an inorder Set of visited nodes.
  */
-const dfs = (graph:Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] => {
+const dfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Edge[]] => {
 
     // path is for the path to be returned
     // visited is for the Set of visited nodes in order
@@ -19,7 +21,7 @@ const dfs = (graph:Graph, start: string, end: string): [string[] | NOTSET_t, Set
     const path: string[] = [];
     const visited: Set<string> = new Set();
     const prev: Map<string, string> = new Map();
-    const visitedEdges: Map<string, Set<string>> = new Map();
+    const visitedEdges = new Queue<Edge>();
 
     /**
      * Internal function which recurses again and again,
@@ -74,6 +76,6 @@ const dfs = (graph:Graph, start: string, end: string): [string[] | NOTSET_t, Set
     // to check for length
     // if length ge 1, we know that there is a route
     // else not
-    return [(path.length > 0 ? path : NOTSET), visited, visitedEdges];
+    return [(path.length > 0 ? path : NOTSET), visited, visitedEdges.toArray()];
 }
 export default dfs;

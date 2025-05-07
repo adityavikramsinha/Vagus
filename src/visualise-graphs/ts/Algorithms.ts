@@ -7,6 +7,8 @@ import dijkstras from "../../algorithms/dijkstras_algorithm";
 import bestFirstSearch from "../../algorithms/best_first_search";
 import bellmanFord from "../../algorithms/bellman_ford";
 import aStar from "../../algorithms/a_star";
+import Edge from "./Edge";
+import {Queue} from "queue-typescript";
 
 /**
  * Main backbone of the whole backend.
@@ -25,11 +27,10 @@ export default class Algorithms {
      * @param to destination vertex/node
      * @private
      */
-    static addVisitedEdge(visitedEdges: Map<string, Set<string>>, from: string, to: string) {
-        if (!visitedEdges.has(from)) {
-            visitedEdges.set(from, new Set());
-        }
-        visitedEdges.get(from)!.add(to);
+    static addVisitedEdge(visitedEdges: Queue<Edge>, from: string, to: string) {
+        if (visitedEdges === null)
+            throw new Error("visitedEdges is null. DO NOT do this and fix it.");
+        visitedEdges.enqueue(new Edge(from , to , 0));
     }
 
     /**
@@ -49,7 +50,7 @@ export default class Algorithms {
     static runWithoutBombNode(algoType: AlgoType, startNodeId: string, endNodeId: string, graph = BackendStateManager.graph()): {
         path: string[] | NOTSET_t,
         visited: Set<string>,
-        visitedEdges: Map<string, Set<string>>
+        visitedEdges: Edge[]
     } {
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function

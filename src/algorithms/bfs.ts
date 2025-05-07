@@ -2,6 +2,7 @@ import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
 import {Queue} from "queue-typescript";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
 import Graph from "../visualise-graphs/ts/Graph";
+import Edge from "../visualise-graphs/ts/Edge";
 
 /**
  * Classic Breadth-first search algorithm which
@@ -13,7 +14,7 @@ import Graph from "../visualise-graphs/ts/Graph";
  * @returns an array containing the path | null [path is given if it is found, else null] and a Set of
  * visited nodes inorder while trying to find the path.
  */
-const bfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] => {
+const bfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Edge[]] => {
 
     // first initialise all the variables
     // visited is the nodes that are visited in the process
@@ -24,7 +25,7 @@ const bfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Se
     const visited: Set<string> = new Set();
     const prev: Map<string, string> = new Map();
     const path: string[] = [];
-    const visitedEdges: Map<string, Set<string>> = new Map();
+    const visitedEdges = new Queue<Edge>();
     const Q = new Queue<string>();
 
     // Enqueue the first one
@@ -51,7 +52,7 @@ const bfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Se
                 path.unshift(at);
 
             // return path and visited inorder
-            return [path, visited, visitedEdges];
+            return [path, visited, visitedEdges.toArray()];
         }
 
         // if end has not been found
@@ -86,6 +87,6 @@ const bfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Se
     // neighbour of any node
     // thus, no path should exist
     // hence, we return null and just visited set
-    return [NOTSET, visited, visitedEdges];
+    return [NOTSET, visited, visitedEdges.toArray()];
 }
 export default bfs;

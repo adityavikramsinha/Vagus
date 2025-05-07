@@ -1,6 +1,8 @@
 import Graph from "../visualise-graphs/ts/Graph";
 import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
+import Edge from "../visualise-graphs/ts/Edge";
+import {Queue} from "queue-typescript";
 
 /**
  * Classic bellman ford to find negative cycles
@@ -11,7 +13,7 @@ import Algorithms from "../visualise-graphs/ts/Algorithms";
  * @param end ending ID
  * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
  */
-const bellmanFord =( graph : Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] => {
+const bellmanFord =( graph : Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Edge[]] => {
 
     // First get all the data from internal bellman ford
     // we get dist to understand if last node [end] was relaxed or not
@@ -44,7 +46,7 @@ const bellmanFord =( graph : Graph, start: string, end: string): [string[] | NOT
  * a Map of previous nodes to construct a path and,
  * a Set of visited nodes.
  */
-const internalBellmanFord = (graph : Graph, start: string): [Map<string, number>, Map<string, string>, Set<string>, Map<string, Set<string>>]=>{
+const internalBellmanFord = (graph : Graph, start: string): [Map<string, number>, Map<string, string>, Set<string>, Edge[]]=>{
 
     // dist is for the possibility of relaxation
     // this also signifies if a path from the start -> end
@@ -58,7 +60,7 @@ const internalBellmanFord = (graph : Graph, start: string): [Map<string, number>
     // Map to help in path reconstruction
     let prev: Map<string, string> = new Map();
 
-    const visitedEdges: Map<string, Set<string>> = new Map();
+    const visitedEdges= new Queue<Edge>();
     // Set all the dist to Infinity
     // minus the start node
     graph.vertices().forEach((node) => {
@@ -114,7 +116,7 @@ const internalBellmanFord = (graph : Graph, start: string): [Map<string, number>
     }
 
     // return everything that was promised.
-    return [dist, prev, visited, visitedEdges];
+    return [dist, prev, visited, visitedEdges.toArray()];
 }
 
 export default bellmanFord;
