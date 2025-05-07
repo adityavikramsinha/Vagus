@@ -102,45 +102,28 @@ export default class AlgorithmRunner {
                 visitedP2.add(nodeId);
             }
         };
-        // @ts-ignore
-        return match(algoType)
-            .with(AlgoType.A_STAR_SEARCH, () => {
-                const path = AlgorithmRunner.joinBombNodePath(aStar(inputsTillBombNode),
-                    aStar(inputsTillEndNode));
-                return {path, visitedP1, visitedP2};
-            })
-            .with(AlgoType.BREADTH_FIRST_SEARCH, () => {
-                const path = AlgorithmRunner.joinBombNodePath(bfs(inputsTillBombNode),
-                    bfs(inputsTillEndNode));
-                return {path, visitedP1, visitedP2};
-            })
-            .with(AlgoType.BELLMAN_FORD, () => {
-                const path = AlgorithmRunner.joinBombNodePath(bellmanFord(inputsTillBombNode),
-                    bellmanFord(inputsTillEndNode));
-                return {path, visitedP1, visitedP2};
-            })
-            .with(AlgoType.DIJKSTRAS_SEARCH, () => {
-                const path = AlgorithmRunner.joinBombNodePath(dijkstras(inputsTillBombNode),
-                    dijkstras(inputsTillEndNode));
-                return {path, visitedP1, visitedP2};
-            })
-            .with(AlgoType.DEPTH_FIRST_SEARCH, () => {
-                const path = AlgorithmRunner.joinBombNodePath(dfs(inputsTillBombNode),
-                    dfs(inputsTillEndNode));
-                return {path, visitedP1, visitedP2};
-            })
-            .with(AlgoType.BEST_FIRST_SEARCH, () => {
-                const path = AlgorithmRunner.joinBombNodePath(bestFirstSearch(inputsTillBombNode),
-                    bestFirstSearch(inputsTillEndNode));
-                return {path, visitedP1, visitedP2};
-            })
-            .otherwise(() => {
-                console.error(
-                    "Internal error, the algorithm selected does not match with the algorithms possible");
-                return {
-                    path: NOTSET as NOTSET_t, visitedP1: new Set<string>(),
-                    visitedP2: new Set<string>()
-                };
-            });
+
+        const path: NOTSET_t | string [] = match(algoType)
+            .with(AlgoType.A_STAR_SEARCH,
+                () => AlgorithmRunner.joinBombNodePath(aStar(inputsTillBombNode),
+                    aStar(inputsTillEndNode)))
+            .with(AlgoType.BREADTH_FIRST_SEARCH,
+                () => AlgorithmRunner.joinBombNodePath(bfs(inputsTillBombNode),
+                    bfs(inputsTillEndNode)))
+            .with(AlgoType.BELLMAN_FORD,
+                () => AlgorithmRunner.joinBombNodePath(bellmanFord(inputsTillBombNode),
+                    bellmanFord(inputsTillEndNode)))
+            .with(AlgoType.DIJKSTRAS_SEARCH,
+                () => AlgorithmRunner.joinBombNodePath(dijkstras(inputsTillBombNode),
+                    dijkstras(inputsTillEndNode)))
+            .with(AlgoType.DEPTH_FIRST_SEARCH,
+                () => AlgorithmRunner.joinBombNodePath(dfs(inputsTillBombNode),
+                    dfs(inputsTillEndNode)))
+            .with(AlgoType.BEST_FIRST_SEARCH,
+                () => AlgorithmRunner.joinBombNodePath(bestFirstSearch(inputsTillBombNode),
+                    bestFirstSearch(inputsTillEndNode)))
+            .otherwise(() => NOTSET);
+
+        return {path, visitedP1, visitedP2}
     }
 }
