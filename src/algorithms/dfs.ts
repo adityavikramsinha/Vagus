@@ -1,4 +1,4 @@
-import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 import Graph from "../visualise-graphs/ts/Graph";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
 import Edge from "../visualise-graphs/ts/Edge";
@@ -13,7 +13,7 @@ import {Queue} from "queue-typescript";
  * @param graph Graph to use.
  * @returns a path | null [path if found, else null] and an inorder Set of visited nodes.
  */
-const dfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Edge[]] => {
+const dfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => {
 
     // path is for the path to be returned
     // visited is for the Set of visited nodes in order

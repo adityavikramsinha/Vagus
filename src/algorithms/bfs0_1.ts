@@ -2,7 +2,7 @@ import Graph from "../visualise-graphs/ts/Graph";
 import {Queue} from "queue-typescript";
 import Edge from "../visualise-graphs/ts/Edge";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
-import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 
 type DQ_t = {
     label: {
@@ -122,7 +122,7 @@ const internalBfs0_1 = (graph: Graph, start: string, end: string)
  * @param end end vertex
  */
 const bfs0_1 = (graph: Graph, start: string, end: string)
-    : [string[] | NOTSET_t, Set<string>, Edge[]] => {
+    : AlgorithmApiReturn_t => {
 
     // first get everything from the internal Dijkstra function
     const [dist, prev, visited, visitedEdges] = internalBfs0_1(graph, start, end);

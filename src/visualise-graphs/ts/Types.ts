@@ -1,3 +1,5 @@
+import Edge from "./Edge";
+
 /**
  * Contains the algo-types for the website
  */
@@ -16,7 +18,7 @@ export enum AlgoType {
 export const NOTSET: unique symbol  = Symbol("__NOTSET__") ;
 export type NOTSET_t = typeof NOTSET;
 
-
+export type AlgorithmApiReturn_t = [string[] | NOTSET_t, Set<string>, Edge[]];
 /**
  * Contains the maze generation types for the website
  */

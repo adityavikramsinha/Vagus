@@ -1,4 +1,4 @@
-import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 import {Queue} from "queue-typescript";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
 import Graph from "../visualise-graphs/ts/Graph";
@@ -14,7 +14,7 @@ import Edge from "../visualise-graphs/ts/Edge";
  * @returns an array containing the path | null [path is given if it is found, else null] and a Set of
  * visited nodes inorder while trying to find the path.
  */
-const bfs = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Edge[]] => {
+const bfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t=> {
 
     // first initialise all the variables
     // visited is the nodes that are visited in the process

@@ -1,4 +1,4 @@
-import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 import Graph from "../visualise-graphs/ts/Graph";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
@@ -15,7 +15,7 @@ import {Queue} from "queue-typescript";
  * @param graph the graph to use for the algorithm
  * @returns a path | null [path if found, else] and visited inorder Set.
  */
-const dijkstras = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Edge[]] => {
+const dijkstras = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => {
 
     // first get everything from the internal Dijkstra function
     const [dist, prev, visited, visitedEdges] = internalDijkstras(graph, start, end);

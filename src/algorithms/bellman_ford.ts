@@ -1,5 +1,5 @@
 import Graph from "../visualise-graphs/ts/Graph";
-import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
+import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
 import Edge from "../visualise-graphs/ts/Edge";
 import {Queue} from "queue-typescript";
@@ -13,7 +13,7 @@ import {Queue} from "queue-typescript";
  * @param end ending ID
  * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
  */
-const bellmanFord =( graph : Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>, Edge[]] => {
+const bellmanFord = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => {
 
     // First get all the data from internal bellman ford
     // we get dist to understand if last node [end] was relaxed or not
@@ -46,7 +46,7 @@ const bellmanFord =( graph : Graph, start: string, end: string): [string[] | NOT
  * a Map of previous nodes to construct a path and,
  * a Set of visited nodes.
  */
-const internalBellmanFord = (graph : Graph, start: string): [Map<string, number>, Map<string, string>, Set<string>, Edge[]]=>{
+const internalBellmanFord = (graph: Graph, start: string): [Map<string, number>, Map<string, string>, Set<string>, Edge[]] => {
 
     // dist is for the possibility of relaxation
     // this also signifies if a path from the start -> end
@@ -60,7 +60,7 @@ const internalBellmanFord = (graph : Graph, start: string): [Map<string, number>
     // Map to help in path reconstruction
     let prev: Map<string, string> = new Map();
 
-    const visitedEdges= new Queue<Edge>();
+    const visitedEdges = new Queue<Edge>();
     // Set all the dist to Infinity
     // minus the start node
     graph.vertices().forEach((node) => {
