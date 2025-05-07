@@ -2,9 +2,9 @@ import BackendStateManager from "@tree/api/BackendStateManager";
 import useTreeStore from "@/stores/TreeStore";
 import Animator from "@tree/api/Animator";
 import {match} from "ts-pattern";
-import Algorithms from "@graph/ts/Algorithms";
 import {AlgoType, NOTSET} from "@graph/ts/Types";
 import {Exception, StartButtonError} from "@/components/action-buttons/StartButton";
+import AlgorithmRunner from "../../api/AlgorithmRunner";
 
 
 /**
@@ -16,9 +16,9 @@ import {Exception, StartButtonError} from "@/components/action-buttons/StartButt
 const runAlgorithmAnimation = async (algoType: AlgoType,
                                      startNodeId: string, endNodeId: string) => {
     useTreeStore.setState({block: true, executing: true});
-    const {film} = Algorithms.runWithoutBombNode(
-        algoType, startNodeId, endNodeId, BackendStateManager.graph)
-    await Animator.animateVisitedVertices(film)
+    const {scene} = AlgorithmRunner.run(
+        algoType, startNodeId, endNodeId, BackendStateManager.graph);
+    await Animator.animateVisitedVertices(scene)
     useTreeStore.setState({block: false, executing: false})
 }
 
@@ -47,12 +47,14 @@ const validateAndRun = () => {
         .with('ts-3', async () => runAlgorithmAnimation(AlgoType.BELLMAN_FORD, startId, endId))
         .with('ts-4',
             async () => runAlgorithmAnimation(AlgoType.DEPTH_FIRST_SEARCH, startId, endId))
-        .with('ts-5', async () => runAlgorithmAnimation(AlgoType.ZERO_ONE_BREADTH_FIRST_SEARCH, startId, endId))
+        .with('ts-5',
+            async () => runAlgorithmAnimation(AlgoType.ZERO_ONE_BREADTH_FIRST_SEARCH, startId,
+                endId))
     return null;
 }
 
 
-export const handleStartButtonClick = () : StartButtonError | null => {
+export const handleStartButtonClick = (): StartButtonError | null => {
     const err = validateAndRun();
 
     return match(err)

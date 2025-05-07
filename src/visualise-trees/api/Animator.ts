@@ -2,6 +2,7 @@ import useTreeStore from "../../stores/TreeStore";
 import Syncer from "./Syncer";
 import Edge from "../../visualise-graphs/ts/Edge";
 import {match} from "ts-pattern";
+import {Queue} from "queue-typescript";
 
 
 export enum AnimationType {
@@ -21,8 +22,7 @@ type VisitEdgeAnimation = {
 export type AnimationSequence = VisitNodeAnimation | VisitEdgeAnimation;
 
 export default class Animator {
-    static async animateVisitedVertices(film: AnimationSequence[]) {
-        const finalVisitedEdges = new Map<string, Set<string>>();
+    static async animateVisitedVertices(film: Queue<AnimationSequence>) {
         for (const sequence of film) {
             await Syncer.supervise(async () => {
                 match(sequence.type)
@@ -31,10 +31,7 @@ export default class Animator {
                         const edge = sequence.payload as Edge;
                         if (!updatedVisitedEdges.has(edge.src))
                             updatedVisitedEdges.set(edge.src, new Set());
-                        if (!finalVisitedEdges.has(edge.src))
-                            finalVisitedEdges.set(edge.src, new Set());
                         updatedVisitedEdges.get(edge.src)!.add(edge.dest);
-                        finalVisitedEdges.get(edge.src)!.add(edge.dest);
                         useTreeStore.setState({visitedEdges: updatedVisitedEdges});
                     })
                     .with(AnimationType.VISIT_NODE, () => {

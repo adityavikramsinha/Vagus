@@ -8,7 +8,6 @@ import bestFirstSearch from "../../algorithms/best_first_search";
 import bellmanFord from "../../algorithms/bellman_ford";
 import aStar from "../../algorithms/a_star";
 import bfs0_1 from "../../algorithms/bfs0_1";
-import {AnimationSequence, AnimationType} from "../../visualise-trees/api/Animator";
 
 /**
  * Main backbone of the whole backend.
@@ -17,7 +16,7 @@ import {AnimationSequence, AnimationType} from "../../visualise-trees/api/Animat
  *
  * @author aditya, <adityavikramsinha19@gmail.com>
  */
-export default class Algorithms {
+export default class AlgorithmRunner {
 
     /**
      * Is a helper function on required for this project
@@ -36,26 +35,16 @@ export default class Algorithms {
     static runWithoutBombNode(algoType: AlgoType, startNodeId: string, endNodeId: string, graph = BackendStateManager.graph()): {
         path: string[] | NOTSET_t,
         visited: Set<string>,
-        film: AnimationSequence[]
     } {
         const visited = new Set<string>();
-        const film: AnimationSequence [] = []
         const inputs: AlgorithmApiInputs_t = {
             graph,
             startNodeId,
             endNodeId,
-            edgeAction: (edge) => {
-                film.push({
-                    type: AnimationType.VISIT_EDGE,
-                    payload: edge
-                })
+            edgeAction: (_) => {
             },
             nodeAction: (nodeId) => {
                 visited.add(nodeId);
-                film.push({
-                    type: AnimationType.VISIT_NODE,
-                    payload: nodeId
-                })
             }
         };
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
@@ -70,7 +59,7 @@ export default class Algorithms {
             .with(AlgoType.BEST_FIRST_SEARCH, () => bestFirstSearch(inputs))
             .otherwise(() => [NOTSET, NOTSET]);
         // @ts-ignore
-        return {path, visited, film}
+        return {path, visited}
     }
 
     /**
@@ -160,7 +149,7 @@ export default class Algorithms {
                 const [pathP2] = bestFirstSearch(inputsTillEndNode);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
-                        ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
+                        ? pathP1.concat(pathP2).slice(1)
                         : NOTSET as NOTSET_t;
                 return {path, visitedP1, visitedP2};
             })

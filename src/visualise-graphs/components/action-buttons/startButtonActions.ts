@@ -1,7 +1,7 @@
 import useGraphStore, {NodeType} from "@/stores/GraphStore";
 import Pipe from "@graph/api/Pipe";
 import Syncer from "@graph/api/Syncer";
-import Algorithms from "@graph/ts/Algorithms";
+import AlgorithmRunner from "../../ts/AlgorithmRunner";
 import {AlgoType, NOTSET, NOTSET_t} from "@graph/ts/Types";
 import {match, P} from "ts-pattern";
 import BackendStateManager from "@graph/api/BackendStateManager";
@@ -33,7 +33,7 @@ const runAlgorithmAnimation = async (
     // that watch for the 'executing' state.
     useGraphStore.setState({executing: true});
     if (bombNodeId === NOTSET) {
-        const {path, visited} = Algorithms.runWithoutBombNode(
+        const {path, visited} = AlgorithmRunner.runWithoutBombNode(
             type,
             startNodeId,
             endNodeId
@@ -45,7 +45,7 @@ const runAlgorithmAnimation = async (
         useGraphStore.setState({block: false});
         useGraphStore.setState({executing: false});
     } else {
-        const {path, visitedP1, visitedP2} = Algorithms.runWithBombNode(
+        const {path, visitedP1, visitedP2} = AlgorithmRunner.runWithBombNode(
             type,
             startNodeId,
             endNodeId,

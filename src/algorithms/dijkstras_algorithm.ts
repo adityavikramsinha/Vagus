@@ -1,7 +1,7 @@
 import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 import Graph from "../visualise-graphs/ts/Graph";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
-import Algorithms from "../visualise-graphs/ts/Algorithms";
+import AlgorithmRunner from "../visualise-graphs/ts/AlgorithmRunner";
 import Edge from "../visualise-graphs/ts/Edge";
 import {Queue} from "queue-typescript";
 
