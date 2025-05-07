@@ -2,8 +2,9 @@ import Graph from './Graph';
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 import {AlgoType, NOTSET, NOTSET_t} from "./Types";
 import BackendStateManager from "../api/BackendStateManager";
-import {Queue} from "queue-typescript";
 import {match} from "ts-pattern";
+import bfs from "./algorithms/bfs"
+import dfs from './algorithms/dfs';
 
 /**
  * Main backbone of the whole backend.
@@ -45,170 +46,11 @@ export default class Algorithms {
      * @param to destination vertex/node
      * @private
      */
-    private static addVisitedEdge(visitedEdges: Map<string, Set<string>>, from: string, to: string) {
+    static addVisitedEdge(visitedEdges: Map<string, Set<string>>, from: string, to: string) {
         if (!visitedEdges.has(from)) {
             visitedEdges.set(from, new Set());
         }
         visitedEdges.get(from)!.add(to);
-    }
-
-    /**
-     * Classic Breadth-first search algorithm which
-     * is unweighted.
-     *
-     * @param start the starting ID on the graph
-     * @param end the end ID on the graph
-     * @returns an array containing the path | null [path is given if it is found, else null] and a Set of
-     * visited nodes inorder while trying to find the path.
-     */
-    bfs(start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string, Set<string>>] {
-
-        // first initialise all the variables
-        // visited is the nodes that are visited in the process
-        // prev is to keep track of the
-        // path is the actual path
-        // visitedEdges keeps a track of the edges that were visited.
-        // Q is a queue which performs the FIFO operation
-        const visited: Set<string> = new Set();
-        const prev: Map<string, string> = new Map();
-        const path: string[] = [];
-        const visitedEdges: Map<string, Set<string>> = new Map();
-        const Q = new Queue<string>();
-
-        // Enqueue the first one
-        Q.enqueue(start);
-
-        // While the length of the Queue is not 0
-        // We keep on going.
-        while (Q.length !== 0) {
-
-            // We first get the present node instance from the graph.
-            let node = this.graph.vertices().get(Q.dequeue());
-
-            // then we add that node to visited set.
-            visited.add(node.getData());
-
-            // if the nodes data is the same as end id,
-            // we know we have reached a path
-            // therefore we just give it out as is and
-            // stop the function
-            if (node.getData() === end) {
-
-                // construct the path
-                for (let at = end; at !== undefined; at = prev.get(at))
-                    path.unshift(at);
-
-                // return path and visited inorder
-                return [path, visited, visitedEdges];
-            }
-
-            // if end has not been found
-            // we keep going over all the neighbours of this noe
-            // in order
-            // this is the reason it is called breadth-first-search
-            // we keep opening all the neighbours, gives the search
-            // a cyclic effect.
-            node.getAdjVertices().forEach(edge => {
-                // if we have already visited it, we do not need to
-                // because it means that it is already added to the visited section
-                // and was a part of the queue.
-                const destId = edge.dest.getData();
-                if (!visited.has(destId)) {
-
-                    // added it to visited set.
-                    visited.add(destId);
-
-                    // set prev
-                    prev.set(destId, node.getData());
-
-                    // add it to the queue since this means that
-                    // we have to open this node again sometime later.
-                    Q.enqueue(destId);
-                    Algorithms.addVisitedEdge(visitedEdges, node.getData(), destId);
-                }
-            });
-        }
-
-        // if the code has reached here then
-        // we can safely assume that end was not a
-        // neighbour of any node
-        // thus, no path should exist
-        // hence, we return null and just visited set
-        return [NOTSET, visited, visitedEdges];
-    }
-
-    /**
-     * Classic DFS which uses an internal function
-     * to do recursion
-     *
-     * @param start starting id of the path
-     * @param end ending id of the path
-     * @returns a path | null [path if found, else null] and an inorder Set of visited nodes.
-     */
-    dfs(start: string, end: string): [string[] | NOTSET_t, Set<string>, Map<string,  Set<string>>] {
-
-        // path is for the path to be returned
-        // visited is for the Set of visited nodes in order
-        // prev is to construct a path.
-        const path: string[] = [];
-        const visited: Set<string> = new Set();
-        const prev: Map<string, string> = new Map();
-        const visitedEdges : Map<string , Set<string>> = new Map();
-
-        /**
-         * Internal function which recurses again and again,
-         * thus helping in DFS.
-         * This modifies the parent level variables and hence,
-         * has no return
-         *
-         * @param at the present node id for iteration
-         * @param parent
-         */
-        const internalDfs = (at: string, parent: string): void => {
-
-            // First check if visited has this or not
-            // because if it does then it means that
-            // we have already opened this node and explored
-            // it in-depth.
-            if (!visited.has(at)) {
-
-                // add the node if not visited
-                visited.add(at);
-
-                // setting prev for the path stuff
-                prev.set(at, parent);
-
-                // if not found then keep opening
-                // descendent
-                if (at !== end) {
-                    this.graph.vertices().get(at).getAdjVertices().forEach(edge => {
-                        // add to list of visited Edges
-                        Algorithms.addVisitedEdge(visitedEdges, at , edge.dest.getData())
-                        internalDfs(edge.dest.getData(), at);
-                    });
-                }
-
-                // if found then we just construct the path
-                // and leave
-                else {
-                    // reconstruct path from the given prev Set
-                    for (let at = end; at !== undefined; at = prev.get(at))
-                        path.unshift(at);
-                    return;
-                }
-            }
-        }
-
-        // call function once to start
-        // with undefined as starts "ancestor"
-        // this may help in reconstructing path
-        internalDfs(start, undefined);
-
-        // just do a simple ternary
-        // to check for length
-        // if length ge 1, we know that there is a route
-        // else not
-        return [(path.length > 0 ? path : NOTSET), visited, visitedEdges];
     }
 
     /**
@@ -318,7 +160,7 @@ export default class Algorithms {
      * a Map of previous nodes to construct a path and,
      * a Set of visited nodes.
      */
-    internalBellmanFord(start: string): [Map<string, number>, Map<string, string>, Set<string>, Map<string,  Set<string>>] {
+    internalBellmanFord(start: string): [Map<string, number>, Map<string, string>, Set<string>, Map<string, Set<string>>] {
 
         // dist is for the possibility of relaxation
         // this also signifies if a path from the start -> end
@@ -332,7 +174,7 @@ export default class Algorithms {
         // Map to help in path reconstruction
         let prev: Map<string, string> = new Map();
 
-        const visitedEdges : Map<string , Set<string>> = new Map();
+        const visitedEdges: Map<string, Set<string>> = new Map();
         // Set all the dist to Infinity
         // minus the start node
         this.graph.vertices().forEach((node) => {
@@ -816,8 +658,8 @@ export default class Algorithms {
         const [path, visited, visitedEdges] = match(algoType)
             .with(AlgoType.DIJKSTRAS_SEARCH, () => algo.dijkstras(startNodeId, endNodeId))
             .with(AlgoType.A_STAR_SEARCH, () => algo.aStar(startNodeId, endNodeId))
-            .with(AlgoType.BREADTH_FIRST_SEARCH, () => algo.bfs(startNodeId, endNodeId))
-            .with(AlgoType.DEPTH_FIRST_SEARCH, () => algo.dfs(startNodeId, endNodeId))
+            .with(AlgoType.BREADTH_FIRST_SEARCH, () => bfs(graph, startNodeId, endNodeId))
+            .with(AlgoType.DEPTH_FIRST_SEARCH, () => dfs(graph, startNodeId, endNodeId))
             .with(AlgoType.BELLMAN_FORD, () => algo.bellmanFord(startNodeId, endNodeId))
             .with(AlgoType.BEST_FIRST_SEARCH, () => algo.bestFirstSearch(startNodeId, endNodeId))
             .otherwise(() => [NOTSET, NOTSET]);
@@ -836,7 +678,8 @@ export default class Algorithms {
         algoType: AlgoType,
         startNodeId: string,
         endNodeId: string,
-        bombNodeId: string
+        bombNodeId: string,
+        graph = BackendStateManager.graph()
     ): { path: string[] | NOTSET_t, visitedP1: Set<string>, visitedP2: Set<string> } {
         // getting an algorithm instance for ease of running
         let algo = new Algorithms(BackendStateManager.graph());
@@ -853,8 +696,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.BREADTH_FIRST_SEARCH, () => {
-                const [pathP1, visitedP1] = algo.bfs(startNodeId, bombNodeId);
-                const [pathP2, visitedP2] = algo.bfs(bombNodeId, endNodeId);
+                const [pathP1, visitedP1] = bfs(graph, startNodeId, bombNodeId);
+                const [pathP2, visitedP2] = bfs(graph, bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
@@ -880,8 +723,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.DEPTH_FIRST_SEARCH, () => {
-                const [pathP1, visitedP1] = algo.dfs(startNodeId, bombNodeId);
-                const [pathP2, visitedP2] = algo.dfs(bombNodeId, endNodeId);
+                const [pathP1, visitedP1] = dfs(graph, startNodeId, bombNodeId);
+                const [pathP2, visitedP2] = dfs(graph, bombNodeId, endNodeId);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
