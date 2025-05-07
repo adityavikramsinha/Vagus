@@ -17,7 +17,7 @@ const bellmanFord = ({
     // we get dist to understand if last node [end] was relaxed or not
     // if it was then we can construct a path
     // else we return null since that means there is not a single path
-    const [dist, prev, visited] = internalBellmanFord(
+    const [dist, prev] = internalBellmanFord(
         {graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // path array
@@ -25,7 +25,7 @@ const bellmanFord = ({
 
     // checking for if the last node [end] was relaxed or not
     if (dist.get(endNodeId) === Infinity)
-        return [NOTSET, visited];
+        return [NOTSET];
 
     // path reconstruction
     for (let at = endNodeId; at !== undefined; at = prev.get(at))
@@ -34,7 +34,7 @@ const bellmanFord = ({
     // return path
     // which is guaranteed to be the shortest path
     // in the graph from start->end.
-    return [path, visited];
+    return [path];
 }
 
 /**
@@ -47,7 +47,7 @@ const bellmanFord = ({
  */
 const internalBellmanFord = ({
                                  graph, startNodeId, endNodeId, nodeAction, edgeAction
-                             }: AlgorithmApiInputs_t): [Map<string, number>, Map<string, string>, Set<string>] => {
+                             }: AlgorithmApiInputs_t): [Map<string, number>, Map<string, string>] => {
 
     // dist is for the possibility of relaxation
     // this also signifies if a path from the start -> end
@@ -116,7 +116,7 @@ const internalBellmanFord = ({
     }
 
     // return everything that was promised.
-    return [dist, prev, visited];
+    return [dist, prev];
 }
 
 export default bellmanFord;

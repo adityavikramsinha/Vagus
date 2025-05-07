@@ -21,7 +21,7 @@ import {Queue} from "queue-typescript";
 const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
 
     // first get everything from the internal Dijkstra function
-    const [dist, prev, visited] = internalDijkstras({graph, startNodeId, endNodeId, nodeAction, edgeAction});
+    const [dist, prev] = internalDijkstras({graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // the rest is just finding the path to use.
     let path: string[] = [];
@@ -30,7 +30,7 @@ const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : Alg
     // we know path is not found.
     // directly return
     if (dist.get(endNodeId) === Infinity)
-        return [NOTSET, visited];
+        return [NOTSET];
 
     // if it is not null,
     // we know there must be a path that exists
@@ -38,7 +38,7 @@ const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : Alg
     for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
 
     // return reconstructed path.
-    return [path, visited];
+    return [path];
 }
 
 /**
@@ -52,7 +52,7 @@ const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : Alg
  * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes and, a Set for visited nodes inorder.
  */
 const internalDijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : AlgorithmApiInputs_t):
-    [Map<string, number>, Map<string, string>, Set<string>] => {
+    [Map<string, number>, Map<string, string>] => {
 
     // Creating a type to hold the important
     // properties for the Priority Queue.
@@ -161,7 +161,7 @@ const internalDijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeActio
         // if label is the same as end
         // then we know that, there is a path
         // and return all the items for reconstruction.
-        if (label === endNodeId) return [dist, prev, visited];
+        if (label === endNodeId) return [dist, prev];
     }
 
     // at this point, the end dist is Infinity
@@ -169,7 +169,7 @@ const internalDijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeActio
     // hence, we need to go about and just return everything to caller
     // the caller has the ability to understand if
     // the given end dist is Infinity or not.
-    return [dist, prev, visited];
+    return [dist, prev];
 }
 
 export default dijkstras;

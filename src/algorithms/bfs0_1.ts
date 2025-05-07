@@ -55,7 +55,7 @@ class DoubleQ {
 const internalBfs0_1 = ({
                             graph, startNodeId, endNodeId, nodeAction, edgeAction
                         }: AlgorithmApiInputs_t)
-    : [Map<string, number>, Map<string, string>, Set<string>] => {
+    : [Map<string, number>, Map<string, string>] => {
 
     // set of visited nodes IN_ORDER
     // has a Queue of visited Edges (more efficient)
@@ -107,11 +107,11 @@ const internalBfs0_1 = ({
 
         // premature return if we find the end
         if (label.to === endNodeId)
-            return [dist, prev, visited]
+            return [dist, prev]
     }
 
     // return all data from API.
-    return [dist, prev, visited]
+    return [dist, prev]
 }
 
 /**
@@ -125,7 +125,7 @@ const bfs0_1 = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: Algorit
     : AlgorithmApiReturn_t => {
 
     // first get everything from the internal Dijkstra function
-    const [dist, prev, visited] = internalBfs0_1(
+    const [dist, prev] = internalBfs0_1(
         {graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // the rest is just finding the path to use.
@@ -135,7 +135,7 @@ const bfs0_1 = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: Algorit
     // we know path is not found.
     // directly return
     if (dist.get(endNodeId) === Infinity)
-        return [NOTSET, visited];
+        return [NOTSET];
 
     // if it is not null,
     // we know there must be a path that exists
@@ -143,7 +143,7 @@ const bfs0_1 = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: Algorit
     for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
 
     // return reconstructed path.
-    return [path, visited];
+    return [path];
 }
 
 export default bfs0_1;

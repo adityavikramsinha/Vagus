@@ -51,7 +51,7 @@ const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmA
                 path.unshift(at);
 
             // return path and visited inorder
-            return [path, visited];
+            return [path];
         }
 
         // if end has not been found
@@ -90,6 +90,6 @@ const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmA
     // neighbour of any node
     // thus, no path should exist
     // hence, we return null and just visited set
-    return [NOTSET, visited];
+    return [NOTSET];
 }
 export default bfs;

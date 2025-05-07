@@ -18,7 +18,7 @@ import {MinPriorityQueue} from "@datastructures-js/priority-queue";
  */
 const internalAStar = ({
                            graph, startNodeId, endNodeId, nodeAction, edgeAction
-                       }: AlgorithmApiInputs_t): [Map<string, number>, Map<string, string>, Set<string>] => {
+                       }: AlgorithmApiInputs_t): [Map<string, number>, Map<string, string>] => {
 
     // created type to have
     // in the Priority Queue
@@ -117,12 +117,12 @@ const internalAStar = ({
         // if label is end
         // then path has been found
         // we directly return
-        if (label === endNodeId) return [dist, prev, visited];
+        if (label === endNodeId) return [dist, prev];
     }
 
     // right now its confirmed that we have no
     // potential path
-    return [dist, prev, visited];
+    return [dist, prev];
 }
 
 /**
@@ -142,7 +142,7 @@ const aStar = ({
     // dist is the distance from start [S]-> every node [A] which is reachable
     // prev is required to reconstruct path
     // visited is the set of nodes visited in order
-    const [dist, prev, visited] = internalAStar(
+    const [dist, prev] = internalAStar(
         {graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // this is just to reconstruct the path for a*;
@@ -152,7 +152,7 @@ const aStar = ({
     // we automatically understand no path is possible
     // thus, return null
     if (dist.get(endNodeId) === Infinity)
-        return [NOTSET, visited];
+        return [NOTSET];
 
     // reconstruct path
     // after that just return
@@ -161,7 +161,7 @@ const aStar = ({
 
     // we are sure path exists
     // so we just return it.
-    return [path, visited];
+    return [path];
 }
 
 export default aStar;

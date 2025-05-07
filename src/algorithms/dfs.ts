@@ -73,6 +73,6 @@ const dfs = ({
     // to check for length
     // if length ge 1, we know that there is a route
     // else not
-    return [(path.length > 0 ? path : NOTSET), visited];
+    return [(path.length > 0 ? path : NOTSET)];
 }
 export default dfs;

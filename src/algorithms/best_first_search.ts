@@ -24,13 +24,13 @@ const bestFirstSearch = ({
     // prev is for path deconstruction and ,
     // visited in order is for
     // visualisation
-    let [prev, visited] = internalBestFirstSearch(
+    let prev = internalBestFirstSearch(
         {graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // if prev is null then we know that
     // there is no path
     if (prev === NOTSET)
-        return [NOTSET, visited];
+        return [NOTSET];
 
     // path array
     let path: string[] = [];
@@ -40,7 +40,7 @@ const bestFirstSearch = ({
         path.unshift(at);
 
     // return the path since it exists.
-    return [path, visited];
+    return [path];
 }
 /**
  * Implementation of best first search greedy mechanism
@@ -52,7 +52,7 @@ const bestFirstSearch = ({
  */
 const internalBestFirstSearch = ({
                                      graph, startNodeId, endNodeId, nodeAction, edgeAction
-                                 }: AlgorithmApiInputs_t): [Map<string, string> | NOTSET_t, Set<string>] => {
+                                 }: AlgorithmApiInputs_t): Map<string, string> | NOTSET_t => {
 
     // creating a type
     // for priority queue
@@ -123,14 +123,14 @@ const internalBestFirstSearch = ({
         // if the id or label is end
         // then there has to be a path
         // hence we return prev and visited
-        if (label === endNodeId) return [prev, visited];
+        if (label === endNodeId) return prev;
     }
 
     // if till here also the function has come
     // that means end is not reachable
     // hence we return null and visited
     // to signify no path
-    return [NOTSET, visited];
+    return NOTSET;
 }
 
 export default bestFirstSearch;

@@ -38,6 +38,7 @@ export default class Algorithms {
         visited: Set<string>,
         film: AnimationSequence[]
     } {
+        const visited = new Set<string>();
         const film: AnimationSequence [] = []
         const inputs: AlgorithmApiInputs_t = {
             graph,
@@ -50,6 +51,7 @@ export default class Algorithms {
                 })
             },
             nodeAction: (nodeId) => {
+                visited.add(nodeId);
                 film.push({
                     type: AnimationType.VISIT_NODE,
                     payload: nodeId
@@ -58,7 +60,7 @@ export default class Algorithms {
         };
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
-        const [path, visited] = match(algoType)
+        const [path] = match(algoType)
             .with(AlgoType.ZERO_ONE_BREADTH_FIRST_SEARCH, () => bfs0_1(inputs))
             .with(AlgoType.DIJKSTRAS_SEARCH, () => dijkstras(inputs))
             .with(AlgoType.A_STAR_SEARCH, () => aStar(inputs))
@@ -85,14 +87,16 @@ export default class Algorithms {
         bombNodeId: string,
         graph = BackendStateManager.graph()
     ): { path: string[] | NOTSET_t, visitedP1: Set<string>, visitedP2: Set<string> } {
-
+        const visitedP1 = new Set<string>();
+        const visitedP2 = new Set<string>();
         const inputsTillBombNode: AlgorithmApiInputs_t = {
             graph,
             startNodeId,
             endNodeId: bombNodeId,
             edgeAction: (_) => {
             },
-            nodeAction: (_) => {
+            nodeAction: (nodeId) => {
+                visitedP1.add(nodeId)
             }
         };
         const inputsTillEndNode: AlgorithmApiInputs_t = {
@@ -100,13 +104,15 @@ export default class Algorithms {
             startNodeId: bombNodeId,
             endNodeId,
             edgeAction: (_) => {},
-            nodeAction: (_) => {}
+            nodeAction: (nodeId) => {
+                visitedP2.add(nodeId);
+            }
         };
         // @ts-ignore
         return match(algoType)
             .with(AlgoType.A_STAR_SEARCH, () => {
-                const [pathP1, visitedP1] = aStar(inputsTillBombNode);
-                const [pathP2, visitedP2] = aStar(inputsTillEndNode);
+                const [pathP1] = aStar(inputsTillBombNode);
+                const [pathP2] = aStar(inputsTillEndNode);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
@@ -114,8 +120,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.BREADTH_FIRST_SEARCH, () => {
-                const [pathP1, visitedP1] = bfs(inputsTillBombNode);
-                const [pathP2, visitedP2] = bfs(inputsTillEndNode);
+                const [pathP1] = bfs(inputsTillBombNode);
+                const [pathP2] = bfs(inputsTillEndNode);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
@@ -123,8 +129,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.BELLMAN_FORD, () => {
-                const [pathP1, visitedP1] = bellmanFord(inputsTillBombNode);
-                const [pathP2, visitedP2] = bellmanFord(inputsTillEndNode);
+                const [pathP1] = bellmanFord(inputsTillBombNode);
+                const [pathP2] = bellmanFord(inputsTillEndNode);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
@@ -132,8 +138,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.DIJKSTRAS_SEARCH, () => {
-                const [pathP1, visitedP1] = dijkstras(inputsTillBombNode);
-                const [pathP2, visitedP2] = dijkstras(inputsTillEndNode);
+                const [pathP1] = dijkstras(inputsTillBombNode);
+                const [pathP2] = dijkstras(inputsTillEndNode);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
@@ -141,8 +147,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.DEPTH_FIRST_SEARCH, () => {
-                const [pathP1, visitedP1] = dfs(inputsTillBombNode);
-                const [pathP2, visitedP2] = dfs(inputsTillEndNode);
+                const [pathP1] = dfs(inputsTillBombNode);
+                const [pathP2] = dfs(inputsTillEndNode);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
@@ -150,8 +156,8 @@ export default class Algorithms {
                 return {path, visitedP1, visitedP2};
             })
             .with(AlgoType.BEST_FIRST_SEARCH, () => {
-                const [pathP1, visitedP1] = bestFirstSearch(inputsTillBombNode);
-                const [pathP2, visitedP2] = bestFirstSearch(inputsTillEndNode);
+                const [pathP1] = bestFirstSearch(inputsTillBombNode);
+                const [pathP2] = bestFirstSearch(inputsTillEndNode);
                 const path =
                     pathP1 !== NOTSET && pathP2 !== NOTSET
                         ? (pathP1 as string[]).concat((pathP2 as string[]).slice(1))
