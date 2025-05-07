@@ -16,7 +16,7 @@ const biDirectional = ({
                            graph, startNodeId, endNodeId, nodeAction, edgeAction
                        }: AlgorithmApiInputs_t): [string[] | NOTSET_t, Set<string>, Set<string>] => {
 
-    const pathFromStart = dijkstras({graph, startNodeId, endNodeId, nodeAction, edgeAction})[0];
+    const pathFromStart = dijkstras({graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     const visitedFromStart = new Set<string>();
     const visitedFromEnd = new Set<string>();
@@ -54,7 +54,7 @@ const biDirectional = ({
         }, edgeAction
     });
     dijkstras({
-        graph, startNodeId: spliceNode, endNodeId, nodeAction: (nodeId) => {
+        graph, startNodeId: endNodeId, endNodeId : spliceNode, nodeAction: (nodeId) => {
             visitedFromEnd.add(nodeId)
         }, edgeAction
     });
