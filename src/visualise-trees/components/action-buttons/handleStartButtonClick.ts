@@ -47,7 +47,7 @@ const validateAndRun = () => {
         .with('ts-3', async () => runAlgorithmAnimation(AlgoType.BELLMAN_FORD, startId, endId))
         .with('ts-4',
             async () => runAlgorithmAnimation(AlgoType.DEPTH_FIRST_SEARCH, startId, endId))
-
+        .with('ts-5', async () => runAlgorithmAnimation(AlgoType.ZERO_ONE_BREADTH_FIRST_SEARCH, startId, endId))
     return null;
 }
 

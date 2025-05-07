@@ -9,6 +9,7 @@ import bellmanFord from "../../algorithms/bellman_ford";
 import aStar from "../../algorithms/a_star";
 import Edge from "./Edge";
 import {Queue} from "queue-typescript";
+import bfs0_1 from "../../algorithms/bfs0_1";
 
 /**
  * Main backbone of the whole backend.
@@ -55,6 +56,7 @@ export default class Algorithms {
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
         const [path, visited, visitedEdges] = match(algoType)
+            .with(AlgoType.ZERO_ONE_BREADTH_FIRST_SEARCH, ()=> bfs0_1(graph, startNodeId, endNodeId))
             .with(AlgoType.DIJKSTRAS_SEARCH, () => dijkstras(graph, startNodeId, endNodeId))
             .with(AlgoType.A_STAR_SEARCH, () => aStar(graph, startNodeId, endNodeId))
             .with(AlgoType.BREADTH_FIRST_SEARCH, () => bfs(graph, startNodeId, endNodeId))

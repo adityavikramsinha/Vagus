@@ -9,7 +9,8 @@ export enum AlgoType {
   DEPTH_FIRST_SEARCH = 'dfs-algo',
   BI_DIRECTIONAL_SEARCH = 'bd-algo',
   RANDOM_WALK = 'rand-algo',
-  BEST_FIRST_SEARCH = 'best-fs'
+  BEST_FIRST_SEARCH = 'best-fs',
+  ZERO_ONE_BREADTH_FIRST_SEARCH = '0-1-bfs'
 }
 
 export const NOTSET: unique symbol  = Symbol("__NOTSET__") ;
