@@ -19,7 +19,7 @@ export enum AlgoType {
 export const NOTSET: unique symbol  = Symbol("__NOTSET__") ;
 export type NOTSET_t = typeof NOTSET;
 
-export type AlgorithmApiReturn_t = [string[] | NOTSET_t];
+export type AlgorithmApiReturn_t = string[] | NOTSET_t;
 export type AlgorithmApiInputs_t = {
   graph : Graph,
   startNodeId : string,

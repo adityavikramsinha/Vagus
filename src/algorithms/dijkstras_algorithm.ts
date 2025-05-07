@@ -1,9 +1,5 @@
 import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
-import Graph from "../visualise-graphs/ts/Graph";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
-import AlgorithmRunner from "../visualise-graphs/ts/AlgorithmRunner";
-import Edge from "../visualise-graphs/ts/Edge";
-import {Queue} from "queue-typescript";
 
 /**
  * Classic implementation of Dijkstras algorithm
@@ -18,7 +14,9 @@ import {Queue} from "queue-typescript";
  * on the PQ.
  * @returns a path | null [path if found, else] and visited inorder Set.
  */
-const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
+const dijkstras = ({
+                       graph, startNodeId, endNodeId, nodeAction, edgeAction
+                   }: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
 
     // first get everything from the internal Dijkstra function
     const [dist, prev] = internalDijkstras({graph, startNodeId, endNodeId, nodeAction, edgeAction});
@@ -30,7 +28,7 @@ const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : Alg
     // we know path is not found.
     // directly return
     if (dist.get(endNodeId) === Infinity)
-        return [NOTSET];
+        return NOTSET;
 
     // if it is not null,
     // we know there must be a path that exists
@@ -38,7 +36,7 @@ const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : Alg
     for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
 
     // return reconstructed path.
-    return [path];
+    return path;
 }
 
 /**
@@ -51,16 +49,15 @@ const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : Alg
  * @param edgeAction
  * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes and, a Set for visited nodes inorder.
  */
-const internalDijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : AlgorithmApiInputs_t):
+const internalDijkstras = ({
+                               graph, startNodeId, endNodeId, nodeAction, edgeAction
+                           }: AlgorithmApiInputs_t):
     [Map<string, number>, Map<string, string>] => {
 
     // Creating a type to hold the important
     // properties for the Priority Queue.
     type Priority = {
-        info: {
-            label: string,
-            srcLabel: string
-        },
+        label: string,
         minDist: number;
     }
 
@@ -78,16 +75,16 @@ const internalDijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeActio
     // First we set the value of distances from node [S]
     // to any node [A] to infinity
     graph.vertices().forEach((node) => {
-        node.getData() !== startNodeId ? dist.set(node.getData(), Infinity) : dist.set(startNodeId, 0);
+        node.getData() !== startNodeId ? dist.set(node.getData(), Infinity) : dist.set(startNodeId,
+            0);
     });
 
     // Enqueue the first node,
     // this way we have a length of 1
     // and least distance of 0.
     PQ.enqueue({
-        info: {
-            label: startNodeId, srcLabel: startNodeId
-        }, minDist: 0
+        label: startNodeId,
+        minDist: 0
     });
 
     // While it is not empty,
@@ -96,11 +93,7 @@ const internalDijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeActio
     while (!PQ.isEmpty()) {
 
         // get the Priority Object and deconstruct it
-        const {
-            info: {
-                label, srcLabel
-            }, minDist
-        } = PQ.dequeue();
+        const {label, minDist} = PQ.dequeue();
         // add it to visited so that
         // we do not keep opening it.
         visited.add(label);
@@ -148,10 +141,8 @@ const internalDijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeActio
 
                     // enqueue this for opening in terms of minDist.
                     PQ.enqueue({
-                        info: {
-                            label: dest,
-                            srcLabel: label
-                        }, minDist: newDist
+                        label: dest,
+                        minDist: newDist
                     });
                     edgeAction(edge);
                 }

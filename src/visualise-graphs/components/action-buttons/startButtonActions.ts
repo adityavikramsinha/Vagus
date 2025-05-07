@@ -1,7 +1,7 @@
 import useGraphStore, {NodeType} from "@/stores/GraphStore";
 import Pipe from "@graph/api/Pipe";
 import Syncer from "@graph/api/Syncer";
-import AlgorithmRunner from "../../ts/AlgorithmRunner";
+import AlgorithmRunner from "../../api/AlgorithmRunner";
 import {AlgoType, NOTSET, NOTSET_t} from "@graph/ts/Types";
 import {match, P} from "ts-pattern";
 import BackendStateManager from "@graph/api/BackendStateManager";

@@ -2,7 +2,6 @@ import {
     AlgorithmApiInputs_t,
     AlgorithmApiReturn_t,
     NOTSET,
-    NOTSET_t
 } from "../visualise-graphs/ts/Types";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 
@@ -152,7 +151,7 @@ const aStar = ({
     // we automatically understand no path is possible
     // thus, return null
     if (dist.get(endNodeId) === Infinity)
-        return [NOTSET];
+        return NOTSET;
 
     // reconstruct path
     // after that just return
@@ -161,7 +160,7 @@ const aStar = ({
 
     // we are sure path exists
     // so we just return it.
-    return [path];
+    return path;
 }
 
 export default aStar;

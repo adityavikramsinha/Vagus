@@ -49,12 +49,12 @@ const biDirectional = ({
     // we get from this splice point a visited from start
     // and a visited from end
     dijkstras({
-        graph, startNodeId, endNodeId, nodeAction: (nodeId) => {
+        graph, startNodeId, endNodeId : spliceNode, nodeAction: (nodeId) => {
             visitedFromStart.add(nodeId);
         }, edgeAction
     });
     dijkstras({
-        graph, startNodeId: endNodeId, endNodeId: startNodeId, nodeAction: (nodeId) => {
+        graph, startNodeId: spliceNode, endNodeId, nodeAction: (nodeId) => {
             visitedFromEnd.add(nodeId)
         }, edgeAction
     });

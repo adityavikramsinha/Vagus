@@ -1,5 +1,5 @@
-import {AlgorithmApiInputs_t, AlgoType, NOTSET, NOTSET_t} from "./Types";
-import BackendStateManager from "../api/BackendStateManager";
+import {AlgorithmApiInputs_t, AlgoType, NOTSET, NOTSET_t} from "../ts/Types";
+import BackendStateManager from "./BackendStateManager";
 import {match} from "ts-pattern";
 import bfs from "../../algorithms/bfs"
 import dfs from '../../algorithms/dfs';

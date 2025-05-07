@@ -135,7 +135,7 @@ const bfs0_1 = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: Algorit
     // we know path is not found.
     // directly return
     if (dist.get(endNodeId) === Infinity)
-        return [NOTSET];
+        return NOTSET;
 
     // if it is not null,
     // we know there must be a path that exists
@@ -143,7 +143,7 @@ const bfs0_1 = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: Algorit
     for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
 
     // return reconstructed path.
-    return [path];
+    return path;
 }
 
 export default bfs0_1;

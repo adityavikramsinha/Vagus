@@ -25,7 +25,7 @@ const bellmanFord = ({
 
     // checking for if the last node [end] was relaxed or not
     if (dist.get(endNodeId) === Infinity)
-        return [NOTSET];
+        return NOTSET;
 
     // path reconstruction
     for (let at = endNodeId; at !== undefined; at = prev.get(at))
@@ -34,7 +34,7 @@ const bellmanFord = ({
     // return path
     // which is guaranteed to be the shortest path
     // in the graph from start->end.
-    return [path];
+    return path;
 }
 
 /**

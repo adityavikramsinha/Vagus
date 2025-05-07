@@ -30,7 +30,7 @@ const bestFirstSearch = ({
     // if prev is null then we know that
     // there is no path
     if (prev === NOTSET)
-        return [NOTSET];
+        return NOTSET;
 
     // path array
     let path: string[] = [];
@@ -40,7 +40,7 @@ const bestFirstSearch = ({
         path.unshift(at);
 
     // return the path since it exists.
-    return [path];
+    return path;
 }
 /**
  * Implementation of best first search greedy mechanism
