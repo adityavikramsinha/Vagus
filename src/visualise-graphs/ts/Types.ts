@@ -18,7 +18,7 @@ export enum AlgoType {
 export const NOTSET: unique symbol  = Symbol("__NOTSET__") ;
 export type NOTSET_t = typeof NOTSET;
 
-export type AlgorithmApiReturn_t = [string[] | NOTSET_t, Set<string>, Edge[]];
+export type AlgorithmApiReturn_t = [string[] | NOTSET_t, Set<string>];
 /**
  * Contains the maze generation types for the website
  */

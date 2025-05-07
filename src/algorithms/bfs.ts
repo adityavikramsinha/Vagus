@@ -1,6 +1,5 @@
 import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 import {Queue} from "queue-typescript";
-import Algorithms from "../visualise-graphs/ts/Algorithms";
 import Graph from "../visualise-graphs/ts/Graph";
 import Edge from "../visualise-graphs/ts/Edge";
 
@@ -11,10 +10,13 @@ import Edge from "../visualise-graphs/ts/Edge";
  * @param start the starting ID on the graph
  * @param end the end ID on the graph
  * @param graph the Graph to use.
+ * @param nodeAction action to perform whenever a new node is dequeued
+ * @param edgeAction action to perform whenever a new edge is opened
  * @returns an array containing the path | null [path is given if it is found, else null] and a Set of
  * visited nodes inorder while trying to find the path.
  */
-const bfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t=> {
+const bfs = (graph: Graph, start: string, end: string,
+             nodeAction:(node:string)=>void = (_)=>{}, edgeAction: (edge:Edge)=>void = (_)=>{}): AlgorithmApiReturn_t=> {
 
     // first initialise all the variables
     // visited is the nodes that are visited in the process
@@ -25,7 +27,6 @@ const bfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t=> {
     const visited: Set<string> = new Set();
     const prev: Map<string, string> = new Map();
     const path: string[] = [];
-    const visitedEdges = new Queue<Edge>();
     const Q = new Queue<string>();
 
     // Enqueue the first one
@@ -40,7 +41,8 @@ const bfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t=> {
 
         // then we add that node to visited set.
         visited.add(node.getData());
-
+        // perform the node action
+        nodeAction(node.getData());
         // if the nodes data is the same as end id,
         // we know we have reached a path
         // therefore we just give it out as is and
@@ -52,7 +54,7 @@ const bfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t=> {
                 path.unshift(at);
 
             // return path and visited inorder
-            return [path, visited, visitedEdges.toArray()];
+            return [path, visited];
         }
 
         // if end has not been found
@@ -65,6 +67,11 @@ const bfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t=> {
             // if we have already visited it, we do not need to
             // because it means that it is already added to the visited section
             // and was a part of the queue.
+
+            // perform edge action
+            edgeAction(edge);
+
+            // do everything else
             const destId = edge.dest;
             if (!visited.has(destId)) {
 
@@ -77,7 +84,6 @@ const bfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t=> {
                 // add it to the queue since this means that
                 // we have to open this node again sometime later.
                 Q.enqueue(destId);
-                Algorithms.addVisitedEdge(visitedEdges, node.getData(), destId);
             }
         });
     }
@@ -87,6 +93,6 @@ const bfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t=> {
     // neighbour of any node
     // thus, no path should exist
     // hence, we return null and just visited set
-    return [NOTSET, visited, visitedEdges.toArray()];
+    return [NOTSET, visited];
 }
 export default bfs;

@@ -1,40 +1,52 @@
 import useTreeStore from "../../stores/TreeStore";
 import Syncer from "./Syncer";
 import Edge from "../../visualise-graphs/ts/Edge";
+import {match} from "ts-pattern";
+
+
+export enum AnimationType {
+    VISIT_NODE = "VISIT_NODE",
+    VISIT_EDGE = "VISIT_EDGE"
+}
+
+type VisitNodeAnimation = {
+    type: AnimationType.VISIT_NODE,
+    payload: string
+}
+type VisitEdgeAnimation = {
+    type: AnimationType.VISIT_EDGE,
+    payload: Edge
+}
+
+export type AnimationSequence = VisitNodeAnimation | VisitEdgeAnimation;
 
 export default class Animator {
-    static async animateVisitedVertices(vertices: Set<string>, edges: Edge[]) {
+    static async animateVisitedVertices(film: AnimationSequence[]) {
         const finalVisitedEdges = new Map<string, Set<string>>();
-        for (const edge of edges) {
+        for (const sequence of film) {
             await Syncer.supervise(async () => {
-                const updatedVisitedVertices = new Set(useTreeStore.getState().visitedVertices);
-                const updatedVisitedEdges = new Map(useTreeStore.getState().visitedEdges);
-
-                if (!updatedVisitedVertices.has(edge.src))
-                    updatedVisitedVertices.add(edge.src);
-
-                if (!updatedVisitedEdges.has(edge.src))
-                    updatedVisitedEdges.set(edge.src, new Set());
-
-                if (!finalVisitedEdges.has(edge.src))
-                    finalVisitedEdges.set(edge.src, new Set());
-
-                updatedVisitedEdges.get(edge.src)!.add(edge.dest);
-                finalVisitedEdges.get(edge.src)!.add(edge.dest);
-                updatedVisitedVertices.add(edge.dest);
-
-                useTreeStore.setState({
-                    visitedVertices: updatedVisitedVertices,
-                    visitedEdges: updatedVisitedEdges
-                });
-
+                match(sequence.type)
+                    .with(AnimationType.VISIT_EDGE, () => {
+                        const updatedVisitedEdges = new Map(useTreeStore.getState().visitedEdges);
+                        const edge = sequence.payload as Edge;
+                        if (!updatedVisitedEdges.has(edge.src))
+                            updatedVisitedEdges.set(edge.src, new Set());
+                        if (!finalVisitedEdges.has(edge.src))
+                            finalVisitedEdges.set(edge.src, new Set());
+                        updatedVisitedEdges.get(edge.src)!.add(edge.dest);
+                        finalVisitedEdges.get(edge.src)!.add(edge.dest);
+                        useTreeStore.setState({visitedEdges: updatedVisitedEdges});
+                    })
+                    .with(AnimationType.VISIT_NODE, () => {
+                        const updatedVisitedVertices = new Set(
+                            useTreeStore.getState().visitedVertices);
+                        const nodeId = sequence.payload as string;
+                        if (!updatedVisitedVertices.has(nodeId))
+                            updatedVisitedVertices.add(nodeId);
+                        useTreeStore.setState({visitedVertices: updatedVisitedVertices});
+                    })
                 await new Promise(resolve => setTimeout(resolve, 500));
             });
         }
-
-
-        await Syncer.supervise(() => {
-            useTreeStore.setState({visitedVertices: vertices, visitedEdges: finalVisitedEdges});
-        });
     }
 }

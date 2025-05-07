@@ -16,9 +16,9 @@ import {Exception, StartButtonError} from "@/components/action-buttons/StartButt
 const runAlgorithmAnimation = async (algoType: AlgoType,
                                      startNodeId: string, endNodeId: string) => {
     useTreeStore.setState({block: true, executing: true});
-    const {visited, visitedEdges} = Algorithms.runWithoutBombNode(
+    const {film} = Algorithms.runWithoutBombNode(
         algoType, startNodeId, endNodeId, BackendStateManager.graph)
-    await Animator.animateVisitedVertices(visited, visitedEdges)
+    await Animator.animateVisitedVertices(film)
     useTreeStore.setState({block: false, executing: false})
 }
 
