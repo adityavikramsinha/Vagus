@@ -1,5 +1,9 @@
-import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
-import Graph from "../visualise-graphs/ts/Graph";
+import {
+    AlgorithmApiInputs_t,
+    AlgorithmApiReturn_t,
+    NOTSET,
+    NOTSET_t
+} from "../visualise-graphs/ts/Types";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 
 /**
@@ -12,13 +16,16 @@ import {MinPriorityQueue} from "@datastructures-js/priority-queue";
  * @param end ending node ID
  * @returns a path | NOTSET [path if found, else NOTSET] and a Set of visited nodes inorder.
  */
-const bestFirstSearch = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>] => {
+const bestFirstSearch = ({
+                             graph, startNodeId, endNodeId, nodeAction, edgeAction
+                         }: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
 
     // first get all the internal information from the implementation
     // prev is for path deconstruction and ,
     // visited in order is for
     // visualisation
-    let [prev, visited] = internalBestFirstSearch(graph, start, end);
+    let [prev, visited] = internalBestFirstSearch(
+        {graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // if prev is null then we know that
     // there is no path
@@ -29,7 +36,7 @@ const bestFirstSearch = (graph: Graph, start: string, end: string): [string[] | 
     let path: string[] = [];
 
     // reconstruct path
-    for (let at = end; at !== undefined; at = prev.get(at))
+    for (let at = endNodeId; at !== undefined; at = prev.get(at))
         path.unshift(at);
 
     // return the path since it exists.
@@ -43,7 +50,9 @@ const bestFirstSearch = (graph: Graph, start: string, end: string): [string[] | 
  * @param end ending node id
  * @returns a Map for path reconstruction and a Set of visited nodes inorder
  */
-const internalBestFirstSearch = (graph: Graph, start: string, end: string): [Map<string, string> | NOTSET_t, Set<string>] => {
+const internalBestFirstSearch = ({
+                                     graph, startNodeId, endNodeId, nodeAction, edgeAction
+                                 }: AlgorithmApiInputs_t): [Map<string, string> | NOTSET_t, Set<string>] => {
 
     // creating a type
     // for priority queue
@@ -68,11 +77,11 @@ const internalBestFirstSearch = (graph: Graph, start: string, end: string): [Map
     let visited: Set<string> = new Set();
 
     // start and end nodes have been given values
-    let dest = graph.vertices().get(start), endNode = graph.vertices().get(end);
+    let dest = graph.vertices().get(startNodeId), endNode = graph.vertices().get(endNodeId);
 
     // we enqueue the starting node
     PQ.enqueue({
-        label: start, minHeuristic: graph.distBw(dest.coordinates(), endNode.coordinates())
+        label: startNodeId, minHeuristic: graph.distBw(dest.coordinates(), endNode.coordinates())
     });
 
     // while PQ is not empty
@@ -86,6 +95,8 @@ const internalBestFirstSearch = (graph: Graph, start: string, end: string): [Map
 
         // add it to visited since it has been explored now
         visited.add(label);
+
+        nodeAction(label);
 
         // get ready to explore all the edges going out of it
         graph.vertices().get(label).getAdjVertices().forEach(edge => {
@@ -102,6 +113,7 @@ const internalBestFirstSearch = (graph: Graph, start: string, end: string): [Map
                 // we get a new heuristic approach
                 let newHeuristic = graph.distBw(dest.coordinates(), endNode.coordinates());
 
+                edgeAction(edge);
                 // we enqueue and then set the nodes as required
                 PQ.enqueue({label: destData, minHeuristic: newHeuristic});
                 prev.set(destData, label);
@@ -111,7 +123,7 @@ const internalBestFirstSearch = (graph: Graph, start: string, end: string): [Map
         // if the id or label is end
         // then there has to be a path
         // hence we return prev and visited
-        if (label === end) return [prev, visited];
+        if (label === endNodeId) return [prev, visited];
     }
 
     // if till here also the function has come

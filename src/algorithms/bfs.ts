@@ -1,7 +1,5 @@
-import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
+import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 import {Queue} from "queue-typescript";
-import Graph from "../visualise-graphs/ts/Graph";
-import Edge from "../visualise-graphs/ts/Edge";
 
 /**
  * Classic Breadth-first search algorithm which
@@ -15,8 +13,7 @@ import Edge from "../visualise-graphs/ts/Edge";
  * @returns an array containing the path | null [path is given if it is found, else null] and a Set of
  * visited nodes inorder while trying to find the path.
  */
-const bfs = (graph: Graph, start: string, end: string,
-             nodeAction:(node:string)=>void = (_)=>{}, edgeAction: (edge:Edge)=>void = (_)=>{}): AlgorithmApiReturn_t=> {
+const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmApiInputs_t): AlgorithmApiReturn_t=> {
 
     // first initialise all the variables
     // visited is the nodes that are visited in the process
@@ -30,7 +27,7 @@ const bfs = (graph: Graph, start: string, end: string,
     const Q = new Queue<string>();
 
     // Enqueue the first one
-    Q.enqueue(start);
+    Q.enqueue(startNodeId);
 
     // While the length of the Queue is not 0
     // We keep on going.
@@ -47,10 +44,10 @@ const bfs = (graph: Graph, start: string, end: string,
         // we know we have reached a path
         // therefore we just give it out as is and
         // stop the function
-        if (node.getData() === end) {
+        if (node.getData() === endNodeId) {
 
             // construct the path
-            for (let at = end; at !== undefined; at = prev.get(at))
+            for (let at = endNodeId; at !== undefined; at = prev.get(at))
                 path.unshift(at);
 
             // return path and visited inorder

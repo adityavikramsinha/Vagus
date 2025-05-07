@@ -125,11 +125,15 @@ const performStartButtonJobs = (
             // that watch for the 'executing' state.
             useGraphStore.setState({executing: true});
             if (bombNodeId === NOTSET) {
-                const [path, visitedStart, visitedEnd] = biDirectional(
-                    BackendStateManager.graph(),
+                const [path, visitedStart, visitedEnd] = biDirectional({
+                    graph: BackendStateManager.graph(),
                     startNodeId,
-                    endNodeId
-                )
+                    endNodeId,
+                    nodeAction: (_) => {
+                    },
+                    edgeAction: (_) => {
+                    }
+                })
                 await Animator.animateVisitedNodes(
                     Pipe.andInterleaveSetsToMap(visitedStart, visitedEnd, NodeType.START_NODE));
                 await Animator.animatePathNodes(path);

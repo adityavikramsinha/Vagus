@@ -1,4 +1,5 @@
 import Edge from "./Edge";
+import Graph from "./Graph";
 
 /**
  * Contains the algo-types for the website
@@ -19,6 +20,13 @@ export const NOTSET: unique symbol  = Symbol("__NOTSET__") ;
 export type NOTSET_t = typeof NOTSET;
 
 export type AlgorithmApiReturn_t = [string[] | NOTSET_t, Set<string>];
+export type AlgorithmApiInputs_t = {
+  graph : Graph,
+  startNodeId : string,
+  endNodeId : string,
+  nodeAction : (nodeId : string) => void,
+  edgeAction : (edge : Edge) => void
+}
 /**
  * Contains the maze generation types for the website
  */

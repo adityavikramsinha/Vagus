@@ -1,8 +1,4 @@
-import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
-import Graph from "../visualise-graphs/ts/Graph";
-import Algorithms from "../visualise-graphs/ts/Algorithms";
-import Edge from "../visualise-graphs/ts/Edge";
-import {Queue} from "queue-typescript";
+import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 
 /**
  * Classic DFS which uses an internal function
@@ -13,7 +9,9 @@ import {Queue} from "queue-typescript";
  * @param graph Graph to use.
  * @returns a path | null [path if found, else null] and an inorder Set of visited nodes.
  */
-const dfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => {
+const dfs = ({
+                 graph, startNodeId, endNodeId, nodeAction, edgeAction
+             }: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
 
     // path is for the path to be returned
     // visited is for the Set of visited nodes in order
@@ -21,7 +19,6 @@ const dfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => 
     const path: string[] = [];
     const visited: Set<string> = new Set();
     const prev: Map<string, string> = new Map();
-    const visitedEdges = new Queue<Edge>();
 
     /**
      * Internal function which recurses again and again,
@@ -33,7 +30,7 @@ const dfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => 
      * @param parent
      */
     const internalDfs = (at: string, parent: string): void => {
-
+        nodeAction(at);
         // First check if visited has this or not
         // because if it does then it means that
         // we have already opened this node and explored
@@ -48,10 +45,10 @@ const dfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => 
 
             // if not found then keep opening
             // descendent
-            if (at !== end) {
+            if (at !== endNodeId) {
                 graph.vertices().get(at).getAdjVertices().forEach(edge => {
                     // add to list of visited Edges
-                    Algorithms.addVisitedEdge(visitedEdges, at, edge.dest)
+                    edgeAction(edge);
                     internalDfs(edge.dest, at);
                 });
             }
@@ -60,7 +57,7 @@ const dfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => 
             // and leave
             else {
                 // reconstruct path from the given prev Set
-                for (let at = end; at !== undefined; at = prev.get(at))
+                for (let at = endNodeId; at !== undefined; at = prev.get(at))
                     path.unshift(at);
                 return;
             }
@@ -70,12 +67,12 @@ const dfs = (graph: Graph, start: string, end: string): AlgorithmApiReturn_t => 
     // call function once to start
     // with undefined as starts' "ancestor"
     // this may help in reconstructing path
-    internalDfs(start, undefined);
+    internalDfs(startNodeId, undefined);
 
     // just do a simple ternary
     // to check for length
     // if length ge 1, we know that there is a route
     // else not
-    return [(path.length > 0 ? path : NOTSET), visited, visitedEdges.toArray()];
+    return [(path.length > 0 ? path : NOTSET), visited];
 }
 export default dfs;

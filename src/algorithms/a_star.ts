@@ -1,5 +1,9 @@
-import {NOTSET, NOTSET_t} from "../visualise-graphs/ts/Types";
-import Graph from "../visualise-graphs/ts/Graph";
+import {
+    AlgorithmApiInputs_t,
+    AlgorithmApiReturn_t,
+    NOTSET,
+    NOTSET_t
+} from "../visualise-graphs/ts/Types";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 
 /**
@@ -12,7 +16,9 @@ import {MinPriorityQueue} from "@datastructures-js/priority-queue";
  * @param end ending node ID
  * @returns a distance map, a map to reconstruct the path and a set of visited nodes inorder
  */
-const internalAStar = (graph: Graph, start: string, end: string): [Map<string, number>, Map<string, string>, Set<string>] => {
+const internalAStar = ({
+                           graph, startNodeId, endNodeId, nodeAction, edgeAction
+                       }: AlgorithmApiInputs_t): [Map<string, number>, Map<string, string>, Set<string>] => {
 
     // created type to have
     // in the Priority Queue
@@ -39,16 +45,17 @@ const internalAStar = (graph: Graph, start: string, end: string): [Map<string, n
 
     // set the distances to infinity
     graph.vertices().forEach((node) => {
-        node.getData() !== start ? dist.set(node.getData(), Infinity) : dist.set(start, 0);
+        node.getData() !== startNodeId ? dist.set(node.getData(), Infinity) : dist.set(startNodeId,
+            0);
     });
 
     // getting the start and end nodes
-    let dest = graph.vertices().get(start), endNode = graph.vertices().get(end);
+    let dest = graph.vertices().get(startNodeId), endNode = graph.vertices().get(endNodeId);
 
     // Enqueue the first item
     // this way, the PQ is always > 0 when starting.
     PQ.enqueue({
-        label: start, minDist: 0,
+        label: startNodeId, minDist: 0,
         minHeuristic: graph.distBw(dest.coordinates(), endNode.coordinates())
     });
 
@@ -61,6 +68,7 @@ const internalAStar = (graph: Graph, start: string, end: string): [Map<string, n
         // add to visited to say that this node has been opened already
         visited.add(label);
 
+        nodeAction(label);
         // if we see that the current minDist is > the dist present in the Map
         // then it is evident that there is no point in trying to explore it since
         // it may not yield a better path.
@@ -98,6 +106,7 @@ const internalAStar = (graph: Graph, start: string, end: string): [Map<string, n
                 // then only do we update everything
                 // else we do not.
                 if (newDist < dist.get(destData)) {
+                    edgeAction(edge);
                     prev.set(destData, label);
                     dist.set(destData, newDist);
                     PQ.enqueue({label: destData, minDist: newDist, minHeuristic: newHeuristic});
@@ -108,7 +117,7 @@ const internalAStar = (graph: Graph, start: string, end: string): [Map<string, n
         // if label is end
         // then path has been found
         // we directly return
-        if (label === end) return [dist, prev, visited];
+        if (label === endNodeId) return [dist, prev, visited];
     }
 
     // right now its confirmed that we have no
@@ -125,13 +134,16 @@ const internalAStar = (graph: Graph, start: string, end: string): [Map<string, n
  * @param end the ending node ID
  * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
  */
-const aStar = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, Set<string>] => {
+const aStar = ({
+                   graph, startNodeId, endNodeId, nodeAction, edgeAction
+               }: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
 
     // first deconstruct the array returned from a-start
     // dist is the distance from start [S]-> every node [A] which is reachable
     // prev is required to reconstruct path
     // visited is the set of nodes visited in order
-    const [dist, prev, visited] = internalAStar(graph, start, end);
+    const [dist, prev, visited] = internalAStar(
+        {graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // this is just to reconstruct the path for a*;
     let path: string[] = [];
@@ -139,12 +151,12 @@ const aStar = (graph: Graph, start: string, end: string): [string[] | NOTSET_t, 
     // if distance is infinity,
     // we automatically understand no path is possible
     // thus, return null
-    if (dist.get(end) === Infinity)
+    if (dist.get(endNodeId) === Infinity)
         return [NOTSET, visited];
 
     // reconstruct path
     // after that just return
-    for (let at: string = end; at !== undefined; at = prev.get(at))
+    for (let at: string = endNodeId; at !== undefined; at = prev.get(at))
         path.unshift(at);
 
     // we are sure path exists

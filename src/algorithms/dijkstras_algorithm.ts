@@ -1,4 +1,4 @@
-import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
+import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 import Graph from "../visualise-graphs/ts/Graph";
 import {MinPriorityQueue} from "@datastructures-js/priority-queue";
 import Algorithms from "../visualise-graphs/ts/Algorithms";
@@ -18,11 +18,10 @@ import {Queue} from "queue-typescript";
  * on the PQ.
  * @returns a path | null [path if found, else] and visited inorder Set.
  */
-const dijkstras = (graph: Graph, start: string, end: string,
-nodeAction:(node:string)=>void = (_)=>{}, edgeAction: (edge:Edge)=>void = (_)=>{}): AlgorithmApiReturn_t => {
+const dijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
 
     // first get everything from the internal Dijkstra function
-    const [dist, prev, visited] = internalDijkstras(graph, start, end, nodeAction, edgeAction);
+    const [dist, prev, visited] = internalDijkstras({graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // the rest is just finding the path to use.
     let path: string[] = [];
@@ -30,13 +29,13 @@ nodeAction:(node:string)=>void = (_)=>{}, edgeAction: (edge:Edge)=>void = (_)=>{
     // if distance is Infinity then,
     // we know path is not found.
     // directly return
-    if (dist.get(end) === Infinity)
+    if (dist.get(endNodeId) === Infinity)
         return [NOTSET, visited];
 
     // if it is not null,
     // we know there must be a path that exists
     // so reconstruct it.
-    for (let at: string = end; at !== undefined; at = prev.get(at)) path.unshift(at);
+    for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
 
     // return reconstructed path.
     return [path, visited];
@@ -52,8 +51,7 @@ nodeAction:(node:string)=>void = (_)=>{}, edgeAction: (edge:Edge)=>void = (_)=>{
  * @param edgeAction
  * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes and, a Set for visited nodes inorder.
  */
-const internalDijkstras = (graph: Graph, start: string, end: string,
-                           nodeAction:(node:string)=>void = (_)=>{}, edgeAction: (edge:Edge)=>void = (_)=>{}):
+const internalDijkstras = ({graph, startNodeId, endNodeId, nodeAction, edgeAction} : AlgorithmApiInputs_t):
     [Map<string, number>, Map<string, string>, Set<string>] => {
 
     // Creating a type to hold the important
@@ -80,7 +78,7 @@ const internalDijkstras = (graph: Graph, start: string, end: string,
     // First we set the value of distances from node [S]
     // to any node [A] to infinity
     graph.vertices().forEach((node) => {
-        node.getData() !== start ? dist.set(node.getData(), Infinity) : dist.set(start, 0);
+        node.getData() !== startNodeId ? dist.set(node.getData(), Infinity) : dist.set(startNodeId, 0);
     });
 
     // Enqueue the first node,
@@ -88,7 +86,7 @@ const internalDijkstras = (graph: Graph, start: string, end: string,
     // and least distance of 0.
     PQ.enqueue({
         info: {
-            label: start, srcLabel: start
+            label: startNodeId, srcLabel: startNodeId
         }, minDist: 0
     });
 
@@ -163,7 +161,7 @@ const internalDijkstras = (graph: Graph, start: string, end: string,
         // if label is the same as end
         // then we know that, there is a path
         // and return all the items for reconstruction.
-        if (label === end) return [dist, prev, visited];
+        if (label === endNodeId) return [dist, prev, visited];
     }
 
     // at this point, the end dist is Infinity

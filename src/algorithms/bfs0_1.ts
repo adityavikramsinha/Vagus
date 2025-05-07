@@ -1,8 +1,5 @@
-import Graph from "../visualise-graphs/ts/Graph";
 import {Queue} from "queue-typescript";
-import Edge from "../visualise-graphs/ts/Edge";
-import Algorithms from "../visualise-graphs/ts/Algorithms";
-import {AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
+import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
 
 type DQ_t = {
     label: {
@@ -55,8 +52,10 @@ class DoubleQ {
     }
 }
 
-const internalBfs0_1 = (graph: Graph, start: string, end: string)
-    : [Map<string, number>, Map<string, string>, Set<string>, Edge[]] => {
+const internalBfs0_1 = ({
+                            graph, startNodeId, endNodeId, nodeAction, edgeAction
+                        }: AlgorithmApiInputs_t)
+    : [Map<string, number>, Map<string, string>, Set<string>] => {
 
     // set of visited nodes IN_ORDER
     // has a Queue of visited Edges (more efficient)
@@ -65,7 +64,6 @@ const internalBfs0_1 = (graph: Graph, start: string, end: string)
     // We can use two Queues one for "lower priority" (0) weight.
     // one for "higher priority" (1) weight.
     const visited = new Set<string>();
-    const visitedEdges = new Queue<Edge>();
     const prev = new Map<string, string>();
     // Dist for vertices
     const dist = new Map<string, number>();
@@ -75,13 +73,14 @@ const internalBfs0_1 = (graph: Graph, start: string, end: string)
     const PQ = new DoubleQ();
 
     graph.vertices().forEach(node => {
-        node.getData() !== start ? dist.set(node.getData(), Infinity) : dist.set(node.getData(), 0);
+        node.getData() !== startNodeId ? dist.set(node.getData(), Infinity) : dist.set(
+            node.getData(), 0);
     });
-    PQ.enqueue({label: {from: start, to: start}, wt: 0}, 0);
+    PQ.enqueue({label: {from: startNodeId, to: startNodeId}, wt: 0}, 0);
 
     while (!PQ.isEmpty()) {
         const {label, wt} = PQ.dequeue();
-        Algorithms.addVisitedEdge(visitedEdges, label.from, label.to);
+        nodeAction(label.to);
         visited.add(label.to);
 
         // if the current dist for this node is < the weight,
@@ -93,6 +92,7 @@ const internalBfs0_1 = (graph: Graph, start: string, end: string)
             if (!visited.has(dest)) {
                 let newDist = edge.cost + wt;
                 if (newDist < dist.get(dest)) {
+                    edgeAction(edge);
                     prev.set(dest, label.to);
                     dist.set(dest, newDist);
                     PQ.enqueue({
@@ -106,12 +106,12 @@ const internalBfs0_1 = (graph: Graph, start: string, end: string)
         });
 
         // premature return if we find the end
-        if (label.to === end)
-            return [dist, prev, visited, visitedEdges.toArray()]
+        if (label.to === endNodeId)
+            return [dist, prev, visited]
     }
 
     // return all data from API.
-    return [dist, prev, visited, visitedEdges.toArray()]
+    return [dist, prev, visited]
 }
 
 /**
@@ -121,11 +121,12 @@ const internalBfs0_1 = (graph: Graph, start: string, end: string)
  * @param start start vertex
  * @param end end vertex
  */
-const bfs0_1 = (graph: Graph, start: string, end: string)
+const bfs0_1 = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmApiInputs_t)
     : AlgorithmApiReturn_t => {
 
     // first get everything from the internal Dijkstra function
-    const [dist, prev, visited, visitedEdges] = internalBfs0_1(graph, start, end);
+    const [dist, prev, visited] = internalBfs0_1(
+        {graph, startNodeId, endNodeId, nodeAction, edgeAction});
 
     // the rest is just finding the path to use.
     let path: string[] = [];
@@ -133,16 +134,16 @@ const bfs0_1 = (graph: Graph, start: string, end: string)
     // if distance is Infinity then,
     // we know path is not found.
     // directly return
-    if (dist.get(end) === Infinity)
-        return [NOTSET, visited, visitedEdges];
+    if (dist.get(endNodeId) === Infinity)
+        return [NOTSET, visited];
 
     // if it is not null,
     // we know there must be a path that exists
     // so reconstruct it.
-    for (let at: string = end; at !== undefined; at = prev.get(at)) path.unshift(at);
+    for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
 
     // return reconstructed path.
-    return [path, visited, visitedEdges];
+    return [path, visited];
 }
 
 export default bfs0_1;
