@@ -1,5 +1,4 @@
 import {AlgorithmApiInputs_t, AlgoType, NOTSET, NOTSET_t} from "../ts/Types";
-import BackendStateManager from "./BackendStateManager";
 import {match} from "ts-pattern";
 import bfs from "../../algorithms/bfs"
 import dfs from '../../algorithms/dfs';
@@ -8,6 +7,7 @@ import bestFirstSearch from "../../algorithms/best_first_search";
 import bellmanFord from "../../algorithms/bellman_ford";
 import aStar from "../../algorithms/a_star";
 import bfs0_1 from "../../algorithms/bfs0_1";
+import Graph from "../ts/Graph";
 
 /**
  * Main backbone of the whole backend.
@@ -32,7 +32,7 @@ export default class AlgorithmRunner {
      * the path contains the path from start->end for currentState and visitedInOrder contains
      * the nodes that were visited [inorder] to reach to that path
      */
-    static runWithoutBombNode(algoType: AlgoType, startNodeId: string, endNodeId: string, graph = BackendStateManager.graph()): {
+    static runWithoutBombNode(algoType: AlgoType, startNodeId: string, endNodeId: string, graph: Graph): {
         path: string[] | NOTSET_t,
         visited: Set<string>,
     } {
@@ -49,7 +49,7 @@ export default class AlgorithmRunner {
         };
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
-        const path = match(algoType)
+        const path : string[] | NOTSET_t = match(algoType)
             .with(AlgoType.ZERO_ONE_BREADTH_FIRST_SEARCH, () => bfs0_1(inputs))
             .with(AlgoType.DIJKSTRAS_SEARCH, () => dijkstras(inputs))
             .with(AlgoType.A_STAR_SEARCH, () => aStar(inputs))
@@ -57,8 +57,8 @@ export default class AlgorithmRunner {
             .with(AlgoType.DEPTH_FIRST_SEARCH, () => dfs(inputs))
             .with(AlgoType.BELLMAN_FORD, () => bellmanFord(inputs))
             .with(AlgoType.BEST_FIRST_SEARCH, () => bestFirstSearch(inputs))
-            .otherwise(() => [NOTSET, NOTSET]);
-        // @ts-ignore
+            .otherwise(() => NOTSET);
+
         return {path, visited}
     }
 
@@ -78,7 +78,7 @@ export default class AlgorithmRunner {
         startNodeId: string,
         endNodeId: string,
         bombNodeId: string,
-        graph = BackendStateManager.graph()
+        graph :Graph
     ): { path: string[] | NOTSET_t, visitedP1: Set<string>, visitedP2: Set<string> } {
         const visitedP1 = new Set<string>();
         const visitedP2 = new Set<string>();

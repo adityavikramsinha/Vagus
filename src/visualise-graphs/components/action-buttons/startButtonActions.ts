@@ -36,7 +36,8 @@ const runAlgorithmAnimation = async (
         const {path, visited} = AlgorithmRunner.runWithoutBombNode(
             type,
             startNodeId,
-            endNodeId
+            endNodeId,
+            BackendStateManager.graph()
         );
         await Animator.animateVisitedNodes(Pipe.setToMap(visited, NodeType.START_NODE));
         await Animator.animatePathNodes(path);
@@ -49,7 +50,8 @@ const runAlgorithmAnimation = async (
             type,
             startNodeId,
             endNodeId,
-            bombNodeId
+            bombNodeId,
+            BackendStateManager.graph()
         );
         await Animator.animateVisitedNodes(Pipe.setToMap(visitedP1, NodeType.START_NODE));
         await Animator.animateVisitedNodes(Pipe.setToMap(visitedP2, NodeType.BOMB_NODE));
