@@ -7,5 +7,5 @@
 #    - 'components/**'
 #    # exclude packages that are inside test directories
 #    - '!**/test/**'
-packages :
+packages:
     - 'src/visualise-graphs/**'

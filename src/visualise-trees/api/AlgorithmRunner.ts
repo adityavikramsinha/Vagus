@@ -1,13 +1,13 @@
-import {AlgorithmApiInputs_t, AlgoType, NOTSET} from "../../visualise-graphs/ts/Types";
-import {AnimationSequence, AnimationType} from "./Animator";
-import {match} from "ts-pattern";
-import bfs0_1 from "../../algorithms/bfs0_1";
-import dijkstras from "../../algorithms/dijkstras_algorithm";
-import bfs from "../../algorithms/bfs";
-import dfs from "../../algorithms/dfs";
-import bellmanFord from "../../algorithms/bellman_ford";
-import Graph from "../../visualise-graphs/ts/Graph";
-import {Queue} from "queue-typescript";
+import { AlgorithmApiInputs_t, AlgoType, NOTSET } from '../../visualise-graphs/ts/Types';
+import { AnimationSequence, AnimationType } from './Animator';
+import { match } from 'ts-pattern';
+import bfs0_1 from '../../algorithms/bfs0_1';
+import dijkstras from '../../algorithms/dijkstras_algorithm';
+import bfs from '../../algorithms/bfs';
+import dfs from '../../algorithms/dfs';
+import bellmanFord from '../../algorithms/bellman_ford';
+import Graph from '../../visualise-graphs/ts/Graph';
+import { Queue } from 'queue-typescript';
 
 export default class AlgorithmRunner {
     /**
@@ -24,8 +24,13 @@ export default class AlgorithmRunner {
      * the path contains the path from start->end for currentState and visitedInOrder contains
      * the nodes that were visited [inorder] to reach to that path
      */
-    static run(algoType: AlgoType, startNodeId: string, endNodeId: string, graph: Graph): {
-        scene: Queue<AnimationSequence>
+    static run(
+        algoType: AlgoType,
+        startNodeId: string,
+        endNodeId: string,
+        graph: Graph,
+    ): {
+        scene: Queue<AnimationSequence>;
     } {
         const scene: Queue<AnimationSequence> = new Queue();
         const inputs: AlgorithmApiInputs_t = {
@@ -35,15 +40,15 @@ export default class AlgorithmRunner {
             edgeAction: (edge) => {
                 scene.enqueue({
                     type: AnimationType.VISIT_EDGE,
-                    payload: edge
-                })
+                    payload: edge,
+                });
             },
             nodeAction: (nodeId) => {
                 scene.enqueue({
                     type: AnimationType.VISIT_NODE,
-                    payload: nodeId
-                })
-            }
+                    payload: nodeId,
+                });
+            },
         };
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
@@ -56,6 +61,6 @@ export default class AlgorithmRunner {
             .with(AlgoType.BELLMAN_FORD, () => bellmanFord(inputs))
             // .with(AlgoType.BEST_FIRST_SEARCH, () => bestFirstSearch(inputs))
             .otherwise(() => [NOTSET, NOTSET]);
-        return {scene: scene}
+        return { scene: scene };
     }
 }

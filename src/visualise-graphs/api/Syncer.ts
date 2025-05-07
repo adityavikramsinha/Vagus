@@ -1,12 +1,11 @@
-import BackendStateManager from "@graph/api/BackendStateManager";
-import useGraphStore, {NodeType} from "../../stores/GraphStore";
-import {NOTSET} from "@graph/ts/Types";
-import Graph from "@graph/ts/Graph";
-import Pipe from "./Pipe";
-import {HexProps} from "../components/hex/Hex";
+import BackendStateManager from '@graph/api/BackendStateManager';
+import useGraphStore, { NodeType } from '../../stores/GraphStore';
+import { NOTSET } from '@graph/ts/Types';
+import Graph from '@graph/ts/Graph';
+import Pipe from './Pipe';
+import { HexProps } from '../components/hex/Hex';
 
 export default class Syncer {
-
     static syncInitialGraph() {
         Graph.copy(BackendStateManager.initGraph(), BackendStateManager.graph(), 1);
     }
@@ -18,9 +17,9 @@ export default class Syncer {
 
     static setNode(x: number, y: number, id: string) {
         BackendStateManager.graph().addNode(id);
-        BackendStateManager.graph().setNodeCoords(id, {x: x, y: y});
+        BackendStateManager.graph().setNodeCoords(id, { x: x, y: y });
         BackendStateManager.initGraph().addNode(id);
-        BackendStateManager.initGraph().setNodeCoords(id, {x: x, y: y});
+        BackendStateManager.initGraph().setNodeCoords(id, { x: x, y: y });
     }
 
     static removeNode(id: string) {
@@ -32,27 +31,33 @@ export default class Syncer {
      * but not connecting them,
      * @param hexes holds the information for the nodes
      */
-    static setGraph (hexes : HexProps []) {
-        hexes.forEach(({x,y,id})=> Syncer.setNode(x, y, id));
+    static setGraph(hexes: HexProps[]) {
+        hexes.forEach(({ x, y, id }) => Syncer.setNode(x, y, id));
         return this;
     }
 
     // STABLE. (v2.0.0)
-    static connectGraph(
-        rows: number,
-        cols: number,
-    ) {
+    static connectGraph(rows: number, cols: number) {
         // New implementation,
         // 1st one is col, 2nd one is row.
         // see https://www.redblobgames.com/grids/hexagons/#coordinates-doubled for visualisation + logic.
         const offsets = [
-            [0, 2], [0, -2], [1, -1], [1, + 1], [-1, -1], [-1, +1]
+            [0, 2],
+            [0, -2],
+            [1, -1],
+            [1, +1],
+            [-1, -1],
+            [-1, +1],
         ];
 
         // Absolutely gorgeous.
         for (let col = 0; col < cols; ++col) {
             const startDoubledRow = (col & 1) === 1 ? 1 : 0;
-            for (let row = 0, doubledCoordinates = startDoubledRow; row < rows; ++row, doubledCoordinates += 2) {
+            for (
+                let row = 0, doubledCoordinates = startDoubledRow;
+                row < rows;
+                ++row, doubledCoordinates += 2
+            ) {
                 const fromId = Pipe.pairToUUID(doubledCoordinates, col);
                 for (const [dc, dr] of offsets) {
                     // dc, dx (differential element?) and Delta Column and Delta Double Coordinates (c+dc)
@@ -76,32 +81,31 @@ export default class Syncer {
     }
 
     static cleanHexBoard() {
-        useGraphStore.setState({visitedNodes: new Map()});
-        useGraphStore.setState({pathNodes: new Set()});
+        useGraphStore.setState({ visitedNodes: new Map() });
+        useGraphStore.setState({ pathNodes: new Set() });
     }
 
     static clearHexBoard() {
         Syncer.cleanHexBoard();
-        if(useGraphStore.getState().executing) {
-            useGraphStore.setState({executing : false});
+        if (useGraphStore.getState().executing) {
+            useGraphStore.setState({ executing: false });
             return;
         }
         useGraphStore.setState({
             hexBoard: {
-                [NOTSET]: NodeType.START_NODE
-            }
-        })
-        let prevStartNode = useGraphStore.getState().startId;
-        let prevEndNode = useGraphStore.getState().endId;
-        let bombNode = useGraphStore.getState().bombNodeId;
+                [NOTSET]: NodeType.START_NODE,
+            },
+        });
+        const prevStartNode = useGraphStore.getState().startId;
+        const prevEndNode = useGraphStore.getState().endId;
+        const bombNode = useGraphStore.getState().bombNodeId;
         Syncer.syncInitialGraph();
         useGraphStore.getState().hexBoard[prevStartNode] = NodeType.START_NODE;
         useGraphStore.getState().hexBoard[prevEndNode] = NodeType.END_NODE;
-        if(bombNode !== NOTSET)
-            useGraphStore.getState().hexBoard[bombNode] = NodeType.BOMB_NODE;
+        if (bombNode !== NOTSET) useGraphStore.getState().hexBoard[bombNode] = NodeType.BOMB_NODE;
     }
 
-    static async supervise(fn: ()=> Promise<void> | void) {
+    static async supervise(fn: () => Promise<void> | void) {
         if (!useGraphStore.getState().executing) return;
         await fn();
     }

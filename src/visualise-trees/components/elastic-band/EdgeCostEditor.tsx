@@ -1,4 +1,4 @@
-import Button from "../../../components/Button";
+import Button from '../../../components/Button';
 
 /**
  * -___+ Value Editor for the Edge Cost.
@@ -6,9 +6,9 @@ import Button from "../../../components/Button";
  * @param onChange function to perform when the Edge cost is changed via + or -
  */
 const EdgeCostEditor = ({
-                            edgeCost,
-                            onChange,
-                        }: {
+    edgeCost,
+    onChange,
+}: {
     edgeCost: number;
     onChange: (newCost: number) => void;
 }) => {

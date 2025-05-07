@@ -1,6 +1,5 @@
 ### Welcome, to the Vagus Readme Page
 
-
 This project has been created for fun, lol.
 It tries to visualise a lot of the common algorithms in graphs and shortest path detection problems.
 This is basically in a sense, a "maze solver". However, it does not strive to take **just** the path that joins two points but, the most optimal path too. This is why, a host of different algorithms have been provided.

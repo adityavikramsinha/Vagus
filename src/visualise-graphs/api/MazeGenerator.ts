@@ -1,5 +1,5 @@
-import useGraphStore from "../../stores/GraphStore";
-import Pipe from "./Pipe";
+import useGraphStore from '../../stores/GraphStore';
+import Pipe from './Pipe';
 
 /**
  * The basic maze generator class which builds the Sets required for
@@ -8,7 +8,6 @@ import Pipe from "./Pipe";
  * @author aditya, <adityavikramsinha19@gmail.com>
  */
 class MazeGenerator {
-
     /**
      * Generates a random maze.
      * It does take the start-node , bomb-node , end-node into consideration.
@@ -16,14 +15,16 @@ class MazeGenerator {
      * @returns a Set having the drawable IDs
      */
     static genRandomMaze(): Set<string> {
-        let hexes = useGraphStore.getState().hexes;
-        let maze: Set<string> = new Set();
+        const hexes = useGraphStore.getState().hexes;
+        const maze: Set<string> = new Set();
         for (let i = 0; i < hexes.length; i++) {
-            let randomId = Math.floor(Math.random() * hexes.length);
-            let hexId = hexes[randomId].id;
-            if (hexId !== useGraphStore.getState().startId &&
+            const randomId = Math.floor(Math.random() * hexes.length);
+            const hexId = hexes[randomId].id;
+            if (
+                hexId !== useGraphStore.getState().startId &&
                 hexId !== useGraphStore.getState().endId &&
-                hexId !== useGraphStore.getState().bombNodeId)
+                hexId !== useGraphStore.getState().bombNodeId
+            )
                 maze.add(hexes[randomId].id);
         }
         return maze;
@@ -42,30 +43,36 @@ class MazeGenerator {
     static genRidges(workableColumns: number, workableRows: number): Set<string> {
         if (workableColumns < 2 || workableRows < 2) return new Set();
 
-        let maze = new Set<string>()
+        const maze = new Set<string>();
 
-        const getDoors = (rows : number) :  [number, number] => {
+        const getDoors = (rows: number): [number, number] => {
             const a = Math.floor(Math.random() * rows);
             let b = Math.floor(Math.random() * (rows - 1));
             if (b >= a) b += 1; // avoid collisions
 
             return [a, b];
-        }
+        };
 
-        for (let col = 0 ; col<workableColumns ;col +=2){
+        for (let col = 0; col < workableColumns; col += 2) {
             // keep 2 random hex's/nodes in the column free to move around.
-            let [door1, door2] = getDoors(workableRows);
-            for (let row = 0 , doubledCoordinates = (col & 1) ===1 ? 1 : 0; row <workableRows ; ++row , doubledCoordinates +=2) {
+            const [door1, door2] = getDoors(workableRows);
+            for (
+                let row = 0, doubledCoordinates = (col & 1) === 1 ? 1 : 0;
+                row < workableRows;
+                ++row, doubledCoordinates += 2
+            ) {
                 const id = Pipe.pairToUUID(doubledCoordinates, col).toString();
                 const startNodeId = useGraphStore.getState().startId;
                 const endNodeId = useGraphStore.getState().endId;
                 const bombNodeId = useGraphStore.getState().bombNodeId;
-                if(door1 !== row &&
+                if (
+                    door1 !== row &&
                     door2 !== row &&
                     id !== startNodeId &&
                     id !== endNodeId &&
                     id !== bombNodeId
-                ) maze.add(id);
+                )
+                    maze.add(id);
             }
         }
         return maze;

@@ -1,5 +1,5 @@
-import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
-import {Queue} from "queue-typescript";
+import { AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET } from '../visualise-graphs/ts/Types';
+import { Queue } from 'queue-typescript';
 
 /**
  * Classic Breadth-first search algorithm which
@@ -13,8 +13,13 @@ import {Queue} from "queue-typescript";
  * @returns an array containing the path | null [path is given if it is found, else null] and a Set of
  * visited nodes inorder while trying to find the path.
  */
-const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmApiInputs_t): AlgorithmApiReturn_t=> {
-
+const bfs = ({
+    graph,
+    startNodeId,
+    endNodeId,
+    nodeAction,
+    edgeAction,
+}: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
     // first initialise all the variables
     // visited is the nodes that are visited in the process
     // prev is to keep track of the
@@ -32,9 +37,8 @@ const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmA
     // While the length of the Queue is not 0
     // We keep on going.
     while (Q.length !== 0) {
-
         // We first get the present node instance from the graph.
-        let node = graph.vertices().get(Q.dequeue());
+        const node = graph.vertices().get(Q.dequeue());
 
         // then we add that node to visited set.
         visited.add(node.getData());
@@ -45,10 +49,8 @@ const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmA
         // therefore we just give it out as is and
         // stop the function
         if (node.getData() === endNodeId) {
-
             // construct the path
-            for (let at = endNodeId; at !== undefined; at = prev.get(at))
-                path.unshift(at);
+            for (let at = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
 
             // return path and visited inorder
             return path;
@@ -60,7 +62,7 @@ const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmA
         // this is the reason it is called breadth-first-search
         // we keep opening all the neighbours, gives the search
         // a cyclic effect.
-        node.getAdjVertices().forEach(edge => {
+        node.getAdjVertices().forEach((edge) => {
             // if we have already visited it, we do not need to
             // because it means that it is already added to the visited section
             // and was a part of the queue.
@@ -71,7 +73,6 @@ const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmA
             // do everything else
             const destId = edge.dest;
             if (!visited.has(destId)) {
-
                 // added it to visited set.
                 visited.add(destId);
 
@@ -91,5 +92,5 @@ const bfs = ({graph, startNodeId, endNodeId, nodeAction, edgeAction}: AlgorithmA
     // thus, no path should exist
     // hence, we return null and just visited set
     return NOTSET;
-}
+};
 export default bfs;

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
     --color-white: rgba(255, 255, 255, 0.8);
@@ -26,9 +26,8 @@
     --color-file-bg-selected: rgba(17, 17, 27, 0.63);
     --loading-epoch: 1.5s;
     --loading-container-size: 250px;
-    --loading-box-size: 33px ;
+    --loading-box-size: 33px;
     --loading-box-border-radius: 15%;
-
 
     --animate-visited-node-without-bomb: visited-node-animation-without-bomb 1s linear forwards;
     @keyframes visited-node-animation-without-bomb {
@@ -65,7 +64,7 @@
         }
     }
 
-    --animate-path: path-animation 1s linear forwards ;
+    --animate-path: path-animation 1s linear forwards;
     @keyframes path-animation {
         0% {
             fill: var(--color-hex-color);
@@ -145,5 +144,4 @@
             transform: scale(1);
         }
     }
-
 }

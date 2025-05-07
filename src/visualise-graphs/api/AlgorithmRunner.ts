@@ -1,13 +1,13 @@
-import {AlgorithmApiInputs_t, AlgoType, NOTSET, NOTSET_t} from "../ts/Types";
-import {match} from "ts-pattern";
-import bfs from "../../algorithms/bfs"
+import { AlgorithmApiInputs_t, AlgoType, NOTSET, NOTSET_t } from '../ts/Types';
+import { match } from 'ts-pattern';
+import bfs from '../../algorithms/bfs';
 import dfs from '../../algorithms/dfs';
-import dijkstras from "../../algorithms/dijkstras_algorithm";
-import bestFirstSearch from "../../algorithms/best_first_search";
-import bellmanFord from "../../algorithms/bellman_ford";
-import aStar from "../../algorithms/a_star";
-import bfs0_1 from "../../algorithms/bfs0_1";
-import Graph from "../ts/Graph";
+import dijkstras from '../../algorithms/dijkstras_algorithm';
+import bestFirstSearch from '../../algorithms/best_first_search';
+import bellmanFord from '../../algorithms/bellman_ford';
+import aStar from '../../algorithms/a_star';
+import bfs0_1 from '../../algorithms/bfs0_1';
+import Graph from '../ts/Graph';
 
 /**
  * Main backbone of the whole backend.
@@ -17,7 +17,6 @@ import Graph from "../ts/Graph";
  * @author aditya, <adityavikramsinha19@gmail.com>
  */
 export default class AlgorithmRunner {
-
     /**
      * Is a helper function on required for this project
      * It helps simplify front end by doing everything internally
@@ -32,24 +31,28 @@ export default class AlgorithmRunner {
      * the path contains the path from start->end for currentState and visitedInOrder contains
      * the nodes that were visited [inorder] to reach to that path
      */
-    static runWithoutBombNode(algoType: AlgoType, startNodeId: string, endNodeId: string, graph: Graph): {
-        path: string[] | NOTSET_t,
-        visited: Set<string>,
+    static runWithoutBombNode(
+        algoType: AlgoType,
+        startNodeId: string,
+        endNodeId: string,
+        graph: Graph,
+    ): {
+        path: string[] | NOTSET_t;
+        visited: Set<string>;
     } {
         const visited = new Set<string>();
         const inputs: AlgorithmApiInputs_t = {
             graph,
             startNodeId,
             endNodeId,
-            edgeAction: (_) => {
-            },
+            edgeAction: (_) => {},
             nodeAction: (nodeId) => {
                 visited.add(nodeId);
-            }
+            },
         };
         // using if else and enums to return an output in the form of [path , visitedInOrder] which
         // is later turned directly into an object and given as return from the function
-        const path : string[] | NOTSET_t = match(algoType)
+        const path: string[] | NOTSET_t = match(algoType)
             .with(AlgoType.ZERO_ONE_BREADTH_FIRST_SEARCH, () => bfs0_1(inputs))
             .with(AlgoType.DIJKSTRAS_SEARCH, () => dijkstras(inputs))
             .with(AlgoType.A_STAR_SEARCH, () => aStar(inputs))
@@ -59,10 +62,10 @@ export default class AlgorithmRunner {
             .with(AlgoType.BEST_FIRST_SEARCH, () => bestFirstSearch(inputs))
             .otherwise(() => NOTSET);
 
-        return {path, visited}
+        return { path, visited };
     }
 
-    private static joinBombNodePath(p1: string [] | NOTSET_t, p2: string [] | NOTSET_t) {
+    private static joinBombNodePath(p1: string[] | NOTSET_t, p2: string[] | NOTSET_t) {
         return p1 !== NOTSET && p2 !== NOTSET ? p1.concat(p2.slice(1)) : NOTSET;
     }
 
@@ -78,52 +81,62 @@ export default class AlgorithmRunner {
         startNodeId: string,
         endNodeId: string,
         bombNodeId: string,
-        graph :Graph
-    ): { path: string[] | NOTSET_t, visitedP1: Set<string>, visitedP2: Set<string> } {
+        graph: Graph,
+    ): { path: string[] | NOTSET_t; visitedP1: Set<string>; visitedP2: Set<string> } {
         const visitedP1 = new Set<string>();
         const visitedP2 = new Set<string>();
         const inputsTillBombNode: AlgorithmApiInputs_t = {
             graph,
             startNodeId,
             endNodeId: bombNodeId,
-            edgeAction: (_) => {
-            },
+            edgeAction: (_) => {},
             nodeAction: (nodeId) => {
-                visitedP1.add(nodeId)
-            }
+                visitedP1.add(nodeId);
+            },
         };
         const inputsTillEndNode: AlgorithmApiInputs_t = {
             graph,
             startNodeId: bombNodeId,
             endNodeId,
-            edgeAction: (_) => {
-            },
+            edgeAction: (_) => {},
             nodeAction: (nodeId) => {
                 visitedP2.add(nodeId);
-            }
+            },
         };
 
-        const path: NOTSET_t | string [] = match(algoType)
-            .with(AlgoType.A_STAR_SEARCH,
-                () => AlgorithmRunner.joinBombNodePath(aStar(inputsTillBombNode),
-                    aStar(inputsTillEndNode)))
-            .with(AlgoType.BREADTH_FIRST_SEARCH,
-                () => AlgorithmRunner.joinBombNodePath(bfs(inputsTillBombNode),
-                    bfs(inputsTillEndNode)))
-            .with(AlgoType.BELLMAN_FORD,
-                () => AlgorithmRunner.joinBombNodePath(bellmanFord(inputsTillBombNode),
-                    bellmanFord(inputsTillEndNode)))
-            .with(AlgoType.DIJKSTRAS_SEARCH,
-                () => AlgorithmRunner.joinBombNodePath(dijkstras(inputsTillBombNode),
-                    dijkstras(inputsTillEndNode)))
-            .with(AlgoType.DEPTH_FIRST_SEARCH,
-                () => AlgorithmRunner.joinBombNodePath(dfs(inputsTillBombNode),
-                    dfs(inputsTillEndNode)))
-            .with(AlgoType.BEST_FIRST_SEARCH,
-                () => AlgorithmRunner.joinBombNodePath(bestFirstSearch(inputsTillBombNode),
-                    bestFirstSearch(inputsTillEndNode)))
+        const path: NOTSET_t | string[] = match(algoType)
+            .with(AlgoType.A_STAR_SEARCH, () =>
+                AlgorithmRunner.joinBombNodePath(
+                    aStar(inputsTillBombNode),
+                    aStar(inputsTillEndNode),
+                ),
+            )
+            .with(AlgoType.BREADTH_FIRST_SEARCH, () =>
+                AlgorithmRunner.joinBombNodePath(bfs(inputsTillBombNode), bfs(inputsTillEndNode)),
+            )
+            .with(AlgoType.BELLMAN_FORD, () =>
+                AlgorithmRunner.joinBombNodePath(
+                    bellmanFord(inputsTillBombNode),
+                    bellmanFord(inputsTillEndNode),
+                ),
+            )
+            .with(AlgoType.DIJKSTRAS_SEARCH, () =>
+                AlgorithmRunner.joinBombNodePath(
+                    dijkstras(inputsTillBombNode),
+                    dijkstras(inputsTillEndNode),
+                ),
+            )
+            .with(AlgoType.DEPTH_FIRST_SEARCH, () =>
+                AlgorithmRunner.joinBombNodePath(dfs(inputsTillBombNode), dfs(inputsTillEndNode)),
+            )
+            .with(AlgoType.BEST_FIRST_SEARCH, () =>
+                AlgorithmRunner.joinBombNodePath(
+                    bestFirstSearch(inputsTillBombNode),
+                    bestFirstSearch(inputsTillEndNode),
+                ),
+            )
             .otherwise(() => NOTSET);
 
-        return {path, visitedP1, visitedP2}
+        return { path, visitedP1, visitedP2 };
     }
 }

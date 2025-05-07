@@ -1,22 +1,22 @@
 import React from 'react';
-import useFileExplorer, {FileStore} from "@/providers/FileExplorer";
+import useFileExplorer, { FileStore } from '@/providers/FileExplorer';
 
 export enum FileType {
-    TS = "ts",
-    IO = "io",
-    BAT = "bat",
-    SYS = "sys",
-    MD = "md",
-    GUI = "gui",
+    TS = 'ts',
+    IO = 'io',
+    BAT = 'bat',
+    SYS = 'sys',
+    MD = 'md',
+    GUI = 'gui',
 }
 
 export type FileProps = {
-    type: FileType,
-    id: string,
-    name: string,
-    Icon: React.JSX.Element,
-    onClick?: () => void
-}
+    type: FileType;
+    id: string;
+    name: string;
+    Icon: React.JSX.Element;
+    onClick?: () => void;
+};
 
 /**
  * @param type is the type of FileType
@@ -28,20 +28,19 @@ export type FileProps = {
  *                state and style of the file. But extra functionality can be added via the onClick function for
  *                specific files.
  */
-const File: React.FC<FileProps> = ({type, id, name, Icon, onClick}) => {
+const File: React.FC<FileProps> = ({ type, id, name, Icon, onClick }) => {
     const isActiveFile = useFileExplorer((state: FileStore) => state.activeFiles[type] === id);
     const changeActiveFiles = useFileExplorer((state: FileStore) => state.changeActiveFiles);
-    let styles: React.CSSProperties = {
-        background: "rgba(255, 255, 255, 0.05)",
-        borderRadius: "4px"
-    }
+    const styles: React.CSSProperties = {
+        background: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: '4px',
+    };
     return (
         <div
             className="p-[1px_0_3px_22px] m-[0_2px_0_18px] flex flex-nowrap gap-[5px] pt-[2.5px] pb-[2.5px]"
             id={id}
             onClick={() => {
-                if (type !== FileType.GUI)
-                    changeActiveFiles(id, type);
+                if (type !== FileType.GUI) changeActiveFiles(id, type);
                 onClick?.();
             }}
             style={isActiveFile ? styles : {}}
@@ -49,7 +48,6 @@ const File: React.FC<FileProps> = ({type, id, name, Icon, onClick}) => {
             {Icon}
             <p className="text-xs font-light">{name}</p>
         </div>
-    )
-}
+    );
+};
 export default File;
-

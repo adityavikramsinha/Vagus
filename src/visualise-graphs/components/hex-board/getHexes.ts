@@ -1,5 +1,5 @@
-import {HexProps} from "@graph/components/hex/Hex";
-import Pipe from "@graph/api/Pipe";
+import { HexProps } from '@graph/components/hex/Hex';
+import Pipe from '@graph/api/Pipe';
 
 /**
  * Based on the Dimensions of the Hex board and a single Hex, this returns an array of Hex's each with
@@ -10,7 +10,7 @@ import Pipe from "@graph/api/Pipe";
  * @param HEX_HEIGHT
  */
 const getHexes = (rows: number, cols: number, HEX_WIDTH: number, HEX_HEIGHT: number) => {
-    let hexes: HexProps[] = [];
+    const hexes: HexProps[] = [];
     let x = -14.5;
 
     for (let col = 0; col < cols; col++, x += HEX_WIDTH) {

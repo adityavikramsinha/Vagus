@@ -1,4 +1,4 @@
-import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-graphs/ts/Types";
+import { AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET } from '../visualise-graphs/ts/Types';
 
 /**
  * Classic DFS which uses an internal function
@@ -10,9 +10,12 @@ import {AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET} from "../visualise-g
  * @returns a path | null [path if found, else null] and an inorder Set of visited nodes.
  */
 const dfs = ({
-                 graph, startNodeId, endNodeId, nodeAction, edgeAction
-             }: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
-
+    graph,
+    startNodeId,
+    endNodeId,
+    nodeAction,
+    edgeAction,
+}: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
     // path is for the path to be returned
     // visited is for the Set of visited nodes in order
     // prev is to construct a path.
@@ -36,7 +39,6 @@ const dfs = ({
         // we have already opened this node and explored
         // it in-depth.
         if (!visited.has(at)) {
-
             // add the node if not visited
             visited.add(at);
 
@@ -46,23 +48,26 @@ const dfs = ({
             // if not found then keep opening
             // descendent
             if (at !== endNodeId) {
-                graph.vertices().get(at).getAdjVertices().forEach(edge => {
-                    // add to list of visited Edges
-                    edgeAction(edge);
-                    internalDfs(edge.dest, at);
-                });
+                graph
+                    .vertices()
+                    .get(at)
+                    .getAdjVertices()
+                    .forEach((edge) => {
+                        // add to list of visited Edges
+                        edgeAction(edge);
+                        internalDfs(edge.dest, at);
+                    });
             }
 
-                // if found then we just construct the path
+            // if found then we just construct the path
             // and leave
             else {
                 // reconstruct path from the given prev Set
-                for (let at = endNodeId; at !== undefined; at = prev.get(at))
-                    path.unshift(at);
+                for (let at = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
                 return;
             }
         }
-    }
+    };
 
     // call function once to start
     // with undefined as starts' "ancestor"
@@ -74,5 +79,5 @@ const dfs = ({
     // if length ge 1, we know that there is a route
     // else not
     return path.length > 0 ? path : NOTSET;
-}
+};
 export default dfs;

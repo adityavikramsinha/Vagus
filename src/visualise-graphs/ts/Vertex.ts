@@ -17,7 +17,6 @@ import Edge from './Edge';
  * @author aditya, <adityavikramsinha19@gmail.com>
  */
 export default class Vertex {
-
     //id or the UID of a vertex
     private readonly data: string;
 
@@ -44,7 +43,7 @@ export default class Vertex {
      * @param x x coordinate of the vertex on the hex board
      */
     setX(x: number | string): void {
-        if (typeof x === "string") this.xCoord = parseFloat(x);
+        if (typeof x === 'string') this.xCoord = parseFloat(x);
         else this.xCoord = x;
     }
 
@@ -61,7 +60,7 @@ export default class Vertex {
      * @param y y coordinate of the vertex on the hex board
      */
     setY(y: number | string): void {
-        if (typeof y === "string") this.yCoord = parseFloat(y);
+        if (typeof y === 'string') this.yCoord = parseFloat(y);
         else this.yCoord = y;
     }
 
@@ -108,8 +107,8 @@ export default class Vertex {
      * @returns An object that has the x and y coordinates of
      * this vertex.
      */
-    coordinates(): { x: number, y: number } {
-        return {x: this.xCoord, y: this.yCoord};
+    coordinates(): { x: number; y: number } {
+        return { x: this.xCoord, y: this.yCoord };
     }
 
     // comparator for total ordering in the vertex class
@@ -130,7 +129,12 @@ export default class Vertex {
      * @param x x coordinate of the vertex
      * @param y y coordinate of the vertex
      */
-    constructor(data: string, comparator: (a: string, b: string) => number, x: number = 0, y: number = 0) {
+    constructor(
+        data: string,
+        comparator: (a: string, b: string) => number,
+        x: number = 0,
+        y: number = 0,
+    ) {
         this.data = data;
         this.comparator = comparator;
         this.adjVertices = new Map();
@@ -181,7 +185,7 @@ export default class Vertex {
      */
     updateCostTo(v: Vertex, cost: number): boolean {
         // first get the v to update.
-        let edgeToUpdate = this.adjVertices.get(v.getData());
+        const edgeToUpdate = this.adjVertices.get(v.getData());
 
         // if it is undefined, then the given v does not exist
         // thus, we return false
@@ -222,13 +226,13 @@ export default class Vertex {
      */
     toString(): string {
         let metaData: string = 'data:' + this.data + ',\nNeighbours:[\n';
-        this.adjVertices.forEach(edge => {
-            metaData += "    {dest:" + edge.dest + ", cost:" + edge.cost + "},\n";
+        this.adjVertices.forEach((edge) => {
+            metaData += '    {dest:' + edge.dest + ', cost:' + edge.cost + '},\n';
         });
-        metaData += "]\ncoords:{";
-        metaData += "\n     x:" + this.xCoord;
-        metaData += "\n     y:" + this.yCoord;
-        metaData += "\n}";
+        metaData += ']\ncoords:{';
+        metaData += '\n     x:' + this.xCoord;
+        metaData += '\n     y:' + this.yCoord;
+        metaData += '\n}';
         return metaData;
     }
 
@@ -238,11 +242,12 @@ export default class Vertex {
      *
      * @returns A random neighbour from the list of neighbours
      */
-    getRandomNeighbour(): string{
+    getRandomNeighbour(): string {
         while (true) {
-            let neighbourId = Array.from(this.getAdjVertices().values())[Math.floor(Math.random() * this.getAdjVertices().size)].dest;
-            if (neighbourId !== this.data || this.adjVertices.size === 1)
-                return neighbourId;
+            const neighbourId = Array.from(this.getAdjVertices().values())[
+                Math.floor(Math.random() * this.getAdjVertices().size)
+            ].dest;
+            if (neighbourId !== this.data || this.adjVertices.size === 1) return neighbourId;
         }
     }
 }

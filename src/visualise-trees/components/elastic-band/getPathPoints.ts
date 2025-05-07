@@ -18,15 +18,15 @@ const getPathPoints = (
     arrowLength: number,
     arrowWidth: number,
     bendDirection: number = 0, // -1: left, 0: straight, +1: right
-    bendAmount: number = 25
+    bendAmount: number = 25,
 ) => {
-    const [centerX1, centerY1, centerX2, centerY2] = vals.map(val => val + RADIUS);
+    const [centerX1, centerY1, centerX2, centerY2] = vals.map((val) => val + RADIUS);
 
     const dx = centerX2 - centerX1;
     const dy = centerY2 - centerY1;
     const dist = Math.hypot(dx, dy) || 1;
 
-    const [shrinkX, shrinkY] = [dx, dy].map(dl => (dl / dist) * RADIUS);
+    const [shrinkX, shrinkY] = [dx, dy].map((dl) => (dl / dist) * RADIUS);
 
     const newX1 = centerX1 + shrinkX;
     const newY1 = centerY1 + shrinkY;
@@ -38,7 +38,7 @@ const getPathPoints = (
     const normY = dy / dist;
     const perpX = -normY * bendDirection;
     const perpY = normX * bendDirection;
-    if (bendDirection !== 0 ){
+    if (bendDirection !== 0) {
         // Control point for quadratic curve
         const controlX = (newX1 + newX2) / 2 + perpX * bendAmount * bendDirection;
         const controlY = (newY1 + newY2) / 2 + perpY * bendAmount * bendDirection;
@@ -52,11 +52,15 @@ const getPathPoints = (
         const arrowAngle = Math.atan2(tangentY, tangentX);
 
         // Now calculate the arrowhead base positions
-        const arrowBaseX1 = newX2 - arrowLength * Math.cos(arrowAngle) + (arrowWidth / 2) * Math.sin(arrowAngle);
-        const arrowBaseY1 = newY2 - arrowLength * Math.sin(arrowAngle) - (arrowWidth / 2) * Math.cos(arrowAngle);
+        const arrowBaseX1 =
+            newX2 - arrowLength * Math.cos(arrowAngle) + (arrowWidth / 2) * Math.sin(arrowAngle);
+        const arrowBaseY1 =
+            newY2 - arrowLength * Math.sin(arrowAngle) - (arrowWidth / 2) * Math.cos(arrowAngle);
 
-        const arrowBaseX2 = newX2 - arrowLength * Math.cos(arrowAngle) - (arrowWidth / 2) * Math.sin(arrowAngle);
-        const arrowBaseY2 = newY2 - arrowLength * Math.sin(arrowAngle) + (arrowWidth / 2) * Math.cos(arrowAngle);
+        const arrowBaseX2 =
+            newX2 - arrowLength * Math.cos(arrowAngle) - (arrowWidth / 2) * Math.sin(arrowAngle);
+        const arrowBaseY2 =
+            newY2 - arrowLength * Math.sin(arrowAngle) + (arrowWidth / 2) * Math.cos(arrowAngle);
 
         return {
             x1: newX1,
@@ -68,20 +72,22 @@ const getPathPoints = (
             ay2: arrowBaseY2,
             ax2: arrowBaseX2,
             cx: controlX,
-            cy: controlY
-        }
-    }
-    else {
+            cy: controlY,
+        };
+    } else {
         // Calculate the angle for the arrowhead
         const angle = Math.atan2(newY2 - newY1, newX2 - newX1);
 
         // Arrowhead base positions
-        const arrowBaseX1 = newX2 - arrowLength * Math.cos(angle) + (arrowWidth / 2) * Math.sin(angle);
-        const arrowBaseY1 = newY2 - arrowLength * Math.sin(angle) - (arrowWidth / 2) * Math.cos(angle);
+        const arrowBaseX1 =
+            newX2 - arrowLength * Math.cos(angle) + (arrowWidth / 2) * Math.sin(angle);
+        const arrowBaseY1 =
+            newY2 - arrowLength * Math.sin(angle) - (arrowWidth / 2) * Math.cos(angle);
 
-        const arrowBaseX2 = newX2 - arrowLength * Math.cos(angle) - (arrowWidth / 2) * Math.sin(angle);
-        const arrowBaseY2 = newY2 - arrowLength * Math.sin(angle) + (arrowWidth / 2) * Math.cos(angle);
-
+        const arrowBaseX2 =
+            newX2 - arrowLength * Math.cos(angle) - (arrowWidth / 2) * Math.sin(angle);
+        const arrowBaseY2 =
+            newY2 - arrowLength * Math.sin(angle) + (arrowWidth / 2) * Math.cos(angle);
 
         return {
             x1: newX1,
@@ -93,8 +99,8 @@ const getPathPoints = (
             ay2: arrowBaseY2,
             ax2: arrowBaseX2,
             cx: cx,
-            cy: cy
-        }
+            cy: cy,
+        };
     }
 };
 export default getPathPoints;

@@ -1,4 +1,4 @@
-import Vertex from "./Vertex";
+import Vertex from './Vertex';
 
 /**
  * Utility graph class with functions to help in maintaining state and making the algorithms work.
@@ -11,7 +11,6 @@ import Vertex from "./Vertex";
  * @author aditya, <adityavikramsinha19@gmail.com>
  */
 export default class Graph {
-
     // freeze guard
     private frozen = false;
 
@@ -53,7 +52,7 @@ export default class Graph {
      * @param x the x coordinate
      * @param y the y coordinate
      */
-    setNodeCoords(data: string, {x, y}: { x: number, y: number }): void {
+    setNodeCoords(data: string, { x, y }: { x: number; y: number }): void {
         this.assertMutable();
         this.vertices().get(data).setCoords(x, y);
     }
@@ -80,8 +79,7 @@ export default class Graph {
     hasEdge(source: string, destination: string): boolean {
         const src = this.vertices().get(source);
 
-        if (src === undefined)
-            return false;
+        if (src === undefined) return false;
         return src.getAdjVertices().has(destination);
     }
 
@@ -95,8 +93,7 @@ export default class Graph {
     addNode(data: string, x: number = 0, y: number = 0): Vertex {
         this.assertMutable();
         let vertex = this.vertices().get(data);
-        if (vertex !== undefined)
-            return vertex;
+        if (vertex !== undefined) return vertex;
         vertex = new Vertex(data, this.comparator, x, y);
         this.vertices().set(data, vertex);
         return vertex;
@@ -116,7 +113,7 @@ export default class Graph {
         if (!nodeToRm) return null;
         this.vertices().forEach((vertex) => {
             vertex.rmAdjVertex(nodeToRm.getData());
-        })
+        });
         this.vertices().delete(data);
         return nodeToRm;
     }
@@ -128,7 +125,8 @@ export default class Graph {
     private assertMutable() {
         if (this.frozen)
             throw new Error(
-                "The graph has been frozen, no operations that modify the graph can be done")
+                'The graph has been frozen, no operations that modify the graph can be done',
+            );
     }
 
     /**
@@ -144,8 +142,8 @@ export default class Graph {
      */
     addEdge(source: string, destination: string, cost: number): void {
         this.assertMutable();
-        let src = this.vertices().get(source);
-        let dest = this.vertices().get(destination);
+        const src = this.vertices().get(source);
+        const dest = this.vertices().get(destination);
         src.addAdjVertex(dest, cost);
         if (this.isUndirected) dest.addAdjVertex(src, cost);
     }
@@ -167,8 +165,7 @@ export default class Graph {
         const dest = this.vertices().get(destination);
         if (src && dest) {
             src.rmAdjVertex(destination);
-            if (this.isUndirected)
-                dest.rmAdjVertex(source);
+            if (this.isUndirected) dest.rmAdjVertex(source);
         }
     }
 
@@ -181,14 +178,17 @@ export default class Graph {
      * @param whatType is the type of distance required, m for manhattan and e for Euclidean
      * @returns the value of this function.
      */
-    distBw(_this: { x: number, y: number }, _that: {
-        x: number,
-        y: number
-    }, whatType: string = 'e'): number {
+    distBw(
+        _this: { x: number; y: number },
+        _that: {
+            x: number;
+            y: number;
+        },
+        whatType: string = 'e',
+    ): number {
         if (whatType === 'e')
             return Math.sqrt(Math.pow(_that.x - _this.x, 2) + Math.pow(_that.y - _this.y, 2));
-        else
-            return Math.abs(_this.x - _that.x) + Math.abs(_this.y - _that.y);
+        else return Math.abs(_this.x - _that.x) + Math.abs(_this.y - _that.y);
     }
 
     /**
@@ -211,18 +211,18 @@ export default class Graph {
      * @param _presentGraph the present graph in which the changes need to be made.
      */
     static revertNode(data: string, _initGraph: Graph, _presentGraph: Graph): void {
-        let initialNode = _initGraph.vertices().get(data);
+        const initialNode = _initGraph.vertices().get(data);
         _presentGraph.addNode(data);
-        let presentNode = _presentGraph.vertices().get(data);
+        const presentNode = _presentGraph.vertices().get(data);
 
-        initialNode.getAdjVertices().forEach(edge => {
-            let presentEdgeDest = _presentGraph.vertices().get(edge.dest);
+        initialNode.getAdjVertices().forEach((edge) => {
+            const presentEdgeDest = _presentGraph.vertices().get(edge.dest);
 
             if (presentEdgeDest !== undefined) {
                 presentNode.addAdjVertex(presentEdgeDest, edge.cost);
                 presentEdgeDest.addAdjVertex(presentNode, edge.cost);
             }
-        })
+        });
     }
 
     /**
@@ -235,7 +235,7 @@ export default class Graph {
      * @return true if updated or false if not updated(either vertex does not exist or edge does not exist or both)
      */
     updateEdgeCost(srcId: string, destId: string, cost: number) {
-        let vertex = this.vertices().get(srcId);
+        const vertex = this.vertices().get(srcId);
         if (vertex === undefined) return false;
         const targetEdge = vertex.getAdjVertices().get(destId);
         if (targetEdge === undefined) return false;
@@ -251,7 +251,6 @@ export default class Graph {
      * @param cost the cost of edges.
      */
     static copy(_initial: Graph, _present: Graph, cost: number): void {
-
         //first reset all active connections
         _initial.vertices().forEach((initNode) => {
             if (!_present.vertices().has(initNode.getData())) {
@@ -262,8 +261,7 @@ export default class Graph {
         //then reset all active costs.
         _present.vertices().forEach((initNode) => {
             initNode.getAdjVertices().forEach((edge) => {
-                if (edge.dest !== initNode.getData() && edge.cost > 1)
-                    edge.changeCost(cost);
+                if (edge.dest !== initNode.getData() && edge.cost > 1) edge.changeCost(cost);
             });
         });
     }
