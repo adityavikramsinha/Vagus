@@ -1,8 +1,4 @@
 import Vertex from './Vertex';
-import {
-    convertSegmentPathToStaticExportFilename
-} from 'next/dist/shared/lib/segment-cache/segment-value-encoding';
-
 /**
  * Utility graph class with functions to help in maintaining state and making the algorithms work.
  * It is a Map of vertices, each vertex is connection through the Edges and together get
@@ -147,10 +143,8 @@ export default class Graph {
         this.assertMutable();
         const src = this.vertices().get(source);
         const dest = this.vertices().get(destination);
-        if (!src)
-            throw new Error("Source is the issue");
-        if (!dest)
-            throw new Error("Destination is the issue");
+        if (!src) throw new Error('Source is the issue');
+        if (!dest) throw new Error('Destination is the issue');
         src.addAdjVertex(dest, cost);
         if (this.isUndirected) dest.addAdjVertex(src, cost);
     }
@@ -237,14 +231,13 @@ export default class Graph {
         _present.clear();
         _initial.vertices().forEach((vertex) => {
             _present.addNode(vertex.getData(), vertex.x(), vertex.y());
-
         });
 
-        _initial.vertices().forEach((vertex)=>{
+        _initial.vertices().forEach((vertex) => {
             vertex.getAdjVertices().forEach((edge) => {
                 _present.addEdge(edge.src, edge.dest, edge.cost);
-            })
-        })
+            });
+        });
     }
 
     static equals(g1: Graph, g2: Graph): boolean {
@@ -264,30 +257,39 @@ export default class Graph {
             const v2 = g2.vertices().get(key)!;
 
             if (v1.getData() !== v2.getData())
-                throw new Error(`Data mismatch at vertex ${key}: ${v1.getData()} vs ${v2.getData()}`);
+                throw new Error(
+                    `Data mismatch at vertex ${key}: ${v1.getData()} vs ${v2.getData()}`,
+                );
 
             if (v1.x() !== v2.x() || v1.y() !== v2.y())
-                throw new Error(`Coordinate mismatch at vertex ${key}: (${v1.x()}, ${v1.y()}) vs (${v2.x()}, ${v2.y()})`);
+                throw new Error(
+                    `Coordinate mismatch at vertex ${key}: (${v1.x()}, ${v1.y()}) vs (${v2.x()}, ${v2.y()})`,
+                );
 
             const adj1 = [...v1.getAdjVertices().keys()].sort();
             const adj2 = [...v2.getAdjVertices().keys()].sort();
 
             if (adj1.length !== adj2.length)
-                throw new Error(`Adjacency count mismatch at vertex ${key}: ${adj1.length} vs ${adj2.length}`);
+                throw new Error(
+                    `Adjacency count mismatch at vertex ${key}: ${adj1.length} vs ${adj2.length}`,
+                );
 
             for (let i = 0; i < adj1.length; i++) {
                 if (adj1[i] !== adj2[i])
-                    throw new Error(`Adjacency mismatch at vertex ${key}, index ${i}: ${adj1[i]} vs ${adj2[i]}`);
+                    throw new Error(
+                        `Adjacency mismatch at vertex ${key}, index ${i}: ${adj1[i]} vs ${adj2[i]}`,
+                    );
 
                 const e1 = v1.getAdjVertices().get(adj1[i]);
                 const e2 = v2.getAdjVertices().get(adj2[i]);
 
                 if (e1?.cost !== e2?.cost)
-                    throw new Error(`Edge cost mismatch from vertex ${key} to ${adj1[i]}: ${e1?.cost} vs ${e2?.cost}`);
+                    throw new Error(
+                        `Edge cost mismatch from vertex ${key} to ${adj1[i]}: ${e1?.cost} vs ${e2?.cost}`,
+                    );
             }
         }
 
         return true;
     }
-
 }

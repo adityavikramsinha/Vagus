@@ -7,14 +7,15 @@ import { NOTSET, NOTSET_t } from '../../visualise-graphs/ts/Types';
  * @param endNodeId is the id of the end node
  *
  */
-const reconstruct_path_or_else = (prev: Map<string, string>, condition: boolean, endNodeId: string): NOTSET_t | string[] => {
-    if (!condition)
-        return NOTSET;
+const reconstruct_path_or_else = (
+    prev: Map<string, string>,
+    condition: boolean,
+    endNodeId: string,
+): NOTSET_t | string[] => {
+    if (!condition) return NOTSET;
     const path: string[] = [];
-    for (let at: string = endNodeId; at !== undefined; at = prev.get(at))
-        path.unshift(at);
+    for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
     return path;
-
 };
 
 export default reconstruct_path_or_else;

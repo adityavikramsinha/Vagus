@@ -4,12 +4,10 @@ import { NOTSET } from '@graph/ts/Types';
 import Graph from '@graph/ts/Graph';
 import Pipe from './Pipe';
 import { HexProps } from '../components/hex/Hex';
-import { Bruno_Ace } from 'next/dist/compiled/@next/font/dist/google';
 
 export default class Syncer {
     static syncInitialGraph() {
-        Graph.copy(BackendStateManager.initGraph(), BackendStateManager.graph(), 1);
-        console.log(Graph.equals(BackendStateManager.initGraph(), BackendStateManager.graph()));
+        Graph.copy(BackendStateManager.initGraph(), BackendStateManager.graph());
     }
 
     static setEdge(source: string, dest: string) {
