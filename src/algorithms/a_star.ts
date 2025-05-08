@@ -3,13 +3,17 @@ import { MinPriorityQueue } from '@datastructures-js/priority-queue';
 
 /**
  * Internal implementation of the a-star algorithm
- * This algorithm uses EPS [10^-5] and uses multiplication
- * and addition to make an informed choice.
+ * This algorithm uses EPS [10^-5] for balancing factor
+ * between edge weight and edge node distance.
  *
  * @param graph the Graph to use
- * @param start starting node ID
- * @param end ending node ID
- * @returns a distance map, a map to reconstruct the path and a set of visited nodes inorder
+ * @param startNodeId starting node ID
+ * @param endNodeId ending node ID
+ * @param nodeAction action to perform on every node dequeue (to preserve the order in Priority
+ * Queue)
+ * @param edgeAction action to perform whenever a new destination from an opened nodes' edge is
+ * added.
+ * @returns {@link AlgorithmApiInputs_t} specified return type for this API
  */
 const internalAStar = ({
     graph,
@@ -18,15 +22,11 @@ const internalAStar = ({
     nodeAction,
     edgeAction,
 }: AlgorithmApiInputs_t): [Map<string, number>, Map<string, string>] => {
-    // created type to have
-    // in the Priority Queue
     type Priority = {
         // UID of node
         label: string;
-
         // min distance from [S]
         minDist: number;
-
         // min heuristic cost from [S]
         minHeuristic: number;
     };
@@ -34,9 +34,8 @@ const internalAStar = ({
     // making the priority queue to
     // sort the data in the opening nodes
     // the distance map is for understanding if a path exists or not
-    // the visited set is for visualisation
-    // and to make decisions about whether a node should be opened or not
-    const PQ = new MinPriorityQueue<Priority>((promisingNode) => promisingNode.minHeuristic);
+    // the visited set is to make decisions about whether a node should be opened or not
+    const pq = new MinPriorityQueue<Priority>((promisingNode) => promisingNode.minHeuristic);
     const dist: Map<string, number> = new Map(),
         prev: Map<string, string> = new Map();
     const visited: Set<string> = new Set();
@@ -47,26 +46,28 @@ const internalAStar = ({
         dist.set(id, id === startNodeId ? 0 : Infinity);
     });
 
-    // getting the start and end nodes
-    const dest = graph.vertices().get(startNodeId),
+    const startNode = graph.vertices().get(startNodeId),
         endNode = graph.vertices().get(endNodeId);
 
     // Enqueue the first item
-    // this way, the PQ is always > 0 when starting.
-    PQ.enqueue({
+    // this way, the pq is always > 0 when starting.
+    pq.enqueue({
         label: startNodeId,
         minDist: 0,
-        minHeuristic: graph.distBw(dest.coordinates(), endNode.coordinates()),
+        minHeuristic: graph.distBw(startNode.coordinates(), endNode.coordinates()),
     });
 
-    // keeps going while PQ is not exhausted
-    while (!PQ.isEmpty()) {
-        // deconstruct the object
-        const { label, minDist } = PQ.dequeue();
+    // keeps going while pq is not empty
+    while (!pq.isEmpty()) {
+        const { label, minDist } = pq.dequeue();
 
-        // add to visited to say that this node has been opened already
+        // add to visited to say that this node has been opened
+        // and if we come across this node again, we will not try
+        // to open it or enqueue it.
         visited.add(label);
 
+        // perform the nodeAction as promised
+        // after the De-Queue-ing of the node.
         nodeAction(label);
         // if we see that the current minDist is > the dist present in the Map
         // then it is evident that there is no point in trying to explore it since
@@ -75,98 +76,69 @@ const internalAStar = ({
 
         // open all the neighbour nodes
         // same as a bfs search
-        // this bfs gives a cyclic kind of effect
         graph
             .vertices()
             .get(label)
             .getAdjVertices()
             .forEach((edge) => {
-                // get the data to remove
-                // boilerplate code
                 const destData = edge.dest;
 
+                // perform the edge action
+                // since we have opened an edge.
+                edgeAction(edge);
                 // if visited does not have the node
                 // then only do we open it.
                 // else we can already confirm that all the nodes
                 // have either been opened or explored or are going to
-                // be explored.
+                // be explored we do not need to add anymore.
                 if (!visited.has(destData)) {
-                    // get the new dist
-                    // which is dist form [S] of the prev node
-                    // + edge cost.
                     const newDist = dist.get(label) + edge.cost;
 
                     // get heuristics from the previous node
                     // and node to next
                     const destNode = graph.vertices().get(destData);
-                    const newHeuristic =
+                    const latestHeuristicScore =
                         (graph.distBw(destNode.coordinates(), endNode.coordinates(), 'e') /
                             1000000) *
                         newDist;
 
-                    // now if newDist is < dist present in dist Map
-                    // then only do we update everything
-                    // else we do not.
+                    // Only update if we have found a better cost than the
+                    // one that iws currently there in the dist Map.
                     if (newDist < dist.get(destData)) {
-                        edgeAction(edge);
                         prev.set(destData, label);
                         dist.set(destData, newDist);
-                        PQ.enqueue({
+                        pq.enqueue({
                             label: destData,
                             minDist: newDist,
-                            minHeuristic: newHeuristic,
+                            minHeuristic: latestHeuristicScore,
                         });
                     }
                 }
             });
 
-        // if label is end
-        // then path has been found
-        // we directly return
+        // premature retreat
+        // if we find the endNodeId.
         if (label === endNodeId) return [dist, prev];
     }
-
-    // right now its confirmed that we have no
-    // potential path
     return [dist, prev];
 };
 
 /**
- * Classic a-start implementation
- * using heuristics and weights
+ * Classic a-star implementation using heuristics and weights, where the
+ * formula for the Heuristic is given as distance between 2 nodes * 1e-5 * edge weight.
  *
- * @param graph the Graph to use
- * @param start the starting node ID
- * @param end the ending node ID
- * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
+ * @param inputs object as defined in {@link AlgorithmApiInputs_t} for the Api
+ * @returns {@link AlgorithmApiReturn_t} as promised by the Api.
  */
-const aStar = ({
-    graph,
-    startNodeId,
-    endNodeId,
-    nodeAction,
-    edgeAction,
-}: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
-    // first deconstruct the array returned from a-start
-    // dist is the distance from start [S]-> every node [A] which is reachable
-    // prev is required to reconstruct path
-    // visited is the set of nodes visited in order
-    const [dist, prev] = internalAStar({ graph, startNodeId, endNodeId, nodeAction, edgeAction });
-
-    // this is just to reconstruct the path for a*;
+const aStar = (inputs: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
+    const [dist, prev] = internalAStar({ ...inputs });
     const path: string[] = [];
 
     // if distance is infinity,
     // we automatically understand no path is possible
-    // thus, return null
-    if (dist.get(endNodeId) === Infinity) return NOTSET;
-
-    // reconstruct path
-    // after that just return
-    for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
-
-    // we are sure path exists
-    // so we just return it.
+    // thus, return NOTSET
+    if (dist.get(inputs.endNodeId) === Infinity) return NOTSET;
+    for (let at: string = inputs.endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
     return path;
 };
 
