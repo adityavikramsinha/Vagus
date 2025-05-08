@@ -5,10 +5,14 @@ import dijkstras from './dijkstras_algorithm';
  * Starts a weighted , bidirectional ,dijkstras search
  * to find a path
  *
- * @param start the starting node ID
- * @param end target/end node ID
- * @param graph The Graph to use
- * @returns a path | null [path if present, else null] and two sets, first is of a search
+ * @param graph the Graph to use
+ * @param startNodeId starting node ID
+ * @param endNodeId ending node ID
+ * @param nodeAction action to perform on every node dequeue (to preserve the order in Priority
+ * Queue)
+ * @param edgeAction action to perform whenever a new destination from an opened nodes' edge is
+ * added.
+ * @returns a path or {@link NOTSET_t} and two sets, first is of a search
  * from the Start till some point X and second is from the end till the same point X where
  * both of these algorithms meet.
  */
@@ -24,7 +28,7 @@ const biDirectional = ({
     const visitedFromStart = new Set<string>();
     const visitedFromEnd = new Set<string>();
 
-    // if it is null , we automatically know
+    // if it is NOTSET , we automatically know
     // the there is no path possible
     if (pathFromStart === NOTSET) {
         // we just get visited from start and visited from end Sets
@@ -46,8 +50,6 @@ const biDirectional = ({
             },
             edgeAction,
         });
-
-        // we return the path from start [or null] and the two sets as promised.
         return [NOTSET, visitedFromStart, visitedFromEnd];
     }
 
@@ -76,7 +78,6 @@ const biDirectional = ({
         },
         edgeAction,
     });
-    // then we return the whole thing as promised.
     return [pathFromStart, visitedFromStart, visitedFromEnd];
 };
 
