@@ -1,52 +1,36 @@
 import { AlgorithmApiInputs_t, AlgorithmApiReturn_t, NOTSET } from '../visualise-graphs/ts/Types';
 
 /**
- * Classic bellman ford to find negative cycles
+ * Classic Bellman Ford that cycles over edge list V-1 times
  * and for shortest path node relaxation
  *
- * @param graph the Graph to use
- * @param start starting ID
- * @param end ending ID
- * @returns a path | null [path if found, else null] and a Set of visited nodes inorder
+ * @param inputs object of inputs as specified in {@link AlgorithmApiInputs_t}
+ * @returns {@link AlgorithmApiReturn_t}
  */
-const bellmanFord = ({
-    graph,
-    startNodeId,
-    endNodeId,
-    nodeAction,
-    edgeAction,
-}: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
-    // First get all the data from internal bellman ford
-    // we get dist to understand if last node [end] was relaxed or not
-    // if it was then we can construct a path
-    // else we return null since that means there is not a single path
-    const [dist, prev] = internalBellmanFord({
-        graph,
-        startNodeId,
-        endNodeId,
-        nodeAction,
-        edgeAction,
-    });
+const bellmanFord = (inputs: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
+    const [dist, prev] = internalBellmanFord({ ...inputs });
 
     // path array
     const path: string[] = [];
 
     // checking for if the last node [end] was relaxed or not
-    if (dist.get(endNodeId) === Infinity) return NOTSET;
-
-    // path reconstruction
-    for (let at = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
-
-    // return path
-    // which is guaranteed to be the shortest path
-    // in the graph from start->end.
+    // if not then we know that no path exists so return NOTSET.
+    if (dist.get(inputs.endNodeId) === Infinity) return NOTSET;
+    for (let at = inputs.endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
     return path;
 };
 
 /**
+ * Simple implementation of Bellman ford that is capable of finding the least cost path
+ * in O(E*V^2) time for negative weights too but does not detect cycles.
  *
  * @param graph the Graph to use
- * @param start starting node of the path to be found
+ * @param startNodeId starting ID
+ * @param endNodeId ending ID
+ * @param nodeAction action to perform arbitrarily (since Bellman Ford is node agnostic). There
+ * are no guarantees regarding if every node will go through this action, just that each node
+ * that is visited OR opened will have action called on it.
+ * @param edgeAction action to perform everytime an edge is visited.
  * @returns a Map of relaxed distances from start node [S] to all other nodes
  * a Map of previous nodes to construct a path and,
  * a Set of visited nodes.
@@ -60,16 +44,12 @@ const internalBellmanFord = ({
     // dist is for the possibility of relaxation
     // this also signifies if a path from the start -> end
     // exists since if end is not relaxed [i.e. end remains Infinity]
-    // it means it is unreachable
+    // it means it is unreachable. Prev is a Map that helps in
+    // path reconstruction.
     const dist: Map<string, number> = new Map();
-
-    // Set of visited nodes inorder
     const visited: Set<string> = new Set();
-    // Map to help in path reconstruction
     const prev: Map<string, string> = new Map();
 
-    // Set all the dist to Infinity
-    // minus the start node
     graph.vertices().forEach((node) => {
         const id = node.getData();
         dist.set(id, id === startNodeId ? 0 : Infinity);
@@ -89,36 +69,30 @@ const internalBellmanFord = ({
     for (let v = 0; v < V - 1 && changes > 0; v++) {
         changes = 0;
         // each time we go through each node of the graph
-        graph.vertices().forEach((node) => {
+        graph.vertices().forEach((v) => {
+            // perform the node action.
+            nodeAction(v.getData());
             // and each edge in the graph from this node
             // we open it up and try to see if
             // relaxation is possible or not
-            node.getAdjVertices().forEach((edge) => {
+            v.getAdjVertices().forEach((edge) => {
                 // if visited does not have the node
                 // we simply add it.
                 if (!visited.has(edge.dest)) visited.add(edge.dest);
 
                 // if the current cost < prev cost of traversal
-                // from start to this node
-                // then we try to
-                // update it
-                if (dist.get(node.getData()) + edge.cost < dist.get(edge.dest)) {
-                    // update its new best distance
-                    dist.set(edge.dest, dist.get(node.getData()) + edge.cost);
-
-                    // set it as a possible path candidate
-                    prev.set(edge.dest, node.getData());
+                // from start to this node then we try to update it
+                if (dist.get(v.getData()) + edge.cost < dist.get(edge.dest)) {
+                    dist.set(edge.dest, dist.get(v.getData()) + edge.cost);
+                    prev.set(edge.dest, v.getData());
 
                     // update changes
                     changes++;
-                    nodeAction(node.getData());
                     edgeAction(edge);
                 }
             });
         });
     }
-
-    // return everything that was promised.
     return [dist, prev];
 };
 
