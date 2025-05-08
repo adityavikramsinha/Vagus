@@ -6,56 +6,29 @@ import { MinPriorityQueue } from '@datastructures-js/priority-queue';
  * which opens the nodes using BFS but is weighted.
  * We can call it a weighted BFS in some context.
  *
- * @param start the id of the starting node
- * @param end the id of the end node
- * @param graph the graph to use for the algorithm
- * @param nodeAction action to perform whenever a node is dequeued from Priority queue
- * @param edgeAction action to perform whenever an edge is opened for a node that is to be put
- * on the PQ.
- * @returns a path | null [path if found, else] and visited inorder Set.
+ * @param inputs an input object of shape {@link AlgorithmApiInputs_t} containing all the
+ * information to run this algorithm
+ * @returns {@link AlgorithmApiReturn_t}
  */
-const dijkstras = ({
-    graph,
-    startNodeId,
-    endNodeId,
-    nodeAction,
-    edgeAction,
-}: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
-    // first get everything from the internal Dijkstra function
-    const [dist, prev] = internalDijkstras({
-        graph,
-        startNodeId,
-        endNodeId,
-        nodeAction,
-        edgeAction,
-    });
-
-    // the rest is just finding the path to use.
+const dijkstras = (inputs: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
+    const [dist, prev] = internalDijkstras({ ...inputs });
     const path: string[] = [];
-
-    // if distance is Infinity then,
-    // we know path is not found.
-    // directly return
-    if (dist.get(endNodeId) === Infinity) return NOTSET;
-
-    // if it is not null,
-    // we know there must be a path that exists
-    // so reconstruct it.
-    for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
-
-    // return reconstructed path.
+    if (dist.get(inputs.endNodeId) === Infinity) return NOTSET;
+    for (let at: string = inputs.endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
     return path;
 };
 
 /**
  * Internal implementation of the dijkstras algorithm.
  *
- * @param start the starting node ID
- * @param end the ending node ID
- * @param graph the graph to use
- * @param nodeAction
- * @param edgeAction
- * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes and, a Set for visited nodes inorder.
+ * @param graph the Graph to use
+ * @param startNodeId starting node ID
+ * @param endNodeId ending node ID
+ * @param nodeAction action to perform on every node dequeue (to preserve the order in Priority
+ * Queue)
+ * @param edgeAction action to perform whenever a new destination from an opened nodes' edge is
+ * added.
+ * @returns a dist Map to show the distances between the nodes, a Map which has the prev nodes.
  */
 const internalDijkstras = ({
     graph,
@@ -64,15 +37,11 @@ const internalDijkstras = ({
     nodeAction,
     edgeAction,
 }: AlgorithmApiInputs_t): [Map<string, number>, Map<string, string>] => {
-    // Creating a type to hold the important
-    // properties for the Priority Queue.
     type Priority = {
         label: string;
         minDist: number;
     };
 
-    // Priority Queue for total ordering through the
-    // minDist property.
     const PQ = new MinPriorityQueue<Priority>((promisingNode) => promisingNode.minDist);
 
     // dist map for shortest distance between
@@ -80,19 +49,13 @@ const internalDijkstras = ({
     const dist: Map<string, number> = new Map(),
         prev: Map<string, string> = new Map();
 
-    // Set of all visited nodes
     const visited: Set<string> = new Set();
 
-    // First we set the value of distances from node [S]
-    // to any node [A] to infinity
     graph.vertices().forEach((node) => {
         const id = node.getData();
         dist.set(id, id === startNodeId ? 0 : Infinity);
     });
 
-    // Enqueue the first node,
-    // this way we have a length of 1
-    // and least distance of 0.
     PQ.enqueue({
         label: startNodeId,
         minDist: 0,
@@ -108,6 +71,7 @@ const internalDijkstras = ({
         // we do not keep opening it.
         visited.add(label);
 
+        // perform the node action.
         nodeAction(label);
 
         // if the dist > minDist then
@@ -142,34 +106,21 @@ const internalDijkstras = ({
                     // since starting value in distance for every node is
                     // infinity.
                     if (newDist < dist.get(dest)) {
-                        // we reference this node in case it is a part of the
-                        // path
                         prev.set(dest, label);
-
-                        // update the distance from [S] to this node [A]
                         dist.set(dest, newDist);
-
-                        // enqueue this for opening in terms of minDist.
                         PQ.enqueue({
                             label: dest,
                             minDist: newDist,
                         });
+                        // perform edge action
                         edgeAction(edge);
                     }
                 }
             });
 
-        // if label is the same as end
-        // then we know that, there is a path
-        // and return all the items for reconstruction.
+        // pre mature return.
         if (label === endNodeId) return [dist, prev];
     }
-
-    // at this point, the end dist is Infinity
-    // thus we know that it has not been relaxed
-    // hence, we need to go about and just return everything to caller
-    // the caller has the ability to understand if
-    // the given end dist is Infinity or not.
     return [dist, prev];
 };
 
