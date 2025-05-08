@@ -30,7 +30,6 @@ const bfs = ({
 
     Q.enqueue(startNodeId);
 
-
     while (Q.length !== 0) {
         const node = graph.vertices().get(Q.dequeue());
 

@@ -43,7 +43,6 @@ const internalBestFirstSearch = ({
     nodeAction,
     edgeAction,
 }: AlgorithmApiInputs_t): Map<string, string> | NOTSET_t => {
-
     type Priority = {
         // name of the node or its ID
         label: string;
@@ -70,7 +69,6 @@ const internalBestFirstSearch = ({
     });
 
     while (!pq.isEmpty()) {
-
         const { label } = pq.dequeue();
         visited.add(label);
 
@@ -83,7 +81,6 @@ const internalBestFirstSearch = ({
             .get(label)
             .getAdjVertices()
             .forEach((edge) => {
-
                 const destData = edge.dest;
                 const dest = graph.vertices().get(destData);
 

@@ -54,6 +54,22 @@ class DoubleQ {
     }
 }
 
+/**
+ * Smart simplification of a weighted graph of just 0 or 1 weights can lead to
+ * using a doubly ended queue which is more time efficient (essentially a BFS).
+ * This implements that based.
+ * Resources such as :{@link https://cp-algorithms.com/graph/01_bfs.html this} give
+ * good insight.
+ *
+ * @param graph the Graph to use
+ * @param startNodeId starting node ID
+ * @param endNodeId ending node ID
+ * @param nodeAction action to perform on every node dequeue (to preserve the order in Priority
+ * Queue)
+ * @param edgeAction action to perform whenever a new destination from an opened nodes' edge is
+ * added.
+ * @returns two Maps, first is dist and second is prev
+ */
 const internalBfs0_1 = ({
     graph,
     startNodeId,
@@ -125,36 +141,16 @@ const internalBfs0_1 = ({
 };
 
 /**
- * Implementation of the 0-1 special case for Breadth-First-Search.
- * See {@link https://cp-algorithms.com/graph/01_bfs.html} for proof of concept and logic.
- * @param graph the graph to use
- * @param start start vertex
- * @param end end vertex
+ * Implementation of the 0-1 special case for Weighted DAGs that can be solved in BFS time O(V).
+ * See {@link https://cp-algorithms.com/graph/01_bfs.html this} for proof of concept and logic.
+ * @param inputs {@link AlgorithmApiInputs_t}
+ * @returns structure conforming to {@link AlgorithmApiReturn_t}
  */
-const bfs0_1 = ({
-    graph,
-    startNodeId,
-    endNodeId,
-    nodeAction,
-    edgeAction,
-}: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
-    // first get everything from the internal Dijkstra function
-    const [dist, prev] = internalBfs0_1({ graph, startNodeId, endNodeId, nodeAction, edgeAction });
-
-    // the rest is just finding the path to use.
+const bfs0_1 = (inputs: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
+    const [dist, prev] = internalBfs0_1({ ...inputs });
     const path: string[] = [];
-
-    // if distance is Infinity then,
-    // we know path is not found.
-    // directly return
-    if (dist.get(endNodeId) === Infinity) return NOTSET;
-
-    // if it is not null,
-    // we know there must be a path that exists
-    // so reconstruct it.
-    for (let at: string = endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
-
-    // return reconstructed path.
+    if (dist.get(inputs.endNodeId) === Infinity) return NOTSET;
+    for (let at: string = inputs.endNodeId; at !== undefined; at = prev.get(at)) path.unshift(at);
     return path;
 };
 
