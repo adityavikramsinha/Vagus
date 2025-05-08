@@ -99,7 +99,7 @@ const internalAStar = ({
                     const destNode = graph.vertices().get(destData);
                     const latestHeuristicScore =
                         (graph.distBw(destNode.coordinates(), endNode.coordinates(), 'e') /
-                            1000000) *
+                            100000) *
                         newDist;
 
                     // Only update if we have found a better cost than the

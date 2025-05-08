@@ -1,4 +1,7 @@
 import Vertex from './Vertex';
+import {
+    convertSegmentPathToStaticExportFilename
+} from 'next/dist/shared/lib/segment-cache/segment-value-encoding';
 
 /**
  * Utility graph class with functions to help in maintaining state and making the algorithms work.
@@ -144,6 +147,10 @@ export default class Graph {
         this.assertMutable();
         const src = this.vertices().get(source);
         const dest = this.vertices().get(destination);
+        if (!src)
+            throw new Error("Source is the issue");
+        if (!dest)
+            throw new Error("Destination is the issue");
         src.addAdjVertex(dest, cost);
         if (this.isUndirected) dest.addAdjVertex(src, cost);
     }
@@ -199,33 +206,6 @@ export default class Graph {
     }
 
     /**
-     * Takes an initial Graph (_initGraph) and (_presentGraph), then, for a given vertex in the
-     * _presentGraph it reverts the vertices state back the vertices state in the _initGraph.
-     * This means that the properties of the vertex in _initGraph and _presentGraph
-     * should be exactly the same, unless a neighbours of it is not present in the _presentGraph.
-     * It does not make any new vertices except for the one vertex with a data passed in as parameter.
-     * The cost of the connections also reflect the cost in the _initGraph.
-     *
-     * @param data the vertex whose state needs to be reverted to from the _initGraph.
-     * @param _initGraph the _initGraph whose vertex state needs to be copied
-     * @param _presentGraph the present graph in which the changes need to be made.
-     */
-    static revertNode(data: string, _initGraph: Graph, _presentGraph: Graph): void {
-        const initialNode = _initGraph.vertices().get(data);
-        _presentGraph.addNode(data);
-        const presentNode = _presentGraph.vertices().get(data);
-
-        initialNode.getAdjVertices().forEach((edge) => {
-            const presentEdgeDest = _presentGraph.vertices().get(edge.dest);
-
-            if (presentEdgeDest !== undefined) {
-                presentNode.addAdjVertex(presentEdgeDest, edge.cost);
-                presentEdgeDest.addAdjVertex(presentNode, edge.cost);
-            }
-        });
-    }
-
-    /**
      * Update cost of edge from Source to Destination to the given value.
      * This is a O(E) cost, since it will have to go over ALL the edges and
      * find the edge with the actual Destination.
@@ -243,26 +223,71 @@ export default class Graph {
         return true;
     }
 
+    clear() {
+        this.vs.clear();
+    }
+
     /**
      * Copies the state of one graph to another graph and then changes the cost as specified.
      *
      * @param _initial the initial graph whose state needs to be copied
      * @param _present the present graph to which the state needs to be copied
-     * @param cost the cost of edges.
      */
-    static copy(_initial: Graph, _present: Graph, cost: number): void {
-        //first reset all active connections
-        _initial.vertices().forEach((initNode) => {
-            if (!_present.vertices().has(initNode.getData())) {
-                this.revertNode(initNode.getData(), _initial, _present);
-            }
+    static copy(_initial: Graph, _present: Graph): void {
+        _present.clear();
+        _initial.vertices().forEach((vertex) => {
+            _present.addNode(vertex.getData(), vertex.x(), vertex.y());
+
         });
 
-        //then reset all active costs.
-        _present.vertices().forEach((initNode) => {
-            initNode.getAdjVertices().forEach((edge) => {
-                if (edge.dest !== initNode.getData() && edge.cost > 1) edge.changeCost(cost);
-            });
-        });
+        _initial.vertices().forEach((vertex)=>{
+            vertex.getAdjVertices().forEach((edge) => {
+                _present.addEdge(edge.src, edge.dest, edge.cost);
+            })
+        })
     }
+
+    static equals(g1: Graph, g2: Graph): boolean {
+        const keys1 = [...g1.vertices().keys()].sort();
+        const keys2 = [...g2.vertices().keys()].sort();
+
+        if (keys1.length !== keys2.length)
+            throw new Error(`Vertex count mismatch: ${keys1.length} vs ${keys2.length}`);
+
+        for (let i = 0; i < keys1.length; i++) {
+            if (keys1[i] !== keys2[i])
+                throw new Error(`Vertex ID mismatch at index ${i}: ${keys1[i]} vs ${keys2[i]}`);
+        }
+
+        for (const key of keys1) {
+            const v1 = g1.vertices().get(key)!;
+            const v2 = g2.vertices().get(key)!;
+
+            if (v1.getData() !== v2.getData())
+                throw new Error(`Data mismatch at vertex ${key}: ${v1.getData()} vs ${v2.getData()}`);
+
+            if (v1.x() !== v2.x() || v1.y() !== v2.y())
+                throw new Error(`Coordinate mismatch at vertex ${key}: (${v1.x()}, ${v1.y()}) vs (${v2.x()}, ${v2.y()})`);
+
+            const adj1 = [...v1.getAdjVertices().keys()].sort();
+            const adj2 = [...v2.getAdjVertices().keys()].sort();
+
+            if (adj1.length !== adj2.length)
+                throw new Error(`Adjacency count mismatch at vertex ${key}: ${adj1.length} vs ${adj2.length}`);
+
+            for (let i = 0; i < adj1.length; i++) {
+                if (adj1[i] !== adj2[i])
+                    throw new Error(`Adjacency mismatch at vertex ${key}, index ${i}: ${adj1[i]} vs ${adj2[i]}`);
+
+                const e1 = v1.getAdjVertices().get(adj1[i]);
+                const e2 = v2.getAdjVertices().get(adj2[i]);
+
+                if (e1?.cost !== e2?.cost)
+                    throw new Error(`Edge cost mismatch from vertex ${key} to ${adj1[i]}: ${e1?.cost} vs ${e2?.cost}`);
+            }
+        }
+
+        return true;
+    }
+
 }
