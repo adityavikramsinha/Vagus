@@ -33,7 +33,6 @@ const bellmanFord = (inputs: AlgorithmApiInputs_t): AlgorithmApiReturn_t => {
  * @param edgeAction action to perform everytime an edge is visited.
  * @returns a Map of relaxed distances from start node [S] to all other nodes
  * a Map of previous nodes to construct a path and,
- * a Set of visited nodes.
  */
 const internalBellmanFord = ({
     graph,

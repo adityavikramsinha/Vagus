@@ -13,7 +13,7 @@ import { MinPriorityQueue } from '@datastructures-js/priority-queue';
  * Queue)
  * @param edgeAction action to perform whenever a new destination from an opened nodes' edge is
  * added.
- * @returns {@link AlgorithmApiInputs_t} specified return type for this API
+ * @returns two Maps, first is dist and second is prev
  */
 const internalAStar = ({
     graph,
